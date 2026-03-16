@@ -1,5 +1,5 @@
 import { A as Button, D as CardDescription, E as CardContent, O as CardHeader, T as Card, W as Check, a as AvatarImage, ct as require_jsx_runtime, i as AvatarFallback, k as CardTitle, n as DashboardHeader, r as Avatar, t as PageContent } from "./PageContent-JaKQk1C1.js";
-import { t as Progress } from "./index-BV9fKYld.js";
+import { t as Progress } from "./index-CSzvdCoM.js";
 //#region src/pages/client/ClientNutrition.tsx
 var import_jsx_runtime = require_jsx_runtime();
 var ProfCard = ({ n, r, img, fb }) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Card, {
@@ -222,4 +222,4 @@ function ClientNutrition() {
 //#endregion
 export { ClientNutrition as default };
 
-//# sourceMappingURL=ClientNutrition-DmbSf5Uh.js.map
+//# sourceMappingURL=ClientNutrition-DnBvOrJp.js.map

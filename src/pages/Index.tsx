@@ -1,7 +1,7 @@
 import { Link, Navigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { useAuth } from '@/contexts/AuthContext'
-import { Activity, Brain, Users, ArrowRight } from 'lucide-react'
+import { Activity, Brain, Users, ArrowRight, Sparkles } from 'lucide-react'
 
 export default function Index() {
   const { user } = useAuth()
@@ -20,8 +20,8 @@ export default function Index() {
       {/* Navbar */}
       <nav className="flex items-center justify-between p-6 max-w-7xl mx-auto w-full">
         <div className="font-bold text-xl flex items-center gap-2 text-primary">
-          <Activity className="h-6 w-6" />
-          <span>HealthSaaS</span>
+          <Sparkles className="h-6 w-6" />
+          <span>Taoli</span>
         </div>
         <div className="flex gap-4 items-center">
           <Button variant="ghost" className="hidden sm:inline-flex">

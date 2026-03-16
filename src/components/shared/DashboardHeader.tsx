@@ -1,5 +1,6 @@
 import { SidebarTrigger } from '@/components/ui/sidebar'
 import { useAuth } from '@/contexts/AuthContext'
+import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -10,7 +11,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { LogOut, User as UserIcon } from 'lucide-react'
+import { LogOut, User as UserIcon, Sparkles } from 'lucide-react'
 import { ReactNode } from 'react'
 
 interface DashboardHeaderProps {
@@ -20,12 +21,24 @@ interface DashboardHeaderProps {
 
 export function DashboardHeader({ title, children }: DashboardHeaderProps) {
   const { user, logout } = useAuth()
+  const navigate = useNavigate()
+
+  const handleLogout = () => {
+    logout()
+    navigate('/login')
+  }
 
   return (
     <header className="sticky top-0 z-10 flex h-16 shrink-0 items-center justify-between border-b bg-background/95 px-4 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="flex items-center gap-4">
         <SidebarTrigger className="-ml-2" />
         <h1 className="text-lg font-semibold tracking-tight hidden md:block">{title}</h1>
+
+        {/* Mobile Branding - Taoli */}
+        <div className="flex items-center gap-2 font-bold text-lg text-primary md:hidden">
+          <Sparkles className="h-5 w-5" />
+          <span>Taoli</span>
+        </div>
       </div>
 
       <div className="flex items-center gap-4">
@@ -48,17 +61,17 @@ export function DashboardHeader({ title, children }: DashboardHeaderProps) {
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem className="cursor-pointer">
               <UserIcon className="mr-2 h-4 w-4" />
               <span>Configurações do Perfil</span>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem
-              onClick={logout}
-              className="text-destructive focus:bg-destructive/10 focus:text-destructive"
+              onClick={handleLogout}
+              className="text-destructive focus:bg-destructive/10 focus:text-destructive cursor-pointer"
             >
               <LogOut className="mr-2 h-4 w-4" />
-              <span>Sair da conta</span>
+              <span>Sair</span>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

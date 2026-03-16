@@ -34,6 +34,7 @@ import ClientDashboard from './pages/client/ClientDashboard'
 import ClientDiary from './pages/client/ClientDiary'
 import ClientProductivity from './pages/client/ClientProductivity'
 import ClientProgress from './pages/client/ClientProgress'
+import ClientFinances from './pages/client/ClientFinances'
 
 const App = () => (
   <BrowserRouter future={{ v7_startTransition: false, v7_relativeSplatPath: false }}>
@@ -73,6 +74,7 @@ const App = () => (
                 <Route path="diary" element={<ClientDiary />} />
                 <Route path="productivity" element={<ClientProductivity />} />
                 <Route path="progress" element={<ClientProgress />} />
+                <Route path="finances" element={<ClientFinances />} />
               </Route>
             </Route>
           </Route>

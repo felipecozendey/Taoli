@@ -1,5 +1,5 @@
 import { Outlet, Link, useLocation } from 'react-router-dom'
-import { LayoutDashboard, Book, Target, TrendingUp, Sparkles } from 'lucide-react'
+import { LayoutDashboard, Book, Target, TrendingUp, Sparkles, Wallet } from 'lucide-react'
 import {
   SidebarProvider,
   Sidebar,
@@ -19,6 +19,7 @@ export default function ClientLayout() {
     { title: 'Meu Diário', icon: Book, path: '/client/diary' },
     { title: 'Produtividade', icon: Target, path: '/client/productivity' },
     { title: 'Meu Progresso', icon: TrendingUp, path: '/client/progress' },
+    { title: 'Finanças', icon: Wallet, path: '/client/finances' },
   ]
 
   return (

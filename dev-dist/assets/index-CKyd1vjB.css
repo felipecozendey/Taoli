@@ -2163,9 +2163,6 @@ section[aria-label='Notifications alt+T'] {
       opacity: 1;
     }
   }
-.animate-fade-in {
-    animation: fade-in 0.5s ease-out forwards;
-  }
 .animate-fade-in-up {
     animation: fade-in-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   }
@@ -3171,9 +3168,6 @@ section[aria-label='Notifications alt+T'] {
   }
   .md\:p-6{
     padding: 1.5rem;
-  }
-  .md\:p-8{
-    padding: 2rem;
   }
   .md\:px-6{
     padding-left: 1.5rem;

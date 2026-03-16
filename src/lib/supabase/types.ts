@@ -9,7 +9,48 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      food_items: {
+        Row: {
+          base_qty_g: number | null
+          carbs_g: number | null
+          created_at: string
+          energy_kcal: number | null
+          fats_g: number | null
+          fiber_g: number | null
+          food_group: string | null
+          id: string
+          name: string
+          protein_g: number | null
+          source: string | null
+        }
+        Insert: {
+          base_qty_g?: number | null
+          carbs_g?: number | null
+          created_at?: string
+          energy_kcal?: number | null
+          fats_g?: number | null
+          fiber_g?: number | null
+          food_group?: string | null
+          id?: string
+          name: string
+          protein_g?: number | null
+          source?: string | null
+        }
+        Update: {
+          base_qty_g?: number | null
+          carbs_g?: number | null
+          created_at?: string
+          energy_kcal?: number | null
+          fats_g?: number | null
+          fiber_g?: number | null
+          food_group?: string | null
+          id?: string
+          name?: string
+          protein_g?: number | null
+          source?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -153,6 +194,31 @@ export const Constants = {
 // IMPORTANT: The TypeScript types above map UUID, TEXT, VARCHAR all to "string".
 // Use the COLUMN TYPES section below to know the real PostgreSQL type for each column.
 // Always use the correct PostgreSQL type when writing SQL migrations.
+
+// --- COLUMN TYPES (actual PostgreSQL types) ---
+// Use this to know the real database type when writing migrations.
+// "string" in TypeScript types above may be uuid, text, varchar, timestamptz, etc.
+// Table: food_items
+//   id: uuid (not null, default: gen_random_uuid())
+//   name: text (not null)
+//   source: text (nullable)
+//   food_group: text (nullable)
+//   base_qty_g: numeric (nullable, default: 100)
+//   energy_kcal: numeric (nullable)
+//   protein_g: numeric (nullable)
+//   carbs_g: numeric (nullable)
+//   fats_g: numeric (nullable)
+//   fiber_g: numeric (nullable)
+//   created_at: timestamp with time zone (not null, default: now())
+
+// --- CONSTRAINTS ---
+// Table: food_items
+//   PRIMARY KEY food_items_pkey: PRIMARY KEY (id)
+
+// --- ROW LEVEL SECURITY POLICIES ---
+// Table: food_items
+//   Policy "Authenticated users can select food items" (SELECT, PERMISSIVE) roles={authenticated}
+//     USING: true
 
 // --- DATABASE FUNCTIONS ---
 // FUNCTION rls_auto_enable()

@@ -1,11 +1,15 @@
 import { ReactNode } from 'react'
+import { cn } from '@/lib/utils'
 
-export function PageContent({
-  children,
-  className = '',
-}: {
+interface PageContentProps {
   children: ReactNode
   className?: string
-}) {
-  return <div className={`flex-1 p-4 md:p-6 lg:p-8 animate-fade-in ${className}`}>{children}</div>
+}
+
+export function PageContent({ children, className }: PageContentProps) {
+  return (
+    <main className={cn('flex flex-1 flex-col gap-4 p-4 pt-4 md:p-6 lg:p-8', className)}>
+      {children}
+    </main>
+  )
 }

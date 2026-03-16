@@ -1,5 +1,16 @@
 import { Outlet, Link, useLocation } from 'react-router-dom'
-import { LayoutDashboard, Book, Target, TrendingUp, Sparkles, Wallet } from 'lucide-react'
+import {
+  LayoutDashboard,
+  Target,
+  TrendingUp,
+  Sparkles,
+  Wallet,
+  Calendar,
+  Apple,
+  Dumbbell,
+  Brain,
+  BookOpen,
+} from 'lucide-react'
 import {
   SidebarProvider,
   Sidebar,
@@ -16,7 +27,11 @@ export default function ClientLayout() {
 
   const navItems = [
     { title: 'Dashboard', icon: LayoutDashboard, path: '/client' },
-    { title: 'Meu Diário', icon: Book, path: '/client/diary' },
+    { title: 'Resumo do Dia', icon: Calendar, path: '/client/diary' },
+    { title: 'Nutrição', icon: Apple, path: '/client/nutrition' },
+    { title: 'Treino', icon: Dumbbell, path: '/client/training' },
+    { title: 'Mente', icon: Brain, path: '/client/mind' },
+    { title: 'Estudos', icon: BookOpen, path: '/client/study' },
     { title: 'Produtividade', icon: Target, path: '/client/productivity' },
     { title: 'Meu Progresso', icon: TrendingUp, path: '/client/progress' },
     { title: 'Finanças', icon: Wallet, path: '/client/finances' },

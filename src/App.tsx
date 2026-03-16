@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { lazy, Suspense } from 'react'
 import { Toaster } from '@/components/ui/toaster'
 import { Toaster as Sonner } from '@/components/ui/sonner'
 import { TooltipProvider } from '@/components/ui/tooltip'
@@ -36,6 +37,18 @@ import ClientProductivity from './pages/client/ClientProductivity'
 import ClientProgress from './pages/client/ClientProgress'
 import ClientFinances from './pages/client/ClientFinances'
 
+// Client Lazy Pages
+const ClientNutrition = lazy(() => import('./pages/client/ClientNutrition'))
+const ClientTraining = lazy(() => import('./pages/client/ClientTraining'))
+const ClientMind = lazy(() => import('./pages/client/ClientMind'))
+const ClientStudy = lazy(() => import('./pages/client/ClientStudy'))
+
+const LoadingFallback = () => (
+  <div className="flex items-center justify-center min-h-[50vh]">
+    <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+  </div>
+)
+
 const App = () => (
   <BrowserRouter future={{ v7_startTransition: false, v7_relativeSplatPath: false }}>
     <AuthProvider>
@@ -72,6 +85,41 @@ const App = () => (
               <Route path="/client" element={<ClientLayout />}>
                 <Route index element={<ClientDashboard />} />
                 <Route path="diary" element={<ClientDiary />} />
+
+                {/* Lazy Loaded Modular Pages */}
+                <Route
+                  path="nutrition"
+                  element={
+                    <Suspense fallback={<LoadingFallback />}>
+                      <ClientNutrition />
+                    </Suspense>
+                  }
+                />
+                <Route
+                  path="training"
+                  element={
+                    <Suspense fallback={<LoadingFallback />}>
+                      <ClientTraining />
+                    </Suspense>
+                  }
+                />
+                <Route
+                  path="mind"
+                  element={
+                    <Suspense fallback={<LoadingFallback />}>
+                      <ClientMind />
+                    </Suspense>
+                  }
+                />
+                <Route
+                  path="study"
+                  element={
+                    <Suspense fallback={<LoadingFallback />}>
+                      <ClientStudy />
+                    </Suspense>
+                  }
+                />
+
                 <Route path="productivity" element={<ClientProductivity />} />
                 <Route path="progress" element={<ClientProgress />} />
                 <Route path="finances" element={<ClientFinances />} />

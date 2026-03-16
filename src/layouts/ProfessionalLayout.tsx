@@ -1,5 +1,5 @@
 import { Outlet, Link, useLocation } from 'react-router-dom'
-import { LayoutDashboard, Users, CalendarDays, FileText, Stethoscope } from 'lucide-react'
+import { LayoutDashboard, Users, CalendarDays, FileText, Sparkles } from 'lucide-react'
 import {
   SidebarProvider,
   Sidebar,
@@ -27,8 +27,8 @@ export default function ProfessionalLayout() {
         <Sidebar variant="inset">
           <SidebarHeader className="py-4 px-4">
             <div className="flex items-center gap-2 font-bold text-lg text-primary">
-              <Stethoscope className="h-6 w-6" />
-              <span>Portal Pro</span>
+              <Sparkles className="h-6 w-6" />
+              <span>Taoli</span>
             </div>
           </SidebarHeader>
           <SidebarContent>

@@ -15,7 +15,22 @@ import {
 } from '@/components/ui/select'
 import { Search, Trash2, Plus } from 'lucide-react'
 
-const MOCK_FOODS = [
+interface FoodItem {
+  id: string
+  name: string
+  energy: number
+  protein: number
+  carbs: number
+  fats: number
+  source: string
+}
+
+interface DietEntry extends FoodItem {
+  entryId: string
+  portion: string | number
+}
+
+const MOCK_FOODS: FoodItem[] = [
   {
     id: '1',
     name: 'Arroz branco, cozido',
@@ -63,7 +78,6 @@ const MOCK_FOODS = [
   },
 ]
 
-type DietEntry = (typeof MOCK_FOODS)[0] & { entryId: string; portion: string | number }
 const calc = (val: number, port: string | number) => ((val / 100) * (Number(port) || 0)).toFixed(1)
 
 export default function ProfPrescriptions() {
@@ -81,7 +95,7 @@ export default function ProfPrescriptions() {
     [search],
   )
 
-  const addFood = (food: (typeof MOCK_FOODS)[0]) => {
+  const addFood = (food: FoodItem) => {
     setMeals((prev) =>
       prev.map((m) =>
         m.id === targetMeal
@@ -120,7 +134,6 @@ export default function ProfPrescriptions() {
       <DashboardHeader title="Prescrição de Dieta" />
       <PageContent className="flex flex-col lg:h-[calc(100vh-4rem)] p-4 md:p-6 overflow-hidden">
         <div className="flex flex-col lg:flex-row gap-6 flex-1 min-h-0">
-          {/* Left Column: Search */}
           <Card className="w-full lg:w-[350px] flex flex-col shrink-0 h-[400px] lg:h-full border-muted/60 shadow-sm">
             <CardHeader className="p-4 border-b space-y-3">
               <CardTitle className="text-base font-semibold">Buscar Alimentos</CardTitle>
@@ -181,7 +194,6 @@ export default function ProfPrescriptions() {
             </ScrollArea>
           </Card>
 
-          {/* Right Column: Diet Plan */}
           <Card className="flex-1 flex flex-col h-[500px] lg:h-full border-muted/60 shadow-sm overflow-hidden">
             <CardHeader className="p-4 border-b bg-muted/10">
               <CardTitle className="text-base font-semibold">Plano Alimentar</CardTitle>

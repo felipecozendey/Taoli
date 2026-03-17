@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react'
 import { studyService, type StudyDeck, type StudyFlashcard } from '@/services/study'
+import { useAuth } from '@/contexts/AuthContext'
 
 export function useFlashcards() {
+  const { user, isLoading } = useAuth()
   const [decks, setDecks] = useState<StudyDeck[]>([])
   const [loadingDecks, setLoadingDecks] = useState(true)
 
@@ -13,13 +15,23 @@ export function useFlashcards() {
   const [showAnswer, setShowAnswer] = useState(false)
 
   useEffect(() => {
+    if (isLoading) return
+
+    if (!user) {
+      setLoadingDecks(false)
+      return
+    }
+
+    setLoadingDecks(true)
     studyService.getDecks().then(({ data }) => {
       setDecks(data || [])
       setLoadingDecks(false)
     })
-  }, [])
+  }, [user, isLoading])
 
   const startReview = async (deck: StudyDeck) => {
+    if (!user) return
+
     setLoadingCards(true)
     setIsReviewing(true)
     setCurrentDeck(deck)
@@ -31,7 +43,8 @@ export function useFlashcards() {
   }
 
   const handleGrade = async (grade: number) => {
-    if (!flashcards.length) return
+    if (!user || !flashcards.length) return
+
     const card = flashcards[currentIndex]
     console.log(`processCardReview called for card ${card.id} with grade ${grade}`)
 

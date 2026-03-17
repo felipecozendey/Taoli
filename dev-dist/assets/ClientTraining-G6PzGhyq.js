@@ -1,5 +1,5 @@
 import { D as Input, O as Card, a as AvatarImage, dt as require_jsx_runtime, i as AvatarFallback, k as CardContent, n as DashboardHeader, r as Avatar, t as PageContent } from "./PageContent-wcdRlike.js";
-import { s as Label } from "./index-56gZuXg-.js";
+import { s as Label } from "./index-SiydvObI.js";
 //#region src/pages/client/ClientTraining.tsx
 var import_jsx_runtime = require_jsx_runtime();
 var ProfCard = ({ n, r, img, fb }) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Card, {
@@ -158,4 +158,4 @@ function ClientTraining() {
 //#endregion
 export { ClientTraining as default };
 
-//# sourceMappingURL=ClientTraining-gTZLkx9p.js.map
+//# sourceMappingURL=ClientTraining-G6PzGhyq.js.map

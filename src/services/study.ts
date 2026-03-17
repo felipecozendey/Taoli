@@ -12,7 +12,7 @@ export const studyService = {
       const {
         data: { user },
       } = await supabase.auth.getUser()
-      if (!user) throw new Error('Not authenticated')
+      if (!user) return { data: [], error: new Error('Not authenticated') }
 
       const { data, error } = await supabase
         .from('study_decks')
@@ -24,12 +24,17 @@ export const studyService = {
       return { data, error: null }
     } catch (error) {
       console.error('Error fetching study decks:', error)
-      return { data: null, error }
+      return { data: [], error }
     }
   },
 
   async getDueFlashcards(deckId: string) {
     try {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
+      if (!user) return { data: [], error: new Error('Not authenticated') }
+
       const now = new Date().toISOString()
       const { data, error } = await supabase
         .from('study_flashcards')
@@ -42,12 +47,17 @@ export const studyService = {
       return { data, error: null }
     } catch (error) {
       console.error('Error fetching due flashcards:', error)
-      return { data: null, error }
+      return { data: [], error }
     }
   },
 
   async processCardReview(cardId: string, grade: number, currentData: SRSItem) {
     try {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
+      if (!user) return { data: null, error: new Error('Not authenticated') }
+
       const nextReview = calculateNextReview(currentData, grade)
 
       const { data, error } = await supabase
@@ -75,7 +85,7 @@ export const studyService = {
       const {
         data: { user },
       } = await supabase.auth.getUser()
-      if (!user) throw new Error('Not authenticated')
+      if (!user) return { data: [], error: new Error('Not authenticated') }
 
       const { data, error } = await supabase
         .from('study_notes')
@@ -87,7 +97,7 @@ export const studyService = {
       return { data, error: null }
     } catch (error) {
       console.error('Error fetching notes:', error)
-      return { data: null, error }
+      return { data: [], error }
     }
   },
 
@@ -96,7 +106,7 @@ export const studyService = {
       const {
         data: { user },
       } = await supabase.auth.getUser()
-      if (!user) throw new Error('Not authenticated')
+      if (!user) return { data: null, error: new Error('Not authenticated') }
 
       const noteData = {
         title,
@@ -112,7 +122,7 @@ export const studyService = {
           .from('study_notes')
           .update(noteData)
           .eq('id', id)
-          .eq('user_id', user.id) // Extra safety check
+          .eq('user_id', user.id)
           .select()
           .single()
       } else {

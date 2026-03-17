@@ -1,5 +1,5 @@
-import { A as CardDescription, D as Input, Et as __toESM, J as createLucideIcon, M as CardTitle, N as Button, O as Card, W as cn, dt as require_jsx_runtime, h as Skeleton, j as CardHeader, k as CardContent, n as DashboardHeader, t as PageContent, v as __awaiter, wt as require_react, y as __rest } from "./PageContent-wcdRlike.js";
-import { a as TabsList, c as Search, i as TabsContent, l as FileText, o as TabsTrigger, r as Tabs } from "./index-56gZuXg-.js";
+import { A as CardDescription, D as Input, Et as __toESM, F as useAuth, J as createLucideIcon, M as CardTitle, N as Button, O as Card, W as cn, dt as require_jsx_runtime, h as Skeleton, j as CardHeader, k as CardContent, n as DashboardHeader, t as PageContent, v as __awaiter, wt as require_react, y as __rest } from "./PageContent-wcdRlike.js";
+import { a as TabsList, c as Search, i as TabsContent, l as FileText, o as TabsTrigger, r as Tabs } from "./index-SiydvObI.js";
 var BrainCircuit = createLucideIcon("brain-circuit", [
 	["path", {
 		d: "M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z",
@@ -15990,7 +15990,10 @@ var studyService = {
 	async getDecks() {
 		try {
 			const { data: { user } } = await supabase.auth.getUser();
-			if (!user) throw new Error("Not authenticated");
+			if (!user) return {
+				data: [],
+				error: /* @__PURE__ */ new Error("Not authenticated")
+			};
 			const { data, error } = await supabase.from("study_decks").select("*").eq("user_id", user.id).order("updated_at", { ascending: false });
 			if (error) throw error;
 			return {
@@ -16000,13 +16003,18 @@ var studyService = {
 		} catch (error) {
 			console.error("Error fetching study decks:", error);
 			return {
-				data: null,
+				data: [],
 				error
 			};
 		}
 	},
 	async getDueFlashcards(deckId) {
 		try {
+			const { data: { user } } = await supabase.auth.getUser();
+			if (!user) return {
+				data: [],
+				error: /* @__PURE__ */ new Error("Not authenticated")
+			};
 			const now = (/* @__PURE__ */ new Date()).toISOString();
 			const { data, error } = await supabase.from("study_flashcards").select("*").eq("deck_id", deckId).or(`next_review_date.lte.${now},next_review_date.is.null`).order("next_review_date", { ascending: true });
 			if (error) throw error;
@@ -16017,13 +16025,18 @@ var studyService = {
 		} catch (error) {
 			console.error("Error fetching due flashcards:", error);
 			return {
-				data: null,
+				data: [],
 				error
 			};
 		}
 	},
 	async processCardReview(cardId, grade, currentData) {
 		try {
+			const { data: { user } } = await supabase.auth.getUser();
+			if (!user) return {
+				data: null,
+				error: /* @__PURE__ */ new Error("Not authenticated")
+			};
 			const nextReview = calculateNextReview(currentData, grade);
 			const { data, error } = await supabase.from("study_flashcards").update({
 				interval: nextReview.interval,
@@ -16047,7 +16060,10 @@ var studyService = {
 	async getNotes() {
 		try {
 			const { data: { user } } = await supabase.auth.getUser();
-			if (!user) throw new Error("Not authenticated");
+			if (!user) return {
+				data: [],
+				error: /* @__PURE__ */ new Error("Not authenticated")
+			};
 			const { data, error } = await supabase.from("study_notes").select("*").eq("user_id", user.id).order("updated_at", { ascending: false });
 			if (error) throw error;
 			return {
@@ -16057,7 +16073,7 @@ var studyService = {
 		} catch (error) {
 			console.error("Error fetching notes:", error);
 			return {
-				data: null,
+				data: [],
 				error
 			};
 		}
@@ -16065,7 +16081,10 @@ var studyService = {
 	async saveNote(id, title, content) {
 		try {
 			const { data: { user } } = await supabase.auth.getUser();
-			if (!user) throw new Error("Not authenticated");
+			if (!user) return {
+				data: null,
+				error: /* @__PURE__ */ new Error("Not authenticated")
+			};
 			const noteData = {
 				title,
 				content,
@@ -16092,6 +16111,7 @@ var studyService = {
 //#endregion
 //#region src/hooks/use-flashcards.ts
 function useFlashcards() {
+	const { user, isLoading } = useAuth();
 	const [decks, setDecks] = (0, import_react.useState)([]);
 	const [loadingDecks, setLoadingDecks] = (0, import_react.useState)(true);
 	const [isReviewing, setIsReviewing] = (0, import_react.useState)(false);
@@ -16101,12 +16121,19 @@ function useFlashcards() {
 	const [currentIndex, setCurrentIndex] = (0, import_react.useState)(0);
 	const [showAnswer, setShowAnswer] = (0, import_react.useState)(false);
 	(0, import_react.useEffect)(() => {
+		if (isLoading) return;
+		if (!user) {
+			setLoadingDecks(false);
+			return;
+		}
+		setLoadingDecks(true);
 		studyService.getDecks().then(({ data }) => {
 			setDecks(data || []);
 			setLoadingDecks(false);
 		});
-	}, []);
+	}, [user, isLoading]);
 	const startReview = async (deck) => {
+		if (!user) return;
 		setLoadingCards(true);
 		setIsReviewing(true);
 		setCurrentDeck(deck);
@@ -16117,7 +16144,7 @@ function useFlashcards() {
 		setLoadingCards(false);
 	};
 	const handleGrade = async (grade) => {
-		if (!flashcards.length) return;
+		if (!user || !flashcards.length) return;
 		const card = flashcards[currentIndex];
 		console.log(`processCardReview called for card ${card.id} with grade ${grade}`);
 		await studyService.processCardReview(card.id, grade, {
@@ -16287,4 +16314,4 @@ function ClientStudy() {
 //#endregion
 export { ClientStudy as default };
 
-//# sourceMappingURL=ClientStudy-0OAPOSiB.js.map
+//# sourceMappingURL=ClientStudy-pL_WPBQH.js.map

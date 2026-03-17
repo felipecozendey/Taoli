@@ -1,5 +1,5 @@
 import { A as CardDescription, D as Input, Et as __toESM, F as useAuth, J as createLucideIcon, M as CardTitle, N as Button, O as Card, W as cn, dt as require_jsx_runtime, h as Skeleton, j as CardHeader, k as CardContent, n as DashboardHeader, t as PageContent, v as __awaiter, wt as require_react, y as __rest } from "./PageContent-wcdRlike.js";
-import { a as TabsList, c as Search, i as TabsContent, l as FileText, o as TabsTrigger, r as Tabs } from "./index-SiydvObI.js";
+import { a as TabsList, c as Search, d as useToast, i as TabsContent, l as Plus, o as TabsTrigger, r as Tabs, u as FileText } from "./index-D5FI7v-L.js";
 var BrainCircuit = createLucideIcon("brain-circuit", [
 	["path", {
 		d: "M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z",
@@ -114,6 +114,10 @@ var Layers = createLucideIcon("layers", [
 		key: "kqbvx6"
 	}]
 ]);
+var LoaderCircle = createLucideIcon("loader-circle", [["path", {
+	d: "M21 12a9 9 0 1 1-6.219-8.56",
+	key: "13zald"
+}]]);
 var Network = createLucideIcon("network", [
 	["rect", {
 		x: "16",
@@ -152,6 +156,20 @@ var Play = createLucideIcon("play", [["path", {
 	d: "M5 5a2 2 0 0 1 3.008-1.728l11.997 6.998a2 2 0 0 1 .003 3.458l-12 7A2 2 0 0 1 5 19z",
 	key: "10ikf1"
 }]]);
+var Save = createLucideIcon("save", [
+	["path", {
+		d: "M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z",
+		key: "1c8476"
+	}],
+	["path", {
+		d: "M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7",
+		key: "1ydtos"
+	}],
+	["path", {
+		d: "M7 3v4a1 1 0 0 0 1 1h7",
+		key: "t51u73"
+	}]
+]);
 //#endregion
 //#region ../../cache/modules/gerenciador-pessoal-completo-6024e/node_modules/.pnpm/react-resizable-panels@3.0.6_react-dom@19.2.4_react@19.2.4__react@19.2.4/node_modules/react-resizable-panels/dist/react-resizable-panels.browser.js
 var import_react = /* @__PURE__ */ __toESM(require_react(), 1);
@@ -1797,546 +1815,17 @@ var ResizableHandle = ({ withHandle, className, ...props }) => /* @__PURE__ */ (
 	})
 });
 //#endregion
-//#region src/pages/client/components/SecondBrainPanel.tsx
-function SecondBrainPanel() {
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-		"data-uid": "src/pages/client/components/SecondBrainPanel.tsx:7:5",
+//#region src/components/ui/textarea.tsx
+var Textarea = import_react.forwardRef(({ className, ...props }, ref) => {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("textarea", {
+		"data-uid": "src/components/ui/textarea.tsx:9:7",
 		"data-prohibitions": "[editContent]",
-		className: "flex flex-col h-full bg-background relative z-0",
-		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-			"data-uid": "src/pages/client/components/SecondBrainPanel.tsx:8:7",
-			"data-prohibitions": "[]",
-			className: "flex items-center justify-between px-4 py-3 border-b bg-muted/20 shrink-0",
-			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-				"data-uid": "src/pages/client/components/SecondBrainPanel.tsx:9:9",
-				"data-prohibitions": "[]",
-				className: "flex items-center gap-2",
-				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrainCircuit, {
-					"data-uid": "src/pages/client/components/SecondBrainPanel.tsx:10:11",
-					"data-prohibitions": "[editContent]",
-					className: "h-5 w-5 text-primary"
-				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-					"data-uid": "src/pages/client/components/SecondBrainPanel.tsx:11:11",
-					"data-prohibitions": "[]",
-					className: "font-semibold text-sm",
-					children: "Segundo Cérebro"
-				})]
-			}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
-				"data-uid": "src/pages/client/components/SecondBrainPanel.tsx:13:9",
-				"data-prohibitions": "[]",
-				variant: "outline",
-				size: "sm",
-				className: "h-8 gap-2 bg-background shadow-sm hover:bg-muted/50",
-				children: [
-					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Network, {
-						"data-uid": "src/pages/client/components/SecondBrainPanel.tsx:18:11",
-						"data-prohibitions": "[editContent]",
-						className: "h-4 w-4 text-muted-foreground"
-					}),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-						"data-uid": "src/pages/client/components/SecondBrainPanel.tsx:19:11",
-						"data-prohibitions": "[]",
-						className: "hidden xl:inline",
-						children: "Ver Grafo de Conhecimento"
-					}),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-						"data-uid": "src/pages/client/components/SecondBrainPanel.tsx:20:11",
-						"data-prohibitions": "[]",
-						className: "xl:hidden",
-						children: "Grafo"
-					})
-				]
-			})]
-		}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-			"data-uid": "src/pages/client/components/SecondBrainPanel.tsx:23:7",
-			"data-prohibitions": "[editContent]",
-			className: "flex flex-1 min-h-0 overflow-hidden",
-			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-				"data-uid": "src/pages/client/components/SecondBrainPanel.tsx:25:9",
-				"data-prohibitions": "[]",
-				className: "w-16 sm:w-56 lg:w-64 border-r bg-muted/5 flex flex-col shrink-0",
-				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					"data-uid": "src/pages/client/components/SecondBrainPanel.tsx:26:11",
-					"data-prohibitions": "[]",
-					className: "p-3 border-b",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						"data-uid": "src/pages/client/components/SecondBrainPanel.tsx:27:13",
-						"data-prohibitions": "[]",
-						className: "relative hidden sm:block",
-						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Search, {
-							"data-uid": "src/pages/client/components/SecondBrainPanel.tsx:28:15",
-							"data-prohibitions": "[editContent]",
-							className: "absolute left-2 top-2 h-4 w-4 text-muted-foreground"
-						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
-							"data-uid": "src/pages/client/components/SecondBrainPanel.tsx:29:15",
-							"data-prohibitions": "[editContent]",
-							className: "h-8 pl-8 text-xs bg-background",
-							placeholder: "Buscar notas..."
-						})]
-					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-						"data-uid": "src/pages/client/components/SecondBrainPanel.tsx:31:13",
-						"data-prohibitions": "[]",
-						className: "sm:hidden flex justify-center",
-						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Search, {
-							"data-uid": "src/pages/client/components/SecondBrainPanel.tsx:32:15",
-							"data-prohibitions": "[editContent]",
-							className: "h-5 w-5 text-muted-foreground"
-						})
-					})]
-				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					"data-uid": "src/pages/client/components/SecondBrainPanel.tsx:35:11",
-					"data-prohibitions": "[]",
-					className: "flex-1 overflow-y-auto p-2 space-y-1",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-						"data-uid": "src/pages/client/components/SecondBrainPanel.tsx:36:13",
-						"data-prohibitions": "[]",
-						className: "w-full flex items-center justify-center sm:justify-start gap-3 px-2 py-2 text-sm rounded-md bg-primary/10 text-primary font-medium transition-colors",
-						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FileText, {
-							"data-uid": "src/pages/client/components/SecondBrainPanel.tsx:37:15",
-							"data-prohibitions": "[editContent]",
-							className: "h-4 w-4 shrink-0"
-						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-							"data-uid": "src/pages/client/components/SecondBrainPanel.tsx:38:15",
-							"data-prohibitions": "[]",
-							className: "hidden sm:inline truncate",
-							children: "Fisiologia Humana"
-						})]
-					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-						"data-uid": "src/pages/client/components/SecondBrainPanel.tsx:40:13",
-						"data-prohibitions": "[]",
-						className: "w-full flex items-center justify-center sm:justify-start gap-3 px-2 py-2 text-sm rounded-md hover:bg-muted text-muted-foreground transition-colors group",
-						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Layers, {
-							"data-uid": "src/pages/client/components/SecondBrainPanel.tsx:41:15",
-							"data-prohibitions": "[editContent]",
-							className: "h-4 w-4 shrink-0 group-hover:text-foreground transition-colors"
-						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-							"data-uid": "src/pages/client/components/SecondBrainPanel.tsx:42:15",
-							"data-prohibitions": "[]",
-							className: "hidden sm:inline truncate",
-							children: "Livro: Hábitos Atômicos"
-						})]
-					})]
-				})]
-			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-				"data-uid": "src/pages/client/components/SecondBrainPanel.tsx:47:9",
-				"data-prohibitions": "[]",
-				className: "flex-1 bg-background overflow-y-auto relative",
-				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-					"data-uid": "src/pages/client/components/SecondBrainPanel.tsx:48:11",
-					"data-prohibitions": "[]",
-					className: "absolute inset-0 p-6 lg:p-12",
-					children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						"data-uid": "src/pages/client/components/SecondBrainPanel.tsx:49:13",
-						"data-prohibitions": "[]",
-						className: "max-w-2xl mx-auto space-y-6",
-						children: [
-							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								"data-uid": "src/pages/client/components/SecondBrainPanel.tsx:50:15",
-								"data-prohibitions": "[]",
-								className: "text-[10px] uppercase tracking-widest font-semibold text-muted-foreground flex items-center gap-2",
-								children: [
-									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-										"data-uid": "src/pages/client/components/SecondBrainPanel.tsx:51:17",
-										"data-prohibitions": "[]",
-										children: "Medicina"
-									}),
-									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-										"data-uid": "src/pages/client/components/SecondBrainPanel.tsx:52:17",
-										"data-prohibitions": "[]",
-										className: "h-1 w-1 rounded-full bg-border"
-									}),
-									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-										"data-uid": "src/pages/client/components/SecondBrainPanel.tsx:53:17",
-										"data-prohibitions": "[]",
-										children: "Anatomia"
-									})
-								]
-							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
-								"data-uid": "src/pages/client/components/SecondBrainPanel.tsx:56:15",
-								"data-prohibitions": "[]",
-								className: "text-3xl lg:text-4xl font-bold tracking-tight text-foreground outline-none cursor-text",
-								children: "Fisiologia Humana"
-							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								"data-uid": "src/pages/client/components/SecondBrainPanel.tsx:60:15",
-								"data-prohibitions": "[]",
-								className: "text-muted-foreground space-y-4 pt-2 text-[15px] leading-relaxed cursor-text",
-								children: [
-									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-										"data-uid": "src/pages/client/components/SecondBrainPanel.tsx:61:17",
-										"data-prohibitions": "[]",
-										children: "A fisiologia humana é o estudo das funções normais do corpo humano, abrangendo desde o nível celular até os sistemas orgânicos complexos. Este documento centraliza os conceitos principais."
-									}),
-									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-										"data-uid": "src/pages/client/components/SecondBrainPanel.tsx:67:17",
-										"data-prohibitions": "[]",
-										className: "p-4 bg-muted/30 rounded-lg border-l-4 border-primary",
-										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-											"data-uid": "src/pages/client/components/SecondBrainPanel.tsx:68:19",
-											"data-prohibitions": "[]",
-											className: "text-sm font-medium text-foreground",
-											children: "Nota Rápida"
-										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-											"data-uid": "src/pages/client/components/SecondBrainPanel.tsx:69:19",
-											"data-prohibitions": "[]",
-											className: "text-sm",
-											children: "Revisar a relação entre o sistema endócrino e a homeostase celular antes da prova prática."
-										})]
-									}),
-									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-										"data-uid": "src/pages/client/components/SecondBrainPanel.tsx:75:17",
-										"data-prohibitions": "[]",
-										className: "font-medium text-foreground mt-6",
-										children: "Tópicos Principais:"
-									}),
-									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("ul", {
-										"data-uid": "src/pages/client/components/SecondBrainPanel.tsx:76:17",
-										"data-prohibitions": "[]",
-										className: "list-disc pl-5 space-y-2 marker:text-muted-foreground",
-										children: [
-											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("li", {
-												"data-uid": "src/pages/client/components/SecondBrainPanel.tsx:77:19",
-												"data-prohibitions": "[]",
-												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", {
-													"data-uid": "src/pages/client/components/SecondBrainPanel.tsx:78:21",
-													"data-prohibitions": "[]",
-													className: "text-foreground",
-													children: "Sistema Nervoso:"
-												}), " Controle e coordenação."]
-											}),
-											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("li", {
-												"data-uid": "src/pages/client/components/SecondBrainPanel.tsx:81:19",
-												"data-prohibitions": "[]",
-												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", {
-													"data-uid": "src/pages/client/components/SecondBrainPanel.tsx:82:21",
-													"data-prohibitions": "[]",
-													className: "text-foreground",
-													children: "Sistema Cardiovascular:"
-												}), " Transporte de nutrientes e oxigênio pela corrente sanguínea."]
-											}),
-											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("li", {
-												"data-uid": "src/pages/client/components/SecondBrainPanel.tsx:85:19",
-												"data-prohibitions": "[]",
-												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", {
-													"data-uid": "src/pages/client/components/SecondBrainPanel.tsx:86:21",
-													"data-prohibitions": "[]",
-													className: "text-foreground",
-													children: "Homeostase:"
-												}), " Manutenção do equilíbrio dinâmico interno frente a mudanças externas."]
-											})
-										]
-									}),
-									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-										"data-uid": "src/pages/client/components/SecondBrainPanel.tsx:91:17",
-										"data-prohibitions": "[]",
-										className: "pt-8 flex items-center gap-2 text-sm text-muted-foreground/60",
-										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-											"data-uid": "src/pages/client/components/SecondBrainPanel.tsx:92:19",
-											"data-prohibitions": "[]",
-											className: "w-1 h-5 bg-primary/40 animate-pulse"
-										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-											"data-uid": "src/pages/client/components/SecondBrainPanel.tsx:93:19",
-											"data-prohibitions": "[]",
-											children: "Continue escrevendo (simulado)..."
-										})]
-									})
-								]
-							})
-						]
-					})
-				})
-			})]
-		})]
+		className: cn("flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm", className),
+		ref,
+		...props
 	});
-}
-//#endregion
-//#region src/pages/client/components/FlashcardsPanel.tsx
-function FlashcardsPanel({ data }) {
-	const { decks, loadingDecks, isReviewing, currentDeck, flashcards, loadingCards, currentIndex, showAnswer, setShowAnswer, startReview, handleGrade, endReview } = data;
-	if (isReviewing) {
-		if (loadingCards) return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-			"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:30:9",
-			"data-prohibitions": "[]",
-			className: "flex flex-col h-full bg-muted/10 p-6 space-y-4",
-			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Skeleton, {
-				"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:31:11",
-				"data-prohibitions": "[editContent]",
-				className: "h-8 w-1/3"
-			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Skeleton, {
-				"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:32:11",
-				"data-prohibitions": "[editContent]",
-				className: "h-[300px] w-full"
-			})]
-		});
-		if (flashcards.length === 0) return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-			"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:39:9",
-			"data-prohibitions": "[]",
-			className: "flex flex-col h-full items-center justify-center p-6 bg-muted/10",
-			children: [
-				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrainCircuit, {
-					"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:40:11",
-					"data-prohibitions": "[editContent]",
-					className: "h-12 w-12 text-muted-foreground mb-4"
-				}),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
-					"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:41:11",
-					"data-prohibitions": "[]",
-					className: "text-lg font-medium",
-					children: "Você está em dia!"
-				}),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-					"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:42:11",
-					"data-prohibitions": "[]",
-					className: "text-muted-foreground mb-6 text-center",
-					children: "Nenhum flashcard pendente para revisão neste baralho agora."
-				}),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
-					"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:45:11",
-					"data-prohibitions": "[]",
-					onClick: endReview,
-					children: "Voltar aos Baralhos"
-				})
-			]
-		});
-		const card = flashcards[currentIndex];
-		return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-			"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:53:7",
-			"data-prohibitions": "[editContent]",
-			className: "flex flex-col h-full bg-muted/10 animate-fade-in-up",
-			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-				"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:54:9",
-				"data-prohibitions": "[editContent]",
-				className: "flex items-center justify-between px-4 py-3 border-b bg-background/50 backdrop-blur-sm shrink-0",
-				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-					"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:55:11",
-					"data-prohibitions": "[editContent]",
-					className: "font-semibold text-sm truncate pr-4",
-					children: currentDeck?.title
-				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-					"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:56:11",
-					"data-prohibitions": "[editContent]",
-					className: "text-xs text-muted-foreground font-medium bg-muted px-2 py-1 rounded-md shrink-0",
-					children: [
-						currentIndex + 1,
-						" / ",
-						flashcards.length
-					]
-				})]
-			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-				"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:60:9",
-				"data-prohibitions": "[editContent]",
-				className: "flex-1 overflow-y-auto p-4 md:p-8 flex flex-col items-center justify-center",
-				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
-					"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:61:11",
-					"data-prohibitions": "[editContent]",
-					className: "w-full max-w-lg min-h-[350px] flex flex-col p-6 sm:p-8 shadow-md relative overflow-hidden bg-background/80 backdrop-blur-xl border-border/50",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:62:13",
-						"data-prohibitions": "[editContent]",
-						className: "flex-1 flex flex-col items-center justify-center text-center",
-						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-							"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:63:15",
-							"data-prohibitions": "[editContent]",
-							className: "text-xl sm:text-2xl font-medium text-foreground leading-relaxed",
-							children: card.front_content
-						}), showAnswer && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-							"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:69:19",
-							"data-prohibitions": "[editContent]",
-							className: "w-full h-px bg-border my-6 sm:my-8"
-						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-							"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:70:19",
-							"data-prohibitions": "[editContent]",
-							className: "text-lg sm:text-xl text-muted-foreground animate-fade-in-up leading-relaxed",
-							children: card.back_content
-						})] })]
-					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-						"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:77:13",
-						"data-prohibitions": "[editContent]",
-						className: "mt-8 pt-4 w-full shrink-0",
-						children: !showAnswer ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
-							"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:79:17",
-							"data-prohibitions": "[]",
-							onClick: () => setShowAnswer(true),
-							className: "w-full h-12 text-base font-semibold",
-							children: "Revelar Resposta"
-						}) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:86:17",
-							"data-prohibitions": "[]",
-							className: "grid grid-cols-2 sm:grid-cols-4 gap-2 w-full animate-fade-in",
-							children: [
-								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
-									"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:87:19",
-									"data-prohibitions": "[]",
-									variant: "destructive",
-									className: "h-12",
-									onClick: () => handleGrade(1),
-									children: "Errei"
-								}),
-								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
-									"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:90:19",
-									"data-prohibitions": "[]",
-									className: "bg-orange-500 hover:bg-orange-600 text-white h-12",
-									onClick: () => handleGrade(3),
-									children: "Difícil"
-								}),
-								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
-									"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:96:19",
-									"data-prohibitions": "[]",
-									className: "bg-green-500 hover:bg-green-600 text-white h-12",
-									onClick: () => handleGrade(4),
-									children: "Bom"
-								}),
-								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
-									"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:102:19",
-									"data-prohibitions": "[]",
-									className: "bg-blue-500 hover:bg-blue-600 text-white h-12",
-									onClick: () => handleGrade(5),
-									children: "Fácil"
-								})
-							]
-						})
-					})]
-				})
-			})]
-		});
-	}
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-		"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:118:5",
-		"data-prohibitions": "[editContent]",
-		className: "flex flex-col h-full bg-muted/10 relative z-0",
-		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-			"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:119:7",
-			"data-prohibitions": "[]",
-			className: "flex items-center px-4 py-3 border-b bg-background/50 backdrop-blur-sm shrink-0",
-			children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-				"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:120:9",
-				"data-prohibitions": "[]",
-				className: "flex items-center gap-2",
-				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Layers, {
-					"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:121:11",
-					"data-prohibitions": "[editContent]",
-					className: "h-5 w-5 text-amber-500"
-				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-					"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:122:11",
-					"data-prohibitions": "[]",
-					className: "font-semibold text-sm",
-					children: "Flashcards (SRS)"
-				})]
-			})
-		}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-			"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:125:7",
-			"data-prohibitions": "[editContent]",
-			className: "flex-1 overflow-y-auto p-4 lg:p-6",
-			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
-				"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:126:9",
-				"data-prohibitions": "[]",
-				className: "text-sm font-semibold text-muted-foreground mb-4 uppercase tracking-wider",
-				children: "Meus Baralhos Ativos"
-			}), loadingDecks ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-				"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:131:11",
-				"data-prohibitions": "[]",
-				className: "space-y-4",
-				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Skeleton, {
-					"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:132:13",
-					"data-prohibitions": "[editContent]",
-					className: "h-32 w-full rounded-xl"
-				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Skeleton, {
-					"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:133:13",
-					"data-prohibitions": "[editContent]",
-					className: "h-32 w-full rounded-xl"
-				})]
-			}) : decks.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
-				"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:136:11",
-				"data-prohibitions": "[]",
-				className: "border-dashed bg-transparent shadow-none flex flex-col items-center justify-center p-8 text-center mt-4",
-				children: [
-					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-						"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:137:13",
-						"data-prohibitions": "[]",
-						className: "h-12 w-12 rounded-full bg-muted flex items-center justify-center mb-4",
-						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Layers, {
-							"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:138:15",
-							"data-prohibitions": "[editContent]",
-							className: "h-6 w-6 text-muted-foreground"
-						})
-					}),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h4", {
-						"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:140:13",
-						"data-prohibitions": "[]",
-						className: "text-lg font-medium mb-2",
-						children: "Nenhum baralho encontrado"
-					}),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-						"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:141:13",
-						"data-prohibitions": "[]",
-						className: "text-sm text-muted-foreground mb-6 max-w-xs",
-						children: "Você ainda não possui baralhos. Crie um novo para começar a revisar com repetição espaçada."
-					}),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
-						"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:145:13",
-						"data-prohibitions": "[]",
-						variant: "outline",
-						className: "gap-2",
-						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Layers, {
-							"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:146:15",
-							"data-prohibitions": "[editContent]",
-							className: "h-4 w-4"
-						}), "Criar Novo Baralho"]
-					})
-				]
-			}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-				"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:151:11",
-				"data-prohibitions": "[editContent]",
-				className: "space-y-4",
-				children: decks.map((deck) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
-					"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:153:15",
-					"data-prohibitions": "[editContent]",
-					className: "bg-background/60 backdrop-blur-xl border-border/50 shadow-sm hover:shadow-md hover:bg-background/80 transition-all duration-300 relative overflow-hidden group",
-					children: [
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-							"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:157:17",
-							"data-prohibitions": "[]",
-							className: "absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-2xl -mr-10 -mt-10 group-hover:bg-primary/10 transition-colors"
-						}),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, {
-							"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:158:17",
-							"data-prohibitions": "[editContent]",
-							className: "pb-4 relative z-10",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
-								"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:159:19",
-								"data-prohibitions": "[editContent]",
-								className: "text-xl mb-1.5",
-								children: deck.title
-							}), deck.description && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardDescription, {
-								"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:160:40",
-								"data-prohibitions": "[editContent]",
-								children: deck.description
-							})]
-						}),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContent, {
-							"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:162:17",
-							"data-prohibitions": "[]",
-							className: "relative z-10",
-							children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
-								"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:163:19",
-								"data-prohibitions": "[]",
-								size: "lg",
-								className: "w-full gap-2 rounded-xl h-12 font-medium text-base shadow-sm",
-								onClick: () => startReview(deck),
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Play, {
-									"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:168:21",
-									"data-prohibitions": "[editContent]",
-									className: "h-4 w-4 fill-current"
-								}), "Estudar Agora"]
-							})
-						})
-					]
-				}, deck.id))
-			})]
-		})]
-	});
-}
+});
+Textarea.displayName = "Textarea";
 //#endregion
 //#region ../../cache/modules/gerenciador-pessoal-completo-6024e/node_modules/.pnpm/@supabase+functions-js@2.99.2/node_modules/@supabase/functions-js/dist/module/helper.js
 var resolveFetch$3 = (customFetch) => {
@@ -16109,6 +15598,554 @@ var studyService = {
 	}
 };
 //#endregion
+//#region src/pages/client/components/SecondBrainPanel.tsx
+function SecondBrainPanel() {
+	const [notes, setNotes] = (0, import_react.useState)([]);
+	const [isLoading, setIsLoading] = (0, import_react.useState)(true);
+	const [isSaving, setIsSaving] = (0, import_react.useState)(false);
+	const [activeNoteId, setActiveNoteId] = (0, import_react.useState)(null);
+	const [editorTitle, setEditorTitle] = (0, import_react.useState)("");
+	const [editorContent, setEditorContent] = (0, import_react.useState)("");
+	const { toast } = useToast();
+	const fetchNotes = async () => {
+		setIsLoading(true);
+		const { data, error } = await studyService.getNotes();
+		if (error) toast({
+			title: "Erro ao carregar notas",
+			description: error.message,
+			variant: "destructive"
+		});
+		else if (data) setNotes(data);
+		setIsLoading(false);
+	};
+	(0, import_react.useEffect)(() => {
+		fetchNotes();
+	}, []);
+	const handleSelectNote = (note) => {
+		setActiveNoteId(note.id);
+		setEditorTitle(note.title);
+		setEditorContent(note.content);
+	};
+	const handleNewNote = () => {
+		setActiveNoteId(null);
+		setEditorTitle("");
+		setEditorContent("");
+	};
+	const handleSaveNote = async () => {
+		if (!editorTitle.trim()) {
+			toast({
+				title: "Título obrigatório",
+				description: "Por favor, insira um título para a nota.",
+				variant: "destructive"
+			});
+			return;
+		}
+		setIsSaving(true);
+		const { data, error } = await studyService.saveNote(activeNoteId, editorTitle, editorContent);
+		setIsSaving(false);
+		if (error) toast({
+			title: "Erro ao salvar nota",
+			description: error.message,
+			variant: "destructive"
+		});
+		else if (data) {
+			toast({
+				title: "Nota salva",
+				description: "Sua nota foi salva com sucesso."
+			});
+			setActiveNoteId(data.id);
+			fetchNotes();
+		}
+	};
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		"data-uid": "src/pages/client/components/SecondBrainPanel.tsx:82:5",
+		"data-prohibitions": "[editContent]",
+		className: "flex flex-col h-full bg-background relative z-0",
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			"data-uid": "src/pages/client/components/SecondBrainPanel.tsx:83:7",
+			"data-prohibitions": "[]",
+			className: "flex items-center justify-between px-4 py-3 border-b bg-muted/20 shrink-0",
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				"data-uid": "src/pages/client/components/SecondBrainPanel.tsx:84:9",
+				"data-prohibitions": "[]",
+				className: "flex items-center gap-2",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrainCircuit, {
+					"data-uid": "src/pages/client/components/SecondBrainPanel.tsx:85:11",
+					"data-prohibitions": "[editContent]",
+					className: "h-5 w-5 text-primary"
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+					"data-uid": "src/pages/client/components/SecondBrainPanel.tsx:86:11",
+					"data-prohibitions": "[]",
+					className: "font-semibold text-sm",
+					children: "Segundo Cérebro"
+				})]
+			}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
+				"data-uid": "src/pages/client/components/SecondBrainPanel.tsx:88:9",
+				"data-prohibitions": "[]",
+				variant: "outline",
+				size: "sm",
+				className: "h-8 gap-2 bg-background shadow-sm hover:bg-muted/50",
+				children: [
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Network, {
+						"data-uid": "src/pages/client/components/SecondBrainPanel.tsx:93:11",
+						"data-prohibitions": "[editContent]",
+						className: "h-4 w-4 text-muted-foreground"
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+						"data-uid": "src/pages/client/components/SecondBrainPanel.tsx:94:11",
+						"data-prohibitions": "[]",
+						className: "hidden xl:inline",
+						children: "Ver Grafo de Conhecimento"
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+						"data-uid": "src/pages/client/components/SecondBrainPanel.tsx:95:11",
+						"data-prohibitions": "[]",
+						className: "xl:hidden",
+						children: "Grafo"
+					})
+				]
+			})]
+		}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			"data-uid": "src/pages/client/components/SecondBrainPanel.tsx:99:7",
+			"data-prohibitions": "[editContent]",
+			className: "flex flex-1 min-h-0 overflow-hidden",
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				"data-uid": "src/pages/client/components/SecondBrainPanel.tsx:101:9",
+				"data-prohibitions": "[editContent]",
+				className: "w-16 sm:w-56 lg:w-64 border-r bg-muted/5 flex flex-col shrink-0",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					"data-uid": "src/pages/client/components/SecondBrainPanel.tsx:102:11",
+					"data-prohibitions": "[]",
+					className: "p-3 border-b flex flex-col gap-2",
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							"data-uid": "src/pages/client/components/SecondBrainPanel.tsx:103:13",
+							"data-prohibitions": "[]",
+							className: "relative hidden sm:block",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Search, {
+								"data-uid": "src/pages/client/components/SecondBrainPanel.tsx:104:15",
+								"data-prohibitions": "[editContent]",
+								className: "absolute left-2 top-2 h-4 w-4 text-muted-foreground"
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
+								"data-uid": "src/pages/client/components/SecondBrainPanel.tsx:105:15",
+								"data-prohibitions": "[editContent]",
+								className: "h-8 pl-8 text-xs bg-background",
+								placeholder: "Buscar notas..."
+							})]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+							"data-uid": "src/pages/client/components/SecondBrainPanel.tsx:107:13",
+							"data-prohibitions": "[]",
+							className: "sm:hidden flex justify-center pb-2 border-b mb-1",
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Search, {
+								"data-uid": "src/pages/client/components/SecondBrainPanel.tsx:108:15",
+								"data-prohibitions": "[editContent]",
+								className: "h-5 w-5 text-muted-foreground"
+							})
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
+							"data-uid": "src/pages/client/components/SecondBrainPanel.tsx:111:13",
+							"data-prohibitions": "[]",
+							variant: "default",
+							size: "sm",
+							className: "h-8 w-full gap-2 text-xs",
+							onClick: handleNewNote,
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Plus, {
+								"data-uid": "src/pages/client/components/SecondBrainPanel.tsx:117:15",
+								"data-prohibitions": "[editContent]",
+								className: "h-4 w-4"
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								"data-uid": "src/pages/client/components/SecondBrainPanel.tsx:118:15",
+								"data-prohibitions": "[]",
+								className: "hidden sm:inline",
+								children: "Nova Nota"
+							})]
+						})
+					]
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+					"data-uid": "src/pages/client/components/SecondBrainPanel.tsx:122:11",
+					"data-prohibitions": "[editContent]",
+					className: "flex-1 overflow-y-auto p-2 space-y-1",
+					children: isLoading ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Skeleton, {
+							"data-uid": "src/pages/client/components/SecondBrainPanel.tsx:125:17",
+							"data-prohibitions": "[editContent]",
+							className: "h-9 w-full rounded-md"
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Skeleton, {
+							"data-uid": "src/pages/client/components/SecondBrainPanel.tsx:126:17",
+							"data-prohibitions": "[editContent]",
+							className: "h-9 w-full rounded-md"
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Skeleton, {
+							"data-uid": "src/pages/client/components/SecondBrainPanel.tsx:127:17",
+							"data-prohibitions": "[editContent]",
+							className: "h-9 w-full rounded-md"
+						})
+					] }) : notes.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+						"data-uid": "src/pages/client/components/SecondBrainPanel.tsx:130:15",
+						"data-prohibitions": "[]",
+						className: "text-xs text-center text-muted-foreground py-4 hidden sm:block",
+						children: "Nenhuma nota."
+					}) : notes.map((note) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+						"data-uid": "src/pages/client/components/SecondBrainPanel.tsx:135:17",
+						"data-prohibitions": "[editContent]",
+						onClick: () => handleSelectNote(note),
+						className: cn("w-full flex items-center justify-center sm:justify-start gap-3 px-2 py-2 text-sm rounded-md transition-colors", activeNoteId === note.id ? "bg-primary/10 text-primary font-medium" : "hover:bg-muted text-muted-foreground group"),
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FileText, {
+							"data-uid": "src/pages/client/components/SecondBrainPanel.tsx:145:19",
+							"data-prohibitions": "[editContent]",
+							className: cn("h-4 w-4 shrink-0 transition-colors", activeNoteId !== note.id && "group-hover:text-foreground")
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+							"data-uid": "src/pages/client/components/SecondBrainPanel.tsx:151:19",
+							"data-prohibitions": "[editContent]",
+							className: "hidden sm:inline truncate text-left",
+							children: note.title
+						})]
+					}, note.id))
+				})]
+			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				"data-uid": "src/pages/client/components/SecondBrainPanel.tsx:159:9",
+				"data-prohibitions": "[editContent]",
+				className: "flex-1 bg-background overflow-y-auto relative flex flex-col",
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					"data-uid": "src/pages/client/components/SecondBrainPanel.tsx:160:11",
+					"data-prohibitions": "[editContent]",
+					className: "flex-1 p-4 lg:p-8 flex flex-col max-w-4xl mx-auto w-full gap-4",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						"data-uid": "src/pages/client/components/SecondBrainPanel.tsx:161:13",
+						"data-prohibitions": "[editContent]",
+						className: "flex items-center justify-between gap-4",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
+							"data-uid": "src/pages/client/components/SecondBrainPanel.tsx:162:15",
+							"data-prohibitions": "[editContent]",
+							value: editorTitle,
+							onChange: (e) => setEditorTitle(e.target.value),
+							placeholder: "Título da nota...",
+							className: "text-2xl lg:text-3xl font-bold border-none px-0 focus-visible:ring-0 h-auto bg-transparent"
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
+							"data-uid": "src/pages/client/components/SecondBrainPanel.tsx:168:15",
+							"data-prohibitions": "[editContent]",
+							onClick: handleSaveNote,
+							disabled: isSaving,
+							size: "sm",
+							className: "gap-2 shrink-0",
+							children: [isSaving ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(LoaderCircle, {
+								"data-uid": "src/pages/client/components/SecondBrainPanel.tsx:175:19",
+								"data-prohibitions": "[editContent]",
+								className: "h-4 w-4 animate-spin"
+							}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Save, {
+								"data-uid": "src/pages/client/components/SecondBrainPanel.tsx:177:19",
+								"data-prohibitions": "[editContent]",
+								className: "h-4 w-4"
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								"data-uid": "src/pages/client/components/SecondBrainPanel.tsx:179:17",
+								"data-prohibitions": "[]",
+								className: "hidden sm:inline",
+								children: "Guardar Nota"
+							})]
+						})]
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Textarea, {
+						"data-uid": "src/pages/client/components/SecondBrainPanel.tsx:183:13",
+						"data-prohibitions": "[editContent]",
+						value: editorContent,
+						onChange: (e) => setEditorContent(e.target.value),
+						placeholder: "Comece a escrever sua nota aqui...",
+						className: "flex-1 resize-none border-none px-0 focus-visible:ring-0 bg-transparent text-base lg:text-lg leading-relaxed text-muted-foreground focus:text-foreground transition-colors"
+					})]
+				})
+			})]
+		})]
+	});
+}
+//#endregion
+//#region src/pages/client/components/FlashcardsPanel.tsx
+function FlashcardsPanel({ data }) {
+	const { decks, loadingDecks, isReviewing, currentDeck, flashcards, loadingCards, currentIndex, showAnswer, setShowAnswer, startReview, handleGrade, endReview } = data;
+	if (isReviewing) {
+		if (loadingCards) return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:30:9",
+			"data-prohibitions": "[]",
+			className: "flex flex-col h-full bg-muted/10 p-6 space-y-4",
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Skeleton, {
+				"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:31:11",
+				"data-prohibitions": "[editContent]",
+				className: "h-8 w-1/3"
+			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Skeleton, {
+				"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:32:11",
+				"data-prohibitions": "[editContent]",
+				className: "h-[300px] w-full"
+			})]
+		});
+		if (flashcards.length === 0) return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:39:9",
+			"data-prohibitions": "[]",
+			className: "flex flex-col h-full items-center justify-center p-6 bg-muted/10",
+			children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrainCircuit, {
+					"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:40:11",
+					"data-prohibitions": "[editContent]",
+					className: "h-12 w-12 text-muted-foreground mb-4"
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+					"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:41:11",
+					"data-prohibitions": "[]",
+					className: "text-lg font-medium",
+					children: "Você está em dia!"
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+					"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:42:11",
+					"data-prohibitions": "[]",
+					className: "text-muted-foreground mb-6 text-center",
+					children: "Nenhum flashcard pendente para revisão neste baralho agora."
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+					"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:45:11",
+					"data-prohibitions": "[]",
+					onClick: endReview,
+					children: "Voltar aos Baralhos"
+				})
+			]
+		});
+		const card = flashcards[currentIndex];
+		return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:53:7",
+			"data-prohibitions": "[editContent]",
+			className: "flex flex-col h-full bg-muted/10 animate-fade-in-up",
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:54:9",
+				"data-prohibitions": "[editContent]",
+				className: "flex items-center justify-between px-4 py-3 border-b bg-background/50 backdrop-blur-sm shrink-0",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+					"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:55:11",
+					"data-prohibitions": "[editContent]",
+					className: "font-semibold text-sm truncate pr-4",
+					children: currentDeck?.title
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+					"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:56:11",
+					"data-prohibitions": "[editContent]",
+					className: "text-xs text-muted-foreground font-medium bg-muted px-2 py-1 rounded-md shrink-0",
+					children: [
+						currentIndex + 1,
+						" / ",
+						flashcards.length
+					]
+				})]
+			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:60:9",
+				"data-prohibitions": "[editContent]",
+				className: "flex-1 overflow-y-auto p-4 md:p-8 flex flex-col items-center justify-center",
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
+					"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:61:11",
+					"data-prohibitions": "[editContent]",
+					className: "w-full max-w-lg min-h-[350px] flex flex-col p-6 sm:p-8 shadow-md relative overflow-hidden bg-background/80 backdrop-blur-xl border-border/50",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:62:13",
+						"data-prohibitions": "[editContent]",
+						className: "flex-1 flex flex-col items-center justify-center text-center",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+							"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:63:15",
+							"data-prohibitions": "[editContent]",
+							className: "text-xl sm:text-2xl font-medium text-foreground leading-relaxed",
+							children: card.front_content
+						}), showAnswer && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+							"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:69:19",
+							"data-prohibitions": "[editContent]",
+							className: "w-full h-px bg-border my-6 sm:my-8"
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+							"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:70:19",
+							"data-prohibitions": "[editContent]",
+							className: "text-lg sm:text-xl text-muted-foreground animate-fade-in-up leading-relaxed",
+							children: card.back_content
+						})] })]
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:77:13",
+						"data-prohibitions": "[editContent]",
+						className: "mt-8 pt-4 w-full shrink-0",
+						children: !showAnswer ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+							"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:79:17",
+							"data-prohibitions": "[]",
+							onClick: () => setShowAnswer(true),
+							className: "w-full h-12 text-base font-semibold",
+							children: "Revelar Resposta"
+						}) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:86:17",
+							"data-prohibitions": "[]",
+							className: "grid grid-cols-2 sm:grid-cols-4 gap-2 w-full animate-fade-in",
+							children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+									"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:87:19",
+									"data-prohibitions": "[]",
+									variant: "destructive",
+									className: "h-12",
+									onClick: () => handleGrade(1),
+									children: "Errei"
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+									"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:90:19",
+									"data-prohibitions": "[]",
+									className: "bg-orange-500 hover:bg-orange-600 text-white h-12",
+									onClick: () => handleGrade(3),
+									children: "Difícil"
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+									"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:96:19",
+									"data-prohibitions": "[]",
+									className: "bg-green-500 hover:bg-green-600 text-white h-12",
+									onClick: () => handleGrade(4),
+									children: "Bom"
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+									"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:102:19",
+									"data-prohibitions": "[]",
+									className: "bg-blue-500 hover:bg-blue-600 text-white h-12",
+									onClick: () => handleGrade(5),
+									children: "Fácil"
+								})
+							]
+						})
+					})]
+				})
+			})]
+		});
+	}
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:118:5",
+		"data-prohibitions": "[editContent]",
+		className: "flex flex-col h-full bg-muted/10 relative z-0",
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+			"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:119:7",
+			"data-prohibitions": "[]",
+			className: "flex items-center px-4 py-3 border-b bg-background/50 backdrop-blur-sm shrink-0",
+			children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:120:9",
+				"data-prohibitions": "[]",
+				className: "flex items-center gap-2",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Layers, {
+					"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:121:11",
+					"data-prohibitions": "[editContent]",
+					className: "h-5 w-5 text-amber-500"
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+					"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:122:11",
+					"data-prohibitions": "[]",
+					className: "font-semibold text-sm",
+					children: "Flashcards (SRS)"
+				})]
+			})
+		}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:125:7",
+			"data-prohibitions": "[editContent]",
+			className: "flex-1 overflow-y-auto p-4 lg:p-6",
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+				"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:126:9",
+				"data-prohibitions": "[]",
+				className: "text-sm font-semibold text-muted-foreground mb-4 uppercase tracking-wider",
+				children: "Meus Baralhos Ativos"
+			}), loadingDecks ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:131:11",
+				"data-prohibitions": "[]",
+				className: "space-y-4",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Skeleton, {
+					"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:132:13",
+					"data-prohibitions": "[editContent]",
+					className: "h-32 w-full rounded-xl"
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Skeleton, {
+					"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:133:13",
+					"data-prohibitions": "[editContent]",
+					className: "h-32 w-full rounded-xl"
+				})]
+			}) : decks.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
+				"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:136:11",
+				"data-prohibitions": "[]",
+				className: "border-dashed bg-transparent shadow-none flex flex-col items-center justify-center p-8 text-center mt-4",
+				children: [
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:137:13",
+						"data-prohibitions": "[]",
+						className: "h-12 w-12 rounded-full bg-muted flex items-center justify-center mb-4",
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Layers, {
+							"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:138:15",
+							"data-prohibitions": "[editContent]",
+							className: "h-6 w-6 text-muted-foreground"
+						})
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h4", {
+						"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:140:13",
+						"data-prohibitions": "[]",
+						className: "text-lg font-medium mb-2",
+						children: "Nenhum baralho encontrado"
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+						"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:141:13",
+						"data-prohibitions": "[]",
+						className: "text-sm text-muted-foreground mb-6 max-w-xs",
+						children: "Você ainda não possui baralhos. Crie um novo para começar a revisar com repetição espaçada."
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
+						"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:145:13",
+						"data-prohibitions": "[]",
+						variant: "outline",
+						className: "gap-2",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Layers, {
+							"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:146:15",
+							"data-prohibitions": "[editContent]",
+							className: "h-4 w-4"
+						}), "Criar Novo Baralho"]
+					})
+				]
+			}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:151:11",
+				"data-prohibitions": "[editContent]",
+				className: "space-y-4",
+				children: decks.map((deck) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
+					"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:153:15",
+					"data-prohibitions": "[editContent]",
+					className: "bg-background/60 backdrop-blur-xl border-border/50 shadow-sm hover:shadow-md hover:bg-background/80 transition-all duration-300 relative overflow-hidden group",
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+							"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:157:17",
+							"data-prohibitions": "[]",
+							className: "absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-2xl -mr-10 -mt-10 group-hover:bg-primary/10 transition-colors"
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, {
+							"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:158:17",
+							"data-prohibitions": "[editContent]",
+							className: "pb-4 relative z-10",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
+								"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:159:19",
+								"data-prohibitions": "[editContent]",
+								className: "text-xl mb-1.5",
+								children: deck.title
+							}), deck.description && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardDescription, {
+								"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:160:40",
+								"data-prohibitions": "[editContent]",
+								children: deck.description
+							})]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContent, {
+							"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:162:17",
+							"data-prohibitions": "[]",
+							className: "relative z-10",
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
+								"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:163:19",
+								"data-prohibitions": "[]",
+								size: "lg",
+								className: "w-full gap-2 rounded-xl h-12 font-medium text-base shadow-sm",
+								onClick: () => startReview(deck),
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Play, {
+									"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:168:21",
+									"data-prohibitions": "[editContent]",
+									className: "h-4 w-4 fill-current"
+								}), "Estudar Agora"]
+							})
+						})
+					]
+				}, deck.id))
+			})]
+		})]
+	});
+}
+//#endregion
 //#region src/hooks/use-flashcards.ts
 function useFlashcards() {
 	const { user, isLoading } = useAuth();
@@ -16314,4 +16351,4 @@ function ClientStudy() {
 //#endregion
 export { ClientStudy as default };
 
-//# sourceMappingURL=ClientStudy-pL_WPBQH.js.map
+//# sourceMappingURL=ClientStudy-ChNpnHmD.js.map

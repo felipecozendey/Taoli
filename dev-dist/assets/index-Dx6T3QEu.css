@@ -813,9 +813,6 @@ section[aria-label='Notifications alt+T'] {
   width: var(--cell-size);
   height: var(--cell-size);
 }
-.h-1{
-  height: 0.25rem;
-}
 .h-1\.5{
   height: 0.375rem;
 }
@@ -1200,9 +1197,6 @@ section[aria-label='Notifications alt+T'] {
 .cursor-pointer{
   cursor: pointer;
 }
-.cursor-text{
-  cursor: text;
-}
 .touch-none{
   touch-action: none;
 }
@@ -1211,8 +1205,8 @@ section[aria-label='Notifications alt+T'] {
      -moz-user-select: none;
           user-select: none;
 }
-.list-disc{
-  list-style-type: disc;
+.resize-none{
+  resize: none;
 }
 .list-none{
   list-style-type: none;
@@ -1422,9 +1416,6 @@ section[aria-label='Notifications alt+T'] {
 .border-l{
   border-left-width: 1px;
 }
-.border-l-4{
-  border-left-width: 4px;
-}
 .border-r{
   border-right-width: 1px;
 }
@@ -1436,6 +1427,9 @@ section[aria-label='Notifications alt+T'] {
 }
 .border-dashed{
   border-style: dashed;
+}
+.border-none{
+  border-style: none;
 }
 .border-\[--color-border\]{
   border-color: var(--color-border);
@@ -1636,9 +1630,6 @@ section[aria-label='Notifications alt+T'] {
 .bg-primary\/20{
   background-color: hsl(var(--primary) / 0.2);
 }
-.bg-primary\/40{
-  background-color: hsl(var(--primary) / 0.4);
-}
 .bg-primary\/5{
   background-color: hsl(var(--primary) / 0.05);
 }
@@ -1724,6 +1715,10 @@ section[aria-label='Notifications alt+T'] {
 }
 .p-\[1px\]{
   padding: 1px;
+}
+.px-0{
+  padding-left: 0px;
+  padding-right: 0px;
 }
 .px-1{
   padding-left: 0.25rem;
@@ -1813,9 +1808,6 @@ section[aria-label='Notifications alt+T'] {
 .pl-4{
   padding-left: 1rem;
 }
-.pl-5{
-  padding-left: 1.25rem;
-}
 .pl-8{
   padding-left: 2rem;
 }
@@ -1852,9 +1844,6 @@ section[aria-label='Notifications alt+T'] {
 .pt-4{
   padding-top: 1rem;
 }
-.pt-8{
-  padding-top: 2rem;
-}
 .text-left{
   text-align: left;
 }
@@ -1877,10 +1866,6 @@ section[aria-label='Notifications alt+T'] {
   font-size: 1.5rem;
   line-height: 2rem;
 }
-.text-3xl{
-  font-size: 1.875rem;
-  line-height: 2.25rem;
-}
 .text-4xl{
   font-size: 2.25rem;
   line-height: 2.5rem;
@@ -1894,9 +1879,6 @@ section[aria-label='Notifications alt+T'] {
 }
 .text-\[10px\]{
   font-size: 10px;
-}
-.text-\[15px\]{
-  font-size: 15px;
 }
 .text-base{
   font-size: 1rem;
@@ -2050,9 +2032,6 @@ section[aria-label='Notifications alt+T'] {
 }
 .text-muted-foreground{
   color: hsl(var(--muted-foreground));
-}
-.text-muted-foreground\/60{
-  color: hsl(var(--muted-foreground) / 0.6);
 }
 .text-orange-500{
   --tw-text-opacity: 1;
@@ -2387,12 +2366,6 @@ section[aria-label='Notifications alt+T'] {
 .\[--cell-size\:2rem\]{
   --cell-size: 2rem;
 }
-.marker\:text-muted-foreground *::marker{
-  color: hsl(var(--muted-foreground));
-}
-.marker\:text-muted-foreground::marker{
-  color: hsl(var(--muted-foreground));
-}
 .file\:border-0::file-selector-button{
   border-width: 0px;
 }
@@ -2660,6 +2633,9 @@ section[aria-label='Notifications alt+T'] {
 .focus\:text-destructive:focus{
   color: hsl(var(--destructive));
 }
+.focus\:text-foreground:focus{
+  color: hsl(var(--foreground));
+}
 .focus\:opacity-100:focus{
   opacity: 1;
 }
@@ -2681,6 +2657,11 @@ section[aria-label='Notifications alt+T'] {
 .focus-visible\:outline-none:focus-visible{
   outline: 2px solid transparent;
   outline-offset: 2px;
+}
+.focus-visible\:ring-0:focus-visible{
+  --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+  --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(0px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+  box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
 }
 .focus-visible\:ring-1:focus-visible{
   --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
@@ -3605,18 +3586,19 @@ section[aria-label='Notifications alt+T'] {
   .lg\:flex-row{
     flex-direction: row;
   }
-  .lg\:p-12{
-    padding: 3rem;
-  }
   .lg\:p-6{
     padding: 1.5rem;
   }
   .lg\:p-8{
     padding: 2rem;
   }
-  .lg\:text-4xl{
-    font-size: 2.25rem;
-    line-height: 2.5rem;
+  .lg\:text-3xl{
+    font-size: 1.875rem;
+    line-height: 2.25rem;
+  }
+  .lg\:text-lg{
+    font-size: 1.125rem;
+    line-height: 1.75rem;
   }
 }
 @media (min-width: 1280px){

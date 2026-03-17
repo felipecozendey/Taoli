@@ -1,5 +1,5 @@
 import { $ as Presence, Et as __toESM, H as useSize, J as createLucideIcon, M as CardTitle, N as Button, O as Card, Q as useControllableState, W as cn, a as AvatarImage, dt as require_jsx_runtime, ft as useComposedRefs, i as AvatarFallback, j as CardHeader, k as CardContent, n as DashboardHeader, ot as Primitive, pt as composeEventHandlers, q as Check, r as Avatar, t as PageContent, ut as createContextScope, wt as require_react } from "./PageContent-wcdRlike.js";
-import { n as usePrevious, s as Label } from "./index-SiydvObI.js";
+import { n as usePrevious, s as Label } from "./index-D5FI7v-L.js";
 var Frown = createLucideIcon("frown", [
 	["circle", {
 		cx: "12",
@@ -503,4 +503,4 @@ function ClientMind() {
 //#endregion
 export { ClientMind as default };
 
-//# sourceMappingURL=ClientMind-cnbJ6JW6.js.map
+//# sourceMappingURL=ClientMind-JNfIo0tH.js.map

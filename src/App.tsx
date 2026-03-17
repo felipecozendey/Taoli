@@ -32,7 +32,6 @@ import ProfPrescriptions from './pages/professional/ProfPrescriptions'
 
 // Client Pages
 import ClientDashboard from './pages/client/ClientDashboard'
-import ClientDiary from './pages/client/ClientDiary'
 import ClientProductivity from './pages/client/ClientProductivity'
 import ClientProgress from './pages/client/ClientProgress'
 import ClientFinances from './pages/client/ClientFinances'
@@ -84,7 +83,6 @@ const App = () => (
             <Route element={<ProtectedRoute allowedRoles={['CLIENT']} />}>
               <Route path="/client" element={<ClientLayout />}>
                 <Route index element={<ClientDashboard />} />
-                <Route path="diary" element={<ClientDiary />} />
 
                 {/* Lazy Loaded Modular Pages */}
                 <Route

@@ -5,7 +5,6 @@ import {
   TrendingUp,
   Sparkles,
   Wallet,
-  Calendar,
   Apple,
   Dumbbell,
   Brain,
@@ -27,7 +26,6 @@ export default function ClientLayout() {
 
   const navItems = [
     { title: 'Dashboard', icon: LayoutDashboard, path: '/client' },
-    { title: 'Resumo do Dia', icon: Calendar, path: '/client/diary' },
     { title: 'Nutrição', icon: Apple, path: '/client/nutrition' },
     { title: 'Treino', icon: Dumbbell, path: '/client/training' },
     { title: 'Mente', icon: Brain, path: '/client/mind' },

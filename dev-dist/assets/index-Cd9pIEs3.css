@@ -921,6 +921,9 @@ section[aria-label='Notifications alt+T'] {
 .min-h-0{
   min-height: 0px;
 }
+.min-h-\[250px\]{
+  min-height: 250px;
+}
 .min-h-\[350px\]{
   min-height: 350px;
 }
@@ -1070,6 +1073,9 @@ section[aria-label='Notifications alt+T'] {
 .max-w-2xl{
   max-width: 42rem;
 }
+.max-w-3xl{
+  max-width: 48rem;
+}
 .max-w-4xl{
   max-width: 56rem;
 }
@@ -1216,6 +1222,9 @@ section[aria-label='Notifications alt+T'] {
 }
 .grid-cols-2{
   grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.grid-cols-3{
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 .flex-row{
   flex-direction: row;
@@ -1543,9 +1552,6 @@ section[aria-label='Notifications alt+T'] {
 .bg-border{
   background-color: hsl(var(--border));
 }
-.bg-border\/60{
-  background-color: hsl(var(--border) / 0.6);
-}
 .bg-card{
   background-color: hsl(var(--card));
 }
@@ -1688,6 +1694,9 @@ section[aria-label='Notifications alt+T'] {
 }
 .fill-current{
   fill: currentColor;
+}
+.stroke-muted{
+  stroke: hsl(var(--muted));
 }
 .p-0{
   padding: 0px;
@@ -2387,24 +2396,6 @@ section[aria-label='Notifications alt+T'] {
 }
 .placeholder\:text-muted-foreground::placeholder{
   color: hsl(var(--muted-foreground));
-}
-.before\:absolute::before{
-  content: var(--tw-content);
-  position: absolute;
-}
-.before\:-inset-x-2::before{
-  content: var(--tw-content);
-  left: -0.5rem;
-  right: -0.5rem;
-}
-.before\:inset-y-0::before{
-  content: var(--tw-content);
-  top: 0px;
-  bottom: 0px;
-}
-.before\:bg-transparent::before{
-  content: var(--tw-content);
-  background-color: transparent;
 }
 .after\:absolute::after{
   content: var(--tw-content);
@@ -3491,6 +3482,9 @@ section[aria-label='Notifications alt+T'] {
   .md\:absolute{
     position: absolute;
   }
+  .md\:mb-4{
+    margin-bottom: 1rem;
+  }
   .md\:block{
     display: block;
   }
@@ -3521,15 +3515,28 @@ section[aria-label='Notifications alt+T'] {
   .md\:flex-row{
     flex-direction: row;
   }
+  .md\:bg-transparent{
+    background-color: transparent;
+  }
+  .md\:p-0{
+    padding: 0px;
+  }
   .md\:p-6{
     padding: 1.5rem;
   }
   .md\:p-8{
     padding: 2rem;
   }
+  .md\:px-0{
+    padding-left: 0px;
+    padding-right: 0px;
+  }
   .md\:px-6{
     padding-left: 1.5rem;
     padding-right: 1.5rem;
+  }
+  .md\:pb-0{
+    padding-bottom: 0px;
   }
   .md\:text-7xl{
     font-size: 4.5rem;
@@ -3579,6 +3586,9 @@ section[aria-label='Notifications alt+T'] {
   }
   .lg\:w-\[350px\]{
     width: 350px;
+  }
+  .lg\:grid-cols-2{
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
   .lg\:grid-cols-4{
     grid-template-columns: repeat(4, minmax(0, 1fr));

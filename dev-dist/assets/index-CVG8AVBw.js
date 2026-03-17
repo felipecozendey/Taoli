@@ -1,5 +1,5 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/ClientNutrition-C_tgvvfl.js","assets/PageContent-BJODfX7S.js","assets/ClientTraining-CQCxQydh.js","assets/ClientMind-Bp39opvt.js","assets/ClientStudy-DY8wOVOr.js"])))=>i.map(i=>d[i]);
-import { $ as X, A as Item$1, At as __vitePreload, B as CardTitle, Ct as Link, Dt as Routes, Et as Route, F as Input, G as Anchor, H as AuthProvider, I as Card, J as Root2$3, K as Arrow, L as CardContent, M as createRovingFocusGroupScope, Mt as require_react, N as useDirection, Nt as __commonJSMin, O as useFocusGuards, Ot as useLocation, P as Primitive$1, Pt as __toESM, Q as cn$1, R as CardDescription, St as BrowserRouter, T as ReactRemoveScroll, Tt as Outlet, U as useAuth, V as Button, W as TooltipProvider, Y as createPopperScope, Z as useId, _t as createSlot, at as VisuallyHidden, bt as useComposedRefs, c as SidebarContent, ct as Portal$1, d as SidebarMenu, dt as DismissableLayer, et as Sparkles, f as SidebarMenuButton, ft as Root$3, gt as createCollection, ht as dispatchDiscreteCustomEvent, it as VISUALLY_HIDDEN_STYLES, j as Root$4, jt as require_react_dom, k as FocusScope, kt as useNavigate, l as SidebarHeader, lt as useLayoutEffect2, m as SidebarProvider, mt as Primitive, n as DashboardHeader, nt as createLucideIcon, o as createContextScope$1, ot as useControllableState, p as SidebarMenuItem, pt as useCallbackRef, q as Content$1, rt as cva, s as Sidebar, st as Presence, t as PageContent, tt as Check, u as SidebarInset, ut as Branch, vt as createContextScope, w as hideOthers, wt as Navigate, xt as composeEventHandlers, yt as require_jsx_runtime, z as CardHeader } from "./PageContent-BJODfX7S.js";
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/ClientNutrition-Wr206_x8.js","assets/PageContent-cRXQOFdU.js","assets/ClientTraining-De4PZPPa.js","assets/ClientMind-DXPBL_zF.js","assets/ClientStudy-Csq0j6UM.js"])))=>i.map(i=>d[i]);
+import { $ as X, A as Item$1, At as useNavigate, B as CardTitle, Ct as BrowserRouter, Dt as Route, Et as Outlet, F as Input, G as Anchor, H as AuthProvider, I as Card, It as __toESM, J as Root2$3, K as Arrow, L as CardContent, M as createRovingFocusGroupScope, Mt as require_react_dom, N as useDirection, Nt as require_react, O as useFocusGuards, Ot as Routes, P as Primitive$1, Pt as __commonJSMin, Q as cn$1, R as CardDescription, St as composeEventHandlers, T as ReactRemoveScroll, Tt as Navigate, U as useAuth, V as Button, W as TooltipProvider, Y as createPopperScope, Z as useId, _t as createCollection, at as VISUALLY_HIDDEN_STYLES, bt as require_jsx_runtime, c as SidebarContent, ct as Presence, d as SidebarMenu, dt as Branch, et as Sparkles, f as SidebarMenuButton, ft as DismissableLayer, gt as dispatchDiscreteCustomEvent, ht as Primitive, j as Root$4, jt as __vitePreload, k as FocusScope, kt as useLocation, l as SidebarHeader, lt as Portal$1, m as SidebarProvider, mt as useCallbackRef, n as DashboardHeader, nt as createLucideIcon, o as createContextScope$1, ot as VisuallyHidden, p as SidebarMenuItem, pt as Root$3, q as Content$1, rt as cva, s as Sidebar, st as useControllableState, t as PageContent, tt as Check, u as SidebarInset, ut as useLayoutEffect2, vt as createSlot, w as hideOthers, wt as Link, xt as useComposedRefs, yt as createContextScope, z as CardHeader } from "./PageContent-cRXQOFdU.js";
 //#region \0vite/modulepreload-polyfill.js
 (function polyfill() {
 	const relList = document.createElement("link").relList;
@@ -21428,10 +21428,10 @@ function ClientFinances() {
 }
 //#endregion
 //#region src/App.tsx
-var ClientNutrition = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientNutrition-C_tgvvfl.js"), __vite__mapDeps([0,1])));
-var ClientTraining = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientTraining-CQCxQydh.js"), __vite__mapDeps([2,1])));
-var ClientMind = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientMind-Bp39opvt.js"), __vite__mapDeps([3,1])));
-var ClientStudy = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientStudy-DY8wOVOr.js"), __vite__mapDeps([4,1])));
+var ClientNutrition = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientNutrition-Wr206_x8.js"), __vite__mapDeps([0,1])));
+var ClientTraining = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientTraining-De4PZPPa.js"), __vite__mapDeps([2,1])));
+var ClientMind = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientMind-DXPBL_zF.js"), __vite__mapDeps([3,1])));
+var ClientStudy = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientStudy-Csq0j6UM.js"), __vite__mapDeps([4,1])));
 var LoadingFallback = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 	"data-uid": "src/App.tsx:47:3",
 	"data-prohibitions": "[]",
@@ -21751,6 +21751,6 @@ var App = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrowserRouter, {
 	"data-prohibitions": "[editContent]"
 }));
 //#endregion
-export { TabsList as a, Search as c, useToast as d, TabsContent as i, Plus as l, usePrevious as n, TabsTrigger as o, Tabs as r, Label$1 as s, Progress as t, FileText as u };
+export { TabsList as a, Target as c, LayoutDashboard as d, Flame as f, useToast as h, TabsContent as i, Search as l, Brain as m, usePrevious as n, TabsTrigger as o, FileText as p, Tabs as r, Label$1 as s, Progress as t, Plus as u };
 
-//# sourceMappingURL=index-D_61u9dO.js.map
+//# sourceMappingURL=index-CVG8AVBw.js.map

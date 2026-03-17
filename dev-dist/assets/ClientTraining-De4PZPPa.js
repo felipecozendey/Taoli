@@ -1,5 +1,5 @@
-import { F as Input, I as Card, L as CardContent, a as AvatarImage, i as AvatarFallback, n as DashboardHeader, r as Avatar, t as PageContent, yt as require_jsx_runtime } from "./PageContent-BJODfX7S.js";
-import { s as Label } from "./index-D_61u9dO.js";
+import { F as Input, I as Card, L as CardContent, a as AvatarImage, bt as require_jsx_runtime, i as AvatarFallback, n as DashboardHeader, r as Avatar, t as PageContent } from "./PageContent-cRXQOFdU.js";
+import { s as Label } from "./index-CVG8AVBw.js";
 //#region src/pages/client/ClientTraining.tsx
 var import_jsx_runtime = require_jsx_runtime();
 var ProfCard = ({ n, r, img, fb }) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Card, {
@@ -158,4 +158,4 @@ function ClientTraining() {
 //#endregion
 export { ClientTraining as default };
 
-//# sourceMappingURL=ClientTraining-CQCxQydh.js.map
+//# sourceMappingURL=ClientTraining-De4PZPPa.js.map

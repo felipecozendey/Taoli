@@ -1,5 +1,5 @@
-import { A as CardDescription, M as CardTitle, N as Button, O as Card, a as AvatarImage, dt as require_jsx_runtime, i as AvatarFallback, j as CardHeader, k as CardContent, n as DashboardHeader, q as Check, r as Avatar, t as PageContent } from "./PageContent-wcdRlike.js";
-import { t as Progress } from "./index-D5FI7v-L.js";
+import { B as CardTitle, I as Card, L as CardContent, R as CardDescription, V as Button, a as AvatarImage, i as AvatarFallback, n as DashboardHeader, r as Avatar, t as PageContent, tt as Check, yt as require_jsx_runtime, z as CardHeader } from "./PageContent-BJODfX7S.js";
+import { t as Progress } from "./index-D_61u9dO.js";
 //#region src/pages/client/ClientNutrition.tsx
 var import_jsx_runtime = require_jsx_runtime();
 var ProfCard = ({ n, r, img, fb }) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Card, {
@@ -222,4 +222,4 @@ function ClientNutrition() {
 //#endregion
 export { ClientNutrition as default };
 
-//# sourceMappingURL=ClientNutrition-1fQIz6Pa.js.map
+//# sourceMappingURL=ClientNutrition-C_tgvvfl.js.map

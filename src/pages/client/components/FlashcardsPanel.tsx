@@ -1,7 +1,19 @@
+import { useState, useEffect } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Layers, Play, BrainCircuit } from 'lucide-react'
+import { Layers, Play, BrainCircuit, Plus } from 'lucide-react'
 import { Skeleton } from '@/components/ui/skeleton'
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from '@/components/ui/dialog'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { useToast } from '@/hooks/use-toast'
+import { studyService, type StudyDeck } from '@/services/study'
 import type { FlashcardsData } from '@/hooks/use-flashcards'
 
 interface FlashcardsPanelProps {
@@ -9,8 +21,14 @@ interface FlashcardsPanelProps {
 }
 
 export function FlashcardsPanel({ data }: FlashcardsPanelProps) {
+  const { toast } = useToast()
+  const [localDecks, setLocalDecks] = useState<StudyDeck[]>([])
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const [newDeckTitle, setNewDeckTitle] = useState('')
+  const [isCreating, setIsCreating] = useState(false)
+
   const {
-    decks,
+    decks: initialDecks,
     loadingDecks,
     isReviewing,
     currentDeck,
@@ -23,6 +41,48 @@ export function FlashcardsPanel({ data }: FlashcardsPanelProps) {
     handleGrade,
     endReview,
   } = data
+
+  useEffect(() => {
+    setLocalDecks(initialDecks)
+  }, [initialDecks])
+
+  const refreshDecks = async () => {
+    const { data: refreshedDecks } = await studyService.getDecks()
+    if (refreshedDecks) setLocalDecks(refreshedDecks)
+  }
+
+  const handleCreateDeck = async () => {
+    if (!newDeckTitle.trim()) {
+      toast({
+        title: 'Título obrigatório',
+        description: 'Por favor, informe um título para o baralho.',
+        variant: 'destructive',
+      })
+      return
+    }
+
+    setIsCreating(true)
+    const { data: newDeck, error } = await studyService.createDeck(newDeckTitle.trim())
+    setIsCreating(false)
+
+    if (error || !newDeck) {
+      toast({
+        title: 'Erro ao criar baralho',
+        description: error?.message || 'Você precisa estar logado ou ocorreu um erro.',
+        variant: 'destructive',
+      })
+      return
+    }
+
+    toast({
+      title: 'Baralho criado!',
+      description: 'Seu novo baralho foi criado com sucesso.',
+    })
+
+    setNewDeckTitle('')
+    setIsDialogOpen(false)
+    await refreshDecks()
+  }
 
   if (isReviewing) {
     if (loadingCards) {
@@ -39,9 +99,7 @@ export function FlashcardsPanel({ data }: FlashcardsPanelProps) {
         <div className="flex flex-col h-full items-center justify-center p-6 bg-muted/10">
           <BrainCircuit className="h-12 w-12 text-muted-foreground mb-4" />
           <h3 className="text-lg font-medium">Você está em dia!</h3>
-          <p className="text-muted-foreground mb-6 text-center">
-            Nenhum flashcard pendente para revisão neste baralho agora.
-          </p>
+          <p className="text-muted-foreground mb-6 text-center">Nenhum flashcard pendente.</p>
           <Button onClick={endReview}>Voltar aos Baralhos</Button>
         </div>
       )
@@ -53,17 +111,16 @@ export function FlashcardsPanel({ data }: FlashcardsPanelProps) {
       <div className="flex flex-col h-full bg-muted/10 animate-fade-in-up">
         <div className="flex items-center justify-between px-4 py-3 border-b bg-background/50 backdrop-blur-sm shrink-0">
           <span className="font-semibold text-sm truncate pr-4">{currentDeck?.title}</span>
-          <span className="text-xs text-muted-foreground font-medium bg-muted px-2 py-1 rounded-md shrink-0">
+          <span className="text-xs text-muted-foreground font-medium bg-muted px-2 py-1 rounded-md">
             {currentIndex + 1} / {flashcards.length}
           </span>
         </div>
         <div className="flex-1 overflow-y-auto p-4 md:p-8 flex flex-col items-center justify-center">
-          <Card className="w-full max-w-lg min-h-[350px] flex flex-col p-6 sm:p-8 shadow-md relative overflow-hidden bg-background/80 backdrop-blur-xl border-border/50">
+          <Card className="w-full max-w-lg min-h-[350px] flex flex-col p-6 sm:p-8 shadow-md relative overflow-hidden bg-background/80 backdrop-blur-xl">
             <div className="flex-1 flex flex-col items-center justify-center text-center">
-              <div className="text-xl sm:text-2xl font-medium text-foreground leading-relaxed">
+              <div className="text-xl sm:text-2xl font-medium leading-relaxed">
                 {card.front_content}
               </div>
-
               {showAnswer && (
                 <>
                   <div className="w-full h-px bg-border my-6 sm:my-8" />
@@ -73,7 +130,6 @@ export function FlashcardsPanel({ data }: FlashcardsPanelProps) {
                 </>
               )}
             </div>
-
             <div className="mt-8 pt-4 w-full shrink-0">
               {!showAnswer ? (
                 <Button
@@ -116,11 +172,15 @@ export function FlashcardsPanel({ data }: FlashcardsPanelProps) {
 
   return (
     <div className="flex flex-col h-full bg-muted/10 relative z-0">
-      <div className="flex items-center px-4 py-3 border-b bg-background/50 backdrop-blur-sm shrink-0">
+      <div className="flex items-center justify-between px-4 py-3 border-b bg-background/50 backdrop-blur-sm shrink-0">
         <div className="flex items-center gap-2">
           <Layers className="h-5 w-5 text-amber-500" />
           <span className="font-semibold text-sm">Flashcards (SRS)</span>
         </div>
+        <Button size="sm" variant="outline" className="gap-2" onClick={() => setIsDialogOpen(true)}>
+          <Plus className="h-4 w-4" />
+          Novo Baralho
+        </Button>
       </div>
       <div className="flex-1 overflow-y-auto p-4 lg:p-6">
         <h3 className="text-sm font-semibold text-muted-foreground mb-4 uppercase tracking-wider">
@@ -132,24 +192,23 @@ export function FlashcardsPanel({ data }: FlashcardsPanelProps) {
             <Skeleton className="h-32 w-full rounded-xl" />
             <Skeleton className="h-32 w-full rounded-xl" />
           </div>
-        ) : decks.length === 0 ? (
+        ) : localDecks.length === 0 ? (
           <Card className="border-dashed bg-transparent shadow-none flex flex-col items-center justify-center p-8 text-center mt-4">
             <div className="h-12 w-12 rounded-full bg-muted flex items-center justify-center mb-4">
               <Layers className="h-6 w-6 text-muted-foreground" />
             </div>
             <h4 className="text-lg font-medium mb-2">Nenhum baralho encontrado</h4>
             <p className="text-sm text-muted-foreground mb-6 max-w-xs">
-              Você ainda não possui baralhos. Crie um novo para começar a revisar com repetição
-              espaçada.
+              Você ainda não possui baralhos. Crie um novo para começar a revisar.
             </p>
-            <Button variant="outline" className="gap-2">
+            <Button variant="outline" className="gap-2" onClick={() => setIsDialogOpen(true)}>
               <Layers className="h-4 w-4" />
               Criar Novo Baralho
             </Button>
           </Card>
         ) : (
           <div className="space-y-4">
-            {decks.map((deck) => (
+            {localDecks.map((deck) => (
               <Card
                 key={deck.id}
                 className="bg-background/60 backdrop-blur-xl border-border/50 shadow-sm hover:shadow-md hover:bg-background/80 transition-all duration-300 relative overflow-hidden group"
@@ -174,6 +233,32 @@ export function FlashcardsPanel({ data }: FlashcardsPanelProps) {
           </div>
         )}
       </div>
+
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Criar Novo Baralho</DialogTitle>
+          </DialogHeader>
+          <div className="py-4 space-y-2">
+            <Label htmlFor="deck-title">Título do Baralho</Label>
+            <Input
+              id="deck-title"
+              placeholder="Ex: Anatomia Básica"
+              value={newDeckTitle}
+              onChange={(e) => setNewDeckTitle(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && handleCreateDeck()}
+            />
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsDialogOpen(false)} disabled={isCreating}>
+              Cancelar
+            </Button>
+            <Button onClick={handleCreateDeck} disabled={isCreating}>
+              {isCreating ? 'Criando...' : 'Criar Baralho'}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }

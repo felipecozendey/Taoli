@@ -1,5 +1,5 @@
-import { A as CardDescription, D as Input, Et as __toESM, F as useAuth, J as createLucideIcon, M as CardTitle, N as Button, O as Card, W as cn, dt as require_jsx_runtime, h as Skeleton, j as CardHeader, k as CardContent, n as DashboardHeader, t as PageContent, v as __awaiter, wt as require_react, y as __rest } from "./PageContent-wcdRlike.js";
-import { a as TabsList, c as Search, d as useToast, i as TabsContent, l as Plus, o as TabsTrigger, r as Tabs, u as FileText } from "./index-D5FI7v-L.js";
+import { $ as X, B as CardTitle, D as __rest, E as __awaiter, F as Input, I as Card, L as CardContent, Mt as require_react, Pt as __toESM, Q as cn, R as CardDescription, S as Title, U as useAuth, V as Button, _ as Content, b as Portal, g as Close, h as Skeleton, n as DashboardHeader, nt as createLucideIcon, t as PageContent, v as Description, x as Root, y as Overlay, yt as require_jsx_runtime, z as CardHeader } from "./PageContent-BJODfX7S.js";
+import { a as TabsList, c as Search, d as useToast, i as TabsContent, l as Plus, o as TabsTrigger, r as Tabs, s as Label, u as FileText } from "./index-D_61u9dO.js";
 var BrainCircuit = createLucideIcon("brain-circuit", [
 	["path", {
 		d: "M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z",
@@ -15497,6 +15497,32 @@ var studyService = {
 			};
 		}
 	},
+	async createDeck(title, description) {
+		try {
+			const { data: { user } } = await supabase.auth.getUser();
+			if (!user) return {
+				data: null,
+				error: /* @__PURE__ */ new Error("Not authenticated")
+			};
+			const deckData = {
+				title,
+				description: description || null,
+				user_id: user.id
+			};
+			const { data, error } = await supabase.from("study_decks").insert([deckData]).select().single();
+			if (error) throw error;
+			return {
+				data,
+				error: null
+			};
+		} catch (error) {
+			console.error("Error creating study deck:", error);
+			return {
+				data: null,
+				error
+			};
+		}
+	},
 	async getDueFlashcards(deckId) {
 		try {
 			const { data: { user } } = await supabase.auth.getUser();
@@ -15859,48 +15885,160 @@ function SecondBrainPanel() {
 	});
 }
 //#endregion
+//#region src/components/ui/dialog.tsx
+var Dialog = Root;
+var DialogPortal = Portal;
+var DialogOverlay = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Overlay, {
+	"data-uid": "src/components/ui/dialog.tsx:20:3",
+	"data-prohibitions": "[editContent]",
+	ref,
+	className: cn("fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0", className),
+	...props
+}));
+DialogOverlay.displayName = Overlay.displayName;
+var DialogContent = import_react.forwardRef(({ className, children, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(DialogPortal, {
+	"data-uid": "src/components/ui/dialog.tsx:35:3",
+	"data-prohibitions": "[editContent]",
+	children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DialogOverlay, {
+		"data-uid": "src/components/ui/dialog.tsx:36:5",
+		"data-prohibitions": "[editContent]"
+	}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Content, {
+		"data-uid": "src/components/ui/dialog.tsx:37:5",
+		"data-prohibitions": "[editContent]",
+		ref,
+		className: cn("fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg overflow-y-auto max-h-screen", className),
+		...props,
+		children: [children, /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Close, {
+			"data-uid": "src/components/ui/dialog.tsx:46:7",
+			"data-prohibitions": "[]",
+			className: "absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground",
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(X, {
+				"data-uid": "src/components/ui/dialog.tsx:47:9",
+				"data-prohibitions": "[editContent]",
+				className: "h-4 w-4"
+			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+				"data-uid": "src/components/ui/dialog.tsx:48:9",
+				"data-prohibitions": "[]",
+				className: "sr-only",
+				children: "Close"
+			})]
+		})]
+	})]
+}));
+DialogContent.displayName = Content.displayName;
+var DialogHeader = ({ className, ...props }) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+	"data-uid": "src/components/ui/dialog.tsx:56:3",
+	"data-prohibitions": "[editContent]",
+	className: cn("flex flex-col space-y-1.5 text-center sm:text-left", className),
+	...props
+});
+DialogHeader.displayName = "DialogHeader";
+var DialogFooter = ({ className, ...props }) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+	"data-uid": "src/components/ui/dialog.tsx:61:3",
+	"data-prohibitions": "[editContent]",
+	className: cn("flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2", className),
+	...props
+});
+DialogFooter.displayName = "DialogFooter";
+var DialogTitle = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Title, {
+	"data-uid": "src/components/ui/dialog.tsx:72:3",
+	"data-prohibitions": "[editContent]",
+	ref,
+	className: cn("text-lg font-semibold leading-none tracking-tight", className),
+	...props
+}));
+DialogTitle.displayName = Title.displayName;
+var DialogDescription = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Description, {
+	"data-uid": "src/components/ui/dialog.tsx:84:3",
+	"data-prohibitions": "[editContent]",
+	ref,
+	className: cn("text-sm text-muted-foreground", className),
+	...props
+}));
+DialogDescription.displayName = Description.displayName;
+//#endregion
 //#region src/pages/client/components/FlashcardsPanel.tsx
 function FlashcardsPanel({ data }) {
-	const { decks, loadingDecks, isReviewing, currentDeck, flashcards, loadingCards, currentIndex, showAnswer, setShowAnswer, startReview, handleGrade, endReview } = data;
+	const { toast } = useToast();
+	const [localDecks, setLocalDecks] = (0, import_react.useState)([]);
+	const [isDialogOpen, setIsDialogOpen] = (0, import_react.useState)(false);
+	const [newDeckTitle, setNewDeckTitle] = (0, import_react.useState)("");
+	const [isCreating, setIsCreating] = (0, import_react.useState)(false);
+	const { decks: initialDecks, loadingDecks, isReviewing, currentDeck, flashcards, loadingCards, currentIndex, showAnswer, setShowAnswer, startReview, handleGrade, endReview } = data;
+	(0, import_react.useEffect)(() => {
+		setLocalDecks(initialDecks);
+	}, [initialDecks]);
+	const refreshDecks = async () => {
+		const { data: refreshedDecks } = await studyService.getDecks();
+		if (refreshedDecks) setLocalDecks(refreshedDecks);
+	};
+	const handleCreateDeck = async () => {
+		if (!newDeckTitle.trim()) {
+			toast({
+				title: "Título obrigatório",
+				description: "Por favor, informe um título para o baralho.",
+				variant: "destructive"
+			});
+			return;
+		}
+		setIsCreating(true);
+		const { data: newDeck, error } = await studyService.createDeck(newDeckTitle.trim());
+		setIsCreating(false);
+		if (error || !newDeck) {
+			toast({
+				title: "Erro ao criar baralho",
+				description: error?.message || "Você precisa estar logado ou ocorreu um erro.",
+				variant: "destructive"
+			});
+			return;
+		}
+		toast({
+			title: "Baralho criado!",
+			description: "Seu novo baralho foi criado com sucesso."
+		});
+		setNewDeckTitle("");
+		setIsDialogOpen(false);
+		await refreshDecks();
+	};
 	if (isReviewing) {
 		if (loadingCards) return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-			"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:30:9",
+			"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:90:9",
 			"data-prohibitions": "[]",
 			className: "flex flex-col h-full bg-muted/10 p-6 space-y-4",
 			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Skeleton, {
-				"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:31:11",
+				"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:91:11",
 				"data-prohibitions": "[editContent]",
 				className: "h-8 w-1/3"
 			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Skeleton, {
-				"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:32:11",
+				"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:92:11",
 				"data-prohibitions": "[editContent]",
 				className: "h-[300px] w-full"
 			})]
 		});
 		if (flashcards.length === 0) return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-			"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:39:9",
+			"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:99:9",
 			"data-prohibitions": "[]",
 			className: "flex flex-col h-full items-center justify-center p-6 bg-muted/10",
 			children: [
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrainCircuit, {
-					"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:40:11",
+					"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:100:11",
 					"data-prohibitions": "[editContent]",
 					className: "h-12 w-12 text-muted-foreground mb-4"
 				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
-					"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:41:11",
+					"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:101:11",
 					"data-prohibitions": "[]",
 					className: "text-lg font-medium",
 					children: "Você está em dia!"
 				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-					"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:42:11",
+					"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:102:11",
 					"data-prohibitions": "[]",
 					className: "text-muted-foreground mb-6 text-center",
-					children: "Nenhum flashcard pendente para revisão neste baralho agora."
+					children: "Nenhum flashcard pendente."
 				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
-					"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:45:11",
+					"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:103:11",
 					"data-prohibitions": "[]",
 					onClick: endReview,
 					children: "Voltar aos Baralhos"
@@ -15909,22 +16047,22 @@ function FlashcardsPanel({ data }) {
 		});
 		const card = flashcards[currentIndex];
 		return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-			"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:53:7",
+			"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:111:7",
 			"data-prohibitions": "[editContent]",
 			className: "flex flex-col h-full bg-muted/10 animate-fade-in-up",
 			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-				"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:54:9",
+				"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:112:9",
 				"data-prohibitions": "[editContent]",
 				className: "flex items-center justify-between px-4 py-3 border-b bg-background/50 backdrop-blur-sm shrink-0",
 				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-					"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:55:11",
+					"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:113:11",
 					"data-prohibitions": "[editContent]",
 					className: "font-semibold text-sm truncate pr-4",
 					children: currentDeck?.title
 				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-					"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:56:11",
+					"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:114:11",
 					"data-prohibitions": "[editContent]",
-					className: "text-xs text-muted-foreground font-medium bg-muted px-2 py-1 rounded-md shrink-0",
+					className: "text-xs text-muted-foreground font-medium bg-muted px-2 py-1 rounded-md",
 					children: [
 						currentIndex + 1,
 						" / ",
@@ -15932,49 +16070,49 @@ function FlashcardsPanel({ data }) {
 					]
 				})]
 			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-				"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:60:9",
+				"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:118:9",
 				"data-prohibitions": "[editContent]",
 				className: "flex-1 overflow-y-auto p-4 md:p-8 flex flex-col items-center justify-center",
 				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
-					"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:61:11",
+					"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:119:11",
 					"data-prohibitions": "[editContent]",
-					className: "w-full max-w-lg min-h-[350px] flex flex-col p-6 sm:p-8 shadow-md relative overflow-hidden bg-background/80 backdrop-blur-xl border-border/50",
+					className: "w-full max-w-lg min-h-[350px] flex flex-col p-6 sm:p-8 shadow-md relative overflow-hidden bg-background/80 backdrop-blur-xl",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:62:13",
+						"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:120:13",
 						"data-prohibitions": "[editContent]",
 						className: "flex-1 flex flex-col items-center justify-center text-center",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-							"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:63:15",
+							"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:121:15",
 							"data-prohibitions": "[editContent]",
-							className: "text-xl sm:text-2xl font-medium text-foreground leading-relaxed",
+							className: "text-xl sm:text-2xl font-medium leading-relaxed",
 							children: card.front_content
 						}), showAnswer && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-							"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:69:19",
+							"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:126:19",
 							"data-prohibitions": "[editContent]",
 							className: "w-full h-px bg-border my-6 sm:my-8"
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-							"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:70:19",
+							"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:127:19",
 							"data-prohibitions": "[editContent]",
 							className: "text-lg sm:text-xl text-muted-foreground animate-fade-in-up leading-relaxed",
 							children: card.back_content
 						})] })]
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-						"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:77:13",
+						"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:133:13",
 						"data-prohibitions": "[editContent]",
 						className: "mt-8 pt-4 w-full shrink-0",
 						children: !showAnswer ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
-							"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:79:17",
+							"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:135:17",
 							"data-prohibitions": "[]",
 							onClick: () => setShowAnswer(true),
 							className: "w-full h-12 text-base font-semibold",
 							children: "Revelar Resposta"
 						}) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:86:17",
+							"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:142:17",
 							"data-prohibitions": "[]",
 							className: "grid grid-cols-2 sm:grid-cols-4 gap-2 w-full animate-fade-in",
 							children: [
 								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
-									"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:87:19",
+									"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:143:19",
 									"data-prohibitions": "[]",
 									variant: "destructive",
 									className: "h-12",
@@ -15982,21 +16120,21 @@ function FlashcardsPanel({ data }) {
 									children: "Errei"
 								}),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
-									"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:90:19",
+									"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:146:19",
 									"data-prohibitions": "[]",
 									className: "bg-orange-500 hover:bg-orange-600 text-white h-12",
 									onClick: () => handleGrade(3),
 									children: "Difícil"
 								}),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
-									"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:96:19",
+									"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:152:19",
 									"data-prohibitions": "[]",
 									className: "bg-green-500 hover:bg-green-600 text-white h-12",
 									onClick: () => handleGrade(4),
 									children: "Bom"
 								}),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
-									"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:102:19",
+									"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:158:19",
 									"data-prohibitions": "[]",
 									className: "bg-blue-500 hover:bg-blue-600 text-white h-12",
 									onClick: () => handleGrade(5),
@@ -16010,139 +16148,213 @@ function FlashcardsPanel({ data }) {
 		});
 	}
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-		"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:118:5",
+		"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:174:5",
 		"data-prohibitions": "[editContent]",
 		className: "flex flex-col h-full bg-muted/10 relative z-0",
-		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-			"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:119:7",
-			"data-prohibitions": "[]",
-			className: "flex items-center px-4 py-3 border-b bg-background/50 backdrop-blur-sm shrink-0",
-			children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-				"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:120:9",
+		children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:175:7",
 				"data-prohibitions": "[]",
-				className: "flex items-center gap-2",
-				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Layers, {
-					"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:121:11",
-					"data-prohibitions": "[editContent]",
-					className: "h-5 w-5 text-amber-500"
-				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-					"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:122:11",
+				className: "flex items-center justify-between px-4 py-3 border-b bg-background/50 backdrop-blur-sm shrink-0",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:176:9",
 					"data-prohibitions": "[]",
-					className: "font-semibold text-sm",
-					children: "Flashcards (SRS)"
+					className: "flex items-center gap-2",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Layers, {
+						"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:177:11",
+						"data-prohibitions": "[editContent]",
+						className: "h-5 w-5 text-amber-500"
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+						"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:178:11",
+						"data-prohibitions": "[]",
+						className: "font-semibold text-sm",
+						children: "Flashcards (SRS)"
+					})]
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
+					"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:180:9",
+					"data-prohibitions": "[]",
+					size: "sm",
+					variant: "outline",
+					className: "gap-2",
+					onClick: () => setIsDialogOpen(true),
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Plus, {
+						"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:181:11",
+						"data-prohibitions": "[editContent]",
+						className: "h-4 w-4"
+					}), "Novo Baralho"]
 				})]
-			})
-		}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-			"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:125:7",
-			"data-prohibitions": "[editContent]",
-			className: "flex-1 overflow-y-auto p-4 lg:p-6",
-			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
-				"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:126:9",
-				"data-prohibitions": "[]",
-				className: "text-sm font-semibold text-muted-foreground mb-4 uppercase tracking-wider",
-				children: "Meus Baralhos Ativos"
-			}), loadingDecks ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-				"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:131:11",
-				"data-prohibitions": "[]",
-				className: "space-y-4",
-				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Skeleton, {
-					"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:132:13",
-					"data-prohibitions": "[editContent]",
-					className: "h-32 w-full rounded-xl"
-				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Skeleton, {
-					"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:133:13",
-					"data-prohibitions": "[editContent]",
-					className: "h-32 w-full rounded-xl"
-				})]
-			}) : decks.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
-				"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:136:11",
-				"data-prohibitions": "[]",
-				className: "border-dashed bg-transparent shadow-none flex flex-col items-center justify-center p-8 text-center mt-4",
-				children: [
-					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-						"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:137:13",
-						"data-prohibitions": "[]",
-						className: "h-12 w-12 rounded-full bg-muted flex items-center justify-center mb-4",
-						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Layers, {
-							"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:138:15",
-							"data-prohibitions": "[editContent]",
-							className: "h-6 w-6 text-muted-foreground"
-						})
-					}),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h4", {
-						"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:140:13",
-						"data-prohibitions": "[]",
-						className: "text-lg font-medium mb-2",
-						children: "Nenhum baralho encontrado"
-					}),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-						"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:141:13",
-						"data-prohibitions": "[]",
-						className: "text-sm text-muted-foreground mb-6 max-w-xs",
-						children: "Você ainda não possui baralhos. Crie um novo para começar a revisar com repetição espaçada."
-					}),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
-						"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:145:13",
-						"data-prohibitions": "[]",
-						variant: "outline",
-						className: "gap-2",
-						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Layers, {
-							"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:146:15",
-							"data-prohibitions": "[editContent]",
-							className: "h-4 w-4"
-						}), "Criar Novo Baralho"]
-					})
-				]
-			}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-				"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:151:11",
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:185:7",
 				"data-prohibitions": "[editContent]",
-				className: "space-y-4",
-				children: decks.map((deck) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
-					"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:153:15",
-					"data-prohibitions": "[editContent]",
-					className: "bg-background/60 backdrop-blur-xl border-border/50 shadow-sm hover:shadow-md hover:bg-background/80 transition-all duration-300 relative overflow-hidden group",
+				className: "flex-1 overflow-y-auto p-4 lg:p-6",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+					"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:186:9",
+					"data-prohibitions": "[]",
+					className: "text-sm font-semibold text-muted-foreground mb-4 uppercase tracking-wider",
+					children: "Meus Baralhos Ativos"
+				}), loadingDecks ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:191:11",
+					"data-prohibitions": "[]",
+					className: "space-y-4",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Skeleton, {
+						"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:192:13",
+						"data-prohibitions": "[editContent]",
+						className: "h-32 w-full rounded-xl"
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Skeleton, {
+						"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:193:13",
+						"data-prohibitions": "[editContent]",
+						className: "h-32 w-full rounded-xl"
+					})]
+				}) : localDecks.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
+					"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:196:11",
+					"data-prohibitions": "[]",
+					className: "border-dashed bg-transparent shadow-none flex flex-col items-center justify-center p-8 text-center mt-4",
 					children: [
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-							"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:157:17",
+							"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:197:13",
 							"data-prohibitions": "[]",
-							className: "absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-2xl -mr-10 -mt-10 group-hover:bg-primary/10 transition-colors"
-						}),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, {
-							"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:158:17",
-							"data-prohibitions": "[editContent]",
-							className: "pb-4 relative z-10",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
-								"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:159:19",
+							className: "h-12 w-12 rounded-full bg-muted flex items-center justify-center mb-4",
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Layers, {
+								"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:198:15",
 								"data-prohibitions": "[editContent]",
-								className: "text-xl mb-1.5",
-								children: deck.title
-							}), deck.description && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardDescription, {
-								"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:160:40",
-								"data-prohibitions": "[editContent]",
-								children: deck.description
-							})]
-						}),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContent, {
-							"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:162:17",
-							"data-prohibitions": "[]",
-							className: "relative z-10",
-							children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
-								"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:163:19",
-								"data-prohibitions": "[]",
-								size: "lg",
-								className: "w-full gap-2 rounded-xl h-12 font-medium text-base shadow-sm",
-								onClick: () => startReview(deck),
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Play, {
-									"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:168:21",
-									"data-prohibitions": "[editContent]",
-									className: "h-4 w-4 fill-current"
-								}), "Estudar Agora"]
+								className: "h-6 w-6 text-muted-foreground"
 							})
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h4", {
+							"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:200:13",
+							"data-prohibitions": "[]",
+							className: "text-lg font-medium mb-2",
+							children: "Nenhum baralho encontrado"
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+							"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:201:13",
+							"data-prohibitions": "[]",
+							className: "text-sm text-muted-foreground mb-6 max-w-xs",
+							children: "Você ainda não possui baralhos. Crie um novo para começar a revisar."
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
+							"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:204:13",
+							"data-prohibitions": "[]",
+							variant: "outline",
+							className: "gap-2",
+							onClick: () => setIsDialogOpen(true),
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Layers, {
+								"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:205:15",
+								"data-prohibitions": "[editContent]",
+								className: "h-4 w-4"
+							}), "Criar Novo Baralho"]
 						})
 					]
-				}, deck.id))
-			})]
-		})]
+				}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+					"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:210:11",
+					"data-prohibitions": "[editContent]",
+					className: "space-y-4",
+					children: localDecks.map((deck) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
+						"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:212:15",
+						"data-prohibitions": "[editContent]",
+						className: "bg-background/60 backdrop-blur-xl border-border/50 shadow-sm hover:shadow-md hover:bg-background/80 transition-all duration-300 relative overflow-hidden group",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:216:17",
+								"data-prohibitions": "[]",
+								className: "absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-2xl -mr-10 -mt-10 group-hover:bg-primary/10 transition-colors"
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, {
+								"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:217:17",
+								"data-prohibitions": "[editContent]",
+								className: "pb-4 relative z-10",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
+									"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:218:19",
+									"data-prohibitions": "[editContent]",
+									className: "text-xl mb-1.5",
+									children: deck.title
+								}), deck.description && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardDescription, {
+									"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:219:40",
+									"data-prohibitions": "[editContent]",
+									children: deck.description
+								})]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContent, {
+								"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:221:17",
+								"data-prohibitions": "[]",
+								className: "relative z-10",
+								children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
+									"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:222:19",
+									"data-prohibitions": "[]",
+									size: "lg",
+									className: "w-full gap-2 rounded-xl h-12 font-medium text-base shadow-sm",
+									onClick: () => startReview(deck),
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Play, {
+										"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:227:21",
+										"data-prohibitions": "[editContent]",
+										className: "h-4 w-4 fill-current"
+									}), "Estudar Agora"]
+								})
+							})
+						]
+					}, deck.id))
+				})]
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Dialog, {
+				"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:237:7",
+				"data-prohibitions": "[editContent]",
+				open: isDialogOpen,
+				onOpenChange: setIsDialogOpen,
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(DialogContent, {
+					"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:238:9",
+					"data-prohibitions": "[editContent]",
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DialogHeader, {
+							"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:239:11",
+							"data-prohibitions": "[]",
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(DialogTitle, {
+								"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:240:13",
+								"data-prohibitions": "[]",
+								children: "Criar Novo Baralho"
+							})
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:242:11",
+							"data-prohibitions": "[]",
+							className: "py-4 space-y-2",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label, {
+								"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:243:13",
+								"data-prohibitions": "[]",
+								htmlFor: "deck-title",
+								children: "Título do Baralho"
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
+								"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:244:13",
+								"data-prohibitions": "[editContent]",
+								id: "deck-title",
+								placeholder: "Ex: Anatomia Básica",
+								value: newDeckTitle,
+								onChange: (e) => setNewDeckTitle(e.target.value),
+								onKeyDown: (e) => e.key === "Enter" && handleCreateDeck()
+							})]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(DialogFooter, {
+							"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:252:11",
+							"data-prohibitions": "[editContent]",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+								"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:253:13",
+								"data-prohibitions": "[]",
+								variant: "outline",
+								onClick: () => setIsDialogOpen(false),
+								disabled: isCreating,
+								children: "Cancelar"
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+								"data-uid": "src/pages/client/components/FlashcardsPanel.tsx:256:13",
+								"data-prohibitions": "[editContent]",
+								onClick: handleCreateDeck,
+								disabled: isCreating,
+								children: isCreating ? "Criando..." : "Criar Baralho"
+							})]
+						})
+					]
+				})
+			})
+		]
 	});
 }
 //#endregion
@@ -16351,4 +16563,4 @@ function ClientStudy() {
 //#endregion
 export { ClientStudy as default };
 
-//# sourceMappingURL=ClientStudy-ChNpnHmD.js.map
+//# sourceMappingURL=ClientStudy-DY8wOVOr.js.map

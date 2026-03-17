@@ -28,6 +28,33 @@ export const studyService = {
     }
   },
 
+  async createDeck(title: string, description?: string) {
+    try {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
+      if (!user) return { data: null, error: new Error('Not authenticated') }
+
+      const deckData = {
+        title,
+        description: description || null,
+        user_id: user.id,
+      }
+
+      const { data, error } = await supabase
+        .from('study_decks')
+        .insert([deckData])
+        .select()
+        .single()
+
+      if (error) throw error
+      return { data, error: null }
+    } catch (error) {
+      console.error('Error creating study deck:', error)
+      return { data: null, error }
+    }
+  },
+
   async getDueFlashcards(deckId: string) {
     try {
       const {

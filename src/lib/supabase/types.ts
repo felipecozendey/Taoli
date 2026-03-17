@@ -51,6 +51,137 @@ export type Database = {
         }
         Relationships: []
       }
+      note_links: {
+        Row: {
+          id: string
+          source_note_id: string
+          target_note_id: string
+        }
+        Insert: {
+          id?: string
+          source_note_id: string
+          target_note_id: string
+        }
+        Update: {
+          id?: string
+          source_note_id?: string
+          target_note_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'note_links_source_note_id_fkey'
+            columns: ['source_note_id']
+            isOneToOne: false
+            referencedRelation: 'study_notes'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'note_links_target_note_id_fkey'
+            columns: ['target_note_id']
+            isOneToOne: false
+            referencedRelation: 'study_notes'
+            referencedColumns: ['id']
+          },
+        ]
+      }
+      study_decks: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      study_flashcards: {
+        Row: {
+          back_content: string
+          deck_id: string
+          ease_factor: number
+          front_content: string
+          id: string
+          interval: number
+          next_review_date: string | null
+          repetition: number
+        }
+        Insert: {
+          back_content: string
+          deck_id: string
+          ease_factor?: number
+          front_content: string
+          id?: string
+          interval?: number
+          next_review_date?: string | null
+          repetition?: number
+        }
+        Update: {
+          back_content?: string
+          deck_id?: string
+          ease_factor?: number
+          front_content?: string
+          id?: string
+          interval?: number
+          next_review_date?: string | null
+          repetition?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'study_flashcards_deck_id_fkey'
+            columns: ['deck_id']
+            isOneToOne: false
+            referencedRelation: 'study_decks'
+            referencedColumns: ['id']
+          },
+        ]
+      }
+      study_notes: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          tags: string[]
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          tags?: string[]
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          tags?: string[]
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -210,15 +341,73 @@ export const Constants = {
 //   fats_g: numeric (nullable)
 //   fiber_g: numeric (nullable)
 //   created_at: timestamp with time zone (not null, default: now())
+// Table: note_links
+//   id: uuid (not null, default: gen_random_uuid())
+//   source_note_id: uuid (not null)
+//   target_note_id: uuid (not null)
+// Table: study_decks
+//   id: uuid (not null, default: gen_random_uuid())
+//   user_id: uuid (not null)
+//   title: text (not null)
+//   description: text (nullable)
+//   created_at: timestamp with time zone (not null, default: now())
+//   updated_at: timestamp with time zone (not null, default: now())
+// Table: study_flashcards
+//   id: uuid (not null, default: gen_random_uuid())
+//   deck_id: uuid (not null)
+//   front_content: text (not null)
+//   back_content: text (not null)
+//   interval: integer (not null, default: 0)
+//   repetition: integer (not null, default: 0)
+//   ease_factor: numeric (not null, default: 2.5)
+//   next_review_date: timestamp with time zone (nullable)
+// Table: study_notes
+//   id: uuid (not null, default: gen_random_uuid())
+//   user_id: uuid (not null)
+//   title: text (not null)
+//   content: text (not null)
+//   tags: _text (not null, default: '{}'::text[])
+//   created_at: timestamp with time zone (not null, default: now())
+//   updated_at: timestamp with time zone (not null, default: now())
 
 // --- CONSTRAINTS ---
 // Table: food_items
 //   PRIMARY KEY food_items_pkey: PRIMARY KEY (id)
+// Table: note_links
+//   PRIMARY KEY note_links_pkey: PRIMARY KEY (id)
+//   FOREIGN KEY note_links_source_note_id_fkey: FOREIGN KEY (source_note_id) REFERENCES study_notes(id) ON DELETE CASCADE
+//   UNIQUE note_links_source_note_id_target_note_id_key: UNIQUE (source_note_id, target_note_id)
+//   FOREIGN KEY note_links_target_note_id_fkey: FOREIGN KEY (target_note_id) REFERENCES study_notes(id) ON DELETE CASCADE
+// Table: study_decks
+//   PRIMARY KEY study_decks_pkey: PRIMARY KEY (id)
+//   FOREIGN KEY study_decks_user_id_fkey: FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE
+// Table: study_flashcards
+//   FOREIGN KEY study_flashcards_deck_id_fkey: FOREIGN KEY (deck_id) REFERENCES study_decks(id) ON DELETE CASCADE
+//   PRIMARY KEY study_flashcards_pkey: PRIMARY KEY (id)
+// Table: study_notes
+//   PRIMARY KEY study_notes_pkey: PRIMARY KEY (id)
+//   FOREIGN KEY study_notes_user_id_fkey: FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE
 
 // --- ROW LEVEL SECURITY POLICIES ---
 // Table: food_items
 //   Policy "Authenticated users can select food items" (SELECT, PERMISSIVE) roles={authenticated}
 //     USING: true
+// Table: note_links
+//   Policy "Users can manage own note links" (ALL, PERMISSIVE) roles={authenticated}
+//     USING: (EXISTS ( SELECT 1    FROM study_notes   WHERE ((study_notes.id = note_links.source_note_id) AND (study_notes.user_id = auth.uid()))))
+//     WITH CHECK: (EXISTS ( SELECT 1    FROM study_notes   WHERE ((study_notes.id = note_links.source_note_id) AND (study_notes.user_id = auth.uid()))))
+// Table: study_decks
+//   Policy "Users can manage own study decks" (ALL, PERMISSIVE) roles={authenticated}
+//     USING: (user_id = auth.uid())
+//     WITH CHECK: (user_id = auth.uid())
+// Table: study_flashcards
+//   Policy "Users can manage own study flashcards" (ALL, PERMISSIVE) roles={authenticated}
+//     USING: (EXISTS ( SELECT 1    FROM study_decks   WHERE ((study_decks.id = study_flashcards.deck_id) AND (study_decks.user_id = auth.uid()))))
+//     WITH CHECK: (EXISTS ( SELECT 1    FROM study_decks   WHERE ((study_decks.id = study_flashcards.deck_id) AND (study_decks.user_id = auth.uid()))))
+// Table: study_notes
+//   Policy "Users can manage own study notes" (ALL, PERMISSIVE) roles={authenticated}
+//     USING: (user_id = auth.uid())
+//     WITH CHECK: (user_id = auth.uid())
 
 // --- DATABASE FUNCTIONS ---
 // FUNCTION rls_auto_enable()
@@ -252,3 +441,7 @@ export const Constants = {
 //   END;
 //   $function$
 //
+
+// --- INDEXES ---
+// Table: note_links
+//   CREATE UNIQUE INDEX note_links_source_note_id_target_note_id_key ON public.note_links USING btree (source_note_id, target_note_id)

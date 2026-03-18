@@ -1,7 +1,8 @@
-import { B as Input, E as Skeleton, G as CardHeader, H as CardContent, Ht as __commonJSMin, K as CardTitle, Ot as require_jsx_runtime, U as CardDescription, V as Card, Vt as require_react, Wt as __toESM, X as supabase, Y as useAuth, at as cn, ft as clsx, n as DashboardHeader, q as Button, t as PageContent, ut as createLucideIcon } from "./PageContent-ChuXhdYa.js";
-import { t as Flame } from "./flame-BemAQ3ur.js";
-import { $ as Label$1, A as require__baseExtremum, B as getPercentValue, C as getMaxRadius, D as require_isEqual, E as getValueByDataKey, F as warn, G as require_isNil, H as isNumber, I as Layer, K as require_get, L as filterProps, M as Cell, N as Global, O as require__baseLt, P as require__baseIteratee, R as findAllByType, S as formatAxisMap, T as polarToCartesian, U as mathSign, V as interpolateNumber, W as uniqueId, _ as Dot, a as ChartContainer, at as Save, b as LabelList, c as ChartTooltip, ct as LayoutDashboard, d as generateCategoricalChart, f as YAxis, ft as Brain, g as Shape, gt as useToast, h as Bar, i as TabsTrigger, it as Search, j as Text, k as require__baseGt, l as ChartTooltipContent, lt as FileText, m as CartesianGrid, n as TabsContent, nt as Target, o as ChartLegend, ot as Plus, p as XAxis, q as require_isFunction, r as TabsList, s as ChartLegendContent, st as LoaderCircle, t as Tabs, u as BarChart, v as es6_default, w as getTickClassName, x as Label, y as Curve, z as adaptEventsOfChild } from "./index-CS3Ee0Ro.js";
-import { a as DialogHeader, i as DialogFooter, n as DialogContent, o as DialogTitle, t as Dialog } from "./dialog-mrpRqmBB.js";
+import { B as Input, E as Skeleton, G as CardHeader, Gt as __toESM, H as CardContent, Ht as require_react, K as CardTitle, Ot as require_jsx_runtime, U as CardDescription, Ut as __commonJSMin, V as Card, X as supabase, Y as useAuth, at as cn, ft as clsx, n as DashboardHeader, q as Button, t as PageContent, ut as createLucideIcon } from "./PageContent-UlpGY3xE.js";
+import { t as Flame } from "./flame-D0BxVRa-.js";
+import { $ as Label$1, A as require__baseExtremum, B as getPercentValue, C as getMaxRadius, D as require_isEqual, E as getValueByDataKey, F as warn, G as require_isNil, H as isNumber, I as Layer, K as require_get, L as filterProps, M as Cell, N as Global, O as require__baseLt, P as require__baseIteratee, R as findAllByType, S as formatAxisMap, T as polarToCartesian, U as mathSign, V as interpolateNumber, W as uniqueId, _ as Dot, a as ChartContainer, at as Save, b as LabelList, c as ChartTooltip, ct as LoaderCircle, d as generateCategoricalChart, f as YAxis, g as Shape, h as Bar, i as TabsTrigger, it as Search, j as Text, k as require__baseGt, l as ChartTooltipContent, lt as LayoutDashboard, m as CartesianGrid, mt as Brain, n as TabsContent, nt as Target, o as ChartLegend, ot as Plus, p as XAxis, q as require_isFunction, r as TabsList, s as ChartLegendContent, t as Tabs, u as BarChart, ut as FileText, v as es6_default, vt as useToast, w as getTickClassName, x as Label, y as Curve, z as adaptEventsOfChild } from "./index-G0UUvZRf.js";
+import { t as Textarea } from "./textarea-CL6AhMxv.js";
+import { a as DialogHeader, i as DialogFooter, n as DialogContent, o as DialogTitle, t as Dialog } from "./dialog-l8Bm9iRM.js";
 var BrainCircuit = createLucideIcon("brain-circuit", [
 	["path", {
 		d: "M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z",
@@ -1418,19 +1419,6 @@ var PieChart = generateCategoricalChart({
 	}
 });
 //#endregion
-//#region src/components/ui/textarea.tsx
-var import_jsx_runtime = require_jsx_runtime();
-var Textarea = import_react.forwardRef(({ className, ...props }, ref) => {
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("textarea", {
-		"data-uid": "src/components/ui/textarea.tsx:9:7",
-		"data-prohibitions": "[editContent]",
-		className: cn("flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm", className),
-		ref,
-		...props
-	});
-});
-Textarea.displayName = "Textarea";
-//#endregion
 //#region src/lib/srs.ts
 /**
 * Calculates the next review date and updated SRS parameters using the SM-2 algorithm.
@@ -1618,6 +1606,7 @@ var studyService = {
 };
 //#endregion
 //#region src/pages/client/components/SecondBrainPanel.tsx
+var import_jsx_runtime = require_jsx_runtime();
 function SecondBrainPanel() {
 	const [notes, setNotes] = (0, import_react.useState)([]);
 	const [isLoading, setIsLoading] = (0, import_react.useState)(true);
@@ -2860,4 +2849,4 @@ function ClientStudy() {
 //#endregion
 export { ClientStudy as default };
 
-//# sourceMappingURL=ClientStudy-C2oKGIwI.js.map
+//# sourceMappingURL=ClientStudy-B-f6xQPl.js.map

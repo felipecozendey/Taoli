@@ -1,8 +1,8 @@
-import { E as Skeleton, G as CardHeader, H as CardContent, K as CardTitle, Ot as require_jsx_runtime, U as CardDescription, V as Card, Vt as require_react, Wt as __toESM, X as supabase, at as cn, lt as Check, n as DashboardHeader, q as Button, t as PageContent, ut as createLucideIcon } from "./PageContent-ChuXhdYa.js";
-import { t as Flame } from "./flame-BemAQ3ur.js";
-import { J as Progress, X as getFullDietDetails, Y as getClientActiveDiet, ht as Activity, i as TabsTrigger, n as TabsContent, nt as Target, ot as Plus, r as TabsList, t as Tabs } from "./index-CS3Ee0Ro.js";
-import { t as Checkbox } from "./checkbox-DnISOaJ2.js";
-import { i as AccordionTrigger, n as AccordionContent, r as AccordionItem, t as Accordion } from "./accordion-CShmbrjJ.js";
+import { E as Skeleton, G as CardHeader, Gt as __toESM, H as CardContent, Ht as require_react, K as CardTitle, Ot as require_jsx_runtime, U as CardDescription, V as Card, X as supabase, at as cn, lt as Check, n as DashboardHeader, q as Button, t as PageContent, ut as createLucideIcon } from "./PageContent-UlpGY3xE.js";
+import { t as Flame } from "./flame-D0BxVRa-.js";
+import { J as Progress, X as getFullDietDetails, Y as getClientActiveDiet, _t as Activity, i as TabsTrigger, n as TabsContent, nt as Target, ot as Plus, r as TabsList, t as Tabs } from "./index-G0UUvZRf.js";
+import { t as Checkbox } from "./checkbox--L5NjrnP.js";
+import { i as AccordionTrigger, n as AccordionContent, r as AccordionItem, t as Accordion } from "./accordion-B2RAUzsG.js";
 var Droplets = createLucideIcon("droplets", [["path", {
 	d: "M7 16.3c2.2 0 4-1.83 4-4.05 0-1.16-.57-2.26-1.71-3.19S7.29 6.75 7 5.3c-.29 1.45-1.14 2.84-2.29 3.76S3 11.1 3 12.25c0 2.22 1.8 4.05 4 4.05z",
 	key: "1ptgy4"
@@ -672,4 +672,4 @@ function ClientNutrition() {
 //#endregion
 export { ClientNutrition as default };
 
-//# sourceMappingURL=ClientNutrition-ZuQ-1PLQ.js.map
+//# sourceMappingURL=ClientNutrition-B233XFpt.js.map

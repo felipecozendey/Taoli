@@ -871,6 +871,9 @@ section[aria-label='Notifications alt+T'] {
 .h-2\.5{
   height: 0.625rem;
 }
+.h-20{
+  height: 5rem;
+}
 .h-24{
   height: 6rem;
 }
@@ -1800,6 +1803,9 @@ section[aria-label='Notifications alt+T'] {
 .p-4{
   padding: 1rem;
 }
+.p-5{
+  padding: 1.25rem;
+}
 .p-6{
   padding: 1.5rem;
 }
@@ -2121,6 +2127,10 @@ section[aria-label='Notifications alt+T'] {
 .text-emerald-800{
   --tw-text-opacity: 1;
   color: rgb(6 95 70 / var(--tw-text-opacity, 1));
+}
+.text-emerald-900{
+  --tw-text-opacity: 1;
+  color: rgb(6 78 59 / var(--tw-text-opacity, 1));
 }
 .text-foreground{
   color: hsl(var(--foreground));
@@ -3434,6 +3444,9 @@ section[aria-label='Notifications alt+T'] {
 .dark\:bg-emerald-950:is(.dark *){
   --tw-bg-opacity: 1;
   background-color: rgb(2 44 34 / var(--tw-bg-opacity, 1));
+}
+.dark\:bg-emerald-950\/20:is(.dark *){
+  background-color: rgb(2 44 34 / 0.2);
 }
 .dark\:bg-emerald-950\/30:is(.dark *){
   background-color: rgb(2 44 34 / 0.3);

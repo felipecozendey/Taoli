@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { DashboardHeader } from '@/components/shared/DashboardHeader'
 import { PageContent } from '@/components/shared/PageContent'
 import { Button } from '@/components/ui/button'
@@ -23,6 +24,7 @@ import { getMyPatients } from '@/services/patients'
 export default function ProfPatients() {
   const { user } = useAuth()
   const { toast } = useToast()
+  const navigate = useNavigate()
 
   const [patients, setPatients] = useState<any[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -188,7 +190,7 @@ export default function ProfPatients() {
                     <Button
                       variant="secondary"
                       className="w-full justify-between group bg-muted/50 hover:bg-muted"
-                      onClick={() => toast({ description: 'A abrir prontuário...' })}
+                      onClick={() => navigate(`/professional/patient/${clientData.id}`)}
                     >
                       <span className="font-medium">Aceder ao Prontuário</span>
                       <ArrowRight className="h-4 w-4 opacity-50 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />

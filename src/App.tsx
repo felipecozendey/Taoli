@@ -37,6 +37,7 @@ import ClientFinances from './pages/client/ClientFinances'
 
 // Lazy Pages
 const ProfPatients = lazy(() => import('./pages/professional/ProfPatients'))
+const ProfPatientRecord = lazy(() => import('./pages/professional/ProfPatientRecord'))
 
 const ClientNutrition = lazy(() => import('./pages/client/ClientNutrition'))
 const ClientTraining = lazy(() => import('./pages/client/ClientTraining'))
@@ -80,6 +81,14 @@ const App = () => (
                   element={
                     <Suspense fallback={<LoadingFallback />}>
                       <ProfPatients />
+                    </Suspense>
+                  }
+                />
+                <Route
+                  path="patient/:id"
+                  element={
+                    <Suspense fallback={<LoadingFallback />}>
+                      <ProfPatientRecord />
                     </Suspense>
                   }
                 />

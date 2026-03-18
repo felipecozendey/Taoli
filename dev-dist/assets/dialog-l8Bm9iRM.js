@@ -1,4 +1,4 @@
-import { A as Overlay, D as Close, M as Root, N as Title, O as Content, Ot as require_jsx_runtime, P as Trigger, Vt as require_react, Wt as __toESM, at as cn, j as Portal, k as Description, ot as X } from "./PageContent-ChuXhdYa.js";
+import { A as Overlay, D as Close, Gt as __toESM, Ht as require_react, M as Root, N as Title, O as Content, Ot as require_jsx_runtime, P as Trigger, at as cn, j as Portal, k as Description, ot as X } from "./PageContent-UlpGY3xE.js";
 //#region src/components/ui/dialog.tsx
 var import_react = /* @__PURE__ */ __toESM(require_react(), 1);
 var import_jsx_runtime = require_jsx_runtime();
@@ -76,4 +76,4 @@ DialogDescription.displayName = Description.displayName;
 //#endregion
 export { DialogHeader as a, DialogFooter as i, DialogContent as n, DialogTitle as o, DialogDescription as r, DialogTrigger as s, Dialog as t };
 
-//# sourceMappingURL=dialog-mrpRqmBB.js.map
+//# sourceMappingURL=dialog-l8Bm9iRM.js.map

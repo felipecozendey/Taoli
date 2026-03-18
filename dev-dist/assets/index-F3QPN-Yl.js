@@ -1,4 +1,4 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/MasterLogs-CPQZVjv7.js","assets/PageContent-DFaAkjCU.js","assets/ProfPatients-ChELtq0z.js","assets/dialog-BCVEVQvq.js","assets/ProfPatientRecord-CP7evUuN.js","assets/textarea-csMi-mAz.js","assets/ClientNutrition-1uoR7GAT.js","assets/accordion-DNZhsLtn.js","assets/checkbox-g8jML1-n.js","assets/flame-DXHs-D-_.js","assets/ClientTraining-DSnoVEF7.js","assets/ClientMind-B159lonZ.js","assets/ClientStudy-DNnu7uY1.js","assets/ClientTeam-BMjMzHdZ.js"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/MasterLogs-BKBCDQwK.js","assets/PageContent-DFaAkjCU.js","assets/ProfPatients-DC6EgpG_.js","assets/dialog-CvOZOltx.js","assets/ProfPatientRecord-Vu-d_07E.js","assets/textarea-DerFmMX-.js","assets/ClientNutrition-BZq_KCLZ.js","assets/accordion-Dle6lAMG.js","assets/checkbox-V8Y1Qv2A.js","assets/flame-DXHs-D-_.js","assets/ClientTraining-MvWXNVq0.js","assets/ClientMind-CjLlXJVQ.js","assets/ClientStudy-D4Z3xvTL.js","assets/ClientTeam-KcXXCj8Y.js"])))=>i.map(i=>d[i]);
 import { $ as Anchor, A as SheetFooter, At as require_jsx_runtime, Bt as useNavigate, C as SidebarMenuButton, Ct as Root$4, D as Sheet, Dt as createCollection, E as Skeleton, Et as dispatchDiscreteCustomEvent, Ft as Navigate, G as Primitive$1, Gt as require_react, H as ReactRemoveScroll, Ht as useSearchParams, It as Outlet, Jt as __toESM, K as Input, Kt as __commonJSMin, Lt as Route, M as SheetTitle, Mt as composeEventHandlers, Nt as BrowserRouter, O as SheetContent, Ot as createSlot, Pt as Link$1, Q as TooltipProvider, Rt as Routes, S as SidebarMenu, St as DismissableLayer, T as SidebarProvider, Tt as Primitive, U as useFocusGuards, Ut as __vitePreload, V as hideOthers, W as FocusScope, Wt as require_react_dom, X as useAuth, Y as AuthProvider, Z as supabase, _ as Sidebar, _t as useControllableState, a as AvatarImage, at as useId, b as SidebarHeader, bt as useLayoutEffect2, c as DropdownMenuContent, ct as User, d as DropdownMenuSeparator, dt as Check, et as Arrow, f as DropdownMenuTrigger, ft as createLucideIcon, g as useDirection, gt as VisuallyHidden, h as createRovingFocusGroupScope, ht as VISUALLY_HIDDEN_STYLES, i as AvatarFallback, it as useSize, j as SheetHeader, jt as useComposedRefs, k as SheetDescription, kt as createContextScope, l as DropdownMenuItem, lt as Sparkles, m as Root$5, mt as clsx, n as DashboardHeader, nt as Root2$3, o as createContextScope$1, ot as cn$1, p as Item$1, pt as cva, q as Button, qt as __exportAll, r as Avatar, rt as createPopperScope, s as DropdownMenu, st as X, t as PageContent, tt as Content$1, u as DropdownMenuLabel, v as SidebarContent, vt as Presence, w as SidebarMenuItem, wt as useCallbackRef, x as SidebarInset, xt as Branch, y as SidebarFooter, yt as Portal$1, zt as useLocation } from "./PageContent-DFaAkjCU.js";
 //#region \0vite/modulepreload-polyfill.js
 (function polyfill() {
@@ -21405,7 +21405,8 @@ async function getFullDietDetails(dietId) {
               energy_kcal,
               protein_g,
               carbs_g,
-              fats_g
+              fats_g,
+              base_qty_g
             )
           )
         )
@@ -21420,6 +21421,156 @@ async function getFullDietDetails(dietId) {
 		return {
 			data: null,
 			error
+		};
+	}
+}
+async function addFoodLog(clientId, date, data) {
+	try {
+		const { data: result, error } = await supabase.from("food_consumption_logs").insert({
+			client_id: clientId,
+			consumed_on: date,
+			food_name: data.food_name,
+			calories: data.calories,
+			protein: data.protein,
+			carbs: data.carbs,
+			fat: data.fat
+		}).select().single();
+		if (error) throw error;
+		return {
+			data: result,
+			error: null
+		};
+	} catch (error) {
+		console.error("Error adding food log:", error);
+		return {
+			data: null,
+			error
+		};
+	}
+}
+async function deleteFoodLog(logId) {
+	try {
+		const { error } = await supabase.from("food_consumption_logs").delete().eq("id", logId);
+		if (error) throw error;
+		return { error: null };
+	} catch (error) {
+		console.error("Error deleting food log:", error);
+		return { error };
+	}
+}
+async function addWaterLog(clientId, date, amountMl) {
+	try {
+		const { data, error } = await supabase.from("water_consumption_logs").insert({
+			client_id: clientId,
+			consumed_on: date,
+			amount_ml: amountMl
+		}).select().single();
+		if (error) throw error;
+		return {
+			data,
+			error: null
+		};
+	} catch (error) {
+		console.error("Error adding water log:", error);
+		return {
+			data: null,
+			error
+		};
+	}
+}
+async function getDailyNutritionProgress(clientId, date) {
+	try {
+		const { data: activeDiet } = await getClientActiveDiet(clientId);
+		let targets = {
+			calories: 0,
+			protein: 0,
+			carbs: 0,
+			fat: 0
+		};
+		if (activeDiet) {
+			const { data: fullDiet } = await getFullDietDetails(activeDiet.id);
+			if (fullDiet && fullDiet.meals) targets = fullDiet.meals.reduce((acc, meal) => {
+				meal.meal_items.forEach((item) => {
+					if (item.food_items) {
+						const ratio = item.portion_g / (item.food_items.base_qty_g || 100);
+						acc.calories += Number(item.food_items.energy_kcal || 0) * ratio;
+						acc.protein += Number(item.food_items.protein_g || 0) * ratio;
+						acc.carbs += Number(item.food_items.carbs_g || 0) * ratio;
+						acc.fat += Number(item.food_items.fats_g || 0) * ratio;
+					}
+				});
+				return acc;
+			}, {
+				calories: 0,
+				protein: 0,
+				carbs: 0,
+				fat: 0
+			});
+		}
+		const { data: foodLogs, error: foodError } = await supabase.from("food_consumption_logs").select("*").eq("client_id", clientId).eq("consumed_on", date).order("created_at", { ascending: true });
+		if (foodError) throw foodError;
+		const consumed = {
+			calories: 0,
+			protein: 0,
+			carbs: 0,
+			fat: 0,
+			water: 0
+		};
+		const logs = (foodLogs || []).map((log) => ({
+			id: log.id,
+			client_id: log.client_id,
+			consumed_on: log.consumed_on,
+			food_name: log.food_name,
+			calories: Number(log.calories || 0),
+			protein: Number(log.protein || 0),
+			carbs: Number(log.carbs || 0),
+			fat: Number(log.fat || 0),
+			created_at: log.created_at
+		}));
+		logs.forEach((log) => {
+			consumed.calories += log.calories;
+			consumed.protein += log.protein;
+			consumed.carbs += log.carbs;
+			consumed.fat += log.fat;
+		});
+		const { data: waterLogs, error: waterError } = await supabase.from("water_consumption_logs").select("*").eq("client_id", clientId).eq("consumed_on", date);
+		if (waterError) throw waterError;
+		(waterLogs || []).forEach((log) => {
+			consumed.water += Number(log.amount_ml || 0);
+		});
+		return {
+			targets: {
+				calories: Math.round(targets.calories),
+				protein: Math.round(targets.protein),
+				carbs: Math.round(targets.carbs),
+				fat: Math.round(targets.fat)
+			},
+			consumed: {
+				calories: Math.round(consumed.calories),
+				protein: Math.round(consumed.protein),
+				carbs: Math.round(consumed.carbs),
+				fat: Math.round(consumed.fat),
+				water: Math.round(consumed.water)
+			},
+			logs
+		};
+	} catch (error) {
+		console.error("Error fetching daily nutrition progress:", error);
+		return {
+			targets: {
+				calories: 0,
+				protein: 0,
+				carbs: 0,
+				fat: 0
+			},
+			consumed: {
+				calories: 0,
+				protein: 0,
+				carbs: 0,
+				fat: 0,
+				water: 0
+			},
+			logs: []
 		};
 	}
 }
@@ -47417,14 +47568,14 @@ function ClientFinances() {
 }
 //#endregion
 //#region src/App.tsx
-var MasterLogs = (0, import_react.lazy)(() => __vitePreload(() => import("./MasterLogs-CPQZVjv7.js"), __vite__mapDeps([0,1])));
-var ProfPatients = (0, import_react.lazy)(() => __vitePreload(() => import("./ProfPatients-ChELtq0z.js"), __vite__mapDeps([2,1,3])));
-var ProfPatientRecord = (0, import_react.lazy)(() => __vitePreload(() => import("./ProfPatientRecord-CP7evUuN.js"), __vite__mapDeps([4,1,5])));
-var ClientNutrition = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientNutrition-1uoR7GAT.js"), __vite__mapDeps([6,1,7,8,9])));
-var ClientTraining = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientTraining-DSnoVEF7.js"), __vite__mapDeps([10,1,7])));
-var ClientMind = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientMind-B159lonZ.js"), __vite__mapDeps([11,1,8])));
-var ClientStudy = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientStudy-DNnu7uY1.js"), __vite__mapDeps([12,1,9,3,5])));
-var ClientTeam = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientTeam-BMjMzHdZ.js"), __vite__mapDeps([13,1,3])));
+var MasterLogs = (0, import_react.lazy)(() => __vitePreload(() => import("./MasterLogs-BKBCDQwK.js"), __vite__mapDeps([0,1])));
+var ProfPatients = (0, import_react.lazy)(() => __vitePreload(() => import("./ProfPatients-DC6EgpG_.js"), __vite__mapDeps([2,1,3])));
+var ProfPatientRecord = (0, import_react.lazy)(() => __vitePreload(() => import("./ProfPatientRecord-Vu-d_07E.js"), __vite__mapDeps([4,1,5])));
+var ClientNutrition = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientNutrition-BZq_KCLZ.js"), __vite__mapDeps([6,1,7,8,9,3])));
+var ClientTraining = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientTraining-MvWXNVq0.js"), __vite__mapDeps([10,1,7])));
+var ClientMind = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientMind-CjLlXJVQ.js"), __vite__mapDeps([11,1,8])));
+var ClientStudy = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientStudy-D4Z3xvTL.js"), __vite__mapDeps([12,1,9,3,5])));
+var ClientTeam = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientTeam-KcXXCj8Y.js"), __vite__mapDeps([13,1,3])));
 var LoadingFallback = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 	"data-uid": "src/App.tsx:51:3",
 	"data-prohibitions": "[]",
@@ -47794,6 +47945,6 @@ var App = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrowserRouter, {
 	"data-prohibitions": "[editContent]"
 }));
 //#endregion
-export { Table as $, require__baseExtremum as A, ArrowRight as At, getPercentValue as B, getMaxRadius as C, Link as Ct, require_isEqual as D, CirclePlus as Dt, getValueByDataKey as E, Dumbbell as Et, warn$1 as F, require_isNil as G, isNumber as H, Layer as I, getClientActiveDiet as J, require_get as K, filterProps as L, Cell as M, Activity as Mt, Global as N, useToast as Nt, require__baseLt as O, ChevronDown as Ot, require__baseIteratee as P, Badge as Q, findAllByType as R, formatAxisMap$1 as S, LoaderCircle as St, polarToCartesian as T, FileText as Tt, mathSign as U, interpolateNumber$1 as V, uniqueId as W, Switch as X, getFullDietDetails as Y, usePrevious as Z, Dot as _, Smile as _t, ChartContainer as a, getAuditLogs as at, LabelList as b, Plus as bt, ChartTooltip as c, Card as ct, generateCategoricalChart as d, CardFooter as dt, TableBody as et, YAxis as f, CardHeader as ft, Shape as g, Target as gt, Bar as h, Trash2 as ht, TabsTrigger as i, TableRow as it, Text as j, Apple as jt, require__baseGt as k, Brain as kt, ChartTooltipContent as l, CardContent as lt, CartesianGrid as m, Users as mt, TabsContent as n, TableHead as nt, ChartLegend as o, Progress as ot, XAxis as p, CardTitle as pt, require_isFunction as q, TabsList as r, TableHeader as rt, ChartLegendContent as s, Label$2 as st, Tabs as t, TableCell as tt, BarChart as u, CardDescription as ut, es6_default as v, Search as vt, getTickClassName as w, LayoutDashboard as wt, Label as x, Lock as xt, Curve as y, Save as yt, adaptEventsOfChild as z };
+export { getFullDietDetails as $, require__baseExtremum as A, Dumbbell as At, getPercentValue as B, getMaxRadius as C, Save as Ct, require_isEqual as D, Link as Dt, getValueByDataKey as E, LoaderCircle as Et, warn$1 as F, Apple as Ft, require_isNil as G, isNumber as H, Layer as I, Activity as It, addFoodLog as J, require_get as K, filterProps as L, useToast as Lt, Cell as M, ChevronDown as Mt, Global as N, Brain as Nt, require__baseLt as O, LayoutDashboard as Ot, require__baseIteratee as P, ArrowRight as Pt, getDailyNutritionProgress as Q, findAllByType as R, formatAxisMap$1 as S, Search as St, polarToCartesian as T, Lock as Tt, mathSign as U, interpolateNumber$1 as V, uniqueId as W, deleteFoodLog as X, addWaterLog as Y, getClientActiveDiet as Z, Dot as _, CardTitle as _t, ChartContainer as a, TableCell as at, LabelList as b, Target as bt, ChartTooltip as c, TableRow as ct, generateCategoricalChart as d, Label$2 as dt, Switch as et, YAxis as f, Card as ft, Shape as g, CardHeader as gt, Bar as h, CardFooter as ht, TabsTrigger as i, TableBody as it, Text as j, CirclePlus as jt, require__baseGt as k, FileText as kt, ChartTooltipContent as l, getAuditLogs as lt, CartesianGrid as m, CardDescription as mt, TabsContent as n, Badge as nt, ChartLegend as o, TableHead as ot, XAxis as p, CardContent as pt, require_isFunction as q, TabsList as r, Table as rt, ChartLegendContent as s, TableHeader as st, Tabs as t, usePrevious as tt, BarChart as u, Progress as ut, es6_default as v, Users as vt, getTickClassName as w, Plus as wt, Label as x, Smile as xt, Curve as y, Trash2 as yt, adaptEventsOfChild as z };
 
-//# sourceMappingURL=index-CJCaxbOL.js.map
+//# sourceMappingURL=index-F3QPN-Yl.js.map

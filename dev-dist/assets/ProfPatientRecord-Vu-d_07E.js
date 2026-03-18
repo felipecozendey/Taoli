@@ -1,6 +1,6 @@
 import { At as require_jsx_runtime, Bt as useNavigate, Gt as require_react, Jt as __toESM, Vt as useParams, X as useAuth, Z as supabase, ft as createLucideIcon, i as AvatarFallback, n as DashboardHeader, q as Button, r as Avatar, t as PageContent } from "./PageContent-DFaAkjCU.js";
-import { Dt as CirclePlus, Q as Badge, ct as Card, ft as CardHeader, i as TabsTrigger, lt as CardContent, n as TabsContent, pt as CardTitle, r as TabsList, t as Tabs, ut as CardDescription, xt as Lock } from "./index-CJCaxbOL.js";
-import { t as Textarea } from "./textarea-csMi-mAz.js";
+import { Tt as Lock, _t as CardTitle, ft as Card, gt as CardHeader, i as TabsTrigger, jt as CirclePlus, mt as CardDescription, n as TabsContent, nt as Badge, pt as CardContent, r as TabsList, t as Tabs } from "./index-F3QPN-Yl.js";
+import { t as Textarea } from "./textarea-DerFmMX-.js";
 var ArrowLeft = createLucideIcon("arrow-left", [["path", {
 	d: "m12 19-7-7 7-7",
 	key: "1l729n"
@@ -479,4 +479,4 @@ function ProfPatientRecord() {
 //#endregion
 export { ProfPatientRecord as default };
 
-//# sourceMappingURL=ProfPatientRecord-CP7evUuN.js.map
+//# sourceMappingURL=ProfPatientRecord-Vu-d_07E.js.map

@@ -5,6 +5,26 @@ type DietInsert = Database['public']['Tables']['diets']['Insert']
 type MealInsert = Database['public']['Tables']['meals']['Insert']
 type MealItemInsert = Database['public']['Tables']['meal_items']['Insert']
 
+export interface FoodLog {
+  id: string
+  client_id: string
+  consumed_on: string
+  food_name: string
+  calories: number
+  protein: number
+  carbs: number
+  fat: number
+  created_at?: string
+}
+
+export interface WaterLog {
+  id: string
+  client_id: string
+  consumed_on: string
+  amount_ml: number
+  created_at?: string
+}
+
 export async function createDiet(clientId: string, name: string) {
   try {
     const {
@@ -120,7 +140,7 @@ export async function addMealItem(
 
 export type FoodItemDetails = Pick<
   Database['public']['Tables']['food_items']['Row'],
-  'id' | 'name' | 'energy_kcal' | 'protein_g' | 'carbs_g' | 'fats_g'
+  'id' | 'name' | 'energy_kcal' | 'protein_g' | 'carbs_g' | 'fats_g' | 'base_qty_g'
 >
 
 export type MealItemDetails = Database['public']['Tables']['meal_items']['Row'] & {
@@ -151,7 +171,8 @@ export async function getFullDietDetails(dietId: string) {
               energy_kcal,
               protein_g,
               carbs_g,
-              fats_g
+              fats_g,
+              base_qty_g
             )
           )
         )
@@ -161,11 +182,162 @@ export async function getFullDietDetails(dietId: string) {
 
     if (error) throw error
 
-    // Casting data to explicitly defined type to prevent deep inference loops
-    // which can cause Rollup/esbuild to OOM (exit code 143) during build chunking
     return { data: data as unknown as FullDietDetails, error: null }
   } catch (error) {
     console.error('Error fetching full diet details:', error)
     return { data: null, error }
+  }
+}
+
+export async function addFoodLog(
+  clientId: string,
+  date: string,
+  data: Omit<FoodLog, 'id' | 'client_id' | 'consumed_on' | 'created_at'>,
+) {
+  try {
+    const { data: result, error } = await supabase
+      .from('food_consumption_logs')
+      .insert({
+        client_id: clientId,
+        consumed_on: date,
+        food_name: data.food_name,
+        calories: data.calories,
+        protein: data.protein,
+        carbs: data.carbs,
+        fat: data.fat,
+      })
+      .select()
+      .single()
+
+    if (error) throw error
+    return { data: result, error: null }
+  } catch (error) {
+    console.error('Error adding food log:', error)
+    return { data: null, error }
+  }
+}
+
+export async function deleteFoodLog(logId: string) {
+  try {
+    const { error } = await supabase.from('food_consumption_logs').delete().eq('id', logId)
+
+    if (error) throw error
+    return { error: null }
+  } catch (error) {
+    console.error('Error deleting food log:', error)
+    return { error }
+  }
+}
+
+export async function addWaterLog(clientId: string, date: string, amountMl: number) {
+  try {
+    const { data, error } = await supabase
+      .from('water_consumption_logs')
+      .insert({
+        client_id: clientId,
+        consumed_on: date,
+        amount_ml: amountMl,
+      })
+      .select()
+      .single()
+
+    if (error) throw error
+    return { data, error: null }
+  } catch (error) {
+    console.error('Error adding water log:', error)
+    return { data: null, error }
+  }
+}
+
+export async function getDailyNutritionProgress(clientId: string, date: string) {
+  try {
+    const { data: activeDiet } = await getClientActiveDiet(clientId)
+    let targets = { calories: 0, protein: 0, carbs: 0, fat: 0 }
+
+    if (activeDiet) {
+      const { data: fullDiet } = await getFullDietDetails(activeDiet.id)
+      if (fullDiet && fullDiet.meals) {
+        targets = fullDiet.meals.reduce(
+          (acc, meal) => {
+            meal.meal_items.forEach((item) => {
+              if (item.food_items) {
+                const ratio = item.portion_g / (item.food_items.base_qty_g || 100)
+                acc.calories += Number(item.food_items.energy_kcal || 0) * ratio
+                acc.protein += Number(item.food_items.protein_g || 0) * ratio
+                acc.carbs += Number(item.food_items.carbs_g || 0) * ratio
+                acc.fat += Number(item.food_items.fats_g || 0) * ratio
+              }
+            })
+            return acc
+          },
+          { calories: 0, protein: 0, carbs: 0, fat: 0 },
+        )
+      }
+    }
+
+    const { data: foodLogs, error: foodError } = await supabase
+      .from('food_consumption_logs')
+      .select('*')
+      .eq('client_id', clientId)
+      .eq('consumed_on', date)
+      .order('created_at', { ascending: true })
+
+    if (foodError) throw foodError
+
+    const consumed = { calories: 0, protein: 0, carbs: 0, fat: 0, water: 0 }
+    const logs: FoodLog[] = (foodLogs || []).map((log) => ({
+      id: log.id,
+      client_id: log.client_id,
+      consumed_on: log.consumed_on,
+      food_name: log.food_name,
+      calories: Number(log.calories || 0),
+      protein: Number(log.protein || 0),
+      carbs: Number(log.carbs || 0),
+      fat: Number(log.fat || 0),
+      created_at: log.created_at,
+    }))
+
+    logs.forEach((log) => {
+      consumed.calories += log.calories
+      consumed.protein += log.protein
+      consumed.carbs += log.carbs
+      consumed.fat += log.fat
+    })
+
+    const { data: waterLogs, error: waterError } = await supabase
+      .from('water_consumption_logs')
+      .select('*')
+      .eq('client_id', clientId)
+      .eq('consumed_on', date)
+
+    if (waterError) throw waterError
+
+    ;(waterLogs || []).forEach((log) => {
+      consumed.water += Number(log.amount_ml || 0)
+    })
+
+    return {
+      targets: {
+        calories: Math.round(targets.calories),
+        protein: Math.round(targets.protein),
+        carbs: Math.round(targets.carbs),
+        fat: Math.round(targets.fat),
+      },
+      consumed: {
+        calories: Math.round(consumed.calories),
+        protein: Math.round(consumed.protein),
+        carbs: Math.round(consumed.carbs),
+        fat: Math.round(consumed.fat),
+        water: Math.round(consumed.water),
+      },
+      logs,
+    }
+  } catch (error) {
+    console.error('Error fetching daily nutrition progress:', error)
+    return {
+      targets: { calories: 0, protein: 0, carbs: 0, fat: 0 },
+      consumed: { calories: 0, protein: 0, carbs: 0, fat: 0, water: 0 },
+      logs: [],
+    }
   }
 }

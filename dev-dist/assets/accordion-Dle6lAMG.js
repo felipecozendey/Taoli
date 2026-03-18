@@ -1,5 +1,5 @@
 import { At as require_jsx_runtime, Dt as createCollection, Gt as require_react, Jt as __toESM, Mt as composeEventHandlers, Tt as Primitive, _t as useControllableState, at as useId, bt as useLayoutEffect2, g as useDirection, jt as useComposedRefs, kt as createContextScope, ot as cn, vt as Presence } from "./PageContent-DFaAkjCU.js";
-import { Ot as ChevronDown } from "./index-CJCaxbOL.js";
+import { Mt as ChevronDown } from "./index-F3QPN-Yl.js";
 //#region ../../cache/modules/gerenciador-pessoal-completo-6024e/node_modules/.pnpm/@radix-ui+react-collapsible@1.1.12_@types+react-dom@19.2.3_@types+react@19.2.14__@types_10a2c6d0ac3bcc7422bd3020fe61e076/node_modules/@radix-ui/react-collapsible/dist/index.mjs
 var import_react = /* @__PURE__ */ __toESM(require_react(), 1);
 var import_jsx_runtime = require_jsx_runtime();
@@ -402,4 +402,4 @@ AccordionContent.displayName = Content2.displayName;
 //#endregion
 export { AccordionTrigger as i, AccordionContent as n, AccordionItem as r, Accordion as t };
 
-//# sourceMappingURL=accordion-DNZhsLtn.js.map
+//# sourceMappingURL=accordion-Dle6lAMG.js.map

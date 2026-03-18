@@ -1,6 +1,6 @@
 import { At as require_jsx_runtime, a as AvatarImage, ft as createLucideIcon, i as AvatarFallback, n as DashboardHeader, q as Button, r as Avatar, t as PageContent } from "./PageContent-DFaAkjCU.js";
-import { _t as Smile, ct as Card, ft as CardHeader, lt as CardContent, pt as CardTitle, st as Label } from "./index-CJCaxbOL.js";
-import { t as Checkbox } from "./checkbox-g8jML1-n.js";
+import { _t as CardTitle, dt as Label, ft as Card, gt as CardHeader, pt as CardContent, xt as Smile } from "./index-F3QPN-Yl.js";
+import { t as Checkbox } from "./checkbox-V8Y1Qv2A.js";
 var Frown = createLucideIcon("frown", [
 	["circle", {
 		cx: "12",
@@ -284,4 +284,4 @@ function ClientMind() {
 //#endregion
 export { ClientMind as default };
 
-//# sourceMappingURL=ClientMind-B159lonZ.js.map
+//# sourceMappingURL=ClientMind-CjLlXJVQ.js.map

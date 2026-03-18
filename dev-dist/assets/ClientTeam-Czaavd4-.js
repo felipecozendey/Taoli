@@ -1,6 +1,6 @@
-import { At as composeEventHandlers, B as Input, Ct as Primitive, Dt as createContextScope, E as Skeleton, G as CardHeader, H as CardContent, Kt as __toESM, Ot as require_jsx_runtime, Ut as require_react, V as Card, X as supabase, Y as useAuth, a as AvatarImage, at as cn, c as DropdownMenuContent, f as DropdownMenuTrigger, ht as useControllableState, i as AvatarFallback, kt as useComposedRefs, l as DropdownMenuItem, n as DashboardHeader, q as Button, r as Avatar, rt as useSize, s as DropdownMenu, t as PageContent, ut as createLucideIcon } from "./PageContent-BfFW-EY_.js";
-import { Z as usePrevious, dt as Dumbbell, et as Users, gt as Apple, it as Search, mt as Brain, ot as Plus, tt as Trash2, vt as useToast } from "./index-CBdd0jjF.js";
-import { a as DialogHeader, n as DialogContent, o as DialogTitle, s as DialogTrigger, t as Dialog } from "./dialog-Cc9t_Jyj.js";
+import { $ as Button, E as Skeleton, J as CardContent, K as Input, Pt as require_jsx_runtime, Qt as __toESM, Yt as require_react, Z as CardHeader, a as AvatarImage, c as DropdownMenuContent, f as DropdownMenuTrigger, gt as createLucideIcon, i as AvatarFallback, l as DropdownMenuItem, n as DashboardHeader, nt as supabase, q as Card, r as Avatar, s as DropdownMenu, t as PageContent, tt as useAuth } from "./PageContent-CQ4JHobQ.js";
+import { Z as Switch, _t as Apple, at as Search, ft as Dumbbell, ht as Brain, nt as Trash2, st as Plus, tt as Users, yt as useToast } from "./index-BsTnM2OF.js";
+import { a as DialogHeader, n as DialogContent, o as DialogTitle, s as DialogTrigger, t as Dialog } from "./dialog-RRWA0519.js";
 var EllipsisVertical = createLucideIcon("ellipsis-vertical", [
 	["circle", {
 		cx: "12",
@@ -22,133 +22,8 @@ var EllipsisVertical = createLucideIcon("ellipsis-vertical", [
 	}]
 ]);
 //#endregion
-//#region ../../cache/modules/gerenciador-pessoal-completo-6024e/node_modules/.pnpm/@radix-ui+react-switch@1.2.6_@types+react-dom@19.2.3_@types+react@19.2.14__@types+react_e3738c514c10df2ef7e24af5ee461853/node_modules/@radix-ui/react-switch/dist/index.mjs
-var import_react = /* @__PURE__ */ __toESM(require_react(), 1);
-var import_jsx_runtime = require_jsx_runtime();
-var SWITCH_NAME = "Switch";
-var [createSwitchContext, createSwitchScope] = createContextScope(SWITCH_NAME);
-var [SwitchProvider, useSwitchContext] = createSwitchContext(SWITCH_NAME);
-var Switch$1 = import_react.forwardRef((props, forwardedRef) => {
-	const { __scopeSwitch, name, checked: checkedProp, defaultChecked, required, disabled, value = "on", onCheckedChange, form, ...switchProps } = props;
-	const [button, setButton] = import_react.useState(null);
-	const composedRefs = useComposedRefs(forwardedRef, (node) => setButton(node));
-	const hasConsumerStoppedPropagationRef = import_react.useRef(false);
-	const isFormControl = button ? form || !!button.closest("form") : true;
-	const [checked, setChecked] = useControllableState({
-		prop: checkedProp,
-		defaultProp: defaultChecked ?? false,
-		onChange: onCheckedChange,
-		caller: SWITCH_NAME
-	});
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(SwitchProvider, {
-		scope: __scopeSwitch,
-		checked,
-		disabled,
-		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Primitive.button, {
-			type: "button",
-			role: "switch",
-			"aria-checked": checked,
-			"aria-required": required,
-			"data-state": getState(checked),
-			"data-disabled": disabled ? "" : void 0,
-			disabled,
-			value,
-			...switchProps,
-			ref: composedRefs,
-			onClick: composeEventHandlers(props.onClick, (event) => {
-				setChecked((prevChecked) => !prevChecked);
-				if (isFormControl) {
-					hasConsumerStoppedPropagationRef.current = event.isPropagationStopped();
-					if (!hasConsumerStoppedPropagationRef.current) event.stopPropagation();
-				}
-			})
-		}), isFormControl && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SwitchBubbleInput, {
-			control: button,
-			bubbles: !hasConsumerStoppedPropagationRef.current,
-			name,
-			value,
-			checked,
-			required,
-			disabled,
-			form,
-			style: { transform: "translateX(-100%)" }
-		})]
-	});
-});
-Switch$1.displayName = SWITCH_NAME;
-var THUMB_NAME = "SwitchThumb";
-var SwitchThumb = import_react.forwardRef((props, forwardedRef) => {
-	const { __scopeSwitch, ...thumbProps } = props;
-	const context = useSwitchContext(THUMB_NAME, __scopeSwitch);
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Primitive.span, {
-		"data-state": getState(context.checked),
-		"data-disabled": context.disabled ? "" : void 0,
-		...thumbProps,
-		ref: forwardedRef
-	});
-});
-SwitchThumb.displayName = THUMB_NAME;
-var BUBBLE_INPUT_NAME = "SwitchBubbleInput";
-var SwitchBubbleInput = import_react.forwardRef(({ __scopeSwitch, control, checked, bubbles = true, ...props }, forwardedRef) => {
-	const ref = import_react.useRef(null);
-	const composedRefs = useComposedRefs(ref, forwardedRef);
-	const prevChecked = usePrevious(checked);
-	const controlSize = useSize(control);
-	import_react.useEffect(() => {
-		const input = ref.current;
-		if (!input) return;
-		const inputProto = window.HTMLInputElement.prototype;
-		const setChecked = Object.getOwnPropertyDescriptor(inputProto, "checked").set;
-		if (prevChecked !== checked && setChecked) {
-			const event = new Event("click", { bubbles });
-			setChecked.call(input, checked);
-			input.dispatchEvent(event);
-		}
-	}, [
-		prevChecked,
-		checked,
-		bubbles
-	]);
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
-		type: "checkbox",
-		"aria-hidden": true,
-		defaultChecked: checked,
-		...props,
-		tabIndex: -1,
-		ref: composedRefs,
-		style: {
-			...props.style,
-			...controlSize,
-			position: "absolute",
-			pointerEvents: "none",
-			opacity: 0,
-			margin: 0
-		}
-	});
-});
-SwitchBubbleInput.displayName = BUBBLE_INPUT_NAME;
-function getState(checked) {
-	return checked ? "checked" : "unchecked";
-}
-var Root = Switch$1;
-var Thumb = SwitchThumb;
-//#endregion
-//#region src/components/ui/switch.tsx
-var Switch = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Root, {
-	"data-uid": "src/components/ui/switch.tsx:11:3",
-	"data-prohibitions": "[editContent]",
-	className: cn("peer inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=unchecked]:bg-input", className),
-	...props,
-	ref,
-	children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Thumb, {
-		"data-uid": "src/components/ui/switch.tsx:19:5",
-		"data-prohibitions": "[editContent]",
-		className: cn("pointer-events-none block h-5 w-5 rounded-full bg-background shadow-lg ring-0 transition-transform data-[state=checked]:translate-x-5 data-[state=unchecked]:translate-x-0")
-	})
-}));
-Switch.displayName = Root.displayName;
-//#endregion
 //#region src/services/team.ts
+var import_react = /* @__PURE__ */ __toESM(require_react(), 1);
 var getMyTeam = async (clientId) => {
 	const { data, error } = await supabase.from("professional_client_links").select(`
       id,
@@ -200,6 +75,7 @@ var disconnectProfessional = async (linkId) => {
 };
 //#endregion
 //#region src/pages/client/ClientTeam.tsx
+var import_jsx_runtime = require_jsx_runtime();
 var areas = [
 	{
 		key: "can_view_nutrition",
@@ -592,4 +468,4 @@ function ClientTeam() {
 //#endregion
 export { ClientTeam as default };
 
-//# sourceMappingURL=ClientTeam-0272hQA8.js.map
+//# sourceMappingURL=ClientTeam-Czaavd4-.js.map

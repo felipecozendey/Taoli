@@ -1,5 +1,5 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/ProfPatients-Dogj0BQR.js","assets/PageContent-BfFW-EY_.js","assets/dialog-Cc9t_Jyj.js","assets/ProfPatientRecord-B-wej19h.js","assets/textarea-e-mwiPDY.js","assets/ClientNutrition-C7wx6C-I.js","assets/accordion-DLoGh_4l.js","assets/checkbox-BfTSpYrf.js","assets/flame-BdB3ZIUm.js","assets/ClientTraining-BlbESF2-.js","assets/ClientMind-DTab7X8X.js","assets/ClientStudy-D6ynU1z3.js","assets/ClientTeam-0272hQA8.js"])))=>i.map(i=>d[i]);
-import { $ as Arrow, At as composeEventHandlers, B as Input, Bt as useSearchParams, C as SidebarMenuButton, Ct as Primitive, Dt as createContextScope, Et as createSlot, F as hideOthers, Ft as Route, G as CardHeader, Gt as __exportAll, H as CardContent, Ht as require_react_dom, I as ReactRemoveScroll, It as Routes, J as AuthProvider, K as CardTitle, Kt as __toESM, L as useFocusGuards, Lt as useLocation, Mt as Link, Nt as Navigate, Ot as require_jsx_runtime, Pt as Outlet, Q as Anchor, R as FocusScope, Rt as useNavigate, S as SidebarMenu, St as useCallbackRef, T as SidebarProvider, Tt as createCollection, U as CardDescription, Ut as require_react, V as Card, Vt as __vitePreload, W as CardFooter, Wt as __commonJSMin, X as supabase, Y as useAuth, Z as TooltipProvider, _ as Sidebar, _t as Portal$1, at as cn$1, b as SidebarHeader, bt as DismissableLayer, c as DropdownMenuContent, ct as Sparkles, d as DropdownMenuSeparator, dt as cva, et as Content$1, f as DropdownMenuTrigger, ft as clsx, g as useDirection, gt as Presence, h as createRovingFocusGroupScope, ht as useControllableState, it as useId, jt as BrowserRouter, kt as useComposedRefs, l as DropdownMenuItem, lt as Check, m as Root$4, mt as VisuallyHidden, n as DashboardHeader, nt as createPopperScope, o as createContextScope$1, ot as X, p as Item$1, pt as VISUALLY_HIDDEN_STYLES, q as Button, s as DropdownMenu, st as User, t as PageContent, tt as Root2$3, u as DropdownMenuLabel, ut as createLucideIcon, v as SidebarContent, vt as useLayoutEffect2, w as SidebarMenuItem, wt as dispatchDiscreteCustomEvent, x as SidebarInset, xt as Root$3, y as SidebarFooter, yt as Branch, z as Primitive$1 } from "./PageContent-BfFW-EY_.js";
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/ProfPatients-D4P9soqB.js","assets/PageContent-CQ4JHobQ.js","assets/dialog-RRWA0519.js","assets/ProfPatientRecord-BtNwgm4y.js","assets/textarea-B_H8-KqN.js","assets/ClientNutrition-BaSxglTN.js","assets/accordion-CLKlnwCs.js","assets/checkbox-DiZYN7MT.js","assets/flame-I-dPvU7R.js","assets/ClientTraining--EUhB5V3.js","assets/ClientMind-4oOCcews.js","assets/ClientStudy-CL93x3bg.js","assets/ClientTeam-Czaavd4-.js"])))=>i.map(i=>d[i]);
+import { $ as Button, A as SheetFooter, At as dispatchDiscreteCustomEvent, Bt as Outlet, C as SidebarMenuButton, Ct as Portal$1, D as Sheet, Dt as Root$4, Et as DismissableLayer, Ft as useComposedRefs, G as Primitive$1, H as ReactRemoveScroll, Ht as Routes, It as composeEventHandlers, J as CardContent, Jt as require_react_dom, K as Input, Kt as useSearchParams, Lt as BrowserRouter, M as SheetTitle, Mt as createSlot, Nt as createContextScope, O as SheetContent, Ot as useCallbackRef, Pt as require_jsx_runtime, Q as CardTitle, Qt as __toESM, Rt as Link, S as SidebarMenu, St as Presence, T as SidebarProvider, Tt as Branch, U as useFocusGuards, Ut as useLocation, V as hideOthers, Vt as Route, W as FocusScope, Wt as useNavigate, X as CardFooter, Xt as __commonJSMin, Y as CardDescription, Yt as require_react, Z as CardHeader, Zt as __exportAll, _ as Sidebar, _t as cva, at as Arrow, b as SidebarHeader, bt as VisuallyHidden, c as DropdownMenuContent, ct as createPopperScope, d as DropdownMenuSeparator, dt as cn$1, et as AuthProvider, f as DropdownMenuTrigger, ft as X, g as useDirection, gt as createLucideIcon, h as createRovingFocusGroupScope, ht as Check, it as Anchor, j as SheetHeader, jt as createCollection, k as SheetDescription, kt as Primitive, l as DropdownMenuItem, lt as useSize, m as Root$5, mt as Sparkles, n as DashboardHeader, nt as supabase, o as createContextScope$1, ot as Content$1, p as Item$1, pt as User, q as Card, qt as __vitePreload, rt as TooltipProvider, s as DropdownMenu, st as Root2$3, t as PageContent, tt as useAuth, u as DropdownMenuLabel, ut as useId, v as SidebarContent, vt as clsx, w as SidebarMenuItem, wt as useLayoutEffect2, x as SidebarInset, xt as useControllableState, y as SidebarFooter, yt as VISUALLY_HIDDEN_STYLES, zt as Navigate } from "./PageContent-CQ4JHobQ.js";
 //#region \0vite/modulepreload-polyfill.js
 (function polyfill() {
 	const relList = document.createElement("link").relList;
@@ -14824,7 +14824,7 @@ var ToastImpl = import_react.forwardRef((props, forwardedRef) => {
 		onClose: handleClose,
 		children: import_react_dom.createPortal(/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Collection$1.ItemSlot, {
 			scope: __scopeToast,
-			children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Root$3, {
+			children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Root$4, {
 				asChild: true,
 				onEscapeKeyDown: composeEventHandlers(onEscapeKeyDown, () => {
 					if (!context.isFocusedToastEscapeKeyDownRef.current) handleClose();
@@ -16935,18 +16935,18 @@ var Label$3 = import_react.forwardRef((props, forwardedRef) => {
 	});
 });
 Label$3.displayName = NAME;
-var Root$2 = Label$3;
+var Root$3 = Label$3;
 //#endregion
 //#region src/components/ui/label.tsx
 var labelVariants = cva("text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70");
-var Label$2 = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Root$2, {
+var Label$2 = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Root$3, {
 	"data-uid": "src/components/ui/label.tsx:16:3",
 	"data-prohibitions": "[editContent]",
 	ref,
 	className: cn$1(labelVariants(), className),
 	...props
 }));
-Label$2.displayName = Root$2.displayName;
+Label$2.displayName = Root$3.displayName;
 //#endregion
 //#region src/pages/auth/Login.tsx
 function Login() {
@@ -17936,245 +17936,76 @@ function MasterSettings() {
 	});
 }
 //#endregion
-//#region src/pages/master/MasterUsers.tsx
-function MasterUsers() {
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-		"data-uid": "src/pages/master/MasterUsers.tsx:8:5",
+//#region src/components/ui/table.tsx
+var Table = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+	"data-uid": "src/components/ui/table.tsx:8:5",
+	"data-prohibitions": "[editContent]",
+	className: "relative w-full overflow-auto",
+	children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("table", {
+		"data-uid": "src/components/ui/table.tsx:9:7",
 		"data-prohibitions": "[editContent]",
-		className: "flex flex-col min-h-full",
-		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DashboardHeader, {
-			"data-uid": "src/pages/master/MasterUsers.tsx:9:7",
-			"data-prohibitions": "[]",
-			title: "Gestão de Usuários",
-			children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-				"data-uid": "src/pages/master/MasterUsers.tsx:10:9",
-				"data-prohibitions": "[]",
-				className: "relative w-64 hidden md:block",
-				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Search, {
-					"data-uid": "src/pages/master/MasterUsers.tsx:11:11",
-					"data-prohibitions": "[editContent]",
-					className: "absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground"
-				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
-					"data-uid": "src/pages/master/MasterUsers.tsx:12:11",
-					"data-prohibitions": "[editContent]",
-					type: "search",
-					placeholder: "Buscar usuários...",
-					className: "pl-8 bg-muted/50"
-				})]
-			})
-		}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PageContent, {
-			"data-uid": "src/pages/master/MasterUsers.tsx:15:7",
-			"data-prohibitions": "[editContent]",
-			children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-				"data-uid": "src/pages/master/MasterUsers.tsx:16:9",
-				"data-prohibitions": "[editContent]",
-				className: "rounded-md border",
-				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					"data-uid": "src/pages/master/MasterUsers.tsx:17:11",
-					"data-prohibitions": "[]",
-					className: "p-4 border-b bg-muted/20 text-sm text-muted-foreground font-medium flex justify-between",
-					children: [
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-							"data-uid": "src/pages/master/MasterUsers.tsx:18:13",
-							"data-prohibitions": "[]",
-							children: "Nome"
-						}),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-							"data-uid": "src/pages/master/MasterUsers.tsx:19:13",
-							"data-prohibitions": "[]",
-							children: "Função"
-						}),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-							"data-uid": "src/pages/master/MasterUsers.tsx:20:13",
-							"data-prohibitions": "[]",
-							children: "Status"
-						})
-					]
-				}), [
-					1,
-					2,
-					3,
-					4,
-					5
-				].map((i) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					"data-uid": "src/pages/master/MasterUsers.tsx:23:13",
-					"data-prohibitions": "[editContent]",
-					className: "p-4 border-b last:border-0 flex justify-between items-center hover:bg-muted/10 transition-colors",
-					children: [
-						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							"data-uid": "src/pages/master/MasterUsers.tsx:27:15",
-							"data-prohibitions": "[editContent]",
-							className: "font-medium",
-							children: ["Usuário Simulado ", i]
-						}),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-							"data-uid": "src/pages/master/MasterUsers.tsx:28:15",
-							"data-prohibitions": "[]",
-							className: "text-sm text-muted-foreground",
-							children: "Profissional"
-						}),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-							"data-uid": "src/pages/master/MasterUsers.tsx:29:15",
-							"data-prohibitions": "[]",
-							className: "text-xs bg-emerald-100 text-emerald-700 px-2 py-1 rounded-full",
-							children: "Ativo"
-						})
-					]
-				}, i))]
-			})
-		})]
-	});
-}
-//#endregion
-//#region src/pages/professional/ProfDashboard.tsx
-function ProfDashboard() {
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-		"data-uid": "src/pages/professional/ProfDashboard.tsx:9:5",
-		"data-prohibitions": "[editContent]",
-		className: "flex flex-col min-h-full",
-		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DashboardHeader, {
-			"data-uid": "src/pages/professional/ProfDashboard.tsx:10:7",
-			"data-prohibitions": "[]",
-			title: "Painel do Profissional",
-			children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
-				"data-uid": "src/pages/professional/ProfDashboard.tsx:11:9",
-				"data-prohibitions": "[]",
-				size: "sm",
-				className: "hidden sm:flex",
-				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CirclePlus, {
-					"data-uid": "src/pages/professional/ProfDashboard.tsx:12:11",
-					"data-prohibitions": "[editContent]",
-					className: "mr-2 h-4 w-4"
-				}), " Novo Paciente"]
-			})
-		}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(PageContent, {
-			"data-uid": "src/pages/professional/ProfDashboard.tsx:15:7",
-			"data-prohibitions": "[editContent]",
-			children: [
-				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					"data-uid": "src/pages/professional/ProfDashboard.tsx:16:9",
-					"data-prohibitions": "[]",
-					className: "grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-8",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
-						"data-uid": "src/pages/professional/ProfDashboard.tsx:17:11",
-						"data-prohibitions": "[]",
-						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, {
-							"data-uid": "src/pages/professional/ProfDashboard.tsx:18:13",
-							"data-prohibitions": "[]",
-							className: "flex flex-row items-center justify-between space-y-0 pb-2",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
-								"data-uid": "src/pages/professional/ProfDashboard.tsx:19:15",
-								"data-prohibitions": "[]",
-								className: "text-sm font-medium",
-								children: "Consultas Hoje"
-							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Calendar, {
-								"data-uid": "src/pages/professional/ProfDashboard.tsx:20:15",
-								"data-prohibitions": "[editContent]",
-								className: "h-4 w-4 text-teal-600"
-							})]
-						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContent, {
-							"data-uid": "src/pages/professional/ProfDashboard.tsx:22:13",
-							"data-prohibitions": "[]",
-							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-								"data-uid": "src/pages/professional/ProfDashboard.tsx:23:15",
-								"data-prohibitions": "[]",
-								className: "text-2xl font-bold text-teal-900 dark:text-teal-100",
-								children: "8"
-							})
-						})]
-					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
-						"data-uid": "src/pages/professional/ProfDashboard.tsx:26:11",
-						"data-prohibitions": "[]",
-						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardHeader, {
-							"data-uid": "src/pages/professional/ProfDashboard.tsx:27:13",
-							"data-prohibitions": "[]",
-							className: "flex flex-row items-center justify-between space-y-0 pb-2",
-							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
-								"data-uid": "src/pages/professional/ProfDashboard.tsx:28:15",
-								"data-prohibitions": "[]",
-								className: "text-sm font-medium",
-								children: "Pacientes Ativos"
-							})
-						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContent, {
-							"data-uid": "src/pages/professional/ProfDashboard.tsx:30:13",
-							"data-prohibitions": "[]",
-							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-								"data-uid": "src/pages/professional/ProfDashboard.tsx:31:15",
-								"data-prohibitions": "[]",
-								className: "text-2xl font-bold",
-								children: "142"
-							})
-						})]
-					})]
-				}),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
-					"data-uid": "src/pages/professional/ProfDashboard.tsx:36:9",
-					"data-prohibitions": "[]",
-					className: "font-semibold text-lg mb-4",
-					children: "Próximos Atendimentos"
-				}),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-					"data-uid": "src/pages/professional/ProfDashboard.tsx:37:9",
-					"data-prohibitions": "[editContent]",
-					className: "space-y-4",
-					children: [
-						1,
-						2,
-						3
-					].map((i) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						"data-uid": "src/pages/professional/ProfDashboard.tsx:39:13",
-						"data-prohibitions": "[editContent]",
-						className: "p-4 rounded-xl border bg-card flex justify-between items-center",
-						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							"data-uid": "src/pages/professional/ProfDashboard.tsx:43:15",
-							"data-prohibitions": "[editContent]",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
-								"data-uid": "src/pages/professional/ProfDashboard.tsx:44:17",
-								"data-prohibitions": "[editContent]",
-								className: "font-semibold",
-								children: ["Paciente de Demonstração ", i]
-							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-								"data-uid": "src/pages/professional/ProfDashboard.tsx:45:17",
-								"data-prohibitions": "[]",
-								className: "text-sm text-muted-foreground",
-								children: "Hoje, 14:00 - Retorno"
-							})]
-						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
-							"data-uid": "src/pages/professional/ProfDashboard.tsx:47:15",
-							"data-prohibitions": "[]",
-							variant: "outline",
-							size: "sm",
-							children: "Acessar Prontuário"
-						})]
-					}, i))
-				})
-			]
-		})]
-	});
-}
-//#endregion
-//#region src/pages/professional/ProfCalendar.tsx
-function ProfCalendar() {
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-		"data-uid": "src/pages/professional/ProfCalendar.tsx:6:5",
-		"data-prohibitions": "[]",
-		className: "flex flex-col min-h-full",
-		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DashboardHeader, {
-			"data-uid": "src/pages/professional/ProfCalendar.tsx:7:7",
-			"data-prohibitions": "[editContent]",
-			title: "Agenda"
-		}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PageContent, {
-			"data-uid": "src/pages/professional/ProfCalendar.tsx:8:7",
-			"data-prohibitions": "[]",
-			children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-				"data-uid": "src/pages/professional/ProfCalendar.tsx:9:9",
-				"data-prohibitions": "[]",
-				className: "p-12 text-center text-muted-foreground border rounded-xl border-dashed",
-				children: "Módulo de Agenda Semanal (Em desenvolvimento)"
-			})
-		})]
-	});
-}
+		ref,
+		className: cn$1("w-full caption-bottom text-sm", className),
+		...props
+	})
+}));
+Table.displayName = "Table";
+var TableHeader = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("thead", {
+	"data-uid": "src/components/ui/table.tsx:19:3",
+	"data-prohibitions": "[editContent]",
+	ref,
+	className: cn$1("[&_tr]:border-b", className),
+	...props
+}));
+TableHeader.displayName = "TableHeader";
+var TableBody = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("tbody", {
+	"data-uid": "src/components/ui/table.tsx:27:3",
+	"data-prohibitions": "[editContent]",
+	ref,
+	className: cn$1("[&_tr:last-child]:border-0", className),
+	...props
+}));
+TableBody.displayName = "TableBody";
+var TableFooter = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("tfoot", {
+	"data-uid": "src/components/ui/table.tsx:35:3",
+	"data-prohibitions": "[editContent]",
+	ref,
+	className: cn$1("border-t bg-muted/50 font-medium [&>tr]:last:border-b-0", className),
+	...props
+}));
+TableFooter.displayName = "TableFooter";
+var TableRow = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("tr", {
+	"data-uid": "src/components/ui/table.tsx:45:5",
+	"data-prohibitions": "[editContent]",
+	ref,
+	className: cn$1("border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted", className),
+	...props
+}));
+TableRow.displayName = "TableRow";
+var TableHead = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", {
+	"data-uid": "src/components/ui/table.tsx:61:3",
+	"data-prohibitions": "[editContent]",
+	ref,
+	className: cn$1("h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0", className),
+	...props
+}));
+TableHead.displayName = "TableHead";
+var TableCell = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", {
+	"data-uid": "src/components/ui/table.tsx:76:3",
+	"data-prohibitions": "[editContent]",
+	ref,
+	className: cn$1("p-4 align-middle [&:has([role=checkbox])]:pr-0", className),
+	...props
+}));
+TableCell.displayName = "TableCell";
+var TableCaption = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("caption", {
+	"data-uid": "src/components/ui/table.tsx:88:3",
+	"data-prohibitions": "[editContent]",
+	ref,
+	className: cn$1("mt-4 text-sm text-muted-foreground", className),
+	...props
+}));
+TableCaption.displayName = "TableCaption";
 //#endregion
 //#region src/components/ui/badge.tsx
 var badgeVariants = cva("inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2", {
@@ -18199,737 +18030,6 @@ function Badge({ className, variant, ...props }) {
 function clamp(value, [min, max]) {
 	return Math.min(max, Math.max(min, value));
 }
-//#endregion
-//#region ../../cache/modules/gerenciador-pessoal-completo-6024e/node_modules/.pnpm/@radix-ui+react-scroll-area@1.2.10_@types+react-dom@19.2.3_@types+react@19.2.14__@types_155614c2fe5222bb9b221068b09efefc/node_modules/@radix-ui/react-scroll-area/dist/index.mjs
-function useStateMachine(initialState, machine) {
-	return import_react.useReducer((state, event) => {
-		return machine[state][event] ?? state;
-	}, initialState);
-}
-var SCROLL_AREA_NAME = "ScrollArea";
-var [createScrollAreaContext, createScrollAreaScope] = createContextScope(SCROLL_AREA_NAME);
-var [ScrollAreaProvider, useScrollAreaContext] = createScrollAreaContext(SCROLL_AREA_NAME);
-var ScrollArea$1 = import_react.forwardRef((props, forwardedRef) => {
-	const { __scopeScrollArea, type = "hover", dir, scrollHideDelay = 600, ...scrollAreaProps } = props;
-	const [scrollArea, setScrollArea] = import_react.useState(null);
-	const [viewport, setViewport] = import_react.useState(null);
-	const [content, setContent] = import_react.useState(null);
-	const [scrollbarX, setScrollbarX] = import_react.useState(null);
-	const [scrollbarY, setScrollbarY] = import_react.useState(null);
-	const [cornerWidth, setCornerWidth] = import_react.useState(0);
-	const [cornerHeight, setCornerHeight] = import_react.useState(0);
-	const [scrollbarXEnabled, setScrollbarXEnabled] = import_react.useState(false);
-	const [scrollbarYEnabled, setScrollbarYEnabled] = import_react.useState(false);
-	const composedRefs = useComposedRefs(forwardedRef, (node) => setScrollArea(node));
-	const direction = useDirection(dir);
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ScrollAreaProvider, {
-		scope: __scopeScrollArea,
-		type,
-		dir: direction,
-		scrollHideDelay,
-		scrollArea,
-		viewport,
-		onViewportChange: setViewport,
-		content,
-		onContentChange: setContent,
-		scrollbarX,
-		onScrollbarXChange: setScrollbarX,
-		scrollbarXEnabled,
-		onScrollbarXEnabledChange: setScrollbarXEnabled,
-		scrollbarY,
-		onScrollbarYChange: setScrollbarY,
-		scrollbarYEnabled,
-		onScrollbarYEnabledChange: setScrollbarYEnabled,
-		onCornerWidthChange: setCornerWidth,
-		onCornerHeightChange: setCornerHeight,
-		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Primitive.div, {
-			dir: direction,
-			...scrollAreaProps,
-			ref: composedRefs,
-			style: {
-				position: "relative",
-				["--radix-scroll-area-corner-width"]: cornerWidth + "px",
-				["--radix-scroll-area-corner-height"]: cornerHeight + "px",
-				...props.style
-			}
-		})
-	});
-});
-ScrollArea$1.displayName = SCROLL_AREA_NAME;
-var VIEWPORT_NAME$1 = "ScrollAreaViewport";
-var ScrollAreaViewport = import_react.forwardRef((props, forwardedRef) => {
-	const { __scopeScrollArea, children, nonce, ...viewportProps } = props;
-	const context = useScrollAreaContext(VIEWPORT_NAME$1, __scopeScrollArea);
-	const composedRefs = useComposedRefs(forwardedRef, import_react.useRef(null), context.onViewportChange);
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("style", {
-		dangerouslySetInnerHTML: { __html: `[data-radix-scroll-area-viewport]{scrollbar-width:none;-ms-overflow-style:none;-webkit-overflow-scrolling:touch;}[data-radix-scroll-area-viewport]::-webkit-scrollbar{display:none}` },
-		nonce
-	}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Primitive.div, {
-		"data-radix-scroll-area-viewport": "",
-		...viewportProps,
-		ref: composedRefs,
-		style: {
-			overflowX: context.scrollbarXEnabled ? "scroll" : "hidden",
-			overflowY: context.scrollbarYEnabled ? "scroll" : "hidden",
-			...props.style
-		},
-		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-			ref: context.onContentChange,
-			style: {
-				minWidth: "100%",
-				display: "table"
-			},
-			children
-		})
-	})] });
-});
-ScrollAreaViewport.displayName = VIEWPORT_NAME$1;
-var SCROLLBAR_NAME = "ScrollAreaScrollbar";
-var ScrollAreaScrollbar = import_react.forwardRef((props, forwardedRef) => {
-	const { forceMount, ...scrollbarProps } = props;
-	const context = useScrollAreaContext(SCROLLBAR_NAME, props.__scopeScrollArea);
-	const { onScrollbarXEnabledChange, onScrollbarYEnabledChange } = context;
-	const isHorizontal = props.orientation === "horizontal";
-	import_react.useEffect(() => {
-		isHorizontal ? onScrollbarXEnabledChange(true) : onScrollbarYEnabledChange(true);
-		return () => {
-			isHorizontal ? onScrollbarXEnabledChange(false) : onScrollbarYEnabledChange(false);
-		};
-	}, [
-		isHorizontal,
-		onScrollbarXEnabledChange,
-		onScrollbarYEnabledChange
-	]);
-	return context.type === "hover" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ScrollAreaScrollbarHover, {
-		...scrollbarProps,
-		ref: forwardedRef,
-		forceMount
-	}) : context.type === "scroll" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ScrollAreaScrollbarScroll, {
-		...scrollbarProps,
-		ref: forwardedRef,
-		forceMount
-	}) : context.type === "auto" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ScrollAreaScrollbarAuto, {
-		...scrollbarProps,
-		ref: forwardedRef,
-		forceMount
-	}) : context.type === "always" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ScrollAreaScrollbarVisible, {
-		...scrollbarProps,
-		ref: forwardedRef
-	}) : null;
-});
-ScrollAreaScrollbar.displayName = SCROLLBAR_NAME;
-var ScrollAreaScrollbarHover = import_react.forwardRef((props, forwardedRef) => {
-	const { forceMount, ...scrollbarProps } = props;
-	const context = useScrollAreaContext(SCROLLBAR_NAME, props.__scopeScrollArea);
-	const [visible, setVisible] = import_react.useState(false);
-	import_react.useEffect(() => {
-		const scrollArea = context.scrollArea;
-		let hideTimer = 0;
-		if (scrollArea) {
-			const handlePointerEnter = () => {
-				window.clearTimeout(hideTimer);
-				setVisible(true);
-			};
-			const handlePointerLeave = () => {
-				hideTimer = window.setTimeout(() => setVisible(false), context.scrollHideDelay);
-			};
-			scrollArea.addEventListener("pointerenter", handlePointerEnter);
-			scrollArea.addEventListener("pointerleave", handlePointerLeave);
-			return () => {
-				window.clearTimeout(hideTimer);
-				scrollArea.removeEventListener("pointerenter", handlePointerEnter);
-				scrollArea.removeEventListener("pointerleave", handlePointerLeave);
-			};
-		}
-	}, [context.scrollArea, context.scrollHideDelay]);
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Presence, {
-		present: forceMount || visible,
-		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ScrollAreaScrollbarAuto, {
-			"data-state": visible ? "visible" : "hidden",
-			...scrollbarProps,
-			ref: forwardedRef
-		})
-	});
-});
-var ScrollAreaScrollbarScroll = import_react.forwardRef((props, forwardedRef) => {
-	const { forceMount, ...scrollbarProps } = props;
-	const context = useScrollAreaContext(SCROLLBAR_NAME, props.__scopeScrollArea);
-	const isHorizontal = props.orientation === "horizontal";
-	const debounceScrollEnd = useDebounceCallback(() => send("SCROLL_END"), 100);
-	const [state, send] = useStateMachine("hidden", {
-		hidden: { SCROLL: "scrolling" },
-		scrolling: {
-			SCROLL_END: "idle",
-			POINTER_ENTER: "interacting"
-		},
-		interacting: {
-			SCROLL: "interacting",
-			POINTER_LEAVE: "idle"
-		},
-		idle: {
-			HIDE: "hidden",
-			SCROLL: "scrolling",
-			POINTER_ENTER: "interacting"
-		}
-	});
-	import_react.useEffect(() => {
-		if (state === "idle") {
-			const hideTimer = window.setTimeout(() => send("HIDE"), context.scrollHideDelay);
-			return () => window.clearTimeout(hideTimer);
-		}
-	}, [
-		state,
-		context.scrollHideDelay,
-		send
-	]);
-	import_react.useEffect(() => {
-		const viewport = context.viewport;
-		const scrollDirection = isHorizontal ? "scrollLeft" : "scrollTop";
-		if (viewport) {
-			let prevScrollPos = viewport[scrollDirection];
-			const handleScroll = () => {
-				const scrollPos = viewport[scrollDirection];
-				if (prevScrollPos !== scrollPos) {
-					send("SCROLL");
-					debounceScrollEnd();
-				}
-				prevScrollPos = scrollPos;
-			};
-			viewport.addEventListener("scroll", handleScroll);
-			return () => viewport.removeEventListener("scroll", handleScroll);
-		}
-	}, [
-		context.viewport,
-		isHorizontal,
-		send,
-		debounceScrollEnd
-	]);
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Presence, {
-		present: forceMount || state !== "hidden",
-		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ScrollAreaScrollbarVisible, {
-			"data-state": state === "hidden" ? "hidden" : "visible",
-			...scrollbarProps,
-			ref: forwardedRef,
-			onPointerEnter: composeEventHandlers(props.onPointerEnter, () => send("POINTER_ENTER")),
-			onPointerLeave: composeEventHandlers(props.onPointerLeave, () => send("POINTER_LEAVE"))
-		})
-	});
-});
-var ScrollAreaScrollbarAuto = import_react.forwardRef((props, forwardedRef) => {
-	const context = useScrollAreaContext(SCROLLBAR_NAME, props.__scopeScrollArea);
-	const { forceMount, ...scrollbarProps } = props;
-	const [visible, setVisible] = import_react.useState(false);
-	const isHorizontal = props.orientation === "horizontal";
-	const handleResize = useDebounceCallback(() => {
-		if (context.viewport) {
-			const isOverflowX = context.viewport.offsetWidth < context.viewport.scrollWidth;
-			const isOverflowY = context.viewport.offsetHeight < context.viewport.scrollHeight;
-			setVisible(isHorizontal ? isOverflowX : isOverflowY);
-		}
-	}, 10);
-	useResizeObserver(context.viewport, handleResize);
-	useResizeObserver(context.content, handleResize);
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Presence, {
-		present: forceMount || visible,
-		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ScrollAreaScrollbarVisible, {
-			"data-state": visible ? "visible" : "hidden",
-			...scrollbarProps,
-			ref: forwardedRef
-		})
-	});
-});
-var ScrollAreaScrollbarVisible = import_react.forwardRef((props, forwardedRef) => {
-	const { orientation = "vertical", ...scrollbarProps } = props;
-	const context = useScrollAreaContext(SCROLLBAR_NAME, props.__scopeScrollArea);
-	const thumbRef = import_react.useRef(null);
-	const pointerOffsetRef = import_react.useRef(0);
-	const [sizes, setSizes] = import_react.useState({
-		content: 0,
-		viewport: 0,
-		scrollbar: {
-			size: 0,
-			paddingStart: 0,
-			paddingEnd: 0
-		}
-	});
-	const thumbRatio = getThumbRatio(sizes.viewport, sizes.content);
-	const commonProps = {
-		...scrollbarProps,
-		sizes,
-		onSizesChange: setSizes,
-		hasThumb: Boolean(thumbRatio > 0 && thumbRatio < 1),
-		onThumbChange: (thumb) => thumbRef.current = thumb,
-		onThumbPointerUp: () => pointerOffsetRef.current = 0,
-		onThumbPointerDown: (pointerPos) => pointerOffsetRef.current = pointerPos
-	};
-	function getScrollPosition(pointerPos, dir) {
-		return getScrollPositionFromPointer(pointerPos, pointerOffsetRef.current, sizes, dir);
-	}
-	if (orientation === "horizontal") return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ScrollAreaScrollbarX, {
-		...commonProps,
-		ref: forwardedRef,
-		onThumbPositionChange: () => {
-			if (context.viewport && thumbRef.current) {
-				const scrollPos = context.viewport.scrollLeft;
-				const offset = getThumbOffsetFromScroll(scrollPos, sizes, context.dir);
-				thumbRef.current.style.transform = `translate3d(${offset}px, 0, 0)`;
-			}
-		},
-		onWheelScroll: (scrollPos) => {
-			if (context.viewport) context.viewport.scrollLeft = scrollPos;
-		},
-		onDragScroll: (pointerPos) => {
-			if (context.viewport) context.viewport.scrollLeft = getScrollPosition(pointerPos, context.dir);
-		}
-	});
-	if (orientation === "vertical") return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ScrollAreaScrollbarY, {
-		...commonProps,
-		ref: forwardedRef,
-		onThumbPositionChange: () => {
-			if (context.viewport && thumbRef.current) {
-				const scrollPos = context.viewport.scrollTop;
-				const offset = getThumbOffsetFromScroll(scrollPos, sizes);
-				thumbRef.current.style.transform = `translate3d(0, ${offset}px, 0)`;
-			}
-		},
-		onWheelScroll: (scrollPos) => {
-			if (context.viewport) context.viewport.scrollTop = scrollPos;
-		},
-		onDragScroll: (pointerPos) => {
-			if (context.viewport) context.viewport.scrollTop = getScrollPosition(pointerPos);
-		}
-	});
-	return null;
-});
-var ScrollAreaScrollbarX = import_react.forwardRef((props, forwardedRef) => {
-	const { sizes, onSizesChange, ...scrollbarProps } = props;
-	const context = useScrollAreaContext(SCROLLBAR_NAME, props.__scopeScrollArea);
-	const [computedStyle, setComputedStyle] = import_react.useState();
-	const ref = import_react.useRef(null);
-	const composeRefs = useComposedRefs(forwardedRef, ref, context.onScrollbarXChange);
-	import_react.useEffect(() => {
-		if (ref.current) setComputedStyle(getComputedStyle(ref.current));
-	}, [ref]);
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ScrollAreaScrollbarImpl, {
-		"data-orientation": "horizontal",
-		...scrollbarProps,
-		ref: composeRefs,
-		sizes,
-		style: {
-			bottom: 0,
-			left: context.dir === "rtl" ? "var(--radix-scroll-area-corner-width)" : 0,
-			right: context.dir === "ltr" ? "var(--radix-scroll-area-corner-width)" : 0,
-			["--radix-scroll-area-thumb-width"]: getThumbSize(sizes) + "px",
-			...props.style
-		},
-		onThumbPointerDown: (pointerPos) => props.onThumbPointerDown(pointerPos.x),
-		onDragScroll: (pointerPos) => props.onDragScroll(pointerPos.x),
-		onWheelScroll: (event, maxScrollPos) => {
-			if (context.viewport) {
-				const scrollPos = context.viewport.scrollLeft + event.deltaX;
-				props.onWheelScroll(scrollPos);
-				if (isScrollingWithinScrollbarBounds(scrollPos, maxScrollPos)) event.preventDefault();
-			}
-		},
-		onResize: () => {
-			if (ref.current && context.viewport && computedStyle) onSizesChange({
-				content: context.viewport.scrollWidth,
-				viewport: context.viewport.offsetWidth,
-				scrollbar: {
-					size: ref.current.clientWidth,
-					paddingStart: toInt(computedStyle.paddingLeft),
-					paddingEnd: toInt(computedStyle.paddingRight)
-				}
-			});
-		}
-	});
-});
-var ScrollAreaScrollbarY = import_react.forwardRef((props, forwardedRef) => {
-	const { sizes, onSizesChange, ...scrollbarProps } = props;
-	const context = useScrollAreaContext(SCROLLBAR_NAME, props.__scopeScrollArea);
-	const [computedStyle, setComputedStyle] = import_react.useState();
-	const ref = import_react.useRef(null);
-	const composeRefs = useComposedRefs(forwardedRef, ref, context.onScrollbarYChange);
-	import_react.useEffect(() => {
-		if (ref.current) setComputedStyle(getComputedStyle(ref.current));
-	}, [ref]);
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ScrollAreaScrollbarImpl, {
-		"data-orientation": "vertical",
-		...scrollbarProps,
-		ref: composeRefs,
-		sizes,
-		style: {
-			top: 0,
-			right: context.dir === "ltr" ? 0 : void 0,
-			left: context.dir === "rtl" ? 0 : void 0,
-			bottom: "var(--radix-scroll-area-corner-height)",
-			["--radix-scroll-area-thumb-height"]: getThumbSize(sizes) + "px",
-			...props.style
-		},
-		onThumbPointerDown: (pointerPos) => props.onThumbPointerDown(pointerPos.y),
-		onDragScroll: (pointerPos) => props.onDragScroll(pointerPos.y),
-		onWheelScroll: (event, maxScrollPos) => {
-			if (context.viewport) {
-				const scrollPos = context.viewport.scrollTop + event.deltaY;
-				props.onWheelScroll(scrollPos);
-				if (isScrollingWithinScrollbarBounds(scrollPos, maxScrollPos)) event.preventDefault();
-			}
-		},
-		onResize: () => {
-			if (ref.current && context.viewport && computedStyle) onSizesChange({
-				content: context.viewport.scrollHeight,
-				viewport: context.viewport.offsetHeight,
-				scrollbar: {
-					size: ref.current.clientHeight,
-					paddingStart: toInt(computedStyle.paddingTop),
-					paddingEnd: toInt(computedStyle.paddingBottom)
-				}
-			});
-		}
-	});
-});
-var [ScrollbarProvider, useScrollbarContext] = createScrollAreaContext(SCROLLBAR_NAME);
-var ScrollAreaScrollbarImpl = import_react.forwardRef((props, forwardedRef) => {
-	const { __scopeScrollArea, sizes, hasThumb, onThumbChange, onThumbPointerUp, onThumbPointerDown, onThumbPositionChange, onDragScroll, onWheelScroll, onResize, ...scrollbarProps } = props;
-	const context = useScrollAreaContext(SCROLLBAR_NAME, __scopeScrollArea);
-	const [scrollbar, setScrollbar] = import_react.useState(null);
-	const composeRefs = useComposedRefs(forwardedRef, (node) => setScrollbar(node));
-	const rectRef = import_react.useRef(null);
-	const prevWebkitUserSelectRef = import_react.useRef("");
-	const viewport = context.viewport;
-	const maxScrollPos = sizes.content - sizes.viewport;
-	const handleWheelScroll = useCallbackRef(onWheelScroll);
-	const handleThumbPositionChange = useCallbackRef(onThumbPositionChange);
-	const handleResize = useDebounceCallback(onResize, 10);
-	function handleDragScroll(event) {
-		if (rectRef.current) onDragScroll({
-			x: event.clientX - rectRef.current.left,
-			y: event.clientY - rectRef.current.top
-		});
-	}
-	import_react.useEffect(() => {
-		const handleWheel = (event) => {
-			const element = event.target;
-			if (scrollbar?.contains(element)) handleWheelScroll(event, maxScrollPos);
-		};
-		document.addEventListener("wheel", handleWheel, { passive: false });
-		return () => document.removeEventListener("wheel", handleWheel, { passive: false });
-	}, [
-		viewport,
-		scrollbar,
-		maxScrollPos,
-		handleWheelScroll
-	]);
-	import_react.useEffect(handleThumbPositionChange, [sizes, handleThumbPositionChange]);
-	useResizeObserver(scrollbar, handleResize);
-	useResizeObserver(context.content, handleResize);
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ScrollbarProvider, {
-		scope: __scopeScrollArea,
-		scrollbar,
-		hasThumb,
-		onThumbChange: useCallbackRef(onThumbChange),
-		onThumbPointerUp: useCallbackRef(onThumbPointerUp),
-		onThumbPositionChange: handleThumbPositionChange,
-		onThumbPointerDown: useCallbackRef(onThumbPointerDown),
-		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Primitive.div, {
-			...scrollbarProps,
-			ref: composeRefs,
-			style: {
-				position: "absolute",
-				...scrollbarProps.style
-			},
-			onPointerDown: composeEventHandlers(props.onPointerDown, (event) => {
-				if (event.button === 0) {
-					event.target.setPointerCapture(event.pointerId);
-					rectRef.current = scrollbar.getBoundingClientRect();
-					prevWebkitUserSelectRef.current = document.body.style.webkitUserSelect;
-					document.body.style.webkitUserSelect = "none";
-					if (context.viewport) context.viewport.style.scrollBehavior = "auto";
-					handleDragScroll(event);
-				}
-			}),
-			onPointerMove: composeEventHandlers(props.onPointerMove, handleDragScroll),
-			onPointerUp: composeEventHandlers(props.onPointerUp, (event) => {
-				const element = event.target;
-				if (element.hasPointerCapture(event.pointerId)) element.releasePointerCapture(event.pointerId);
-				document.body.style.webkitUserSelect = prevWebkitUserSelectRef.current;
-				if (context.viewport) context.viewport.style.scrollBehavior = "";
-				rectRef.current = null;
-			})
-		})
-	});
-});
-var THUMB_NAME = "ScrollAreaThumb";
-var ScrollAreaThumb = import_react.forwardRef((props, forwardedRef) => {
-	const { forceMount, ...thumbProps } = props;
-	const scrollbarContext = useScrollbarContext(THUMB_NAME, props.__scopeScrollArea);
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Presence, {
-		present: forceMount || scrollbarContext.hasThumb,
-		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ScrollAreaThumbImpl, {
-			ref: forwardedRef,
-			...thumbProps
-		})
-	});
-});
-var ScrollAreaThumbImpl = import_react.forwardRef((props, forwardedRef) => {
-	const { __scopeScrollArea, style, ...thumbProps } = props;
-	const scrollAreaContext = useScrollAreaContext(THUMB_NAME, __scopeScrollArea);
-	const scrollbarContext = useScrollbarContext(THUMB_NAME, __scopeScrollArea);
-	const { onThumbPositionChange } = scrollbarContext;
-	const composedRef = useComposedRefs(forwardedRef, (node) => scrollbarContext.onThumbChange(node));
-	const removeUnlinkedScrollListenerRef = import_react.useRef(void 0);
-	const debounceScrollEnd = useDebounceCallback(() => {
-		if (removeUnlinkedScrollListenerRef.current) {
-			removeUnlinkedScrollListenerRef.current();
-			removeUnlinkedScrollListenerRef.current = void 0;
-		}
-	}, 100);
-	import_react.useEffect(() => {
-		const viewport = scrollAreaContext.viewport;
-		if (viewport) {
-			const handleScroll = () => {
-				debounceScrollEnd();
-				if (!removeUnlinkedScrollListenerRef.current) {
-					removeUnlinkedScrollListenerRef.current = addUnlinkedScrollListener(viewport, onThumbPositionChange);
-					onThumbPositionChange();
-				}
-			};
-			onThumbPositionChange();
-			viewport.addEventListener("scroll", handleScroll);
-			return () => viewport.removeEventListener("scroll", handleScroll);
-		}
-	}, [
-		scrollAreaContext.viewport,
-		debounceScrollEnd,
-		onThumbPositionChange
-	]);
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Primitive.div, {
-		"data-state": scrollbarContext.hasThumb ? "visible" : "hidden",
-		...thumbProps,
-		ref: composedRef,
-		style: {
-			width: "var(--radix-scroll-area-thumb-width)",
-			height: "var(--radix-scroll-area-thumb-height)",
-			...style
-		},
-		onPointerDownCapture: composeEventHandlers(props.onPointerDownCapture, (event) => {
-			const thumbRect = event.target.getBoundingClientRect();
-			const x = event.clientX - thumbRect.left;
-			const y = event.clientY - thumbRect.top;
-			scrollbarContext.onThumbPointerDown({
-				x,
-				y
-			});
-		}),
-		onPointerUp: composeEventHandlers(props.onPointerUp, scrollbarContext.onThumbPointerUp)
-	});
-});
-ScrollAreaThumb.displayName = THUMB_NAME;
-var CORNER_NAME = "ScrollAreaCorner";
-var ScrollAreaCorner = import_react.forwardRef((props, forwardedRef) => {
-	const context = useScrollAreaContext(CORNER_NAME, props.__scopeScrollArea);
-	const hasBothScrollbarsVisible = Boolean(context.scrollbarX && context.scrollbarY);
-	return context.type !== "scroll" && hasBothScrollbarsVisible ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ScrollAreaCornerImpl, {
-		...props,
-		ref: forwardedRef
-	}) : null;
-});
-ScrollAreaCorner.displayName = CORNER_NAME;
-var ScrollAreaCornerImpl = import_react.forwardRef((props, forwardedRef) => {
-	const { __scopeScrollArea, ...cornerProps } = props;
-	const context = useScrollAreaContext(CORNER_NAME, __scopeScrollArea);
-	const [width, setWidth] = import_react.useState(0);
-	const [height, setHeight] = import_react.useState(0);
-	const hasSize = Boolean(width && height);
-	useResizeObserver(context.scrollbarX, () => {
-		const height2 = context.scrollbarX?.offsetHeight || 0;
-		context.onCornerHeightChange(height2);
-		setHeight(height2);
-	});
-	useResizeObserver(context.scrollbarY, () => {
-		const width2 = context.scrollbarY?.offsetWidth || 0;
-		context.onCornerWidthChange(width2);
-		setWidth(width2);
-	});
-	return hasSize ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Primitive.div, {
-		...cornerProps,
-		ref: forwardedRef,
-		style: {
-			width,
-			height,
-			position: "absolute",
-			right: context.dir === "ltr" ? 0 : void 0,
-			left: context.dir === "rtl" ? 0 : void 0,
-			bottom: 0,
-			...props.style
-		}
-	}) : null;
-});
-function toInt(value) {
-	return value ? parseInt(value, 10) : 0;
-}
-function getThumbRatio(viewportSize, contentSize) {
-	const ratio = viewportSize / contentSize;
-	return isNaN(ratio) ? 0 : ratio;
-}
-function getThumbSize(sizes) {
-	const ratio = getThumbRatio(sizes.viewport, sizes.content);
-	const scrollbarPadding = sizes.scrollbar.paddingStart + sizes.scrollbar.paddingEnd;
-	const thumbSize = (sizes.scrollbar.size - scrollbarPadding) * ratio;
-	return Math.max(thumbSize, 18);
-}
-function getScrollPositionFromPointer(pointerPos, pointerOffset, sizes, dir = "ltr") {
-	const thumbSizePx = getThumbSize(sizes);
-	const thumbCenter = thumbSizePx / 2;
-	const offset = pointerOffset || thumbCenter;
-	const thumbOffsetFromEnd = thumbSizePx - offset;
-	const minPointerPos = sizes.scrollbar.paddingStart + offset;
-	const maxPointerPos = sizes.scrollbar.size - sizes.scrollbar.paddingEnd - thumbOffsetFromEnd;
-	const maxScrollPos = sizes.content - sizes.viewport;
-	const scrollRange = dir === "ltr" ? [0, maxScrollPos] : [maxScrollPos * -1, 0];
-	return linearScale([minPointerPos, maxPointerPos], scrollRange)(pointerPos);
-}
-function getThumbOffsetFromScroll(scrollPos, sizes, dir = "ltr") {
-	const thumbSizePx = getThumbSize(sizes);
-	const scrollbarPadding = sizes.scrollbar.paddingStart + sizes.scrollbar.paddingEnd;
-	const scrollbar = sizes.scrollbar.size - scrollbarPadding;
-	const maxScrollPos = sizes.content - sizes.viewport;
-	const maxThumbPos = scrollbar - thumbSizePx;
-	const scrollWithoutMomentum = clamp(scrollPos, dir === "ltr" ? [0, maxScrollPos] : [maxScrollPos * -1, 0]);
-	return linearScale([0, maxScrollPos], [0, maxThumbPos])(scrollWithoutMomentum);
-}
-function linearScale(input, output) {
-	return (value) => {
-		if (input[0] === input[1] || output[0] === output[1]) return output[0];
-		const ratio = (output[1] - output[0]) / (input[1] - input[0]);
-		return output[0] + ratio * (value - input[0]);
-	};
-}
-function isScrollingWithinScrollbarBounds(scrollPos, maxScrollPos) {
-	return scrollPos > 0 && scrollPos < maxScrollPos;
-}
-var addUnlinkedScrollListener = (node, handler = () => {}) => {
-	let prevPosition = {
-		left: node.scrollLeft,
-		top: node.scrollTop
-	};
-	let rAF = 0;
-	(function loop() {
-		const position = {
-			left: node.scrollLeft,
-			top: node.scrollTop
-		};
-		const isHorizontalScroll = prevPosition.left !== position.left;
-		const isVerticalScroll = prevPosition.top !== position.top;
-		if (isHorizontalScroll || isVerticalScroll) handler();
-		prevPosition = position;
-		rAF = window.requestAnimationFrame(loop);
-	})();
-	return () => window.cancelAnimationFrame(rAF);
-};
-function useDebounceCallback(callback, delay) {
-	const handleCallback = useCallbackRef(callback);
-	const debounceTimerRef = import_react.useRef(0);
-	import_react.useEffect(() => () => window.clearTimeout(debounceTimerRef.current), []);
-	return import_react.useCallback(() => {
-		window.clearTimeout(debounceTimerRef.current);
-		debounceTimerRef.current = window.setTimeout(handleCallback, delay);
-	}, [handleCallback, delay]);
-}
-function useResizeObserver(element, onResize) {
-	const handleResize = useCallbackRef(onResize);
-	useLayoutEffect2(() => {
-		let rAF = 0;
-		if (element) {
-			const resizeObserver = new ResizeObserver(() => {
-				cancelAnimationFrame(rAF);
-				rAF = window.requestAnimationFrame(handleResize);
-			});
-			resizeObserver.observe(element);
-			return () => {
-				window.cancelAnimationFrame(rAF);
-				resizeObserver.unobserve(element);
-			};
-		}
-	}, [element, handleResize]);
-}
-var Root$1 = ScrollArea$1;
-var Viewport$1 = ScrollAreaViewport;
-var Corner = ScrollAreaCorner;
-//#endregion
-//#region src/components/ui/scroll-area.tsx
-var ScrollArea = import_react.forwardRef(({ className, children, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Root$1, {
-	"data-uid": "src/components/ui/scroll-area.tsx:11:3",
-	"data-prohibitions": "[editContent]",
-	ref,
-	className: cn$1("relative overflow-hidden", className),
-	...props,
-	children: [
-		/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Viewport$1, {
-			"data-uid": "src/components/ui/scroll-area.tsx:16:5",
-			"data-prohibitions": "[editContent]",
-			className: "h-full w-full rounded-[inherit]",
-			children
-		}),
-		/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ScrollBar, {
-			"data-uid": "src/components/ui/scroll-area.tsx:19:5",
-			"data-prohibitions": "[editContent]"
-		}),
-		/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Corner, {
-			"data-uid": "src/components/ui/scroll-area.tsx:20:5",
-			"data-prohibitions": "[editContent]"
-		})
-	]
-}));
-ScrollArea.displayName = Root$1.displayName;
-var ScrollBar = import_react.forwardRef(({ className, orientation = "vertical", ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ScrollAreaScrollbar, {
-	"data-uid": "src/components/ui/scroll-area.tsx:29:3",
-	"data-prohibitions": "[editContent]",
-	ref,
-	orientation,
-	className: cn$1("flex touch-none select-none transition-colors", orientation === "vertical" && "h-full w-2.5 border-l border-l-transparent p-[1px]", orientation === "horizontal" && "h-2.5 flex-col border-t border-t-transparent p-[1px]", className),
-	...props,
-	children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ScrollAreaThumb, {
-		"data-uid": "src/components/ui/scroll-area.tsx:40:5",
-		"data-prohibitions": "[editContent]",
-		className: "relative flex-1 rounded-full bg-border"
-	})
-}));
-ScrollBar.displayName = ScrollAreaScrollbar.displayName;
-//#endregion
-//#region src/components/ui/alert.tsx
-var alertVariants = cva("relative w-full rounded-lg border p-4 [&>svg~*]:pl-7 [&>svg+div]:translate-y-[-3px] [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4 [&>svg]:text-foreground", {
-	variants: { variant: {
-		default: "bg-background text-foreground",
-		destructive: "border-destructive/50 text-destructive dark:border-destructive [&>svg]:text-destructive"
-	} },
-	defaultVariants: { variant: "default" }
-});
-var Alert = import_react.forwardRef(({ className, variant, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-	"data-uid": "src/components/ui/alert.tsx:27:3",
-	"data-prohibitions": "[editContent]",
-	ref,
-	role: "alert",
-	className: cn$1(alertVariants({ variant }), className),
-	...props
-}));
-Alert.displayName = "Alert";
-var AlertTitle = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h5", {
-	"data-uid": "src/components/ui/alert.tsx:33:5",
-	"data-prohibitions": "[editContent]",
-	ref,
-	className: cn$1("mb-1 font-medium leading-none tracking-tight", className),
-	...props
-}));
-AlertTitle.displayName = "AlertTitle";
-var AlertDescription = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-	"data-uid": "src/components/ui/alert.tsx:46:3",
-	"data-prohibitions": "[editContent]",
-	ref,
-	className: cn$1("text-sm [&_p]:leading-relaxed", className),
-	...props
-}));
-AlertDescription.displayName = "AlertDescription";
 //#endregion
 //#region ../../cache/modules/gerenciador-pessoal-completo-6024e/node_modules/.pnpm/@radix-ui+react-use-previous@1.1.1_@types+react@19.2.14_react@19.2.4/node_modules/@radix-ui/react-use-previous/dist/index.mjs
 function usePrevious(value) {
@@ -19503,11 +18603,11 @@ var SelectPopperPosition = import_react.forwardRef((props, forwardedRef) => {
 });
 SelectPopperPosition.displayName = POPPER_POSITION_NAME;
 var [SelectViewportProvider, useSelectViewportContext] = createSelectContext(CONTENT_NAME$1, {});
-var VIEWPORT_NAME = "SelectViewport";
+var VIEWPORT_NAME$1 = "SelectViewport";
 var SelectViewport = import_react.forwardRef((props, forwardedRef) => {
 	const { __scopeSelect, nonce, ...viewportProps } = props;
-	const contentContext = useSelectContentContext(VIEWPORT_NAME, __scopeSelect);
-	const viewportContext = useSelectViewportContext(VIEWPORT_NAME, __scopeSelect);
+	const contentContext = useSelectContentContext(VIEWPORT_NAME$1, __scopeSelect);
+	const viewportContext = useSelectViewportContext(VIEWPORT_NAME$1, __scopeSelect);
 	const composedRefs = useComposedRefs(forwardedRef, contentContext.onViewportChange);
 	const prevScrollTopRef = import_react.useRef(0);
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("style", {
@@ -19553,7 +18653,7 @@ var SelectViewport = import_react.forwardRef((props, forwardedRef) => {
 		})
 	})] });
 });
-SelectViewport.displayName = VIEWPORT_NAME;
+SelectViewport.displayName = VIEWPORT_NAME$1;
 var GROUP_NAME = "SelectGroup";
 var [SelectGroupContextProvider, useSelectGroupContext] = createSelectContext(GROUP_NAME);
 var SelectGroup$1 = import_react.forwardRef((props, forwardedRef) => {
@@ -19815,7 +18915,7 @@ var SelectArrow = import_react.forwardRef((props, forwardedRef) => {
 	}) : null;
 });
 SelectArrow.displayName = ARROW_NAME;
-var BUBBLE_INPUT_NAME = "SelectBubbleInput";
+var BUBBLE_INPUT_NAME$1 = "SelectBubbleInput";
 var SelectBubbleInput = import_react.forwardRef(({ __scopeSelect, value, ...props }, forwardedRef) => {
 	const ref = import_react.useRef(null);
 	const composedRefs = useComposedRefs(forwardedRef, ref);
@@ -19841,7 +18941,7 @@ var SelectBubbleInput = import_react.forwardRef(({ __scopeSelect, value, ...prop
 		defaultValue: value
 	});
 });
-SelectBubbleInput.displayName = BUBBLE_INPUT_NAME;
+SelectBubbleInput.displayName = BUBBLE_INPUT_NAME$1;
 function shouldShowPlaceholder(value) {
 	return value === "" || value === void 0;
 }
@@ -19888,7 +18988,7 @@ var Value = SelectValue$1;
 var Icon = SelectIcon;
 var Portal = SelectPortal;
 var Content2 = SelectContent$1;
-var Viewport = SelectViewport;
+var Viewport$1 = SelectViewport;
 var Label$1 = SelectLabel$1;
 var Item = SelectItem$1;
 var ItemText = SelectItemText;
@@ -19959,7 +19059,7 @@ var SelectContent = import_react.forwardRef(({ className, children, position = "
 				"data-uid": "src/components/ui/select.tsx:78:7",
 				"data-prohibitions": "[editContent]"
 			}),
-			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Viewport, {
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Viewport$1, {
 				"data-uid": "src/components/ui/select.tsx:79:7",
 				"data-prohibitions": "[editContent]",
 				className: cn$1("p-1", position === "popper" && "h-[var(--radix-select-trigger-height)] w-full min-w-[var(--radix-select-trigger-width)]"),
@@ -20015,6 +19115,1560 @@ var SelectSeparator = import_react.forwardRef(({ className, ...props }, ref) => 
 	...props
 }));
 SelectSeparator.displayName = Separator.displayName;
+//#endregion
+//#region ../../cache/modules/gerenciador-pessoal-completo-6024e/node_modules/.pnpm/@radix-ui+react-switch@1.2.6_@types+react-dom@19.2.3_@types+react@19.2.14__@types+react_e3738c514c10df2ef7e24af5ee461853/node_modules/@radix-ui/react-switch/dist/index.mjs
+var SWITCH_NAME = "Switch";
+var [createSwitchContext, createSwitchScope] = createContextScope(SWITCH_NAME);
+var [SwitchProvider, useSwitchContext] = createSwitchContext(SWITCH_NAME);
+var Switch$1 = import_react.forwardRef((props, forwardedRef) => {
+	const { __scopeSwitch, name, checked: checkedProp, defaultChecked, required, disabled, value = "on", onCheckedChange, form, ...switchProps } = props;
+	const [button, setButton] = import_react.useState(null);
+	const composedRefs = useComposedRefs(forwardedRef, (node) => setButton(node));
+	const hasConsumerStoppedPropagationRef = import_react.useRef(false);
+	const isFormControl = button ? form || !!button.closest("form") : true;
+	const [checked, setChecked] = useControllableState({
+		prop: checkedProp,
+		defaultProp: defaultChecked ?? false,
+		onChange: onCheckedChange,
+		caller: SWITCH_NAME
+	});
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(SwitchProvider, {
+		scope: __scopeSwitch,
+		checked,
+		disabled,
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Primitive.button, {
+			type: "button",
+			role: "switch",
+			"aria-checked": checked,
+			"aria-required": required,
+			"data-state": getState(checked),
+			"data-disabled": disabled ? "" : void 0,
+			disabled,
+			value,
+			...switchProps,
+			ref: composedRefs,
+			onClick: composeEventHandlers(props.onClick, (event) => {
+				setChecked((prevChecked) => !prevChecked);
+				if (isFormControl) {
+					hasConsumerStoppedPropagationRef.current = event.isPropagationStopped();
+					if (!hasConsumerStoppedPropagationRef.current) event.stopPropagation();
+				}
+			})
+		}), isFormControl && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SwitchBubbleInput, {
+			control: button,
+			bubbles: !hasConsumerStoppedPropagationRef.current,
+			name,
+			value,
+			checked,
+			required,
+			disabled,
+			form,
+			style: { transform: "translateX(-100%)" }
+		})]
+	});
+});
+Switch$1.displayName = SWITCH_NAME;
+var THUMB_NAME$1 = "SwitchThumb";
+var SwitchThumb = import_react.forwardRef((props, forwardedRef) => {
+	const { __scopeSwitch, ...thumbProps } = props;
+	const context = useSwitchContext(THUMB_NAME$1, __scopeSwitch);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Primitive.span, {
+		"data-state": getState(context.checked),
+		"data-disabled": context.disabled ? "" : void 0,
+		...thumbProps,
+		ref: forwardedRef
+	});
+});
+SwitchThumb.displayName = THUMB_NAME$1;
+var BUBBLE_INPUT_NAME = "SwitchBubbleInput";
+var SwitchBubbleInput = import_react.forwardRef(({ __scopeSwitch, control, checked, bubbles = true, ...props }, forwardedRef) => {
+	const ref = import_react.useRef(null);
+	const composedRefs = useComposedRefs(ref, forwardedRef);
+	const prevChecked = usePrevious(checked);
+	const controlSize = useSize(control);
+	import_react.useEffect(() => {
+		const input = ref.current;
+		if (!input) return;
+		const inputProto = window.HTMLInputElement.prototype;
+		const setChecked = Object.getOwnPropertyDescriptor(inputProto, "checked").set;
+		if (prevChecked !== checked && setChecked) {
+			const event = new Event("click", { bubbles });
+			setChecked.call(input, checked);
+			input.dispatchEvent(event);
+		}
+	}, [
+		prevChecked,
+		checked,
+		bubbles
+	]);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+		type: "checkbox",
+		"aria-hidden": true,
+		defaultChecked: checked,
+		...props,
+		tabIndex: -1,
+		ref: composedRefs,
+		style: {
+			...props.style,
+			...controlSize,
+			position: "absolute",
+			pointerEvents: "none",
+			opacity: 0,
+			margin: 0
+		}
+	});
+});
+SwitchBubbleInput.displayName = BUBBLE_INPUT_NAME;
+function getState(checked) {
+	return checked ? "checked" : "unchecked";
+}
+var Root$2 = Switch$1;
+var Thumb = SwitchThumb;
+//#endregion
+//#region src/components/ui/switch.tsx
+var Switch = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Root$2, {
+	"data-uid": "src/components/ui/switch.tsx:11:3",
+	"data-prohibitions": "[editContent]",
+	className: cn$1("peer inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=unchecked]:bg-input", className),
+	...props,
+	ref,
+	children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Thumb, {
+		"data-uid": "src/components/ui/switch.tsx:19:5",
+		"data-prohibitions": "[editContent]",
+		className: cn$1("pointer-events-none block h-5 w-5 rounded-full bg-background shadow-lg ring-0 transition-transform data-[state=checked]:translate-x-5 data-[state=unchecked]:translate-x-0")
+	})
+}));
+Switch.displayName = Root$2.displayName;
+//#endregion
+//#region src/pages/master/MasterUsers.tsx
+var mockUsers = [
+	{
+		id: "mock-1",
+		name: "João",
+		role: "admin",
+		is_nutritionist: false,
+		is_trainer: false,
+		is_psychologist: false,
+		email: "joao@master.com"
+	},
+	{
+		id: "mock-2",
+		name: "Carlos",
+		role: "professional",
+		is_nutritionist: true,
+		is_trainer: true,
+		is_psychologist: false,
+		email: "carlos@prof.com"
+	},
+	{
+		id: "mock-3",
+		name: "Maria",
+		role: "client",
+		is_nutritionist: false,
+		is_trainer: false,
+		is_psychologist: false,
+		email: "maria@client.com"
+	}
+];
+var RoleBadge = ({ role }) => {
+	switch (role) {
+		case "admin": return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Badge, {
+			"data-uid": "src/pages/master/MasterUsers.tsx:80:9",
+			"data-prohibitions": "[]",
+			variant: "outline",
+			className: "bg-purple-50 text-purple-700 border-purple-200",
+			children: "Master"
+		});
+		case "professional": return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Badge, {
+			"data-uid": "src/pages/master/MasterUsers.tsx:86:9",
+			"data-prohibitions": "[]",
+			variant: "outline",
+			className: "bg-blue-50 text-blue-700 border-blue-200",
+			children: "Profissional"
+		});
+		default: return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Badge, {
+			"data-uid": "src/pages/master/MasterUsers.tsx:92:9",
+			"data-prohibitions": "[]",
+			variant: "outline",
+			className: "bg-slate-50 text-slate-700 border-slate-200",
+			children: "Cliente"
+		});
+	}
+};
+var SpecialtiesList = ({ user }) => {
+	if (user.role !== "professional") return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+		"data-uid": "src/pages/master/MasterUsers.tsx:100:44",
+		"data-prohibitions": "[]",
+		className: "text-muted-foreground text-sm",
+		children: "-"
+	});
+	const active = [];
+	if (user.is_nutritionist) active.push(/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+		"data-uid": "src/pages/master/MasterUsers.tsx:105:7",
+		"data-prohibitions": "[]",
+		title: "Nutrição",
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Apple, {
+			"data-uid": "src/pages/master/MasterUsers.tsx:106:9",
+			"data-prohibitions": "[editContent]",
+			className: "w-4 h-4 text-emerald-500"
+		})
+	}, "nutri"));
+	if (user.is_trainer) active.push(/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+		"data-uid": "src/pages/master/MasterUsers.tsx:111:7",
+		"data-prohibitions": "[]",
+		title: "Treino",
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Dumbbell, {
+			"data-uid": "src/pages/master/MasterUsers.tsx:112:9",
+			"data-prohibitions": "[editContent]",
+			className: "w-4 h-4 text-orange-500"
+		})
+	}, "trainer"));
+	if (user.is_psychologist) active.push(/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+		"data-uid": "src/pages/master/MasterUsers.tsx:117:7",
+		"data-prohibitions": "[]",
+		title: "Psicologia",
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Brain, {
+			"data-uid": "src/pages/master/MasterUsers.tsx:118:9",
+			"data-prohibitions": "[editContent]",
+			className: "w-4 h-4 text-pink-500"
+		})
+	}, "psy"));
+	if (active.length === 0) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+		"data-uid": "src/pages/master/MasterUsers.tsx:122:35",
+		"data-prohibitions": "[]",
+		className: "text-muted-foreground text-sm",
+		children: "Nenhuma"
+	});
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+		"data-uid": "src/pages/master/MasterUsers.tsx:123:10",
+		"data-prohibitions": "[editContent]",
+		className: "flex gap-2",
+		children: active
+	});
+};
+function MasterUsers() {
+	const [users, setUsers] = (0, import_react.useState)([]);
+	const [searchTerm, setSearchTerm] = (0, import_react.useState)("");
+	const [selectedUser, setSelectedUser] = (0, import_react.useState)(null);
+	const [isSheetOpen, setIsSheetOpen] = (0, import_react.useState)(false);
+	const [editForm, setEditForm] = (0, import_react.useState)({
+		role: "client",
+		is_nutritionist: false,
+		is_trainer: false,
+		is_psychologist: false
+	});
+	const { toast } = useToast();
+	(0, import_react.useEffect)(() => {
+		fetchUsers();
+	}, []);
+	const fetchUsers = async () => {
+		const { data, error } = await supabase.from("profiles").select("*").order("created_at", { ascending: false });
+		if (!error && data && data.length > 0) setUsers(data.some((u) => u.name === "João" && u.role === "admin") ? data : [...mockUsers, ...data]);
+		else setUsers(mockUsers);
+	};
+	const filteredUsers = users.filter((u) => (u.name || "").toLowerCase().includes(searchTerm.toLowerCase()) || (u.email || "").toLowerCase().includes(searchTerm.toLowerCase()));
+	const openEditSheet = (user) => {
+		setSelectedUser(user);
+		setEditForm({
+			role: user.role || "client",
+			is_nutritionist: user.is_nutritionist,
+			is_trainer: user.is_trainer,
+			is_psychologist: user.is_psychologist
+		});
+		setIsSheetOpen(true);
+	};
+	const handleSave = async () => {
+		if (!selectedUser) return;
+		const isMock = selectedUser.id.startsWith("mock-");
+		const finalNutritionist = editForm.role === "professional" ? editForm.is_nutritionist : false;
+		const finalTrainer = editForm.role === "professional" ? editForm.is_trainer : false;
+		const finalPsychologist = editForm.role === "professional" ? editForm.is_psychologist : false;
+		if (!isMock) {
+			const { error } = await supabase.from("profiles").update({
+				role: editForm.role,
+				is_nutritionist: finalNutritionist,
+				is_trainer: finalTrainer,
+				is_psychologist: finalPsychologist
+			}).eq("id", selectedUser.id);
+			if (error) {
+				toast({
+					title: "Erro",
+					description: "Não foi possível atualizar os acessos.",
+					variant: "destructive"
+				});
+				return;
+			}
+		}
+		setUsers(users.map((u) => u.id === selectedUser.id ? {
+			...u,
+			role: editForm.role,
+			is_nutritionist: finalNutritionist,
+			is_trainer: finalTrainer,
+			is_psychologist: finalPsychologist
+		} : u));
+		toast({ title: "Acessos atualizados com sucesso!" });
+		setIsSheetOpen(false);
+	};
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		"data-uid": "src/pages/master/MasterUsers.tsx:225:5",
+		"data-prohibitions": "[editContent]",
+		className: "flex flex-col min-h-full",
+		children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DashboardHeader, {
+				"data-uid": "src/pages/master/MasterUsers.tsx:226:7",
+				"data-prohibitions": "[]",
+				title: "Gestão de Utilizadores",
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					"data-uid": "src/pages/master/MasterUsers.tsx:227:9",
+					"data-prohibitions": "[]",
+					className: "relative w-64 hidden md:block",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Search, {
+						"data-uid": "src/pages/master/MasterUsers.tsx:228:11",
+						"data-prohibitions": "[editContent]",
+						className: "absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground"
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
+						"data-uid": "src/pages/master/MasterUsers.tsx:229:11",
+						"data-prohibitions": "[editContent]",
+						type: "search",
+						placeholder: "Buscar utilizadores...",
+						className: "pl-8 bg-muted/50",
+						value: searchTerm,
+						onChange: (e) => setSearchTerm(e.target.value)
+					})]
+				})
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(PageContent, {
+				"data-uid": "src/pages/master/MasterUsers.tsx:239:7",
+				"data-prohibitions": "[editContent]",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+					"data-uid": "src/pages/master/MasterUsers.tsx:240:9",
+					"data-prohibitions": "[]",
+					className: "mb-6",
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+						"data-uid": "src/pages/master/MasterUsers.tsx:241:11",
+						"data-prohibitions": "[]",
+						className: "text-sm text-muted-foreground",
+						children: "Administre os acessos, papéis e especialidades de todos os utilizadores da plataforma."
+					})
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+					"data-uid": "src/pages/master/MasterUsers.tsx:246:9",
+					"data-prohibitions": "[editContent]",
+					className: "rounded-md border bg-card shadow-sm overflow-hidden",
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Table, {
+						"data-uid": "src/pages/master/MasterUsers.tsx:247:11",
+						"data-prohibitions": "[editContent]",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHeader, {
+							"data-uid": "src/pages/master/MasterUsers.tsx:248:13",
+							"data-prohibitions": "[]",
+							className: "bg-muted/30",
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(TableRow, {
+								"data-uid": "src/pages/master/MasterUsers.tsx:249:15",
+								"data-prohibitions": "[]",
+								children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, {
+										"data-uid": "src/pages/master/MasterUsers.tsx:250:17",
+										"data-prohibitions": "[]",
+										children: "Nome"
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, {
+										"data-uid": "src/pages/master/MasterUsers.tsx:251:17",
+										"data-prohibitions": "[]",
+										children: "Papel Base"
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, {
+										"data-uid": "src/pages/master/MasterUsers.tsx:252:17",
+										"data-prohibitions": "[]",
+										children: "Especialidades"
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, {
+										"data-uid": "src/pages/master/MasterUsers.tsx:253:17",
+										"data-prohibitions": "[]",
+										className: "text-right",
+										children: "Ações"
+									})
+								]
+							})
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(TableBody, {
+							"data-uid": "src/pages/master/MasterUsers.tsx:256:13",
+							"data-prohibitions": "[editContent]",
+							children: [filteredUsers.map((user) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(TableRow, {
+								"data-uid": "src/pages/master/MasterUsers.tsx:258:17",
+								"data-prohibitions": "[editContent]",
+								className: "hover:bg-muted/10 transition-colors",
+								children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
+										"data-uid": "src/pages/master/MasterUsers.tsx:259:19",
+										"data-prohibitions": "[editContent]",
+										className: "font-medium",
+										children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+											"data-uid": "src/pages/master/MasterUsers.tsx:260:21",
+											"data-prohibitions": "[editContent]",
+											className: "flex flex-col",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												"data-uid": "src/pages/master/MasterUsers.tsx:261:23",
+												"data-prohibitions": "[editContent]",
+												children: user.name || "Sem nome"
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												"data-uid": "src/pages/master/MasterUsers.tsx:262:23",
+												"data-prohibitions": "[editContent]",
+												className: "text-xs text-muted-foreground font-normal",
+												children: user.email || "Sem email"
+											})]
+										})
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
+										"data-uid": "src/pages/master/MasterUsers.tsx:267:19",
+										"data-prohibitions": "[]",
+										children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(RoleBadge, {
+											"data-uid": "src/pages/master/MasterUsers.tsx:268:21",
+											"data-prohibitions": "[editContent]",
+											role: user.role || "client"
+										})
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
+										"data-uid": "src/pages/master/MasterUsers.tsx:270:19",
+										"data-prohibitions": "[]",
+										children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SpecialtiesList, {
+											"data-uid": "src/pages/master/MasterUsers.tsx:271:21",
+											"data-prohibitions": "[editContent]",
+											user
+										})
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
+										"data-uid": "src/pages/master/MasterUsers.tsx:273:19",
+										"data-prohibitions": "[]",
+										className: "text-right",
+										children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
+											"data-uid": "src/pages/master/MasterUsers.tsx:274:21",
+											"data-prohibitions": "[]",
+											variant: "ghost",
+											size: "sm",
+											onClick: () => openEditSheet(user),
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Shield, {
+												"data-uid": "src/pages/master/MasterUsers.tsx:275:23",
+												"data-prohibitions": "[editContent]",
+												className: "w-4 h-4 mr-2"
+											}), "Gerir Acesso"]
+										})
+									})
+								]
+							}, user.id)), filteredUsers.length === 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableRow, {
+								"data-uid": "src/pages/master/MasterUsers.tsx:282:17",
+								"data-prohibitions": "[]",
+								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
+									"data-uid": "src/pages/master/MasterUsers.tsx:283:19",
+									"data-prohibitions": "[]",
+									colSpan: 4,
+									className: "text-center py-8 text-muted-foreground",
+									children: "Nenhum utilizador encontrado."
+								})
+							})]
+						})]
+					})
+				})]
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Sheet, {
+				"data-uid": "src/pages/master/MasterUsers.tsx:293:7",
+				"data-prohibitions": "[editContent]",
+				open: isSheetOpen,
+				onOpenChange: setIsSheetOpen,
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(SheetContent, {
+					"data-uid": "src/pages/master/MasterUsers.tsx:294:9",
+					"data-prohibitions": "[editContent]",
+					className: "flex flex-col overflow-y-auto",
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(SheetHeader, {
+							"data-uid": "src/pages/master/MasterUsers.tsx:295:11",
+							"data-prohibitions": "[editContent]",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(SheetTitle, {
+								"data-uid": "src/pages/master/MasterUsers.tsx:296:13",
+								"data-prohibitions": "[editContent]",
+								children: ["Editar Acessos de ", selectedUser?.name]
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SheetDescription, {
+								"data-uid": "src/pages/master/MasterUsers.tsx:297:13",
+								"data-prohibitions": "[]",
+								children: "Altere o papel principal e as especialidades ativas deste utilizador."
+							})]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							"data-uid": "src/pages/master/MasterUsers.tsx:302:11",
+							"data-prohibitions": "[editContent]",
+							className: "flex-1 py-6 space-y-8",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								"data-uid": "src/pages/master/MasterUsers.tsx:303:13",
+								"data-prohibitions": "[]",
+								className: "space-y-3",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label$2, {
+									"data-uid": "src/pages/master/MasterUsers.tsx:304:15",
+									"data-prohibitions": "[]",
+									children: "Papel Principal"
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Select, {
+									"data-uid": "src/pages/master/MasterUsers.tsx:305:15",
+									"data-prohibitions": "[]",
+									value: editForm.role,
+									onValueChange: (val) => setEditForm({
+										...editForm,
+										role: val
+									}),
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectTrigger, {
+										"data-uid": "src/pages/master/MasterUsers.tsx:309:17",
+										"data-prohibitions": "[]",
+										children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectValue, {
+											"data-uid": "src/pages/master/MasterUsers.tsx:310:19",
+											"data-prohibitions": "[editContent]",
+											placeholder: "Selecione um papel"
+										})
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(SelectContent, {
+										"data-uid": "src/pages/master/MasterUsers.tsx:312:17",
+										"data-prohibitions": "[]",
+										children: [
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectItem, {
+												"data-uid": "src/pages/master/MasterUsers.tsx:313:19",
+												"data-prohibitions": "[]",
+												value: "client",
+												children: "Cliente"
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectItem, {
+												"data-uid": "src/pages/master/MasterUsers.tsx:314:19",
+												"data-prohibitions": "[]",
+												value: "professional",
+												children: "Profissional"
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectItem, {
+												"data-uid": "src/pages/master/MasterUsers.tsx:315:19",
+												"data-prohibitions": "[]",
+												value: "admin",
+												children: "Master"
+											})
+										]
+									})]
+								})]
+							}), editForm.role === "professional" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								"data-uid": "src/pages/master/MasterUsers.tsx:321:15",
+								"data-prohibitions": "[]",
+								className: "space-y-5 pt-5 border-t animate-in fade-in slide-in-from-bottom-2 duration-300",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h4", {
+									"data-uid": "src/pages/master/MasterUsers.tsx:322:17",
+									"data-prohibitions": "[]",
+									className: "text-sm font-semibold flex items-center gap-2",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Settings, {
+										"data-uid": "src/pages/master/MasterUsers.tsx:323:19",
+										"data-prohibitions": "[editContent]",
+										className: "w-4 h-4 text-primary"
+									}), "Especialidades Liberadas"]
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									"data-uid": "src/pages/master/MasterUsers.tsx:327:17",
+									"data-prohibitions": "[]",
+									className: "space-y-4",
+									children: [
+										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+											"data-uid": "src/pages/master/MasterUsers.tsx:328:19",
+											"data-prohibitions": "[]",
+											className: "flex items-center justify-between p-3 rounded-lg border bg-card/50",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+												"data-uid": "src/pages/master/MasterUsers.tsx:329:21",
+												"data-prohibitions": "[]",
+												className: "flex items-center gap-3",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+													"data-uid": "src/pages/master/MasterUsers.tsx:330:23",
+													"data-prohibitions": "[]",
+													className: "p-2 rounded-md bg-emerald-100/50",
+													children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Apple, {
+														"data-uid": "src/pages/master/MasterUsers.tsx:331:25",
+														"data-prohibitions": "[editContent]",
+														className: "w-4 h-4 text-emerald-600"
+													})
+												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label$2, {
+													"data-uid": "src/pages/master/MasterUsers.tsx:333:23",
+													"data-prohibitions": "[]",
+													htmlFor: "nutri",
+													className: "cursor-pointer font-medium",
+													children: "Nutrição"
+												})]
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Switch, {
+												"data-uid": "src/pages/master/MasterUsers.tsx:337:21",
+												"data-prohibitions": "[editContent]",
+												id: "nutri",
+												checked: editForm.is_nutritionist,
+												onCheckedChange: (c) => setEditForm({
+													...editForm,
+													is_nutritionist: c
+												})
+											})]
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+											"data-uid": "src/pages/master/MasterUsers.tsx:344:19",
+											"data-prohibitions": "[]",
+											className: "flex items-center justify-between p-3 rounded-lg border bg-card/50",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+												"data-uid": "src/pages/master/MasterUsers.tsx:345:21",
+												"data-prohibitions": "[]",
+												className: "flex items-center gap-3",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+													"data-uid": "src/pages/master/MasterUsers.tsx:346:23",
+													"data-prohibitions": "[]",
+													className: "p-2 rounded-md bg-orange-100/50",
+													children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Dumbbell, {
+														"data-uid": "src/pages/master/MasterUsers.tsx:347:25",
+														"data-prohibitions": "[editContent]",
+														className: "w-4 h-4 text-orange-600"
+													})
+												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label$2, {
+													"data-uid": "src/pages/master/MasterUsers.tsx:349:23",
+													"data-prohibitions": "[]",
+													htmlFor: "treino",
+													className: "cursor-pointer font-medium",
+													children: "Educação Física / Fisioterapia (Treino)"
+												})]
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Switch, {
+												"data-uid": "src/pages/master/MasterUsers.tsx:353:21",
+												"data-prohibitions": "[editContent]",
+												id: "treino",
+												checked: editForm.is_trainer,
+												onCheckedChange: (c) => setEditForm({
+													...editForm,
+													is_trainer: c
+												})
+											})]
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+											"data-uid": "src/pages/master/MasterUsers.tsx:360:19",
+											"data-prohibitions": "[]",
+											className: "flex items-center justify-between p-3 rounded-lg border bg-card/50",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+												"data-uid": "src/pages/master/MasterUsers.tsx:361:21",
+												"data-prohibitions": "[]",
+												className: "flex items-center gap-3",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+													"data-uid": "src/pages/master/MasterUsers.tsx:362:23",
+													"data-prohibitions": "[]",
+													className: "p-2 rounded-md bg-pink-100/50",
+													children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Brain, {
+														"data-uid": "src/pages/master/MasterUsers.tsx:363:25",
+														"data-prohibitions": "[editContent]",
+														className: "w-4 h-4 text-pink-600"
+													})
+												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label$2, {
+													"data-uid": "src/pages/master/MasterUsers.tsx:365:23",
+													"data-prohibitions": "[]",
+													htmlFor: "psico",
+													className: "cursor-pointer font-medium",
+													children: "Saúde Mental (Psicologia)"
+												})]
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Switch, {
+												"data-uid": "src/pages/master/MasterUsers.tsx:369:21",
+												"data-prohibitions": "[editContent]",
+												id: "psico",
+												checked: editForm.is_psychologist,
+												onCheckedChange: (c) => setEditForm({
+													...editForm,
+													is_psychologist: c
+												})
+											})]
+										})
+									]
+								})]
+							})]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SheetFooter, {
+							"data-uid": "src/pages/master/MasterUsers.tsx:380:11",
+							"data-prohibitions": "[]",
+							className: "mt-auto pt-4 border-t",
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+								"data-uid": "src/pages/master/MasterUsers.tsx:381:13",
+								"data-prohibitions": "[]",
+								onClick: handleSave,
+								className: "w-full",
+								children: "Salvar Alterações"
+							})
+						})
+					]
+				})
+			})
+		]
+	});
+}
+//#endregion
+//#region src/pages/professional/ProfDashboard.tsx
+function ProfDashboard() {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		"data-uid": "src/pages/professional/ProfDashboard.tsx:9:5",
+		"data-prohibitions": "[editContent]",
+		className: "flex flex-col min-h-full",
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DashboardHeader, {
+			"data-uid": "src/pages/professional/ProfDashboard.tsx:10:7",
+			"data-prohibitions": "[]",
+			title: "Painel do Profissional",
+			children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
+				"data-uid": "src/pages/professional/ProfDashboard.tsx:11:9",
+				"data-prohibitions": "[]",
+				size: "sm",
+				className: "hidden sm:flex",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CirclePlus, {
+					"data-uid": "src/pages/professional/ProfDashboard.tsx:12:11",
+					"data-prohibitions": "[editContent]",
+					className: "mr-2 h-4 w-4"
+				}), " Novo Paciente"]
+			})
+		}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(PageContent, {
+			"data-uid": "src/pages/professional/ProfDashboard.tsx:15:7",
+			"data-prohibitions": "[editContent]",
+			children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					"data-uid": "src/pages/professional/ProfDashboard.tsx:16:9",
+					"data-prohibitions": "[]",
+					className: "grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-8",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
+						"data-uid": "src/pages/professional/ProfDashboard.tsx:17:11",
+						"data-prohibitions": "[]",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, {
+							"data-uid": "src/pages/professional/ProfDashboard.tsx:18:13",
+							"data-prohibitions": "[]",
+							className: "flex flex-row items-center justify-between space-y-0 pb-2",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
+								"data-uid": "src/pages/professional/ProfDashboard.tsx:19:15",
+								"data-prohibitions": "[]",
+								className: "text-sm font-medium",
+								children: "Consultas Hoje"
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Calendar, {
+								"data-uid": "src/pages/professional/ProfDashboard.tsx:20:15",
+								"data-prohibitions": "[editContent]",
+								className: "h-4 w-4 text-teal-600"
+							})]
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContent, {
+							"data-uid": "src/pages/professional/ProfDashboard.tsx:22:13",
+							"data-prohibitions": "[]",
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								"data-uid": "src/pages/professional/ProfDashboard.tsx:23:15",
+								"data-prohibitions": "[]",
+								className: "text-2xl font-bold text-teal-900 dark:text-teal-100",
+								children: "8"
+							})
+						})]
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
+						"data-uid": "src/pages/professional/ProfDashboard.tsx:26:11",
+						"data-prohibitions": "[]",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardHeader, {
+							"data-uid": "src/pages/professional/ProfDashboard.tsx:27:13",
+							"data-prohibitions": "[]",
+							className: "flex flex-row items-center justify-between space-y-0 pb-2",
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
+								"data-uid": "src/pages/professional/ProfDashboard.tsx:28:15",
+								"data-prohibitions": "[]",
+								className: "text-sm font-medium",
+								children: "Pacientes Ativos"
+							})
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContent, {
+							"data-uid": "src/pages/professional/ProfDashboard.tsx:30:13",
+							"data-prohibitions": "[]",
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								"data-uid": "src/pages/professional/ProfDashboard.tsx:31:15",
+								"data-prohibitions": "[]",
+								className: "text-2xl font-bold",
+								children: "142"
+							})
+						})]
+					})]
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+					"data-uid": "src/pages/professional/ProfDashboard.tsx:36:9",
+					"data-prohibitions": "[]",
+					className: "font-semibold text-lg mb-4",
+					children: "Próximos Atendimentos"
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+					"data-uid": "src/pages/professional/ProfDashboard.tsx:37:9",
+					"data-prohibitions": "[editContent]",
+					className: "space-y-4",
+					children: [
+						1,
+						2,
+						3
+					].map((i) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						"data-uid": "src/pages/professional/ProfDashboard.tsx:39:13",
+						"data-prohibitions": "[editContent]",
+						className: "p-4 rounded-xl border bg-card flex justify-between items-center",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							"data-uid": "src/pages/professional/ProfDashboard.tsx:43:15",
+							"data-prohibitions": "[editContent]",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+								"data-uid": "src/pages/professional/ProfDashboard.tsx:44:17",
+								"data-prohibitions": "[editContent]",
+								className: "font-semibold",
+								children: ["Paciente de Demonstração ", i]
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+								"data-uid": "src/pages/professional/ProfDashboard.tsx:45:17",
+								"data-prohibitions": "[]",
+								className: "text-sm text-muted-foreground",
+								children: "Hoje, 14:00 - Retorno"
+							})]
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+							"data-uid": "src/pages/professional/ProfDashboard.tsx:47:15",
+							"data-prohibitions": "[]",
+							variant: "outline",
+							size: "sm",
+							children: "Acessar Prontuário"
+						})]
+					}, i))
+				})
+			]
+		})]
+	});
+}
+//#endregion
+//#region src/pages/professional/ProfCalendar.tsx
+function ProfCalendar() {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		"data-uid": "src/pages/professional/ProfCalendar.tsx:6:5",
+		"data-prohibitions": "[]",
+		className: "flex flex-col min-h-full",
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DashboardHeader, {
+			"data-uid": "src/pages/professional/ProfCalendar.tsx:7:7",
+			"data-prohibitions": "[editContent]",
+			title: "Agenda"
+		}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PageContent, {
+			"data-uid": "src/pages/professional/ProfCalendar.tsx:8:7",
+			"data-prohibitions": "[]",
+			children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				"data-uid": "src/pages/professional/ProfCalendar.tsx:9:9",
+				"data-prohibitions": "[]",
+				className: "p-12 text-center text-muted-foreground border rounded-xl border-dashed",
+				children: "Módulo de Agenda Semanal (Em desenvolvimento)"
+			})
+		})]
+	});
+}
+//#endregion
+//#region ../../cache/modules/gerenciador-pessoal-completo-6024e/node_modules/.pnpm/@radix-ui+react-scroll-area@1.2.10_@types+react-dom@19.2.3_@types+react@19.2.14__@types_155614c2fe5222bb9b221068b09efefc/node_modules/@radix-ui/react-scroll-area/dist/index.mjs
+function useStateMachine(initialState, machine) {
+	return import_react.useReducer((state, event) => {
+		return machine[state][event] ?? state;
+	}, initialState);
+}
+var SCROLL_AREA_NAME = "ScrollArea";
+var [createScrollAreaContext, createScrollAreaScope] = createContextScope(SCROLL_AREA_NAME);
+var [ScrollAreaProvider, useScrollAreaContext] = createScrollAreaContext(SCROLL_AREA_NAME);
+var ScrollArea$1 = import_react.forwardRef((props, forwardedRef) => {
+	const { __scopeScrollArea, type = "hover", dir, scrollHideDelay = 600, ...scrollAreaProps } = props;
+	const [scrollArea, setScrollArea] = import_react.useState(null);
+	const [viewport, setViewport] = import_react.useState(null);
+	const [content, setContent] = import_react.useState(null);
+	const [scrollbarX, setScrollbarX] = import_react.useState(null);
+	const [scrollbarY, setScrollbarY] = import_react.useState(null);
+	const [cornerWidth, setCornerWidth] = import_react.useState(0);
+	const [cornerHeight, setCornerHeight] = import_react.useState(0);
+	const [scrollbarXEnabled, setScrollbarXEnabled] = import_react.useState(false);
+	const [scrollbarYEnabled, setScrollbarYEnabled] = import_react.useState(false);
+	const composedRefs = useComposedRefs(forwardedRef, (node) => setScrollArea(node));
+	const direction = useDirection(dir);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ScrollAreaProvider, {
+		scope: __scopeScrollArea,
+		type,
+		dir: direction,
+		scrollHideDelay,
+		scrollArea,
+		viewport,
+		onViewportChange: setViewport,
+		content,
+		onContentChange: setContent,
+		scrollbarX,
+		onScrollbarXChange: setScrollbarX,
+		scrollbarXEnabled,
+		onScrollbarXEnabledChange: setScrollbarXEnabled,
+		scrollbarY,
+		onScrollbarYChange: setScrollbarY,
+		scrollbarYEnabled,
+		onScrollbarYEnabledChange: setScrollbarYEnabled,
+		onCornerWidthChange: setCornerWidth,
+		onCornerHeightChange: setCornerHeight,
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Primitive.div, {
+			dir: direction,
+			...scrollAreaProps,
+			ref: composedRefs,
+			style: {
+				position: "relative",
+				["--radix-scroll-area-corner-width"]: cornerWidth + "px",
+				["--radix-scroll-area-corner-height"]: cornerHeight + "px",
+				...props.style
+			}
+		})
+	});
+});
+ScrollArea$1.displayName = SCROLL_AREA_NAME;
+var VIEWPORT_NAME = "ScrollAreaViewport";
+var ScrollAreaViewport = import_react.forwardRef((props, forwardedRef) => {
+	const { __scopeScrollArea, children, nonce, ...viewportProps } = props;
+	const context = useScrollAreaContext(VIEWPORT_NAME, __scopeScrollArea);
+	const composedRefs = useComposedRefs(forwardedRef, import_react.useRef(null), context.onViewportChange);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("style", {
+		dangerouslySetInnerHTML: { __html: `[data-radix-scroll-area-viewport]{scrollbar-width:none;-ms-overflow-style:none;-webkit-overflow-scrolling:touch;}[data-radix-scroll-area-viewport]::-webkit-scrollbar{display:none}` },
+		nonce
+	}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Primitive.div, {
+		"data-radix-scroll-area-viewport": "",
+		...viewportProps,
+		ref: composedRefs,
+		style: {
+			overflowX: context.scrollbarXEnabled ? "scroll" : "hidden",
+			overflowY: context.scrollbarYEnabled ? "scroll" : "hidden",
+			...props.style
+		},
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+			ref: context.onContentChange,
+			style: {
+				minWidth: "100%",
+				display: "table"
+			},
+			children
+		})
+	})] });
+});
+ScrollAreaViewport.displayName = VIEWPORT_NAME;
+var SCROLLBAR_NAME = "ScrollAreaScrollbar";
+var ScrollAreaScrollbar = import_react.forwardRef((props, forwardedRef) => {
+	const { forceMount, ...scrollbarProps } = props;
+	const context = useScrollAreaContext(SCROLLBAR_NAME, props.__scopeScrollArea);
+	const { onScrollbarXEnabledChange, onScrollbarYEnabledChange } = context;
+	const isHorizontal = props.orientation === "horizontal";
+	import_react.useEffect(() => {
+		isHorizontal ? onScrollbarXEnabledChange(true) : onScrollbarYEnabledChange(true);
+		return () => {
+			isHorizontal ? onScrollbarXEnabledChange(false) : onScrollbarYEnabledChange(false);
+		};
+	}, [
+		isHorizontal,
+		onScrollbarXEnabledChange,
+		onScrollbarYEnabledChange
+	]);
+	return context.type === "hover" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ScrollAreaScrollbarHover, {
+		...scrollbarProps,
+		ref: forwardedRef,
+		forceMount
+	}) : context.type === "scroll" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ScrollAreaScrollbarScroll, {
+		...scrollbarProps,
+		ref: forwardedRef,
+		forceMount
+	}) : context.type === "auto" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ScrollAreaScrollbarAuto, {
+		...scrollbarProps,
+		ref: forwardedRef,
+		forceMount
+	}) : context.type === "always" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ScrollAreaScrollbarVisible, {
+		...scrollbarProps,
+		ref: forwardedRef
+	}) : null;
+});
+ScrollAreaScrollbar.displayName = SCROLLBAR_NAME;
+var ScrollAreaScrollbarHover = import_react.forwardRef((props, forwardedRef) => {
+	const { forceMount, ...scrollbarProps } = props;
+	const context = useScrollAreaContext(SCROLLBAR_NAME, props.__scopeScrollArea);
+	const [visible, setVisible] = import_react.useState(false);
+	import_react.useEffect(() => {
+		const scrollArea = context.scrollArea;
+		let hideTimer = 0;
+		if (scrollArea) {
+			const handlePointerEnter = () => {
+				window.clearTimeout(hideTimer);
+				setVisible(true);
+			};
+			const handlePointerLeave = () => {
+				hideTimer = window.setTimeout(() => setVisible(false), context.scrollHideDelay);
+			};
+			scrollArea.addEventListener("pointerenter", handlePointerEnter);
+			scrollArea.addEventListener("pointerleave", handlePointerLeave);
+			return () => {
+				window.clearTimeout(hideTimer);
+				scrollArea.removeEventListener("pointerenter", handlePointerEnter);
+				scrollArea.removeEventListener("pointerleave", handlePointerLeave);
+			};
+		}
+	}, [context.scrollArea, context.scrollHideDelay]);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Presence, {
+		present: forceMount || visible,
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ScrollAreaScrollbarAuto, {
+			"data-state": visible ? "visible" : "hidden",
+			...scrollbarProps,
+			ref: forwardedRef
+		})
+	});
+});
+var ScrollAreaScrollbarScroll = import_react.forwardRef((props, forwardedRef) => {
+	const { forceMount, ...scrollbarProps } = props;
+	const context = useScrollAreaContext(SCROLLBAR_NAME, props.__scopeScrollArea);
+	const isHorizontal = props.orientation === "horizontal";
+	const debounceScrollEnd = useDebounceCallback(() => send("SCROLL_END"), 100);
+	const [state, send] = useStateMachine("hidden", {
+		hidden: { SCROLL: "scrolling" },
+		scrolling: {
+			SCROLL_END: "idle",
+			POINTER_ENTER: "interacting"
+		},
+		interacting: {
+			SCROLL: "interacting",
+			POINTER_LEAVE: "idle"
+		},
+		idle: {
+			HIDE: "hidden",
+			SCROLL: "scrolling",
+			POINTER_ENTER: "interacting"
+		}
+	});
+	import_react.useEffect(() => {
+		if (state === "idle") {
+			const hideTimer = window.setTimeout(() => send("HIDE"), context.scrollHideDelay);
+			return () => window.clearTimeout(hideTimer);
+		}
+	}, [
+		state,
+		context.scrollHideDelay,
+		send
+	]);
+	import_react.useEffect(() => {
+		const viewport = context.viewport;
+		const scrollDirection = isHorizontal ? "scrollLeft" : "scrollTop";
+		if (viewport) {
+			let prevScrollPos = viewport[scrollDirection];
+			const handleScroll = () => {
+				const scrollPos = viewport[scrollDirection];
+				if (prevScrollPos !== scrollPos) {
+					send("SCROLL");
+					debounceScrollEnd();
+				}
+				prevScrollPos = scrollPos;
+			};
+			viewport.addEventListener("scroll", handleScroll);
+			return () => viewport.removeEventListener("scroll", handleScroll);
+		}
+	}, [
+		context.viewport,
+		isHorizontal,
+		send,
+		debounceScrollEnd
+	]);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Presence, {
+		present: forceMount || state !== "hidden",
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ScrollAreaScrollbarVisible, {
+			"data-state": state === "hidden" ? "hidden" : "visible",
+			...scrollbarProps,
+			ref: forwardedRef,
+			onPointerEnter: composeEventHandlers(props.onPointerEnter, () => send("POINTER_ENTER")),
+			onPointerLeave: composeEventHandlers(props.onPointerLeave, () => send("POINTER_LEAVE"))
+		})
+	});
+});
+var ScrollAreaScrollbarAuto = import_react.forwardRef((props, forwardedRef) => {
+	const context = useScrollAreaContext(SCROLLBAR_NAME, props.__scopeScrollArea);
+	const { forceMount, ...scrollbarProps } = props;
+	const [visible, setVisible] = import_react.useState(false);
+	const isHorizontal = props.orientation === "horizontal";
+	const handleResize = useDebounceCallback(() => {
+		if (context.viewport) {
+			const isOverflowX = context.viewport.offsetWidth < context.viewport.scrollWidth;
+			const isOverflowY = context.viewport.offsetHeight < context.viewport.scrollHeight;
+			setVisible(isHorizontal ? isOverflowX : isOverflowY);
+		}
+	}, 10);
+	useResizeObserver(context.viewport, handleResize);
+	useResizeObserver(context.content, handleResize);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Presence, {
+		present: forceMount || visible,
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ScrollAreaScrollbarVisible, {
+			"data-state": visible ? "visible" : "hidden",
+			...scrollbarProps,
+			ref: forwardedRef
+		})
+	});
+});
+var ScrollAreaScrollbarVisible = import_react.forwardRef((props, forwardedRef) => {
+	const { orientation = "vertical", ...scrollbarProps } = props;
+	const context = useScrollAreaContext(SCROLLBAR_NAME, props.__scopeScrollArea);
+	const thumbRef = import_react.useRef(null);
+	const pointerOffsetRef = import_react.useRef(0);
+	const [sizes, setSizes] = import_react.useState({
+		content: 0,
+		viewport: 0,
+		scrollbar: {
+			size: 0,
+			paddingStart: 0,
+			paddingEnd: 0
+		}
+	});
+	const thumbRatio = getThumbRatio(sizes.viewport, sizes.content);
+	const commonProps = {
+		...scrollbarProps,
+		sizes,
+		onSizesChange: setSizes,
+		hasThumb: Boolean(thumbRatio > 0 && thumbRatio < 1),
+		onThumbChange: (thumb) => thumbRef.current = thumb,
+		onThumbPointerUp: () => pointerOffsetRef.current = 0,
+		onThumbPointerDown: (pointerPos) => pointerOffsetRef.current = pointerPos
+	};
+	function getScrollPosition(pointerPos, dir) {
+		return getScrollPositionFromPointer(pointerPos, pointerOffsetRef.current, sizes, dir);
+	}
+	if (orientation === "horizontal") return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ScrollAreaScrollbarX, {
+		...commonProps,
+		ref: forwardedRef,
+		onThumbPositionChange: () => {
+			if (context.viewport && thumbRef.current) {
+				const scrollPos = context.viewport.scrollLeft;
+				const offset = getThumbOffsetFromScroll(scrollPos, sizes, context.dir);
+				thumbRef.current.style.transform = `translate3d(${offset}px, 0, 0)`;
+			}
+		},
+		onWheelScroll: (scrollPos) => {
+			if (context.viewport) context.viewport.scrollLeft = scrollPos;
+		},
+		onDragScroll: (pointerPos) => {
+			if (context.viewport) context.viewport.scrollLeft = getScrollPosition(pointerPos, context.dir);
+		}
+	});
+	if (orientation === "vertical") return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ScrollAreaScrollbarY, {
+		...commonProps,
+		ref: forwardedRef,
+		onThumbPositionChange: () => {
+			if (context.viewport && thumbRef.current) {
+				const scrollPos = context.viewport.scrollTop;
+				const offset = getThumbOffsetFromScroll(scrollPos, sizes);
+				thumbRef.current.style.transform = `translate3d(0, ${offset}px, 0)`;
+			}
+		},
+		onWheelScroll: (scrollPos) => {
+			if (context.viewport) context.viewport.scrollTop = scrollPos;
+		},
+		onDragScroll: (pointerPos) => {
+			if (context.viewport) context.viewport.scrollTop = getScrollPosition(pointerPos);
+		}
+	});
+	return null;
+});
+var ScrollAreaScrollbarX = import_react.forwardRef((props, forwardedRef) => {
+	const { sizes, onSizesChange, ...scrollbarProps } = props;
+	const context = useScrollAreaContext(SCROLLBAR_NAME, props.__scopeScrollArea);
+	const [computedStyle, setComputedStyle] = import_react.useState();
+	const ref = import_react.useRef(null);
+	const composeRefs = useComposedRefs(forwardedRef, ref, context.onScrollbarXChange);
+	import_react.useEffect(() => {
+		if (ref.current) setComputedStyle(getComputedStyle(ref.current));
+	}, [ref]);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ScrollAreaScrollbarImpl, {
+		"data-orientation": "horizontal",
+		...scrollbarProps,
+		ref: composeRefs,
+		sizes,
+		style: {
+			bottom: 0,
+			left: context.dir === "rtl" ? "var(--radix-scroll-area-corner-width)" : 0,
+			right: context.dir === "ltr" ? "var(--radix-scroll-area-corner-width)" : 0,
+			["--radix-scroll-area-thumb-width"]: getThumbSize(sizes) + "px",
+			...props.style
+		},
+		onThumbPointerDown: (pointerPos) => props.onThumbPointerDown(pointerPos.x),
+		onDragScroll: (pointerPos) => props.onDragScroll(pointerPos.x),
+		onWheelScroll: (event, maxScrollPos) => {
+			if (context.viewport) {
+				const scrollPos = context.viewport.scrollLeft + event.deltaX;
+				props.onWheelScroll(scrollPos);
+				if (isScrollingWithinScrollbarBounds(scrollPos, maxScrollPos)) event.preventDefault();
+			}
+		},
+		onResize: () => {
+			if (ref.current && context.viewport && computedStyle) onSizesChange({
+				content: context.viewport.scrollWidth,
+				viewport: context.viewport.offsetWidth,
+				scrollbar: {
+					size: ref.current.clientWidth,
+					paddingStart: toInt(computedStyle.paddingLeft),
+					paddingEnd: toInt(computedStyle.paddingRight)
+				}
+			});
+		}
+	});
+});
+var ScrollAreaScrollbarY = import_react.forwardRef((props, forwardedRef) => {
+	const { sizes, onSizesChange, ...scrollbarProps } = props;
+	const context = useScrollAreaContext(SCROLLBAR_NAME, props.__scopeScrollArea);
+	const [computedStyle, setComputedStyle] = import_react.useState();
+	const ref = import_react.useRef(null);
+	const composeRefs = useComposedRefs(forwardedRef, ref, context.onScrollbarYChange);
+	import_react.useEffect(() => {
+		if (ref.current) setComputedStyle(getComputedStyle(ref.current));
+	}, [ref]);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ScrollAreaScrollbarImpl, {
+		"data-orientation": "vertical",
+		...scrollbarProps,
+		ref: composeRefs,
+		sizes,
+		style: {
+			top: 0,
+			right: context.dir === "ltr" ? 0 : void 0,
+			left: context.dir === "rtl" ? 0 : void 0,
+			bottom: "var(--radix-scroll-area-corner-height)",
+			["--radix-scroll-area-thumb-height"]: getThumbSize(sizes) + "px",
+			...props.style
+		},
+		onThumbPointerDown: (pointerPos) => props.onThumbPointerDown(pointerPos.y),
+		onDragScroll: (pointerPos) => props.onDragScroll(pointerPos.y),
+		onWheelScroll: (event, maxScrollPos) => {
+			if (context.viewport) {
+				const scrollPos = context.viewport.scrollTop + event.deltaY;
+				props.onWheelScroll(scrollPos);
+				if (isScrollingWithinScrollbarBounds(scrollPos, maxScrollPos)) event.preventDefault();
+			}
+		},
+		onResize: () => {
+			if (ref.current && context.viewport && computedStyle) onSizesChange({
+				content: context.viewport.scrollHeight,
+				viewport: context.viewport.offsetHeight,
+				scrollbar: {
+					size: ref.current.clientHeight,
+					paddingStart: toInt(computedStyle.paddingTop),
+					paddingEnd: toInt(computedStyle.paddingBottom)
+				}
+			});
+		}
+	});
+});
+var [ScrollbarProvider, useScrollbarContext] = createScrollAreaContext(SCROLLBAR_NAME);
+var ScrollAreaScrollbarImpl = import_react.forwardRef((props, forwardedRef) => {
+	const { __scopeScrollArea, sizes, hasThumb, onThumbChange, onThumbPointerUp, onThumbPointerDown, onThumbPositionChange, onDragScroll, onWheelScroll, onResize, ...scrollbarProps } = props;
+	const context = useScrollAreaContext(SCROLLBAR_NAME, __scopeScrollArea);
+	const [scrollbar, setScrollbar] = import_react.useState(null);
+	const composeRefs = useComposedRefs(forwardedRef, (node) => setScrollbar(node));
+	const rectRef = import_react.useRef(null);
+	const prevWebkitUserSelectRef = import_react.useRef("");
+	const viewport = context.viewport;
+	const maxScrollPos = sizes.content - sizes.viewport;
+	const handleWheelScroll = useCallbackRef(onWheelScroll);
+	const handleThumbPositionChange = useCallbackRef(onThumbPositionChange);
+	const handleResize = useDebounceCallback(onResize, 10);
+	function handleDragScroll(event) {
+		if (rectRef.current) onDragScroll({
+			x: event.clientX - rectRef.current.left,
+			y: event.clientY - rectRef.current.top
+		});
+	}
+	import_react.useEffect(() => {
+		const handleWheel = (event) => {
+			const element = event.target;
+			if (scrollbar?.contains(element)) handleWheelScroll(event, maxScrollPos);
+		};
+		document.addEventListener("wheel", handleWheel, { passive: false });
+		return () => document.removeEventListener("wheel", handleWheel, { passive: false });
+	}, [
+		viewport,
+		scrollbar,
+		maxScrollPos,
+		handleWheelScroll
+	]);
+	import_react.useEffect(handleThumbPositionChange, [sizes, handleThumbPositionChange]);
+	useResizeObserver(scrollbar, handleResize);
+	useResizeObserver(context.content, handleResize);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ScrollbarProvider, {
+		scope: __scopeScrollArea,
+		scrollbar,
+		hasThumb,
+		onThumbChange: useCallbackRef(onThumbChange),
+		onThumbPointerUp: useCallbackRef(onThumbPointerUp),
+		onThumbPositionChange: handleThumbPositionChange,
+		onThumbPointerDown: useCallbackRef(onThumbPointerDown),
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Primitive.div, {
+			...scrollbarProps,
+			ref: composeRefs,
+			style: {
+				position: "absolute",
+				...scrollbarProps.style
+			},
+			onPointerDown: composeEventHandlers(props.onPointerDown, (event) => {
+				if (event.button === 0) {
+					event.target.setPointerCapture(event.pointerId);
+					rectRef.current = scrollbar.getBoundingClientRect();
+					prevWebkitUserSelectRef.current = document.body.style.webkitUserSelect;
+					document.body.style.webkitUserSelect = "none";
+					if (context.viewport) context.viewport.style.scrollBehavior = "auto";
+					handleDragScroll(event);
+				}
+			}),
+			onPointerMove: composeEventHandlers(props.onPointerMove, handleDragScroll),
+			onPointerUp: composeEventHandlers(props.onPointerUp, (event) => {
+				const element = event.target;
+				if (element.hasPointerCapture(event.pointerId)) element.releasePointerCapture(event.pointerId);
+				document.body.style.webkitUserSelect = prevWebkitUserSelectRef.current;
+				if (context.viewport) context.viewport.style.scrollBehavior = "";
+				rectRef.current = null;
+			})
+		})
+	});
+});
+var THUMB_NAME = "ScrollAreaThumb";
+var ScrollAreaThumb = import_react.forwardRef((props, forwardedRef) => {
+	const { forceMount, ...thumbProps } = props;
+	const scrollbarContext = useScrollbarContext(THUMB_NAME, props.__scopeScrollArea);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Presence, {
+		present: forceMount || scrollbarContext.hasThumb,
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ScrollAreaThumbImpl, {
+			ref: forwardedRef,
+			...thumbProps
+		})
+	});
+});
+var ScrollAreaThumbImpl = import_react.forwardRef((props, forwardedRef) => {
+	const { __scopeScrollArea, style, ...thumbProps } = props;
+	const scrollAreaContext = useScrollAreaContext(THUMB_NAME, __scopeScrollArea);
+	const scrollbarContext = useScrollbarContext(THUMB_NAME, __scopeScrollArea);
+	const { onThumbPositionChange } = scrollbarContext;
+	const composedRef = useComposedRefs(forwardedRef, (node) => scrollbarContext.onThumbChange(node));
+	const removeUnlinkedScrollListenerRef = import_react.useRef(void 0);
+	const debounceScrollEnd = useDebounceCallback(() => {
+		if (removeUnlinkedScrollListenerRef.current) {
+			removeUnlinkedScrollListenerRef.current();
+			removeUnlinkedScrollListenerRef.current = void 0;
+		}
+	}, 100);
+	import_react.useEffect(() => {
+		const viewport = scrollAreaContext.viewport;
+		if (viewport) {
+			const handleScroll = () => {
+				debounceScrollEnd();
+				if (!removeUnlinkedScrollListenerRef.current) {
+					removeUnlinkedScrollListenerRef.current = addUnlinkedScrollListener(viewport, onThumbPositionChange);
+					onThumbPositionChange();
+				}
+			};
+			onThumbPositionChange();
+			viewport.addEventListener("scroll", handleScroll);
+			return () => viewport.removeEventListener("scroll", handleScroll);
+		}
+	}, [
+		scrollAreaContext.viewport,
+		debounceScrollEnd,
+		onThumbPositionChange
+	]);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Primitive.div, {
+		"data-state": scrollbarContext.hasThumb ? "visible" : "hidden",
+		...thumbProps,
+		ref: composedRef,
+		style: {
+			width: "var(--radix-scroll-area-thumb-width)",
+			height: "var(--radix-scroll-area-thumb-height)",
+			...style
+		},
+		onPointerDownCapture: composeEventHandlers(props.onPointerDownCapture, (event) => {
+			const thumbRect = event.target.getBoundingClientRect();
+			const x = event.clientX - thumbRect.left;
+			const y = event.clientY - thumbRect.top;
+			scrollbarContext.onThumbPointerDown({
+				x,
+				y
+			});
+		}),
+		onPointerUp: composeEventHandlers(props.onPointerUp, scrollbarContext.onThumbPointerUp)
+	});
+});
+ScrollAreaThumb.displayName = THUMB_NAME;
+var CORNER_NAME = "ScrollAreaCorner";
+var ScrollAreaCorner = import_react.forwardRef((props, forwardedRef) => {
+	const context = useScrollAreaContext(CORNER_NAME, props.__scopeScrollArea);
+	const hasBothScrollbarsVisible = Boolean(context.scrollbarX && context.scrollbarY);
+	return context.type !== "scroll" && hasBothScrollbarsVisible ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ScrollAreaCornerImpl, {
+		...props,
+		ref: forwardedRef
+	}) : null;
+});
+ScrollAreaCorner.displayName = CORNER_NAME;
+var ScrollAreaCornerImpl = import_react.forwardRef((props, forwardedRef) => {
+	const { __scopeScrollArea, ...cornerProps } = props;
+	const context = useScrollAreaContext(CORNER_NAME, __scopeScrollArea);
+	const [width, setWidth] = import_react.useState(0);
+	const [height, setHeight] = import_react.useState(0);
+	const hasSize = Boolean(width && height);
+	useResizeObserver(context.scrollbarX, () => {
+		const height2 = context.scrollbarX?.offsetHeight || 0;
+		context.onCornerHeightChange(height2);
+		setHeight(height2);
+	});
+	useResizeObserver(context.scrollbarY, () => {
+		const width2 = context.scrollbarY?.offsetWidth || 0;
+		context.onCornerWidthChange(width2);
+		setWidth(width2);
+	});
+	return hasSize ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Primitive.div, {
+		...cornerProps,
+		ref: forwardedRef,
+		style: {
+			width,
+			height,
+			position: "absolute",
+			right: context.dir === "ltr" ? 0 : void 0,
+			left: context.dir === "rtl" ? 0 : void 0,
+			bottom: 0,
+			...props.style
+		}
+	}) : null;
+});
+function toInt(value) {
+	return value ? parseInt(value, 10) : 0;
+}
+function getThumbRatio(viewportSize, contentSize) {
+	const ratio = viewportSize / contentSize;
+	return isNaN(ratio) ? 0 : ratio;
+}
+function getThumbSize(sizes) {
+	const ratio = getThumbRatio(sizes.viewport, sizes.content);
+	const scrollbarPadding = sizes.scrollbar.paddingStart + sizes.scrollbar.paddingEnd;
+	const thumbSize = (sizes.scrollbar.size - scrollbarPadding) * ratio;
+	return Math.max(thumbSize, 18);
+}
+function getScrollPositionFromPointer(pointerPos, pointerOffset, sizes, dir = "ltr") {
+	const thumbSizePx = getThumbSize(sizes);
+	const thumbCenter = thumbSizePx / 2;
+	const offset = pointerOffset || thumbCenter;
+	const thumbOffsetFromEnd = thumbSizePx - offset;
+	const minPointerPos = sizes.scrollbar.paddingStart + offset;
+	const maxPointerPos = sizes.scrollbar.size - sizes.scrollbar.paddingEnd - thumbOffsetFromEnd;
+	const maxScrollPos = sizes.content - sizes.viewport;
+	const scrollRange = dir === "ltr" ? [0, maxScrollPos] : [maxScrollPos * -1, 0];
+	return linearScale([minPointerPos, maxPointerPos], scrollRange)(pointerPos);
+}
+function getThumbOffsetFromScroll(scrollPos, sizes, dir = "ltr") {
+	const thumbSizePx = getThumbSize(sizes);
+	const scrollbarPadding = sizes.scrollbar.paddingStart + sizes.scrollbar.paddingEnd;
+	const scrollbar = sizes.scrollbar.size - scrollbarPadding;
+	const maxScrollPos = sizes.content - sizes.viewport;
+	const maxThumbPos = scrollbar - thumbSizePx;
+	const scrollWithoutMomentum = clamp(scrollPos, dir === "ltr" ? [0, maxScrollPos] : [maxScrollPos * -1, 0]);
+	return linearScale([0, maxScrollPos], [0, maxThumbPos])(scrollWithoutMomentum);
+}
+function linearScale(input, output) {
+	return (value) => {
+		if (input[0] === input[1] || output[0] === output[1]) return output[0];
+		const ratio = (output[1] - output[0]) / (input[1] - input[0]);
+		return output[0] + ratio * (value - input[0]);
+	};
+}
+function isScrollingWithinScrollbarBounds(scrollPos, maxScrollPos) {
+	return scrollPos > 0 && scrollPos < maxScrollPos;
+}
+var addUnlinkedScrollListener = (node, handler = () => {}) => {
+	let prevPosition = {
+		left: node.scrollLeft,
+		top: node.scrollTop
+	};
+	let rAF = 0;
+	(function loop() {
+		const position = {
+			left: node.scrollLeft,
+			top: node.scrollTop
+		};
+		const isHorizontalScroll = prevPosition.left !== position.left;
+		const isVerticalScroll = prevPosition.top !== position.top;
+		if (isHorizontalScroll || isVerticalScroll) handler();
+		prevPosition = position;
+		rAF = window.requestAnimationFrame(loop);
+	})();
+	return () => window.cancelAnimationFrame(rAF);
+};
+function useDebounceCallback(callback, delay) {
+	const handleCallback = useCallbackRef(callback);
+	const debounceTimerRef = import_react.useRef(0);
+	import_react.useEffect(() => () => window.clearTimeout(debounceTimerRef.current), []);
+	return import_react.useCallback(() => {
+		window.clearTimeout(debounceTimerRef.current);
+		debounceTimerRef.current = window.setTimeout(handleCallback, delay);
+	}, [handleCallback, delay]);
+}
+function useResizeObserver(element, onResize) {
+	const handleResize = useCallbackRef(onResize);
+	useLayoutEffect2(() => {
+		let rAF = 0;
+		if (element) {
+			const resizeObserver = new ResizeObserver(() => {
+				cancelAnimationFrame(rAF);
+				rAF = window.requestAnimationFrame(handleResize);
+			});
+			resizeObserver.observe(element);
+			return () => {
+				window.cancelAnimationFrame(rAF);
+				resizeObserver.unobserve(element);
+			};
+		}
+	}, [element, handleResize]);
+}
+var Root$1 = ScrollArea$1;
+var Viewport = ScrollAreaViewport;
+var Corner = ScrollAreaCorner;
+//#endregion
+//#region src/components/ui/scroll-area.tsx
+var ScrollArea = import_react.forwardRef(({ className, children, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Root$1, {
+	"data-uid": "src/components/ui/scroll-area.tsx:11:3",
+	"data-prohibitions": "[editContent]",
+	ref,
+	className: cn$1("relative overflow-hidden", className),
+	...props,
+	children: [
+		/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Viewport, {
+			"data-uid": "src/components/ui/scroll-area.tsx:16:5",
+			"data-prohibitions": "[editContent]",
+			className: "h-full w-full rounded-[inherit]",
+			children
+		}),
+		/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ScrollBar, {
+			"data-uid": "src/components/ui/scroll-area.tsx:19:5",
+			"data-prohibitions": "[editContent]"
+		}),
+		/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Corner, {
+			"data-uid": "src/components/ui/scroll-area.tsx:20:5",
+			"data-prohibitions": "[editContent]"
+		})
+	]
+}));
+ScrollArea.displayName = Root$1.displayName;
+var ScrollBar = import_react.forwardRef(({ className, orientation = "vertical", ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ScrollAreaScrollbar, {
+	"data-uid": "src/components/ui/scroll-area.tsx:29:3",
+	"data-prohibitions": "[editContent]",
+	ref,
+	orientation,
+	className: cn$1("flex touch-none select-none transition-colors", orientation === "vertical" && "h-full w-2.5 border-l border-l-transparent p-[1px]", orientation === "horizontal" && "h-2.5 flex-col border-t border-t-transparent p-[1px]", className),
+	...props,
+	children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ScrollAreaThumb, {
+		"data-uid": "src/components/ui/scroll-area.tsx:40:5",
+		"data-prohibitions": "[editContent]",
+		className: "relative flex-1 rounded-full bg-border"
+	})
+}));
+ScrollBar.displayName = ScrollAreaScrollbar.displayName;
+//#endregion
+//#region src/components/ui/alert.tsx
+var alertVariants = cva("relative w-full rounded-lg border p-4 [&>svg~*]:pl-7 [&>svg+div]:translate-y-[-3px] [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4 [&>svg]:text-foreground", {
+	variants: { variant: {
+		default: "bg-background text-foreground",
+		destructive: "border-destructive/50 text-destructive dark:border-destructive [&>svg]:text-destructive"
+	} },
+	defaultVariants: { variant: "default" }
+});
+var Alert = import_react.forwardRef(({ className, variant, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+	"data-uid": "src/components/ui/alert.tsx:27:3",
+	"data-prohibitions": "[editContent]",
+	ref,
+	role: "alert",
+	className: cn$1(alertVariants({ variant }), className),
+	...props
+}));
+Alert.displayName = "Alert";
+var AlertTitle = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h5", {
+	"data-uid": "src/components/ui/alert.tsx:33:5",
+	"data-prohibitions": "[editContent]",
+	ref,
+	className: cn$1("mb-1 font-medium leading-none tracking-tight", className),
+	...props
+}));
+AlertTitle.displayName = "AlertTitle";
+var AlertDescription = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+	"data-uid": "src/components/ui/alert.tsx:46:3",
+	"data-prohibitions": "[editContent]",
+	ref,
+	className: cn$1("text-sm [&_p]:leading-relaxed", className),
+	...props
+}));
+AlertDescription.displayName = "AlertDescription";
 //#endregion
 //#region src/services/nutrition.ts
 async function createDiet(clientId, name) {
@@ -45728,7 +46382,7 @@ var TabsList$1 = import_react.forwardRef((props, forwardedRef) => {
 	const { __scopeTabs, loop = true, ...listProps } = props;
 	const context = useTabsContext(TAB_LIST_NAME, __scopeTabs);
 	const rovingFocusGroupScope = useRovingFocusGroupScope(__scopeTabs);
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Root$4, {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Root$5, {
 		asChild: true,
 		...rovingFocusGroupScope,
 		orientation: context.orientation,
@@ -45852,77 +46506,6 @@ var TabsContent = import_react.forwardRef(({ className, ...props }, ref) => /* @
 	...props
 }));
 TabsContent.displayName = Content.displayName;
-//#endregion
-//#region src/components/ui/table.tsx
-var Table = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-	"data-uid": "src/components/ui/table.tsx:8:5",
-	"data-prohibitions": "[editContent]",
-	className: "relative w-full overflow-auto",
-	children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("table", {
-		"data-uid": "src/components/ui/table.tsx:9:7",
-		"data-prohibitions": "[editContent]",
-		ref,
-		className: cn$1("w-full caption-bottom text-sm", className),
-		...props
-	})
-}));
-Table.displayName = "Table";
-var TableHeader = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("thead", {
-	"data-uid": "src/components/ui/table.tsx:19:3",
-	"data-prohibitions": "[editContent]",
-	ref,
-	className: cn$1("[&_tr]:border-b", className),
-	...props
-}));
-TableHeader.displayName = "TableHeader";
-var TableBody = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("tbody", {
-	"data-uid": "src/components/ui/table.tsx:27:3",
-	"data-prohibitions": "[editContent]",
-	ref,
-	className: cn$1("[&_tr:last-child]:border-0", className),
-	...props
-}));
-TableBody.displayName = "TableBody";
-var TableFooter = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("tfoot", {
-	"data-uid": "src/components/ui/table.tsx:35:3",
-	"data-prohibitions": "[editContent]",
-	ref,
-	className: cn$1("border-t bg-muted/50 font-medium [&>tr]:last:border-b-0", className),
-	...props
-}));
-TableFooter.displayName = "TableFooter";
-var TableRow = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("tr", {
-	"data-uid": "src/components/ui/table.tsx:45:5",
-	"data-prohibitions": "[editContent]",
-	ref,
-	className: cn$1("border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted", className),
-	...props
-}));
-TableRow.displayName = "TableRow";
-var TableHead = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", {
-	"data-uid": "src/components/ui/table.tsx:61:3",
-	"data-prohibitions": "[editContent]",
-	ref,
-	className: cn$1("h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0", className),
-	...props
-}));
-TableHead.displayName = "TableHead";
-var TableCell = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", {
-	"data-uid": "src/components/ui/table.tsx:76:3",
-	"data-prohibitions": "[editContent]",
-	ref,
-	className: cn$1("p-4 align-middle [&:has([role=checkbox])]:pr-0", className),
-	...props
-}));
-TableCell.displayName = "TableCell";
-var TableCaption = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("caption", {
-	"data-uid": "src/components/ui/table.tsx:88:3",
-	"data-prohibitions": "[editContent]",
-	ref,
-	className: cn$1("mt-4 text-sm text-muted-foreground", className),
-	...props
-}));
-TableCaption.displayName = "TableCaption";
 //#endregion
 //#region src/pages/client/ClientFinances.tsx
 function ClientFinances() {
@@ -46288,13 +46871,13 @@ function ClientFinances() {
 }
 //#endregion
 //#region src/App.tsx
-var ProfPatients = (0, import_react.lazy)(() => __vitePreload(() => import("./ProfPatients-Dogj0BQR.js"), __vite__mapDeps([0,1,2])));
-var ProfPatientRecord = (0, import_react.lazy)(() => __vitePreload(() => import("./ProfPatientRecord-B-wej19h.js"), __vite__mapDeps([3,1,4])));
-var ClientNutrition = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientNutrition-C7wx6C-I.js"), __vite__mapDeps([5,1,6,7,8])));
-var ClientTraining = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientTraining-BlbESF2-.js"), __vite__mapDeps([9,1,6])));
-var ClientMind = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientMind-DTab7X8X.js"), __vite__mapDeps([10,1,7])));
-var ClientStudy = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientStudy-D6ynU1z3.js"), __vite__mapDeps([11,1,8,2,4])));
-var ClientTeam = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientTeam-0272hQA8.js"), __vite__mapDeps([12,1,2])));
+var ProfPatients = (0, import_react.lazy)(() => __vitePreload(() => import("./ProfPatients-D4P9soqB.js"), __vite__mapDeps([0,1,2])));
+var ProfPatientRecord = (0, import_react.lazy)(() => __vitePreload(() => import("./ProfPatientRecord-BtNwgm4y.js"), __vite__mapDeps([3,1,4])));
+var ClientNutrition = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientNutrition-BaSxglTN.js"), __vite__mapDeps([5,1,6,7,8])));
+var ClientTraining = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientTraining--EUhB5V3.js"), __vite__mapDeps([9,1,6])));
+var ClientMind = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientMind-4oOCcews.js"), __vite__mapDeps([10,1,7])));
+var ClientStudy = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientStudy-CL93x3bg.js"), __vite__mapDeps([11,1,8,2,4])));
+var ClientTeam = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientTeam-Czaavd4-.js"), __vite__mapDeps([12,1,2])));
 var LoadingFallback = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 	"data-uid": "src/App.tsx:49:3",
 	"data-prohibitions": "[]",
@@ -46647,6 +47230,6 @@ var App = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrowserRouter, {
 	"data-prohibitions": "[editContent]"
 }));
 //#endregion
-export { Label$2 as $, require__baseExtremum as A, getPercentValue as B, getMaxRadius as C, require_isEqual as D, getValueByDataKey as E, warn$1 as F, require_isNil as G, isNumber as H, Layer as I, Progress as J, require_get as K, filterProps as L, Cell as M, Global as N, require__baseLt as O, require__baseIteratee as P, Badge as Q, findAllByType as R, formatAxisMap$1 as S, polarToCartesian as T, mathSign as U, interpolateNumber$1 as V, uniqueId as W, getFullDietDetails as X, getClientActiveDiet as Y, usePrevious as Z, Dot as _, Activity as _t, ChartContainer as a, Save as at, LabelList as b, ChartTooltip as c, LoaderCircle as ct, generateCategoricalChart as d, Dumbbell as dt, Users as et, YAxis as f, CirclePlus as ft, Shape as g, Apple as gt, Bar as h, ArrowRight as ht, TabsTrigger as i, Search as it, Text as j, require__baseGt as k, ChartTooltipContent as l, LayoutDashboard as lt, CartesianGrid as m, Brain as mt, TabsContent as n, Target as nt, ChartLegend as o, Plus as ot, XAxis as p, ChevronDown as pt, require_isFunction as q, TabsList as r, Smile as rt, ChartLegendContent as s, Lock as st, Tabs as t, Trash2 as tt, BarChart as u, FileText as ut, es6_default as v, useToast as vt, getTickClassName as w, Label as x, Curve as y, adaptEventsOfChild as z };
+export { Badge as $, require__baseExtremum as A, getPercentValue as B, getMaxRadius as C, require_isEqual as D, getValueByDataKey as E, warn$1 as F, require_isNil as G, isNumber as H, Layer as I, Progress as J, require_get as K, filterProps as L, Cell as M, Global as N, require__baseLt as O, require__baseIteratee as P, usePrevious as Q, findAllByType as R, formatAxisMap$1 as S, polarToCartesian as T, mathSign as U, interpolateNumber$1 as V, uniqueId as W, getFullDietDetails as X, getClientActiveDiet as Y, Switch as Z, Dot as _, Apple as _t, ChartContainer as a, Search as at, LabelList as b, ChartTooltip as c, Lock as ct, generateCategoricalChart as d, FileText as dt, Label$2 as et, YAxis as f, Dumbbell as ft, Shape as g, ArrowRight as gt, Bar as h, Brain as ht, TabsTrigger as i, Smile as it, Text as j, require__baseGt as k, ChartTooltipContent as l, LoaderCircle as lt, CartesianGrid as m, ChevronDown as mt, TabsContent as n, Trash2 as nt, ChartLegend as o, Save as ot, XAxis as p, CirclePlus as pt, require_isFunction as q, TabsList as r, Target as rt, ChartLegendContent as s, Plus as st, Tabs as t, Users as tt, BarChart as u, LayoutDashboard as ut, es6_default as v, Activity as vt, getTickClassName as w, Label as x, Curve as y, useToast as yt, adaptEventsOfChild as z };
 
-//# sourceMappingURL=index-CBdd0jjF.js.map
+//# sourceMappingURL=index-BsTnM2OF.js.map

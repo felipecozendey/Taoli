@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useEffect } from 'react'
 import { DashboardHeader } from '@/components/shared/DashboardHeader'
 import { PageContent } from '@/components/shared/PageContent'
 import { Card, CardHeader, CardTitle } from '@/components/ui/card'
@@ -13,16 +13,19 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { Search, Trash2, Plus } from 'lucide-react'
+import { Search, Trash2, Plus, Save, Loader2 } from 'lucide-react'
+import { useToast } from '@/hooks/use-toast'
+import { supabase } from '@/lib/supabase/client'
+import { createDiet, addMeal, addMealItem } from '@/services/nutrition'
 
 interface FoodItem {
   id: string
   name: string
-  energy: number
-  protein: number
-  carbs: number
-  fats: number
-  source: string
+  energy_kcal: number | null
+  protein_g: number | null
+  carbs_g: number | null
+  fats_g: number | null
+  source: string | null
 }
 
 interface DietEntry extends FoodItem {
@@ -30,59 +33,17 @@ interface DietEntry extends FoodItem {
   portion: string | number
 }
 
-const MOCK_FOODS: FoodItem[] = [
-  {
-    id: '1',
-    name: 'Arroz branco, cozido',
-    energy: 128,
-    protein: 2.5,
-    carbs: 28.1,
-    fats: 0.2,
-    source: 'TACO_4ed',
-  },
-  {
-    id: '2',
-    name: 'Feijão, carioca, cozido',
-    energy: 76,
-    protein: 4.8,
-    carbs: 13.6,
-    fats: 0.5,
-    source: 'TACO_4ed',
-  },
-  {
-    id: '3',
-    name: 'Frango, peito, grelhado',
-    energy: 159,
-    protein: 32.0,
-    carbs: 0,
-    fats: 2.5,
-    source: 'TACO_4ed',
-  },
-  {
-    id: '4',
-    name: 'Ovo, de galinha, cozido',
-    energy: 146,
-    protein: 13.3,
-    carbs: 0.6,
-    fats: 9.5,
-    source: 'TACO_4ed',
-  },
-  {
-    id: '5',
-    name: 'Maçã, com casca',
-    energy: 56,
-    protein: 0.3,
-    carbs: 15.2,
-    fats: 0,
-    source: 'TACO_4ed',
-  },
-]
-
-const calc = (val: number, port: string | number) => ((val / 100) * (Number(port) || 0)).toFixed(1)
+const calc = (val: number | null | undefined, port: string | number) =>
+  (((val || 0) / 100) * (Number(port) || 0)).toFixed(1)
 
 export default function ProfPrescriptions() {
+  const { toast } = useToast()
   const [search, setSearch] = useState('')
+  const [isSearching, setIsSearching] = useState(false)
+  const [searchResults, setSearchResults] = useState<FoodItem[]>([])
   const [targetMeal, setTargetMeal] = useState('cafe')
+  const [isSaving, setIsSaving] = useState(false)
+
   const [meals, setMeals] = useState([
     { id: 'cafe', name: 'Café da Manhã', entries: [] as DietEntry[] },
     { id: 'almoco', name: 'Almoço', entries: [] as DietEntry[] },
@@ -90,10 +51,37 @@ export default function ProfPrescriptions() {
     { id: 'jantar', name: 'Jantar', entries: [] as DietEntry[] },
   ])
 
-  const filteredFoods = useMemo(
-    () => MOCK_FOODS.filter((f) => f.name.toLowerCase().includes(search.toLowerCase())),
-    [search],
-  )
+  useEffect(() => {
+    const fetchFoods = async () => {
+      if (!search.trim()) {
+        setSearchResults([])
+        return
+      }
+      setIsSearching(true)
+      try {
+        const { data, error } = await supabase
+          .from('food_items')
+          .select('*')
+          .ilike('name', `%${search}%`)
+          .limit(20)
+
+        if (error) throw error
+        setSearchResults(data as FoodItem[])
+      } catch (err) {
+        console.error('Error fetching foods:', err)
+        toast({
+          title: 'Erro na busca',
+          description: 'Não foi possível buscar os alimentos.',
+          variant: 'destructive',
+        })
+      } finally {
+        setIsSearching(false)
+      }
+    }
+
+    const debounce = setTimeout(fetchFoods, 300)
+    return () => clearTimeout(debounce)
+  }, [search, toast])
 
   const addFood = (food: FoodItem) => {
     setMeals((prev) =>
@@ -129,10 +117,112 @@ export default function ProfPrescriptions() {
     )
   }
 
+  const handleSaveDiet = async () => {
+    setIsSaving(true)
+    try {
+      // Fetch a placeholder client ID
+      const { data: clients } = await supabase
+        .from('profiles')
+        .select('id')
+        .eq('role', 'client')
+        .limit(1)
+      let clientId = clients?.[0]?.id
+
+      if (!clientId) {
+        const { data: anyProfile } = await supabase.from('profiles').select('id').limit(1)
+        clientId = anyProfile?.[0]?.id
+      }
+
+      if (!clientId) {
+        throw new Error('Nenhum usuário encontrado no sistema para vincular a dieta.')
+      }
+
+      // 1. Create Diet
+      const { data: diet, error: dietError } = await createDiet(clientId, 'Plano Atualizado')
+      if (dietError || !diet) throw new Error('Erro ao criar a prescrição da dieta.')
+
+      const mealTimes = ['08:00', '12:30', '16:00', '20:00']
+
+      // 2 & 3. Create Meals and Meal Items
+      for (let i = 0; i < meals.length; i++) {
+        const meal = meals[i]
+
+        // Skip empty meals
+        if (meal.entries.length === 0) continue
+
+        const { data: savedMeal, error: mealError } = await addMeal(
+          diet.id,
+          meal.name,
+          mealTimes[i] || '00:00',
+          i,
+        )
+
+        if (mealError || !savedMeal) throw new Error(`Erro ao salvar refeição: ${meal.name}`)
+
+        for (const entry of meal.entries) {
+          const portion = Number(entry.portion) || 0
+          const { error: itemError } = await addMealItem(savedMeal.id, entry.id, portion, '')
+          if (itemError) throw new Error(`Erro ao salvar alimento: ${entry.name}`)
+        }
+      }
+
+      toast({
+        title: 'Sucesso',
+        description: 'Dieta guardada com sucesso!',
+      })
+
+      // Reset state
+      setMeals([
+        { id: 'cafe', name: 'Café da Manhã', entries: [] },
+        { id: 'almoco', name: 'Almoço', entries: [] },
+        { id: 'lanche', name: 'Lanche da Tarde', entries: [] },
+        { id: 'jantar', name: 'Jantar', entries: [] },
+      ])
+      setSearch('')
+    } catch (error: any) {
+      console.error(error)
+      toast({
+        title: 'Erro',
+        description: error.message || 'Ocorreu um erro ao salvar a prescrição.',
+        variant: 'destructive',
+      })
+    } finally {
+      setIsSaving(false)
+    }
+  }
+
+  const isDietEmpty = meals.every((m) => m.entries.length === 0)
+
   return (
     <div className="flex flex-col min-h-full">
-      <DashboardHeader title="Prescrição de Dieta" />
+      <DashboardHeader title="Prescrição de Dieta">
+        <Button
+          onClick={handleSaveDiet}
+          disabled={isSaving || isDietEmpty}
+          size="sm"
+          className="hidden sm:flex"
+        >
+          {isSaving ? (
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+          ) : (
+            <Save className="mr-2 h-4 w-4" />
+          )}
+          Guardar Prescrição
+        </Button>
+      </DashboardHeader>
       <PageContent className="flex flex-col lg:h-[calc(100vh-4rem)] p-4 md:p-6 overflow-hidden">
+        {/* Mobile Save Button */}
+        <div className="sm:hidden mb-4">
+          <Button onClick={handleSaveDiet} disabled={isSaving || isDietEmpty} className="w-full">
+            {isSaving ? (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            ) : (
+              <Save className="mr-2 h-4 w-4" />
+            )}
+            Guardar Prescrição
+          </Button>
+        </div>
+
         <div className="flex flex-col lg:flex-row gap-6 flex-1 min-h-0">
           <Card className="w-full lg:w-[350px] flex flex-col shrink-0 h-[400px] lg:h-full border-muted/60 shadow-sm">
             <CardHeader className="p-4 border-b space-y-3">
@@ -163,32 +253,50 @@ export default function ProfPrescriptions() {
             </CardHeader>
             <ScrollArea className="flex-1 p-3">
               <div className="flex flex-col gap-2">
-                {filteredFoods.map((food) => (
-                  <Card
-                    key={food.id}
-                    className="p-3 border-transparent bg-muted/30 hover:bg-muted/60 transition-colors cursor-pointer group"
-                    onClick={() => addFood(food)}
-                  >
-                    <div className="flex justify-between items-start mb-1.5">
-                      <span className="font-medium text-sm leading-tight group-hover:text-primary transition-colors">
-                        {food.name}
-                      </span>
-                      <Badge variant="outline" className="text-[10px] bg-background">
-                        {food.source}
-                      </Badge>
-                    </div>
-                    <div className="flex justify-between text-xs text-muted-foreground items-center">
-                      <span>{food.energy} kcal / 100g</span>
-                      <Button variant="ghost" size="icon" className="h-6 w-6 rounded-full">
-                        <Plus className="h-3.5 w-3.5" />
-                      </Button>
-                    </div>
-                  </Card>
-                ))}
-                {filteredFoods.length === 0 && (
-                  <div className="text-center text-sm text-muted-foreground mt-6">
-                    Nenhum resultado encontrado.
+                {isSearching ? (
+                  <div className="flex items-center justify-center p-6 text-muted-foreground">
+                    <Loader2 className="h-6 w-6 animate-spin" />
                   </div>
+                ) : (
+                  <>
+                    {searchResults.map((food) => (
+                      <Card
+                        key={food.id}
+                        className="p-3 border-transparent bg-muted/30 hover:bg-muted/60 transition-colors cursor-pointer group"
+                        onClick={() => addFood(food)}
+                      >
+                        <div className="flex justify-between items-start mb-1.5">
+                          <span className="font-medium text-sm leading-tight group-hover:text-primary transition-colors">
+                            {food.name}
+                          </span>
+                          {food.source && (
+                            <Badge
+                              variant="outline"
+                              className="text-[10px] bg-background ml-2 shrink-0"
+                            >
+                              {food.source}
+                            </Badge>
+                          )}
+                        </div>
+                        <div className="flex justify-between text-xs text-muted-foreground items-center">
+                          <span>{food.energy_kcal || 0} kcal / 100g</span>
+                          <Button variant="ghost" size="icon" className="h-6 w-6 rounded-full">
+                            <Plus className="h-3.5 w-3.5" />
+                          </Button>
+                        </div>
+                      </Card>
+                    ))}
+                    {search.trim() !== '' && searchResults.length === 0 && !isSearching && (
+                      <div className="text-center text-sm text-muted-foreground mt-6">
+                        Nenhum resultado encontrado.
+                      </div>
+                    )}
+                    {search.trim() === '' && (
+                      <div className="text-center text-sm text-muted-foreground mt-6">
+                        Digite para buscar alimentos na base.
+                      </div>
+                    )}
+                  </>
                 )}
               </div>
             </ScrollArea>
@@ -205,10 +313,10 @@ export default function ProfPrescriptions() {
                     (acc, e) => {
                       const p = Number(e.portion) || 0
                       return {
-                        e: acc.e + (e.energy / 100) * p,
-                        p: acc.p + (e.protein / 100) * p,
-                        c: acc.c + (e.carbs / 100) * p,
-                        f: acc.f + (e.fats / 100) * p,
+                        e: acc.e + ((e.energy_kcal || 0) / 100) * p,
+                        p: acc.p + ((e.protein_g || 0) / 100) * p,
+                        c: acc.c + ((e.carbs_g || 0) / 100) * p,
+                        f: acc.f + ((e.fats_g || 0) / 100) * p,
                       }
                     },
                     { e: 0, p: 0, c: 0, f: 0 },
@@ -254,9 +362,9 @@ export default function ProfPrescriptions() {
                                   </div>
                                   <div className="flex items-center gap-3 text-xs text-muted-foreground min-w-[120px] justify-end">
                                     <span className="font-medium text-foreground">
-                                      {calc(entry.energy, entry.portion)} kcal
+                                      {calc(entry.energy_kcal, entry.portion)} kcal
                                     </span>
-                                    <span>P: {calc(entry.protein, entry.portion)}g</span>
+                                    <span>P: {calc(entry.protein_g, entry.portion)}g</span>
                                   </div>
                                   <Button
                                     variant="ghost"

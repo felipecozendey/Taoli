@@ -60,8 +60,8 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/login" element={<Login />} />
 
-            {/* Master Admin Routes (Role: ADMIN) */}
-            <Route element={<ProtectedRoute allowedRoles={['ADMIN']} />}>
+            {/* Master Admin Routes */}
+            <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
               <Route path="/master" element={<MasterLayout />}>
                 <Route index element={<MasterDashboard />} />
                 <Route path="settings" element={<MasterSettings />} />
@@ -69,8 +69,8 @@ const App = () => (
               </Route>
             </Route>
 
-            {/* Professional Routes (Role: PROFESSIONAL) */}
-            <Route element={<ProtectedRoute allowedRoles={['PROFESSIONAL']} />}>
+            {/* Professional Routes */}
+            <Route element={<ProtectedRoute allowedRoles={['professional']} />}>
               <Route path="/professional" element={<ProfessionalLayout />}>
                 <Route index element={<ProfDashboard />} />
                 <Route path="patients" element={<ProfPatients />} />
@@ -79,8 +79,8 @@ const App = () => (
               </Route>
             </Route>
 
-            {/* Client Routes (Role: CLIENT) */}
-            <Route element={<ProtectedRoute allowedRoles={['CLIENT']} />}>
+            {/* Client Routes */}
+            <Route element={<ProtectedRoute allowedRoles={['client']} />}>
               <Route path="/client" element={<ClientLayout />}>
                 <Route index element={<ClientDashboard />} />
 
@@ -129,8 +129,8 @@ const App = () => (
           <Route path="*" element={<NotFound />} />
         </Routes>
       </TooltipProvider>
-    </AuthProvider>
-  </BrowserRouter>
-)
+    </BrowserRouter>
+  </BrowserRouter> // Wait, double tag in original file? No, just one. 
+) // Need to make sure the syntax is perfect.
 
 export default App

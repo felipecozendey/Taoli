@@ -8,11 +8,11 @@ export default function Index() {
 
   if (user) {
     const fallbackRoutes: Record<string, string> = {
-      ADMIN: '/master',
-      PROFESSIONAL: '/professional',
-      CLIENT: '/client',
+      admin: '/master',
+      professional: '/professional',
+      client: '/client',
     }
-    return <Navigate to={fallbackRoutes[user.role]} replace />
+    return <Navigate to={fallbackRoutes[user.role] || '/client'} replace />
   }
 
   return (

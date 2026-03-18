@@ -1,6 +1,8 @@
 import { createContext, useContext, useState, ReactNode, useEffect } from 'react'
+import { supabase } from '@/lib/supabase/client'
+import { Session } from '@supabase/supabase-js'
 
-export type Role = 'ADMIN' | 'PROFESSIONAL' | 'CLIENT'
+export type Role = 'admin' | 'professional' | 'client'
 
 export interface User {
   id: string
@@ -12,63 +14,79 @@ export interface User {
 
 interface AuthContextType {
   user: User | null
+  session: Session | null
   isLoading: boolean
-  login: (role: Role) => void
-  logout: () => void
+  logout: () => Promise<void>
 }
 
 const AuthContext = createContext<AuthContextType | null>(null)
 
-const MOCK_USERS: Record<Role, User> = {
-  ADMIN: {
-    id: 'admin-1',
-    name: 'Master Admin',
-    email: 'admin@system.com',
-    role: 'ADMIN',
-    avatarUrl: 'https://img.usecurling.com/i?q=admin&shape=fill&color=gray',
-  },
-  PROFESSIONAL: {
-    id: 'prof-1',
-    name: 'Dra. Ana Silva',
-    email: 'ana.silva@clinica.com',
-    role: 'PROFESSIONAL',
-    avatarUrl: 'https://img.usecurling.com/ppl/thumbnail?gender=female&seed=1',
-  },
-  CLIENT: {
-    id: 'client-1',
-    name: 'Carlos Mendes',
-    email: 'carlos@email.com',
-    role: 'CLIENT',
-    avatarUrl: 'https://img.usecurling.com/ppl/thumbnail?gender=male&seed=2',
-  },
-}
-
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
+  const [session, setSession] = useState<Session | null>(null)
   const [isLoading, setIsLoading] = useState(true)
 
-  // Simulate initial load from local storage
   useEffect(() => {
-    const storedUser = localStorage.getItem('saas_user')
-    if (storedUser) {
-      setUser(JSON.parse(storedUser))
-    }
-    setIsLoading(false)
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session)
+    })
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((event, newSession) => {
+      setSession(newSession)
+    })
+
+    return () => subscription.unsubscribe()
   }, [])
 
-  const login = (role: Role) => {
-    const selectedUser = MOCK_USERS[role]
-    setUser(selectedUser)
-    localStorage.setItem('saas_user', JSON.stringify(selectedUser))
-  }
+  useEffect(() => {
+    let mounted = true
 
-  const logout = () => {
-    setUser(null)
-    localStorage.removeItem('saas_user')
+    if (session) {
+      setIsLoading(true)
+      supabase
+        .from('profiles')
+        .select('name, role')
+        .eq('id', session.user.id)
+        .single()
+        .then(({ data, error }) => {
+          if (mounted) {
+            if (!error && data) {
+              setUser({
+                id: session.user.id,
+                email: session.user.email || '',
+                name: data.name || 'Usuário',
+                role: (data.role as Role) || 'client',
+              })
+            } else {
+              setUser(null)
+            }
+            setIsLoading(false)
+          }
+        })
+    } else {
+      setUser(null)
+      setIsLoading(false)
+    }
+
+    return () => {
+      mounted = false
+    }
+  }, [session])
+
+  const logout = async () => {
+    const { error } = await supabase.auth.signOut()
+    if (error) {
+      console.error('Logout error:', error)
+    } else {
+      setUser(null)
+      setSession(null)
+    }
   }
 
   return (
-    <AuthContext.Provider value={{ user, isLoading, login, logout }}>
+    <AuthContext.Provider value={{ user, session, isLoading, logout }}>
       {children}
     </AuthContext.Provider>
   )

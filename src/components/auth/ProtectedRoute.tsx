@@ -25,11 +25,11 @@ export function ProtectedRoute({ allowedRoles }: ProtectedRouteProps) {
   if (!allowedRoles.includes(user.role)) {
     // Determine fallback route based on role
     const fallbackRoutes: Record<Role, string> = {
-      ADMIN: '/master',
-      PROFESSIONAL: '/professional',
-      CLIENT: '/client',
+      admin: '/master',
+      professional: '/professional',
+      client: '/client',
     }
-    return <Navigate to={fallbackRoutes[user.role]} replace />
+    return <Navigate to={fallbackRoutes[user.role] || '/'} replace />
   }
 
   return <Outlet />

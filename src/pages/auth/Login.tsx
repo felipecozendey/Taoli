@@ -1,103 +1,156 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useAuth, Role } from '@/contexts/AuthContext'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+  CardFooter,
+} from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Building2, Stethoscope, Leaf } from 'lucide-react'
+import { useToast } from '@/hooks/use-toast'
+import { Loader2, Mail, Lock } from 'lucide-react'
+import { supabase } from '@/lib/supabase/client'
 
 export default function Login() {
-  const { login } = useAuth()
   const navigate = useNavigate()
+  const { toast } = useToast()
   const [isLoading, setIsLoading] = useState(false)
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
 
-  const handleSimulatedLogin = (role: Role) => {
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!email || !password) {
+      toast({
+        title: 'Campos obrigatórios',
+        description: 'Por favor, preencha e-mail e senha.',
+        variant: 'destructive',
+      })
+      return
+    }
+
     setIsLoading(true)
-    // Simulate network delay
-    setTimeout(() => {
-      login(role)
-      const routes = { ADMIN: '/master', PROFESSIONAL: '/professional', CLIENT: '/client' }
-      navigate(routes[role])
-    }, 800)
+
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      })
+
+      if (error) throw error
+
+      if (data?.user) {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('role')
+          .eq('id', data.user.id)
+          .single()
+
+        const role = profile?.role || 'client'
+        const routes: Record<string, string> = {
+          admin: '/master',
+          professional: '/professional',
+          client: '/client',
+        }
+
+        navigate(routes[role] || '/client')
+      }
+    } catch (error: any) {
+      toast({
+        title: 'Falha na Autenticação',
+        description:
+          error.message === 'Invalid login credentials'
+            ? 'E-mail ou senha incorretos.'
+            : 'Ocorreu um erro ao tentar entrar. Tente novamente.',
+        variant: 'destructive',
+      })
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-muted/30 p-4">
       <Card className="w-full max-w-md animate-fade-in-up border-border/50 shadow-lg">
-        <CardHeader className="space-y-1 text-center pb-8">
+        <CardHeader className="space-y-1 text-center pb-6">
           <CardTitle className="text-2xl font-bold">Acessar Plataforma</CardTitle>
-          <CardDescription>
-            Ambiente de demonstração. Selecione um perfil para entrar.
-          </CardDescription>
+          <CardDescription>Entre com suas credenciais para acessar sua conta.</CardDescription>
         </CardHeader>
-        <CardContent>
-          <Tabs defaultValue="simulacao" className="w-full">
-            <TabsList className="grid w-full grid-cols-2 mb-6">
-              <TabsTrigger value="simulacao">Simulação (RBAC)</TabsTrigger>
-              <TabsTrigger value="padrao">Acesso Padrão</TabsTrigger>
-            </TabsList>
-
-            <TabsContent value="simulacao" className="space-y-4">
-              <Button
-                variant="outline"
-                className="w-full h-14 justify-start px-6 gap-4"
-                onClick={() => handleSimulatedLogin('ADMIN')}
-                disabled={isLoading}
-              >
-                <Building2 className="text-slate-600" />
-                <div className="text-left">
-                  <div className="font-semibold">Entrar como Administrador</div>
-                  <div className="text-xs text-muted-foreground">Acesso ao MasterLayout</div>
-                </div>
-              </Button>
-
-              <Button
-                variant="outline"
-                className="w-full h-14 justify-start px-6 gap-4 border-teal-200 hover:border-teal-300 hover:bg-teal-50"
-                onClick={() => handleSimulatedLogin('PROFESSIONAL')}
-                disabled={isLoading}
-              >
-                <Stethoscope className="text-teal-600" />
-                <div className="text-left text-teal-900">
-                  <div className="font-semibold">Entrar como Profissional</div>
-                  <div className="text-xs opacity-80">Acesso ao ProfessionalLayout</div>
-                </div>
-              </Button>
-
-              <Button
-                variant="outline"
-                className="w-full h-14 justify-start px-6 gap-4 border-indigo-200 hover:border-indigo-300 hover:bg-indigo-50"
-                onClick={() => handleSimulatedLogin('CLIENT')}
-                disabled={isLoading}
-              >
-                <Leaf className="text-indigo-600" />
-                <div className="text-left text-indigo-900">
-                  <div className="font-semibold">Entrar como Cliente</div>
-                  <div className="text-xs opacity-80">Acesso ao ClientLayout</div>
-                </div>
-              </Button>
-            </TabsContent>
-
-            <TabsContent value="padrao" className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="email">E-mail</Label>
-                <Input id="email" type="email" placeholder="m@exemplo.com" disabled />
+        <form onSubmit={handleLogin}>
+          <CardContent className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="email">E-mail</Label>
+              <div className="relative">
+                <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="m@exemplo.com"
+                  className="pl-9"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  disabled={isLoading}
+                />
               </div>
-              <div className="space-y-2">
+            </div>
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
                 <Label htmlFor="password">Senha</Label>
-                <Input id="password" type="password" disabled />
               </div>
-              <Button className="w-full" disabled>
-                Entrar
-              </Button>
-              <p className="text-xs text-center text-muted-foreground mt-4">
-                Por favor, use a aba "Simulação" para esta demonstração arquitetural.
-              </p>
-            </TabsContent>
-          </Tabs>
-        </CardContent>
+              <div className="relative">
+                <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                <Input
+                  id="password"
+                  type="password"
+                  className="pl-9"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  disabled={isLoading}
+                />
+              </div>
+            </div>
+          </CardContent>
+          <CardFooter className="flex flex-col gap-4">
+            <Button type="submit" className="w-full" disabled={isLoading}>
+              {isLoading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Entrando...
+                </>
+              ) : (
+                'Entrar'
+              )}
+            </Button>
+
+            <div className="bg-muted/50 p-3 rounded-md text-xs text-muted-foreground w-full mt-2">
+              <p className="font-semibold mb-2 text-foreground">Contas de teste:</p>
+              <ul className="space-y-1.5">
+                <li className="flex justify-between">
+                  <span className="font-medium">Admin:</span>
+                  <span className="font-mono bg-background px-1 rounded border">
+                    admin@system.com / Admin123!
+                  </span>
+                </li>
+                <li className="flex justify-between">
+                  <span className="font-medium">Profissional:</span>
+                  <span className="font-mono bg-background px-1 rounded border">
+                    profissional@clinica.com / Prof123!
+                  </span>
+                </li>
+                <li className="flex justify-between">
+                  <span className="font-medium">Cliente:</span>
+                  <span className="font-mono bg-background px-1 rounded border">
+                    cliente@email.com / Client123!
+                  </span>
+                </li>
+              </ul>
+            </div>
+          </CardFooter>
+        </form>
       </Card>
     </div>
   )

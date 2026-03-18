@@ -889,6 +889,9 @@ section[aria-label='Notifications alt+T'] {
 .h-4{
   height: 1rem;
 }
+.h-40{
+  height: 10rem;
+}
 .h-5{
   height: 1.25rem;
 }
@@ -1277,12 +1280,6 @@ section[aria-label='Notifications alt+T'] {
 .resize-none{
   resize: none;
 }
-.list-inside{
-  list-style-position: inside;
-}
-.list-disc{
-  list-style-type: disc;
-}
 .list-none{
   list-style-type: none;
 }
@@ -1560,6 +1557,9 @@ section[aria-label='Notifications alt+T'] {
 .border-input{
   border-color: hsl(var(--input));
 }
+.border-muted-foreground\/20{
+  border-color: hsl(var(--muted-foreground) / 0.2);
+}
 .border-muted-foreground\/30{
   border-color: hsl(var(--muted-foreground) / 0.3);
 }
@@ -1575,6 +1575,13 @@ section[aria-label='Notifications alt+T'] {
 .border-purple-100{
   --tw-border-opacity: 1;
   border-color: rgb(243 232 255 / var(--tw-border-opacity, 1));
+}
+.border-rose-200{
+  --tw-border-opacity: 1;
+  border-color: rgb(254 205 211 / var(--tw-border-opacity, 1));
+}
+.border-rose-500\/20{
+  border-color: rgb(244 63 94 / 0.2);
 }
 .border-sidebar-border{
   border-color: hsl(var(--sidebar-border));
@@ -1733,6 +1740,17 @@ section[aria-label='Notifications alt+T'] {
 .bg-purple-50\/20{
   background-color: rgb(250 245 255 / 0.2);
 }
+.bg-rose-100{
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 228 230 / var(--tw-bg-opacity, 1));
+}
+.bg-rose-50{
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 241 242 / var(--tw-bg-opacity, 1));
+}
+.bg-rose-500\/10{
+  background-color: rgb(244 63 94 / 0.1);
+}
 .bg-secondary{
   background-color: hsl(var(--secondary));
 }
@@ -1866,6 +1884,10 @@ section[aria-label='Notifications alt+T'] {
 .py-1\.5{
   padding-top: 0.375rem;
   padding-bottom: 0.375rem;
+}
+.py-10{
+  padding-top: 2.5rem;
+  padding-bottom: 2.5rem;
 }
 .py-12{
   padding-top: 3rem;
@@ -2175,12 +2197,6 @@ section[aria-label='Notifications alt+T'] {
 .text-primary-foreground{
   color: hsl(var(--primary-foreground));
 }
-.text-primary\/30{
-  color: hsl(var(--primary) / 0.3);
-}
-.text-primary\/80{
-  color: hsl(var(--primary) / 0.8);
-}
 .text-purple-500{
   --tw-text-opacity: 1;
   color: rgb(168 85 247 / var(--tw-text-opacity, 1));
@@ -2200,6 +2216,10 @@ section[aria-label='Notifications alt+T'] {
 .text-rose-600{
   --tw-text-opacity: 1;
   color: rgb(225 29 72 / var(--tw-text-opacity, 1));
+}
+.text-rose-700{
+  --tw-text-opacity: 1;
+  color: rgb(190 18 60 / var(--tw-text-opacity, 1));
 }
 .text-secondary-foreground{
   color: hsl(var(--secondary-foreground));
@@ -2259,6 +2279,9 @@ section[aria-label='Notifications alt+T'] {
 .opacity-0{
   opacity: 0;
 }
+.opacity-30{
+  opacity: 0.3;
+}
 .opacity-50{
   opacity: 0.5;
 }
@@ -2267,6 +2290,9 @@ section[aria-label='Notifications alt+T'] {
 }
 .opacity-70{
   opacity: 0.7;
+}
+.opacity-80{
+  opacity: 0.8;
 }
 .opacity-90{
   opacity: 0.9;
@@ -3457,6 +3483,12 @@ section[aria-label='Notifications alt+T'] {
 .dark\:bg-purple-900\/5:is(.dark *){
   background-color: rgb(88 28 135 / 0.05);
 }
+.dark\:bg-rose-900\/30:is(.dark *){
+  background-color: rgb(136 19 55 / 0.3);
+}
+.dark\:bg-rose-950\/30:is(.dark *){
+  background-color: rgb(76 5 25 / 0.3);
+}
 .dark\:text-amber-400:is(.dark *){
   --tw-text-opacity: 1;
   color: rgb(251 191 36 / var(--tw-text-opacity, 1));
@@ -3484,6 +3516,10 @@ section[aria-label='Notifications alt+T'] {
 .dark\:text-purple-400:is(.dark *){
   --tw-text-opacity: 1;
   color: rgb(192 132 252 / var(--tw-text-opacity, 1));
+}
+.dark\:text-rose-400:is(.dark *){
+  --tw-text-opacity: 1;
+  color: rgb(251 113 133 / var(--tw-text-opacity, 1));
 }
 .dark\:text-rose-500:is(.dark *){
   --tw-text-opacity: 1;

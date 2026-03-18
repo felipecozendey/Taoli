@@ -1,4 +1,4 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/ProfPatients-BZgWe63N.js","assets/PageContent-BfFW-EY_.js","assets/dialog-Cc9t_Jyj.js","assets/ProfPatientRecord-BeYaKhhx.js","assets/textarea-e-mwiPDY.js","assets/ClientNutrition-h-BJex1O.js","assets/accordion-BG3d9Y5-.js","assets/checkbox-CaAwxCju.js","assets/flame-BdB3ZIUm.js","assets/ClientTraining-DLHikqZq.js","assets/ClientMind-CIRbuaAP.js","assets/ClientStudy-DkP-6lt6.js","assets/ClientTeam-DKUlZZDs.js"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/ProfPatients-Dogj0BQR.js","assets/PageContent-BfFW-EY_.js","assets/dialog-Cc9t_Jyj.js","assets/ProfPatientRecord-B-wej19h.js","assets/textarea-e-mwiPDY.js","assets/ClientNutrition-C7wx6C-I.js","assets/accordion-DLoGh_4l.js","assets/checkbox-BfTSpYrf.js","assets/flame-BdB3ZIUm.js","assets/ClientTraining-BlbESF2-.js","assets/ClientMind-DTab7X8X.js","assets/ClientStudy-D6ynU1z3.js","assets/ClientTeam-0272hQA8.js"])))=>i.map(i=>d[i]);
 import { $ as Arrow, At as composeEventHandlers, B as Input, Bt as useSearchParams, C as SidebarMenuButton, Ct as Primitive, Dt as createContextScope, Et as createSlot, F as hideOthers, Ft as Route, G as CardHeader, Gt as __exportAll, H as CardContent, Ht as require_react_dom, I as ReactRemoveScroll, It as Routes, J as AuthProvider, K as CardTitle, Kt as __toESM, L as useFocusGuards, Lt as useLocation, Mt as Link, Nt as Navigate, Ot as require_jsx_runtime, Pt as Outlet, Q as Anchor, R as FocusScope, Rt as useNavigate, S as SidebarMenu, St as useCallbackRef, T as SidebarProvider, Tt as createCollection, U as CardDescription, Ut as require_react, V as Card, Vt as __vitePreload, W as CardFooter, Wt as __commonJSMin, X as supabase, Y as useAuth, Z as TooltipProvider, _ as Sidebar, _t as Portal$1, at as cn$1, b as SidebarHeader, bt as DismissableLayer, c as DropdownMenuContent, ct as Sparkles, d as DropdownMenuSeparator, dt as cva, et as Content$1, f as DropdownMenuTrigger, ft as clsx, g as useDirection, gt as Presence, h as createRovingFocusGroupScope, ht as useControllableState, it as useId, jt as BrowserRouter, kt as useComposedRefs, l as DropdownMenuItem, lt as Check, m as Root$4, mt as VisuallyHidden, n as DashboardHeader, nt as createPopperScope, o as createContextScope$1, ot as X, p as Item$1, pt as VISUALLY_HIDDEN_STYLES, q as Button, s as DropdownMenu, st as User, t as PageContent, tt as Root2$3, u as DropdownMenuLabel, ut as createLucideIcon, v as SidebarContent, vt as useLayoutEffect2, w as SidebarMenuItem, wt as dispatchDiscreteCustomEvent, x as SidebarInset, xt as Root$3, y as SidebarFooter, yt as Branch, z as Primitive$1 } from "./PageContent-BfFW-EY_.js";
 //#region \0vite/modulepreload-polyfill.js
 (function polyfill() {
@@ -46288,13 +46288,13 @@ function ClientFinances() {
 }
 //#endregion
 //#region src/App.tsx
-var ProfPatients = (0, import_react.lazy)(() => __vitePreload(() => import("./ProfPatients-BZgWe63N.js"), __vite__mapDeps([0,1,2])));
-var ProfPatientRecord = (0, import_react.lazy)(() => __vitePreload(() => import("./ProfPatientRecord-BeYaKhhx.js"), __vite__mapDeps([3,1,4])));
-var ClientNutrition = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientNutrition-h-BJex1O.js"), __vite__mapDeps([5,1,6,7,8])));
-var ClientTraining = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientTraining-DLHikqZq.js"), __vite__mapDeps([9,1,6])));
-var ClientMind = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientMind-CIRbuaAP.js"), __vite__mapDeps([10,1,7])));
-var ClientStudy = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientStudy-DkP-6lt6.js"), __vite__mapDeps([11,1,8,2,4])));
-var ClientTeam = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientTeam-DKUlZZDs.js"), __vite__mapDeps([12,1,2])));
+var ProfPatients = (0, import_react.lazy)(() => __vitePreload(() => import("./ProfPatients-Dogj0BQR.js"), __vite__mapDeps([0,1,2])));
+var ProfPatientRecord = (0, import_react.lazy)(() => __vitePreload(() => import("./ProfPatientRecord-B-wej19h.js"), __vite__mapDeps([3,1,4])));
+var ClientNutrition = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientNutrition-C7wx6C-I.js"), __vite__mapDeps([5,1,6,7,8])));
+var ClientTraining = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientTraining-BlbESF2-.js"), __vite__mapDeps([9,1,6])));
+var ClientMind = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientMind-DTab7X8X.js"), __vite__mapDeps([10,1,7])));
+var ClientStudy = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientStudy-D6ynU1z3.js"), __vite__mapDeps([11,1,8,2,4])));
+var ClientTeam = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientTeam-0272hQA8.js"), __vite__mapDeps([12,1,2])));
 var LoadingFallback = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 	"data-uid": "src/App.tsx:49:3",
 	"data-prohibitions": "[]",
@@ -46649,4 +46649,4 @@ var App = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrowserRouter, {
 //#endregion
 export { Label$2 as $, require__baseExtremum as A, getPercentValue as B, getMaxRadius as C, require_isEqual as D, getValueByDataKey as E, warn$1 as F, require_isNil as G, isNumber as H, Layer as I, Progress as J, require_get as K, filterProps as L, Cell as M, Global as N, require__baseLt as O, require__baseIteratee as P, Badge as Q, findAllByType as R, formatAxisMap$1 as S, polarToCartesian as T, mathSign as U, interpolateNumber$1 as V, uniqueId as W, getFullDietDetails as X, getClientActiveDiet as Y, usePrevious as Z, Dot as _, Activity as _t, ChartContainer as a, Save as at, LabelList as b, ChartTooltip as c, LoaderCircle as ct, generateCategoricalChart as d, Dumbbell as dt, Users as et, YAxis as f, CirclePlus as ft, Shape as g, Apple as gt, Bar as h, ArrowRight as ht, TabsTrigger as i, Search as it, Text as j, require__baseGt as k, ChartTooltipContent as l, LayoutDashboard as lt, CartesianGrid as m, Brain as mt, TabsContent as n, Target as nt, ChartLegend as o, Plus as ot, XAxis as p, ChevronDown as pt, require_isFunction as q, TabsList as r, Smile as rt, ChartLegendContent as s, Lock as st, Tabs as t, Trash2 as tt, BarChart as u, FileText as ut, es6_default as v, useToast as vt, getTickClassName as w, Label as x, Curve as y, adaptEventsOfChild as z };
 
-//# sourceMappingURL=index-DJOu52_V.js.map
+//# sourceMappingURL=index-CBdd0jjF.js.map

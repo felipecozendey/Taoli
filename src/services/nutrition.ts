@@ -67,7 +67,7 @@ export async function getClientActiveDiet(clientId: string) {
       .limit(1)
       .single()
 
-    if (error && error.code !== 'PGRST116') throw error // PGRST116 is no rows returned
+    if (error && error.code !== 'PGRST116') throw error
     return { data: data || null, error: null }
   } catch (error) {
     console.error('Error fetching active diet:', error)
@@ -118,6 +118,23 @@ export async function addMealItem(
   }
 }
 
+export type FoodItemDetails = Pick<
+  Database['public']['Tables']['food_items']['Row'],
+  'id' | 'name' | 'energy_kcal' | 'protein_g' | 'carbs_g' | 'fats_g'
+>
+
+export type MealItemDetails = Database['public']['Tables']['meal_items']['Row'] & {
+  food_items: FoodItemDetails | null
+}
+
+export type MealDetails = Database['public']['Tables']['meals']['Row'] & {
+  meal_items: MealItemDetails[]
+}
+
+export type FullDietDetails = Database['public']['Tables']['diets']['Row'] & {
+  meals: MealDetails[]
+}
+
 export async function getFullDietDetails(dietId: string) {
   try {
     const { data, error } = await supabase
@@ -143,7 +160,10 @@ export async function getFullDietDetails(dietId: string) {
       .single()
 
     if (error) throw error
-    return { data, error: null }
+
+    // Casting data to explicitly defined type to prevent deep inference loops
+    // which can cause Rollup/esbuild to OOM (exit code 143) during build chunking
+    return { data: data as unknown as FullDietDetails, error: null }
   } catch (error) {
     console.error('Error fetching full diet details:', error)
     return { data: null, error }

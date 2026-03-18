@@ -10,6 +10,48 @@ export interface UpdateAccessData {
   is_psychologist: boolean
 }
 
+export interface DashboardMetrics {
+  totalUsers: number
+  totalProfessionals: number
+  totalClients: number
+  totalLinks: number
+}
+
+/**
+ * Fetches platform-wide statistics using optimized database count queries.
+ */
+export const getDashboardMetrics = async (): Promise<DashboardMetrics> => {
+  try {
+    const [usersRes, profsRes, clientsRes, linksRes] = await Promise.all([
+      supabase.from('profiles').select('*', { count: 'exact', head: true }),
+      supabase
+        .from('profiles')
+        .select('*', { count: 'exact', head: true })
+        .eq('role', 'professional'),
+      supabase.from('profiles').select('*', { count: 'exact', head: true }).eq('role', 'client'),
+      supabase
+        .from('professional_client_links')
+        .select('*', { count: 'exact', head: true })
+        .eq('status', 'active'),
+    ])
+
+    if (usersRes.error) throw usersRes.error
+    if (profsRes.error) throw profsRes.error
+    if (clientsRes.error) throw clientsRes.error
+    if (linksRes.error) throw linksRes.error
+
+    return {
+      totalUsers: usersRes.count || 0,
+      totalProfessionals: profsRes.count || 0,
+      totalClients: clientsRes.count || 0,
+      totalLinks: linksRes.count || 0,
+    }
+  } catch (error: any) {
+    console.error('Error fetching dashboard metrics:', error)
+    throw new Error(error.message || 'Failed to fetch dashboard metrics')
+  }
+}
+
 /**
  * Fetches all user profiles from the database, ordered by creation date (newest first).
  */

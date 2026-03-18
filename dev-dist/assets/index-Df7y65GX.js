@@ -1,4 +1,4 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/ProfPatients-CmOL59sV.js","assets/PageContent-Cxm88eRr.js","assets/dialog-DttZm_Lx.js","assets/ProfPatientRecord-CB-TtM6i.js","assets/textarea-BESrxnVB.js","assets/ClientNutrition-DDydLI6Q.js","assets/accordion-Bq3F3n9v.js","assets/checkbox-azYtbpTF.js","assets/flame-D4-7MCKP.js","assets/ClientTraining-CH06pD4b.js","assets/ClientMind-BbXg6Weh.js","assets/ClientStudy-fGsiVvg-.js","assets/ClientTeam-Cr-pSfIL.js"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/ProfPatients-CPhNdOh9.js","assets/PageContent-Cxm88eRr.js","assets/dialog-DttZm_Lx.js","assets/ProfPatientRecord-t5rV2RMu.js","assets/textarea-BESrxnVB.js","assets/ClientNutrition-CG3YpV39.js","assets/accordion-BEKgfHx3.js","assets/checkbox-BkTxSfjd.js","assets/flame-D4-7MCKP.js","assets/ClientTraining-CINn2FKu.js","assets/ClientMind-Bys8MsPl.js","assets/ClientStudy-DPeofmE8.js","assets/ClientTeam-DsSDGhb8.js"])))=>i.map(i=>d[i]);
 import { $ as Button, A as SheetFooter, At as dispatchDiscreteCustomEvent, Bt as Outlet, C as SidebarMenuButton, Ct as Portal$1, D as Sheet, Dt as Root$4, E as Skeleton, Et as DismissableLayer, Ft as useComposedRefs, G as Primitive$1, H as ReactRemoveScroll, Ht as Routes, It as composeEventHandlers, J as CardContent, Jt as require_react_dom, K as Input, Kt as useSearchParams, Lt as BrowserRouter, M as SheetTitle, Mt as createSlot, Nt as createContextScope, O as SheetContent, Ot as useCallbackRef, Pt as require_jsx_runtime, Q as CardTitle, Qt as __toESM, Rt as Link$1, S as SidebarMenu, St as Presence, T as SidebarProvider, Tt as Branch, U as useFocusGuards, Ut as useLocation, V as hideOthers, Vt as Route, W as FocusScope, Wt as useNavigate, X as CardFooter, Xt as __commonJSMin, Y as CardDescription, Yt as require_react, Z as CardHeader, Zt as __exportAll, _ as Sidebar, _t as cva, a as AvatarImage, at as Arrow, b as SidebarHeader, bt as VisuallyHidden, c as DropdownMenuContent, ct as createPopperScope, d as DropdownMenuSeparator, dt as cn$1, et as AuthProvider, f as DropdownMenuTrigger, ft as X, g as useDirection, gt as createLucideIcon, h as createRovingFocusGroupScope, ht as Check, i as AvatarFallback, it as Anchor, j as SheetHeader, jt as createCollection, k as SheetDescription, kt as Primitive, l as DropdownMenuItem, lt as useSize, m as Root$5, mt as Sparkles, n as DashboardHeader, nt as supabase, o as createContextScope$1, ot as Content$1, p as Item$1, pt as User, q as Card, qt as __vitePreload, r as Avatar, rt as TooltipProvider, s as DropdownMenu, st as Root2$3, t as PageContent, tt as useAuth, u as DropdownMenuLabel, ut as useId, v as SidebarContent, vt as clsx, w as SidebarMenuItem, wt as useLayoutEffect2, x as SidebarInset, xt as useControllableState, y as SidebarFooter, yt as VISUALLY_HIDDEN_STYLES, zt as Navigate } from "./PageContent-Cxm88eRr.js";
 //#region \0vite/modulepreload-polyfill.js
 (function polyfill() {
@@ -17854,336 +17854,434 @@ var Progress = import_react.forwardRef(({ className, value, ...props }, ref) => 
 }));
 Progress.displayName = Root$2.displayName;
 //#endregion
+//#region src/services/master.ts
+/**
+* Fetches platform-wide statistics using optimized database count queries.
+*/
+var getDashboardMetrics = async () => {
+	try {
+		const [usersRes, profsRes, clientsRes, linksRes] = await Promise.all([
+			supabase.from("profiles").select("*", {
+				count: "exact",
+				head: true
+			}),
+			supabase.from("profiles").select("*", {
+				count: "exact",
+				head: true
+			}).eq("role", "professional"),
+			supabase.from("profiles").select("*", {
+				count: "exact",
+				head: true
+			}).eq("role", "client"),
+			supabase.from("professional_client_links").select("*", {
+				count: "exact",
+				head: true
+			}).eq("status", "active")
+		]);
+		if (usersRes.error) throw usersRes.error;
+		if (profsRes.error) throw profsRes.error;
+		if (clientsRes.error) throw clientsRes.error;
+		if (linksRes.error) throw linksRes.error;
+		return {
+			totalUsers: usersRes.count || 0,
+			totalProfessionals: profsRes.count || 0,
+			totalClients: clientsRes.count || 0,
+			totalLinks: linksRes.count || 0
+		};
+	} catch (error) {
+		console.error("Error fetching dashboard metrics:", error);
+		throw new Error(error.message || "Failed to fetch dashboard metrics");
+	}
+};
+/**
+* Fetches all user profiles from the database, ordered by creation date (newest first).
+*/
+var getAllProfiles = async () => {
+	try {
+		const { data, error } = await supabase.from("profiles").select("*").order("created_at", { ascending: false });
+		if (error) throw error;
+		return data || [];
+	} catch (error) {
+		console.error("Error fetching all profiles:", error);
+		throw new Error(error.message || "Failed to fetch profiles");
+	}
+};
+/**
+* Updates a specific user's role and specialties in the database.
+*/
+var updateUserAccess = async (userId, data) => {
+	try {
+		const { error } = await supabase.from("profiles").update({
+			role: data.role,
+			is_nutritionist: data.is_nutritionist,
+			is_trainer: data.is_trainer,
+			is_psychologist: data.is_psychologist
+		}).eq("id", userId);
+		if (error) throw error;
+	} catch (error) {
+		console.error("Error updating user access:", error);
+		throw new Error(error.message || "Failed to update user access");
+	}
+};
+//#endregion
 //#region src/pages/master/MasterDashboard.tsx
+var STATS_TREND = {
+	totalUsers: "+12% este mês",
+	professionals: "+3 novos esta semana",
+	clients: "+18% este mês",
+	links: "+5% esta semana"
+};
+var RECENT_USERS = [
+	{
+		id: 1,
+		name: "Ana Silva",
+		email: "ana.silva@email.com",
+		time: "Entrou há 2 horas",
+		initials: "AS",
+		avatar: "https://img.usecurling.com/ppl/thumbnail?gender=female&seed=1"
+	},
+	{
+		id: 2,
+		name: "Carlos Santos",
+		email: "carlos.s@email.com",
+		time: "Entrou há 5 horas",
+		initials: "CS",
+		avatar: "https://img.usecurling.com/ppl/thumbnail?gender=male&seed=2"
+	},
+	{
+		id: 3,
+		name: "Dra. Beatriz Costa",
+		email: "beatriz.nutri@email.com",
+		time: "Entrou há 1 dia",
+		initials: "BC",
+		avatar: "https://img.usecurling.com/ppl/thumbnail?gender=female&seed=3"
+	},
+	{
+		id: 4,
+		name: "Fernando Oliveira",
+		email: "fernando.o@email.com",
+		time: "Entrou há 2 dias",
+		initials: "FO",
+		avatar: ""
+	},
+	{
+		id: 5,
+		name: "Mariana Lima",
+		email: "mariana.l@email.com",
+		time: "Entrou há 2 dias",
+		initials: "ML",
+		avatar: "https://img.usecurling.com/ppl/thumbnail?gender=female&seed=4"
+	}
+];
+var SPECIALTIES = [
+	{
+		name: "Nutrição",
+		value: 50
+	},
+	{
+		name: "Educação Física",
+		value: 30
+	},
+	{
+		name: "Psicologia",
+		value: 20
+	}
+];
 function MasterDashboard() {
-	const [stats] = (0, import_react.useState)({
-		totalUsers: {
-			value: "156",
-			trend: "+12% este mês"
-		},
-		professionals: {
-			value: "24",
-			trend: "+3 novos esta semana"
-		},
-		clients: {
-			value: "130",
-			trend: "+18% este mês"
-		},
-		links: {
-			value: "112",
-			trend: "+5% esta semana"
-		}
+	const [metrics, setMetrics] = (0, import_react.useState)({
+		totalUsers: 0,
+		totalProfessionals: 0,
+		totalClients: 0,
+		totalLinks: 0
 	});
-	const [recentUsers] = (0, import_react.useState)([
-		{
-			id: 1,
-			name: "Ana Silva",
-			email: "ana.silva@email.com",
-			time: "Entrou há 2 horas",
-			initials: "AS",
-			avatar: "https://img.usecurling.com/ppl/thumbnail?gender=female&seed=1"
-		},
-		{
-			id: 2,
-			name: "Carlos Santos",
-			email: "carlos.s@email.com",
-			time: "Entrou há 5 horas",
-			initials: "CS",
-			avatar: "https://img.usecurling.com/ppl/thumbnail?gender=male&seed=2"
-		},
-		{
-			id: 3,
-			name: "Dra. Beatriz Costa",
-			email: "beatriz.nutri@email.com",
-			time: "Entrou há 1 dia",
-			initials: "BC",
-			avatar: "https://img.usecurling.com/ppl/thumbnail?gender=female&seed=3"
-		},
-		{
-			id: 4,
-			name: "Fernando Oliveira",
-			email: "fernando.o@email.com",
-			time: "Entrou há 2 dias",
-			initials: "FO",
-			avatar: ""
-		},
-		{
-			id: 5,
-			name: "Mariana Lima",
-			email: "mariana.l@email.com",
-			time: "Entrou há 2 dias",
-			initials: "ML",
-			avatar: "https://img.usecurling.com/ppl/thumbnail?gender=female&seed=4"
-		}
-	]);
-	const [specialties] = (0, import_react.useState)([
-		{
-			name: "Nutrição",
-			value: 50
-		},
-		{
-			name: "Educação Física",
-			value: 30
-		},
-		{
-			name: "Psicologia",
-			value: 20
-		}
-	]);
+	const [isLoading, setIsLoading] = (0, import_react.useState)(true);
+	(0, import_react.useEffect)(() => {
+		let mounted = true;
+		const fetchMetrics = async () => {
+			try {
+				const data = await getDashboardMetrics();
+				if (mounted) setMetrics(data);
+			} catch (error) {
+				console.error("Failed to load metrics:", error);
+			} finally {
+				if (mounted) setIsLoading(false);
+			}
+		};
+		fetchMetrics();
+		return () => {
+			mounted = false;
+		};
+	}, []);
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-		"data-uid": "src/pages/master/MasterDashboard.tsx:67:5",
+		"data-uid": "src/pages/master/MasterDashboard.tsx:102:5",
 		"data-prohibitions": "[editContent]",
 		className: "flex flex-col min-h-full bg-muted/20",
 		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DashboardHeader, {
-			"data-uid": "src/pages/master/MasterDashboard.tsx:68:7",
+			"data-uid": "src/pages/master/MasterDashboard.tsx:103:7",
 			"data-prohibitions": "[editContent]",
 			title: "Administração do Sistema"
 		}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(PageContent, {
-			"data-uid": "src/pages/master/MasterDashboard.tsx:69:7",
+			"data-uid": "src/pages/master/MasterDashboard.tsx:104:7",
 			"data-prohibitions": "[editContent]",
 			className: "max-w-7xl mx-auto w-full space-y-8 animate-fade-in-up",
 			children: [
 				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					"data-uid": "src/pages/master/MasterDashboard.tsx:71:9",
+					"data-uid": "src/pages/master/MasterDashboard.tsx:106:9",
 					"data-prohibitions": "[]",
 					className: "flex flex-col space-y-2",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
-						"data-uid": "src/pages/master/MasterDashboard.tsx:72:11",
+						"data-uid": "src/pages/master/MasterDashboard.tsx:107:11",
 						"data-prohibitions": "[]",
 						className: "text-3xl font-bold tracking-tight text-foreground",
 						children: "Visão Geral da Plataforma"
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-						"data-uid": "src/pages/master/MasterDashboard.tsx:75:11",
+						"data-uid": "src/pages/master/MasterDashboard.tsx:110:11",
 						"data-prohibitions": "[]",
 						className: "text-lg text-muted-foreground",
 						children: "Acompanhe o crescimento e as métricas em tempo real do seu sistema."
 					})]
 				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					"data-uid": "src/pages/master/MasterDashboard.tsx:81:9",
+					"data-uid": "src/pages/master/MasterDashboard.tsx:116:9",
 					"data-prohibitions": "[editContent]",
 					className: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6",
 					children: [
 						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
-							"data-uid": "src/pages/master/MasterDashboard.tsx:82:11",
+							"data-uid": "src/pages/master/MasterDashboard.tsx:117:11",
 							"data-prohibitions": "[editContent]",
 							className: "shadow-sm border-border/50 bg-card",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, {
-								"data-uid": "src/pages/master/MasterDashboard.tsx:83:13",
+								"data-uid": "src/pages/master/MasterDashboard.tsx:118:13",
 								"data-prohibitions": "[]",
 								className: "flex flex-row items-center justify-between pb-2 space-y-0",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
-									"data-uid": "src/pages/master/MasterDashboard.tsx:84:15",
+									"data-uid": "src/pages/master/MasterDashboard.tsx:119:15",
 									"data-prohibitions": "[]",
 									className: "text-sm font-medium",
 									children: "Total de Utilizadores"
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Users, {
-									"data-uid": "src/pages/master/MasterDashboard.tsx:85:15",
+									"data-uid": "src/pages/master/MasterDashboard.tsx:120:15",
 									"data-prohibitions": "[editContent]",
 									className: "h-4 w-4 text-muted-foreground"
 								})]
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardContent, {
-								"data-uid": "src/pages/master/MasterDashboard.tsx:87:13",
+								"data-uid": "src/pages/master/MasterDashboard.tsx:122:13",
 								"data-prohibitions": "[editContent]",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-									"data-uid": "src/pages/master/MasterDashboard.tsx:88:15",
+								children: [isLoading ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Skeleton, {
+									"data-uid": "src/pages/master/MasterDashboard.tsx:124:17",
+									"data-prohibitions": "[editContent]",
+									className: "h-8 w-16 mb-1"
+								}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+									"data-uid": "src/pages/master/MasterDashboard.tsx:126:17",
 									"data-prohibitions": "[editContent]",
 									className: "text-2xl font-bold",
-									children: stats.totalUsers.value
+									children: metrics.totalUsers
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
-									"data-uid": "src/pages/master/MasterDashboard.tsx:89:15",
+									"data-uid": "src/pages/master/MasterDashboard.tsx:128:15",
 									"data-prohibitions": "[editContent]",
 									className: "text-xs text-emerald-600 dark:text-emerald-400 font-medium flex items-center mt-1",
 									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TrendingUp, {
-										"data-uid": "src/pages/master/MasterDashboard.tsx:90:17",
+										"data-uid": "src/pages/master/MasterDashboard.tsx:129:17",
 										"data-prohibitions": "[editContent]",
 										className: "h-3 w-3 mr-1"
-									}), stats.totalUsers.trend]
+									}), STATS_TREND.totalUsers]
 								})]
 							})]
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
-							"data-uid": "src/pages/master/MasterDashboard.tsx:96:11",
+							"data-uid": "src/pages/master/MasterDashboard.tsx:135:11",
 							"data-prohibitions": "[editContent]",
 							className: "shadow-sm border-border/50 bg-card",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, {
-								"data-uid": "src/pages/master/MasterDashboard.tsx:97:13",
+								"data-uid": "src/pages/master/MasterDashboard.tsx:136:13",
 								"data-prohibitions": "[]",
 								className: "flex flex-row items-center justify-between pb-2 space-y-0",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
-									"data-uid": "src/pages/master/MasterDashboard.tsx:98:15",
+									"data-uid": "src/pages/master/MasterDashboard.tsx:137:15",
 									"data-prohibitions": "[]",
 									className: "text-sm font-medium",
 									children: "Profissionais Ativos"
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Briefcase, {
-									"data-uid": "src/pages/master/MasterDashboard.tsx:99:15",
+									"data-uid": "src/pages/master/MasterDashboard.tsx:138:15",
 									"data-prohibitions": "[editContent]",
 									className: "h-4 w-4 text-muted-foreground"
 								})]
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardContent, {
-								"data-uid": "src/pages/master/MasterDashboard.tsx:101:13",
+								"data-uid": "src/pages/master/MasterDashboard.tsx:140:13",
 								"data-prohibitions": "[editContent]",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-									"data-uid": "src/pages/master/MasterDashboard.tsx:102:15",
+								children: [isLoading ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Skeleton, {
+									"data-uid": "src/pages/master/MasterDashboard.tsx:142:17",
+									"data-prohibitions": "[editContent]",
+									className: "h-8 w-16 mb-1"
+								}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+									"data-uid": "src/pages/master/MasterDashboard.tsx:144:17",
 									"data-prohibitions": "[editContent]",
 									className: "text-2xl font-bold",
-									children: stats.professionals.value
+									children: metrics.totalProfessionals
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
-									"data-uid": "src/pages/master/MasterDashboard.tsx:103:15",
+									"data-uid": "src/pages/master/MasterDashboard.tsx:146:15",
 									"data-prohibitions": "[editContent]",
 									className: "text-xs text-emerald-600 dark:text-emerald-400 font-medium flex items-center mt-1",
 									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TrendingUp, {
-										"data-uid": "src/pages/master/MasterDashboard.tsx:104:17",
+										"data-uid": "src/pages/master/MasterDashboard.tsx:147:17",
 										"data-prohibitions": "[editContent]",
 										className: "h-3 w-3 mr-1"
-									}), stats.professionals.trend]
+									}), STATS_TREND.professionals]
 								})]
 							})]
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
-							"data-uid": "src/pages/master/MasterDashboard.tsx:110:11",
+							"data-uid": "src/pages/master/MasterDashboard.tsx:153:11",
 							"data-prohibitions": "[editContent]",
 							className: "shadow-sm border-border/50 bg-card",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, {
-								"data-uid": "src/pages/master/MasterDashboard.tsx:111:13",
+								"data-uid": "src/pages/master/MasterDashboard.tsx:154:13",
 								"data-prohibitions": "[]",
 								className: "flex flex-row items-center justify-between pb-2 space-y-0",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
-									"data-uid": "src/pages/master/MasterDashboard.tsx:112:15",
+									"data-uid": "src/pages/master/MasterDashboard.tsx:155:15",
 									"data-prohibitions": "[]",
 									className: "text-sm font-medium",
 									children: "Clientes (Pacientes)"
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(User, {
-									"data-uid": "src/pages/master/MasterDashboard.tsx:113:15",
+									"data-uid": "src/pages/master/MasterDashboard.tsx:156:15",
 									"data-prohibitions": "[editContent]",
 									className: "h-4 w-4 text-muted-foreground"
 								})]
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardContent, {
-								"data-uid": "src/pages/master/MasterDashboard.tsx:115:13",
+								"data-uid": "src/pages/master/MasterDashboard.tsx:158:13",
 								"data-prohibitions": "[editContent]",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-									"data-uid": "src/pages/master/MasterDashboard.tsx:116:15",
+								children: [isLoading ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Skeleton, {
+									"data-uid": "src/pages/master/MasterDashboard.tsx:160:17",
+									"data-prohibitions": "[editContent]",
+									className: "h-8 w-16 mb-1"
+								}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+									"data-uid": "src/pages/master/MasterDashboard.tsx:162:17",
 									"data-prohibitions": "[editContent]",
 									className: "text-2xl font-bold",
-									children: stats.clients.value
+									children: metrics.totalClients
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
-									"data-uid": "src/pages/master/MasterDashboard.tsx:117:15",
+									"data-uid": "src/pages/master/MasterDashboard.tsx:164:15",
 									"data-prohibitions": "[editContent]",
 									className: "text-xs text-emerald-600 dark:text-emerald-400 font-medium flex items-center mt-1",
 									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TrendingUp, {
-										"data-uid": "src/pages/master/MasterDashboard.tsx:118:17",
+										"data-uid": "src/pages/master/MasterDashboard.tsx:165:17",
 										"data-prohibitions": "[editContent]",
 										className: "h-3 w-3 mr-1"
-									}), stats.clients.trend]
+									}), STATS_TREND.clients]
 								})]
 							})]
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
-							"data-uid": "src/pages/master/MasterDashboard.tsx:124:11",
+							"data-uid": "src/pages/master/MasterDashboard.tsx:171:11",
 							"data-prohibitions": "[editContent]",
 							className: "shadow-sm border-border/50 bg-card",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, {
-								"data-uid": "src/pages/master/MasterDashboard.tsx:125:13",
+								"data-uid": "src/pages/master/MasterDashboard.tsx:172:13",
 								"data-prohibitions": "[]",
 								className: "flex flex-row items-center justify-between pb-2 space-y-0",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
-									"data-uid": "src/pages/master/MasterDashboard.tsx:126:15",
+									"data-uid": "src/pages/master/MasterDashboard.tsx:173:15",
 									"data-prohibitions": "[]",
 									className: "text-sm font-medium",
 									children: "Vínculos Estabelecidos"
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
-									"data-uid": "src/pages/master/MasterDashboard.tsx:127:15",
+									"data-uid": "src/pages/master/MasterDashboard.tsx:174:15",
 									"data-prohibitions": "[editContent]",
 									className: "h-4 w-4 text-muted-foreground"
 								})]
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardContent, {
-								"data-uid": "src/pages/master/MasterDashboard.tsx:129:13",
+								"data-uid": "src/pages/master/MasterDashboard.tsx:176:13",
 								"data-prohibitions": "[editContent]",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-									"data-uid": "src/pages/master/MasterDashboard.tsx:130:15",
+								children: [isLoading ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Skeleton, {
+									"data-uid": "src/pages/master/MasterDashboard.tsx:178:17",
+									"data-prohibitions": "[editContent]",
+									className: "h-8 w-16 mb-1"
+								}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+									"data-uid": "src/pages/master/MasterDashboard.tsx:180:17",
 									"data-prohibitions": "[editContent]",
 									className: "text-2xl font-bold",
-									children: stats.links.value
+									children: metrics.totalLinks
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
-									"data-uid": "src/pages/master/MasterDashboard.tsx:131:15",
+									"data-uid": "src/pages/master/MasterDashboard.tsx:182:15",
 									"data-prohibitions": "[editContent]",
 									className: "text-xs text-emerald-600 dark:text-emerald-400 font-medium flex items-center mt-1",
 									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TrendingUp, {
-										"data-uid": "src/pages/master/MasterDashboard.tsx:132:17",
+										"data-uid": "src/pages/master/MasterDashboard.tsx:183:17",
 										"data-prohibitions": "[editContent]",
 										className: "h-3 w-3 mr-1"
-									}), stats.links.trend]
+									}), STATS_TREND.links]
 								})]
 							})]
 						})
 					]
 				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					"data-uid": "src/pages/master/MasterDashboard.tsx:140:9",
+					"data-uid": "src/pages/master/MasterDashboard.tsx:191:9",
 					"data-prohibitions": "[editContent]",
 					className: "grid grid-cols-1 lg:grid-cols-2 gap-6",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
-						"data-uid": "src/pages/master/MasterDashboard.tsx:141:11",
+						"data-uid": "src/pages/master/MasterDashboard.tsx:192:11",
 						"data-prohibitions": "[editContent]",
 						className: "shadow-sm border-border/50",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, {
-							"data-uid": "src/pages/master/MasterDashboard.tsx:142:13",
+							"data-uid": "src/pages/master/MasterDashboard.tsx:193:13",
 							"data-prohibitions": "[]",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
-								"data-uid": "src/pages/master/MasterDashboard.tsx:143:15",
+								"data-uid": "src/pages/master/MasterDashboard.tsx:194:15",
 								"data-prohibitions": "[]",
 								children: "Últimos Registos"
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardDescription, {
-								"data-uid": "src/pages/master/MasterDashboard.tsx:144:15",
+								"data-uid": "src/pages/master/MasterDashboard.tsx:195:15",
 								"data-prohibitions": "[]",
 								children: "Os utilizadores mais recentes a aderir à plataforma."
 							})]
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContent, {
-							"data-uid": "src/pages/master/MasterDashboard.tsx:148:13",
+							"data-uid": "src/pages/master/MasterDashboard.tsx:199:13",
 							"data-prohibitions": "[editContent]",
 							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-								"data-uid": "src/pages/master/MasterDashboard.tsx:149:15",
+								"data-uid": "src/pages/master/MasterDashboard.tsx:200:15",
 								"data-prohibitions": "[editContent]",
 								className: "space-y-6",
-								children: recentUsers.map((user) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									"data-uid": "src/pages/master/MasterDashboard.tsx:151:19",
+								children: RECENT_USERS.map((user) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									"data-uid": "src/pages/master/MasterDashboard.tsx:202:19",
 									"data-prohibitions": "[editContent]",
 									className: "flex items-center gap-4",
 									children: [
 										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Avatar, {
-											"data-uid": "src/pages/master/MasterDashboard.tsx:152:21",
+											"data-uid": "src/pages/master/MasterDashboard.tsx:203:21",
 											"data-prohibitions": "[editContent]",
 											className: "h-10 w-10 border bg-muted",
 											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(AvatarImage, {
-												"data-uid": "src/pages/master/MasterDashboard.tsx:153:23",
+												"data-uid": "src/pages/master/MasterDashboard.tsx:204:23",
 												"data-prohibitions": "[editContent]",
 												src: user.avatar,
 												alt: user.name
 											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AvatarFallback, {
-												"data-uid": "src/pages/master/MasterDashboard.tsx:154:23",
+												"data-uid": "src/pages/master/MasterDashboard.tsx:205:23",
 												"data-prohibitions": "[editContent]",
 												className: "font-medium text-xs",
 												children: user.initials
 											})]
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-											"data-uid": "src/pages/master/MasterDashboard.tsx:158:21",
+											"data-uid": "src/pages/master/MasterDashboard.tsx:209:21",
 											"data-prohibitions": "[editContent]",
 											className: "flex flex-col space-y-1 overflow-hidden",
 											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-												"data-uid": "src/pages/master/MasterDashboard.tsx:159:23",
+												"data-uid": "src/pages/master/MasterDashboard.tsx:210:23",
 												"data-prohibitions": "[editContent]",
 												className: "text-sm font-medium leading-none truncate",
 												children: user.name
 											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-												"data-uid": "src/pages/master/MasterDashboard.tsx:160:23",
+												"data-uid": "src/pages/master/MasterDashboard.tsx:211:23",
 												"data-prohibitions": "[editContent]",
 												className: "text-xs text-muted-foreground truncate",
 												children: user.email
 											})]
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-											"data-uid": "src/pages/master/MasterDashboard.tsx:162:21",
+											"data-uid": "src/pages/master/MasterDashboard.tsx:213:21",
 											"data-prohibitions": "[editContent]",
 											className: "ml-auto font-medium text-xs text-muted-foreground whitespace-nowrap hidden sm:block",
 											children: user.time
@@ -18193,50 +18291,50 @@ function MasterDashboard() {
 							})
 						})]
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
-						"data-uid": "src/pages/master/MasterDashboard.tsx:171:11",
+						"data-uid": "src/pages/master/MasterDashboard.tsx:222:11",
 						"data-prohibitions": "[editContent]",
 						className: "shadow-sm border-border/50",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, {
-							"data-uid": "src/pages/master/MasterDashboard.tsx:172:13",
+							"data-uid": "src/pages/master/MasterDashboard.tsx:223:13",
 							"data-prohibitions": "[]",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
-								"data-uid": "src/pages/master/MasterDashboard.tsx:173:15",
+								"data-uid": "src/pages/master/MasterDashboard.tsx:224:15",
 								"data-prohibitions": "[]",
 								children: "Distribuição de Especialidades"
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardDescription, {
-								"data-uid": "src/pages/master/MasterDashboard.tsx:174:15",
+								"data-uid": "src/pages/master/MasterDashboard.tsx:225:15",
 								"data-prohibitions": "[]",
 								children: "Representação visual das áreas de atuação dos profissionais ativos."
 							})]
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContent, {
-							"data-uid": "src/pages/master/MasterDashboard.tsx:178:13",
+							"data-uid": "src/pages/master/MasterDashboard.tsx:229:13",
 							"data-prohibitions": "[editContent]",
 							className: "pt-4",
 							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-								"data-uid": "src/pages/master/MasterDashboard.tsx:179:15",
+								"data-uid": "src/pages/master/MasterDashboard.tsx:230:15",
 								"data-prohibitions": "[editContent]",
 								className: "space-y-8",
-								children: specialties.map((spec) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									"data-uid": "src/pages/master/MasterDashboard.tsx:181:19",
+								children: SPECIALTIES.map((spec) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									"data-uid": "src/pages/master/MasterDashboard.tsx:232:19",
 									"data-prohibitions": "[editContent]",
 									className: "space-y-2",
 									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-										"data-uid": "src/pages/master/MasterDashboard.tsx:182:21",
+										"data-uid": "src/pages/master/MasterDashboard.tsx:233:21",
 										"data-prohibitions": "[editContent]",
 										className: "flex items-center justify-between text-sm",
 										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-											"data-uid": "src/pages/master/MasterDashboard.tsx:183:23",
+											"data-uid": "src/pages/master/MasterDashboard.tsx:234:23",
 											"data-prohibitions": "[editContent]",
 											className: "font-semibold text-foreground",
 											children: spec.name
 										}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-											"data-uid": "src/pages/master/MasterDashboard.tsx:184:23",
+											"data-uid": "src/pages/master/MasterDashboard.tsx:235:23",
 											"data-prohibitions": "[editContent]",
 											className: "text-muted-foreground font-medium",
 											children: [spec.value, "%"]
 										})]
 									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Progress, {
-										"data-uid": "src/pages/master/MasterDashboard.tsx:186:21",
+										"data-uid": "src/pages/master/MasterDashboard.tsx:237:21",
 										"data-prohibitions": "[editContent]",
 										value: spec.value,
 										className: "h-2.5 bg-muted"
@@ -19628,38 +19726,6 @@ var Switch = import_react.forwardRef(({ className, ...props }, ref) => /* @__PUR
 	})
 }));
 Switch.displayName = Root$1.displayName;
-//#endregion
-//#region src/services/master.ts
-/**
-* Fetches all user profiles from the database, ordered by creation date (newest first).
-*/
-var getAllProfiles = async () => {
-	try {
-		const { data, error } = await supabase.from("profiles").select("*").order("created_at", { ascending: false });
-		if (error) throw error;
-		return data || [];
-	} catch (error) {
-		console.error("Error fetching all profiles:", error);
-		throw new Error(error.message || "Failed to fetch profiles");
-	}
-};
-/**
-* Updates a specific user's role and specialties in the database.
-*/
-var updateUserAccess = async (userId, data) => {
-	try {
-		const { error } = await supabase.from("profiles").update({
-			role: data.role,
-			is_nutritionist: data.is_nutritionist,
-			is_trainer: data.is_trainer,
-			is_psychologist: data.is_psychologist
-		}).eq("id", userId);
-		if (error) throw error;
-	} catch (error) {
-		console.error("Error updating user access:", error);
-		throw new Error(error.message || "Failed to update user access");
-	}
-};
 //#endregion
 //#region src/pages/master/MasterUsers.tsx
 var RoleBadge = ({ role }) => {
@@ -47253,13 +47319,13 @@ function ClientFinances() {
 }
 //#endregion
 //#region src/App.tsx
-var ProfPatients = (0, import_react.lazy)(() => __vitePreload(() => import("./ProfPatients-CmOL59sV.js"), __vite__mapDeps([0,1,2])));
-var ProfPatientRecord = (0, import_react.lazy)(() => __vitePreload(() => import("./ProfPatientRecord-CB-TtM6i.js"), __vite__mapDeps([3,1,4])));
-var ClientNutrition = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientNutrition-DDydLI6Q.js"), __vite__mapDeps([5,1,6,7,8])));
-var ClientTraining = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientTraining-CH06pD4b.js"), __vite__mapDeps([9,1,6])));
-var ClientMind = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientMind-BbXg6Weh.js"), __vite__mapDeps([10,1,7])));
-var ClientStudy = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientStudy-fGsiVvg-.js"), __vite__mapDeps([11,1,8,2,4])));
-var ClientTeam = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientTeam-Cr-pSfIL.js"), __vite__mapDeps([12,1,2])));
+var ProfPatients = (0, import_react.lazy)(() => __vitePreload(() => import("./ProfPatients-CPhNdOh9.js"), __vite__mapDeps([0,1,2])));
+var ProfPatientRecord = (0, import_react.lazy)(() => __vitePreload(() => import("./ProfPatientRecord-t5rV2RMu.js"), __vite__mapDeps([3,1,4])));
+var ClientNutrition = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientNutrition-CG3YpV39.js"), __vite__mapDeps([5,1,6,7,8])));
+var ClientTraining = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientTraining-CINn2FKu.js"), __vite__mapDeps([9,1,6])));
+var ClientMind = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientMind-Bys8MsPl.js"), __vite__mapDeps([10,1,7])));
+var ClientStudy = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientStudy-DPeofmE8.js"), __vite__mapDeps([11,1,8,2,4])));
+var ClientTeam = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientTeam-DsSDGhb8.js"), __vite__mapDeps([12,1,2])));
 var LoadingFallback = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 	"data-uid": "src/App.tsx:49:3",
 	"data-prohibitions": "[]",
@@ -47614,4 +47680,4 @@ var App = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrowserRouter, {
 //#endregion
 export { Progress as $, require__baseExtremum as A, getPercentValue as B, getMaxRadius as C, require_isEqual as D, getValueByDataKey as E, warn$1 as F, require_isNil as G, isNumber as H, Layer as I, getClientActiveDiet as J, require_get as K, filterProps as L, Cell as M, Global as N, require__baseLt as O, require__baseIteratee as P, Badge as Q, findAllByType as R, formatAxisMap$1 as S, polarToCartesian as T, mathSign as U, interpolateNumber$1 as V, uniqueId as W, Switch as X, getFullDietDetails as Y, usePrevious as Z, Dot as _, ArrowRight as _t, ChartContainer as a, Search as at, LabelList as b, useToast as bt, ChartTooltip as c, Lock as ct, generateCategoricalChart as d, LayoutDashboard as dt, Label$2 as et, YAxis as f, FileText as ft, Shape as g, Brain as gt, Bar as h, ChevronDown as ht, TabsTrigger as i, Smile as it, Text as j, require__baseGt as k, ChartTooltipContent as l, LoaderCircle as lt, CartesianGrid as m, CirclePlus as mt, TabsContent as n, Trash2 as nt, ChartLegend as o, Save as ot, XAxis as p, Dumbbell as pt, require_isFunction as q, TabsList as r, Target as rt, ChartLegendContent as s, Plus as st, Tabs as t, Users as tt, BarChart as u, Link as ut, es6_default as v, Apple as vt, getTickClassName as w, Label as x, Curve as y, Activity as yt, adaptEventsOfChild as z };
 
-//# sourceMappingURL=index-CuL43DLt.js.map
+//# sourceMappingURL=index-Df7y65GX.js.map

@@ -1,67 +1,102 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { DashboardHeader } from '@/components/shared/DashboardHeader'
 import { PageContent } from '@/components/shared/PageContent'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Progress } from '@/components/ui/progress'
+import { Skeleton } from '@/components/ui/skeleton'
 import { Users, Briefcase, User, Link as LinkIcon, TrendingUp } from 'lucide-react'
+import { getDashboardMetrics, type DashboardMetrics } from '@/services/master'
+
+const STATS_TREND = {
+  totalUsers: '+12% este mês',
+  professionals: '+3 novos esta semana',
+  clients: '+18% este mês',
+  links: '+5% esta semana',
+}
+
+const RECENT_USERS = [
+  {
+    id: 1,
+    name: 'Ana Silva',
+    email: 'ana.silva@email.com',
+    time: 'Entrou há 2 horas',
+    initials: 'AS',
+    avatar: 'https://img.usecurling.com/ppl/thumbnail?gender=female&seed=1',
+  },
+  {
+    id: 2,
+    name: 'Carlos Santos',
+    email: 'carlos.s@email.com',
+    time: 'Entrou há 5 horas',
+    initials: 'CS',
+    avatar: 'https://img.usecurling.com/ppl/thumbnail?gender=male&seed=2',
+  },
+  {
+    id: 3,
+    name: 'Dra. Beatriz Costa',
+    email: 'beatriz.nutri@email.com',
+    time: 'Entrou há 1 dia',
+    initials: 'BC',
+    avatar: 'https://img.usecurling.com/ppl/thumbnail?gender=female&seed=3',
+  },
+  {
+    id: 4,
+    name: 'Fernando Oliveira',
+    email: 'fernando.o@email.com',
+    time: 'Entrou há 2 dias',
+    initials: 'FO',
+    avatar: '',
+  },
+  {
+    id: 5,
+    name: 'Mariana Lima',
+    email: 'mariana.l@email.com',
+    time: 'Entrou há 2 dias',
+    initials: 'ML',
+    avatar: 'https://img.usecurling.com/ppl/thumbnail?gender=female&seed=4',
+  },
+]
+
+const SPECIALTIES = [
+  { name: 'Nutrição', value: 50 },
+  { name: 'Educação Física', value: 30 },
+  { name: 'Psicologia', value: 20 },
+]
 
 export default function MasterDashboard() {
-  const [stats] = useState({
-    totalUsers: { value: '156', trend: '+12% este mês' },
-    professionals: { value: '24', trend: '+3 novos esta semana' },
-    clients: { value: '130', trend: '+18% este mês' },
-    links: { value: '112', trend: '+5% esta semana' },
+  const [metrics, setMetrics] = useState<DashboardMetrics>({
+    totalUsers: 0,
+    totalProfessionals: 0,
+    totalClients: 0,
+    totalLinks: 0,
   })
+  const [isLoading, setIsLoading] = useState(true)
 
-  const [recentUsers] = useState([
-    {
-      id: 1,
-      name: 'Ana Silva',
-      email: 'ana.silva@email.com',
-      time: 'Entrou há 2 horas',
-      initials: 'AS',
-      avatar: 'https://img.usecurling.com/ppl/thumbnail?gender=female&seed=1',
-    },
-    {
-      id: 2,
-      name: 'Carlos Santos',
-      email: 'carlos.s@email.com',
-      time: 'Entrou há 5 horas',
-      initials: 'CS',
-      avatar: 'https://img.usecurling.com/ppl/thumbnail?gender=male&seed=2',
-    },
-    {
-      id: 3,
-      name: 'Dra. Beatriz Costa',
-      email: 'beatriz.nutri@email.com',
-      time: 'Entrou há 1 dia',
-      initials: 'BC',
-      avatar: 'https://img.usecurling.com/ppl/thumbnail?gender=female&seed=3',
-    },
-    {
-      id: 4,
-      name: 'Fernando Oliveira',
-      email: 'fernando.o@email.com',
-      time: 'Entrou há 2 dias',
-      initials: 'FO',
-      avatar: '',
-    },
-    {
-      id: 5,
-      name: 'Mariana Lima',
-      email: 'mariana.l@email.com',
-      time: 'Entrou há 2 dias',
-      initials: 'ML',
-      avatar: 'https://img.usecurling.com/ppl/thumbnail?gender=female&seed=4',
-    },
-  ])
+  useEffect(() => {
+    let mounted = true
 
-  const [specialties] = useState([
-    { name: 'Nutrição', value: 50 },
-    { name: 'Educação Física', value: 30 },
-    { name: 'Psicologia', value: 20 },
-  ])
+    const fetchMetrics = async () => {
+      try {
+        const data = await getDashboardMetrics()
+        if (mounted) {
+          setMetrics(data)
+        }
+      } catch (error) {
+        console.error('Failed to load metrics:', error)
+      } finally {
+        if (mounted) {
+          setIsLoading(false)
+        }
+      }
+    }
+
+    fetchMetrics()
+
+    return () => {
+      mounted = false
+    }
+  }, [])
 
   return (
     <div className="flex flex-col min-h-full bg-muted/20">
@@ -85,10 +120,14 @@ export default function MasterDashboard() {
               <Users className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{stats.totalUsers.value}</div>
+              {isLoading ? (
+                <Skeleton className="h-8 w-16 mb-1" />
+              ) : (
+                <div className="text-2xl font-bold">{metrics.totalUsers}</div>
+              )}
               <p className="text-xs text-emerald-600 dark:text-emerald-400 font-medium flex items-center mt-1">
                 <TrendingUp className="h-3 w-3 mr-1" />
-                {stats.totalUsers.trend}
+                {STATS_TREND.totalUsers}
               </p>
             </CardContent>
           </Card>
@@ -99,10 +138,14 @@ export default function MasterDashboard() {
               <Briefcase className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{stats.professionals.value}</div>
+              {isLoading ? (
+                <Skeleton className="h-8 w-16 mb-1" />
+              ) : (
+                <div className="text-2xl font-bold">{metrics.totalProfessionals}</div>
+              )}
               <p className="text-xs text-emerald-600 dark:text-emerald-400 font-medium flex items-center mt-1">
                 <TrendingUp className="h-3 w-3 mr-1" />
-                {stats.professionals.trend}
+                {STATS_TREND.professionals}
               </p>
             </CardContent>
           </Card>
@@ -113,10 +156,14 @@ export default function MasterDashboard() {
               <User className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{stats.clients.value}</div>
+              {isLoading ? (
+                <Skeleton className="h-8 w-16 mb-1" />
+              ) : (
+                <div className="text-2xl font-bold">{metrics.totalClients}</div>
+              )}
               <p className="text-xs text-emerald-600 dark:text-emerald-400 font-medium flex items-center mt-1">
                 <TrendingUp className="h-3 w-3 mr-1" />
-                {stats.clients.trend}
+                {STATS_TREND.clients}
               </p>
             </CardContent>
           </Card>
@@ -127,10 +174,14 @@ export default function MasterDashboard() {
               <LinkIcon className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{stats.links.value}</div>
+              {isLoading ? (
+                <Skeleton className="h-8 w-16 mb-1" />
+              ) : (
+                <div className="text-2xl font-bold">{metrics.totalLinks}</div>
+              )}
               <p className="text-xs text-emerald-600 dark:text-emerald-400 font-medium flex items-center mt-1">
                 <TrendingUp className="h-3 w-3 mr-1" />
-                {stats.links.trend}
+                {STATS_TREND.links}
               </p>
             </CardContent>
           </Card>
@@ -147,7 +198,7 @@ export default function MasterDashboard() {
             </CardHeader>
             <CardContent>
               <div className="space-y-6">
-                {recentUsers.map((user) => (
+                {RECENT_USERS.map((user) => (
                   <div key={user.id} className="flex items-center gap-4">
                     <Avatar className="h-10 w-10 border bg-muted">
                       <AvatarImage src={user.avatar} alt={user.name} />
@@ -177,7 +228,7 @@ export default function MasterDashboard() {
             </CardHeader>
             <CardContent className="pt-4">
               <div className="space-y-8">
-                {specialties.map((spec) => (
+                {SPECIALTIES.map((spec) => (
                   <div key={spec.name} className="space-y-2">
                     <div className="flex items-center justify-between text-sm">
                       <span className="font-semibold text-foreground">{spec.name}</span>

@@ -41,6 +41,7 @@ const ClientNutrition = lazy(() => import('./pages/client/ClientNutrition'))
 const ClientTraining = lazy(() => import('./pages/client/ClientTraining'))
 const ClientMind = lazy(() => import('./pages/client/ClientMind'))
 const ClientStudy = lazy(() => import('./pages/client/ClientStudy'))
+const ClientTeam = lazy(() => import('./pages/client/ClientTeam'))
 
 const LoadingFallback = () => (
   <div className="flex items-center justify-center min-h-[50vh]">
@@ -114,6 +115,14 @@ const App = () => (
                   element={
                     <Suspense fallback={<LoadingFallback />}>
                       <ClientStudy />
+                    </Suspense>
+                  }
+                />
+                <Route
+                  path="team"
+                  element={
+                    <Suspense fallback={<LoadingFallback />}>
+                      <ClientTeam />
                     </Suspense>
                   }
                 />

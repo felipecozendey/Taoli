@@ -1,4 +1,4 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/ClientNutrition-B6du793v.js","assets/PageContent-ChuXhdYa.js","assets/accordion-Clty3IQp.js","assets/checkbox-BpQRq3_t.js","assets/flame-BemAQ3ur.js","assets/ClientTraining-BYz4X9oU.js","assets/ClientMind-DsMLDLp3.js","assets/ClientStudy-CcecXcmK.js"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/ClientNutrition-DLoPP9mK.js","assets/PageContent-ChuXhdYa.js","assets/accordion-BTrFwzsm.js","assets/checkbox-CjR6XP_g.js","assets/flame-BemAQ3ur.js","assets/ClientTraining-mZWt1l5v.js","assets/ClientMind-WXR2EHzg.js","assets/ClientStudy-Blm5y5iq.js","assets/dialog-CYXHoOM6.js","assets/ClientTeam-DH07LIP4.js"])))=>i.map(i=>d[i]);
 import { $ as Arrow, At as composeEventHandlers, B as Input, Bt as require_react_dom, C as SidebarMenuButton, Ct as Primitive, Dt as createContextScope, Et as createSlot, F as hideOthers, Ft as Route, G as CardHeader, H as CardContent, Ht as __commonJSMin, I as ReactRemoveScroll, It as Routes, J as AuthProvider, K as CardTitle, L as useFocusGuards, Lt as useLocation, Mt as Link, Nt as Navigate, Ot as require_jsx_runtime, Pt as Outlet, Q as Anchor, R as FocusScope, Rt as useNavigate, S as SidebarMenu, St as useCallbackRef, T as SidebarProvider, Tt as createCollection, U as CardDescription, Ut as __exportAll, V as Card, Vt as require_react, W as CardFooter, Wt as __toESM, X as supabase, Y as useAuth, Z as TooltipProvider, _ as Sidebar, _t as Portal$1, at as cn$1, b as SidebarHeader, bt as DismissableLayer, c as DropdownMenuContent, ct as Sparkles, d as DropdownMenuSeparator, dt as cva, et as Content$1, f as DropdownMenuTrigger, ft as clsx, g as useDirection, gt as Presence, h as createRovingFocusGroupScope, ht as useControllableState, it as useId, jt as BrowserRouter, kt as useComposedRefs, l as DropdownMenuItem, lt as Check, m as Root$4, mt as VisuallyHidden, n as DashboardHeader, nt as createPopperScope, o as createContextScope$1, ot as X, p as Item$1, pt as VISUALLY_HIDDEN_STYLES, q as Button, s as DropdownMenu, st as User, t as PageContent, tt as Root2$3, u as DropdownMenuLabel, ut as createLucideIcon, v as SidebarContent, vt as useLayoutEffect2, w as SidebarMenuItem, wt as dispatchDiscreteCustomEvent, x as SidebarInset, xt as Root$3, y as SidebarFooter, yt as Branch, z as Primitive$1, zt as __vitePreload } from "./PageContent-ChuXhdYa.js";
 //#region \0vite/modulepreload-polyfill.js
 (function polyfill() {
@@ -17612,6 +17612,11 @@ function ClientLayout() {
 			path: "/client/productivity"
 		},
 		{
+			title: "A Minha Equipe",
+			icon: Users,
+			path: "/client/team"
+		},
+		{
 			title: "Meu Progresso",
 			icon: TrendingUp,
 			path: "/client/progress"
@@ -17623,65 +17628,65 @@ function ClientLayout() {
 		}
 	];
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-		"data-uid": "src/layouts/ClientLayout.tsx:41:5",
+		"data-uid": "src/layouts/ClientLayout.tsx:43:5",
 		"data-prohibitions": "[editContent]",
 		className: "theme-client w-full bg-background font-sans",
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(SidebarProvider, {
-			"data-uid": "src/layouts/ClientLayout.tsx:42:7",
+			"data-uid": "src/layouts/ClientLayout.tsx:44:7",
 			"data-prohibitions": "[editContent]",
 			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Sidebar, {
-				"data-uid": "src/layouts/ClientLayout.tsx:43:9",
+				"data-uid": "src/layouts/ClientLayout.tsx:45:9",
 				"data-prohibitions": "[editContent]",
 				variant: "inset",
 				className: "border-r-0",
 				children: [
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SidebarHeader, {
-						"data-uid": "src/layouts/ClientLayout.tsx:44:11",
+						"data-uid": "src/layouts/ClientLayout.tsx:46:11",
 						"data-prohibitions": "[]",
 						className: "py-6 px-6",
 						children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							"data-uid": "src/layouts/ClientLayout.tsx:45:13",
+							"data-uid": "src/layouts/ClientLayout.tsx:47:13",
 							"data-prohibitions": "[]",
 							className: "flex items-center gap-2 font-bold text-2xl text-primary",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Sparkles, {
-								"data-uid": "src/layouts/ClientLayout.tsx:46:15",
+								"data-uid": "src/layouts/ClientLayout.tsx:48:15",
 								"data-prohibitions": "[editContent]",
 								className: "h-6 w-6"
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-								"data-uid": "src/layouts/ClientLayout.tsx:47:15",
+								"data-uid": "src/layouts/ClientLayout.tsx:49:15",
 								"data-prohibitions": "[]",
 								children: "Taoli"
 							})]
 						})
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SidebarContent, {
-						"data-uid": "src/layouts/ClientLayout.tsx:50:11",
+						"data-uid": "src/layouts/ClientLayout.tsx:52:11",
 						"data-prohibitions": "[editContent]",
 						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SidebarMenu, {
-							"data-uid": "src/layouts/ClientLayout.tsx:51:13",
+							"data-uid": "src/layouts/ClientLayout.tsx:53:13",
 							"data-prohibitions": "[editContent]",
 							className: "px-4 gap-2",
 							children: navItems.map((item) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SidebarMenuItem, {
-								"data-uid": "src/layouts/ClientLayout.tsx:53:17",
+								"data-uid": "src/layouts/ClientLayout.tsx:55:17",
 								"data-prohibitions": "[editContent]",
 								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SidebarMenuButton, {
-									"data-uid": "src/layouts/ClientLayout.tsx:54:19",
+									"data-uid": "src/layouts/ClientLayout.tsx:56:19",
 									"data-prohibitions": "[editContent]",
 									asChild: true,
 									isActive: location.pathname === item.path,
 									tooltip: item.title,
 									className: "rounded-lg h-11 transition-all duration-200",
 									children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
-										"data-uid": "src/layouts/ClientLayout.tsx:60:21",
+										"data-uid": "src/layouts/ClientLayout.tsx:62:21",
 										"data-prohibitions": "[editContent]",
 										to: item.path,
 										className: "flex items-center gap-3",
 										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(item.icon, {
-											"data-uid": "src/layouts/ClientLayout.tsx:61:23",
+											"data-uid": "src/layouts/ClientLayout.tsx:63:23",
 											"data-prohibitions": "[editContent]",
 											className: "h-5 w-5"
 										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-											"data-uid": "src/layouts/ClientLayout.tsx:62:23",
+											"data-uid": "src/layouts/ClientLayout.tsx:64:23",
 											"data-prohibitions": "[editContent]",
 											className: "text-sm font-medium",
 											children: item.title
@@ -17692,20 +17697,20 @@ function ClientLayout() {
 						})
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SidebarFooter, {
-						"data-uid": "src/layouts/ClientLayout.tsx:69:11",
+						"data-uid": "src/layouts/ClientLayout.tsx:71:11",
 						"data-prohibitions": "[]",
 						className: "px-4 pb-4",
 						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(RoleSwitcher, {
-							"data-uid": "src/layouts/ClientLayout.tsx:70:13",
+							"data-uid": "src/layouts/ClientLayout.tsx:72:13",
 							"data-prohibitions": "[editContent]"
 						})
 					})
 				]
 			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SidebarInset, {
-				"data-uid": "src/layouts/ClientLayout.tsx:73:9",
+				"data-uid": "src/layouts/ClientLayout.tsx:75:9",
 				"data-prohibitions": "[]",
 				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Outlet, {
-					"data-uid": "src/layouts/ClientLayout.tsx:74:11",
+					"data-uid": "src/layouts/ClientLayout.tsx:76:11",
 					"data-prohibitions": "[editContent]"
 				})
 			})]
@@ -46234,112 +46239,113 @@ function ClientFinances() {
 }
 //#endregion
 //#region src/App.tsx
-var ClientNutrition = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientNutrition-B6du793v.js"), __vite__mapDeps([0,1,2,3,4])));
-var ClientTraining = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientTraining-BYz4X9oU.js"), __vite__mapDeps([5,1,2])));
-var ClientMind = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientMind-DsMLDLp3.js"), __vite__mapDeps([6,1,3])));
-var ClientStudy = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientStudy-CcecXcmK.js"), __vite__mapDeps([7,1,4])));
+var ClientNutrition = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientNutrition-DLoPP9mK.js"), __vite__mapDeps([0,1,2,3,4])));
+var ClientTraining = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientTraining-mZWt1l5v.js"), __vite__mapDeps([5,1,2])));
+var ClientMind = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientMind-WXR2EHzg.js"), __vite__mapDeps([6,1,3])));
+var ClientStudy = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientStudy-Blm5y5iq.js"), __vite__mapDeps([7,1,4,8])));
+var ClientTeam = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientTeam-DH07LIP4.js"), __vite__mapDeps([9,1,8])));
 var LoadingFallback = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-	"data-uid": "src/App.tsx:46:3",
+	"data-uid": "src/App.tsx:47:3",
 	"data-prohibitions": "[]",
 	className: "flex items-center justify-center min-h-[50vh]",
 	children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-		"data-uid": "src/App.tsx:47:5",
+		"data-uid": "src/App.tsx:48:5",
 		"data-prohibitions": "[editContent]",
 		className: "h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent"
 	})
 });
 var App = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrowserRouter, {
-	"data-uid": "src/App.tsx:52:3",
+	"data-uid": "src/App.tsx:53:3",
 	"data-prohibitions": "[editContent]",
 	future: {
 		v7_startTransition: false,
 		v7_relativeSplatPath: false
 	},
 	children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AuthProvider, {
-		"data-uid": "src/App.tsx:53:5",
+		"data-uid": "src/App.tsx:54:5",
 		"data-prohibitions": "[editContent]",
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(TooltipProvider, {
-			"data-uid": "src/App.tsx:54:7",
+			"data-uid": "src/App.tsx:55:7",
 			"data-prohibitions": "[editContent]",
 			children: [
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Toaster$2, {
-					"data-uid": "src/App.tsx:55:9",
-					"data-prohibitions": "[editContent]"
-				}),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Toaster, {
 					"data-uid": "src/App.tsx:56:9",
 					"data-prohibitions": "[editContent]"
 				}),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Routes, {
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Toaster, {
 					"data-uid": "src/App.tsx:57:9",
+					"data-prohibitions": "[editContent]"
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Routes, {
+					"data-uid": "src/App.tsx:58:9",
 					"data-prohibitions": "[editContent]",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Route, {
-						"data-uid": "src/App.tsx:58:11",
+						"data-uid": "src/App.tsx:59:11",
 						"data-prohibitions": "[editContent]",
 						element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Layout, {
-							"data-uid": "src/App.tsx:58:27",
+							"data-uid": "src/App.tsx:59:27",
 							"data-prohibitions": "[editContent]"
 						}),
 						children: [
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
-								"data-uid": "src/App.tsx:60:13",
+								"data-uid": "src/App.tsx:61:13",
 								"data-prohibitions": "[editContent]",
 								path: "/",
 								element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Index, {
-									"data-uid": "src/App.tsx:60:38",
+									"data-uid": "src/App.tsx:61:38",
 									"data-prohibitions": "[editContent]"
 								})
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
-								"data-uid": "src/App.tsx:61:13",
+								"data-uid": "src/App.tsx:62:13",
 								"data-prohibitions": "[editContent]",
 								path: "/login",
 								element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Login, {
-									"data-uid": "src/App.tsx:61:43",
+									"data-uid": "src/App.tsx:62:43",
 									"data-prohibitions": "[editContent]"
 								})
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
-								"data-uid": "src/App.tsx:64:13",
+								"data-uid": "src/App.tsx:65:13",
 								"data-prohibitions": "[]",
 								element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ProtectedRoute, {
-									"data-uid": "src/App.tsx:64:29",
+									"data-uid": "src/App.tsx:65:29",
 									"data-prohibitions": "[editContent]",
 									allowedRoles: ["admin"]
 								}),
 								children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Route, {
-									"data-uid": "src/App.tsx:65:15",
+									"data-uid": "src/App.tsx:66:15",
 									"data-prohibitions": "[]",
 									path: "/master",
 									element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(MasterLayout, {
-										"data-uid": "src/App.tsx:65:46",
+										"data-uid": "src/App.tsx:66:46",
 										"data-prohibitions": "[editContent]"
 									}),
 									children: [
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
-											"data-uid": "src/App.tsx:66:17",
+											"data-uid": "src/App.tsx:67:17",
 											"data-prohibitions": "[editContent]",
 											index: true,
 											element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(MasterDashboard, {
-												"data-uid": "src/App.tsx:66:39",
-												"data-prohibitions": "[editContent]"
-											})
-										}),
-										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
-											"data-uid": "src/App.tsx:67:17",
-											"data-prohibitions": "[editContent]",
-											path: "settings",
-											element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(MasterSettings, {
-												"data-uid": "src/App.tsx:67:49",
+												"data-uid": "src/App.tsx:67:39",
 												"data-prohibitions": "[editContent]"
 											})
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
 											"data-uid": "src/App.tsx:68:17",
 											"data-prohibitions": "[editContent]",
+											path: "settings",
+											element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(MasterSettings, {
+												"data-uid": "src/App.tsx:68:49",
+												"data-prohibitions": "[editContent]"
+											})
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
+											"data-uid": "src/App.tsx:69:17",
+											"data-prohibitions": "[editContent]",
 											path: "users",
 											element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(MasterUsers, {
-												"data-uid": "src/App.tsx:68:46",
+												"data-uid": "src/App.tsx:69:46",
 												"data-prohibitions": "[editContent]"
 											})
 										})
@@ -46347,45 +46353,36 @@ var App = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrowserRouter, {
 								})
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
-								"data-uid": "src/App.tsx:73:13",
+								"data-uid": "src/App.tsx:74:13",
 								"data-prohibitions": "[]",
 								element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ProtectedRoute, {
-									"data-uid": "src/App.tsx:73:29",
+									"data-uid": "src/App.tsx:74:29",
 									"data-prohibitions": "[editContent]",
 									allowedRoles: ["professional"]
 								}),
 								children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Route, {
-									"data-uid": "src/App.tsx:74:15",
+									"data-uid": "src/App.tsx:75:15",
 									"data-prohibitions": "[]",
 									path: "/professional",
 									element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ProfessionalLayout, {
-										"data-uid": "src/App.tsx:74:52",
+										"data-uid": "src/App.tsx:75:52",
 										"data-prohibitions": "[editContent]"
 									}),
 									children: [
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
-											"data-uid": "src/App.tsx:75:17",
+											"data-uid": "src/App.tsx:76:17",
 											"data-prohibitions": "[editContent]",
 											index: true,
 											element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ProfDashboard, {
-												"data-uid": "src/App.tsx:75:39",
-												"data-prohibitions": "[editContent]"
-											})
-										}),
-										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
-											"data-uid": "src/App.tsx:76:17",
-											"data-prohibitions": "[editContent]",
-											path: "patients",
-											element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ProfPatients, {
-												"data-uid": "src/App.tsx:76:49",
+												"data-uid": "src/App.tsx:76:39",
 												"data-prohibitions": "[editContent]"
 											})
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
 											"data-uid": "src/App.tsx:77:17",
 											"data-prohibitions": "[editContent]",
-											path: "calendar",
-											element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ProfCalendar, {
+											path: "patients",
+											element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ProfPatients, {
 												"data-uid": "src/App.tsx:77:49",
 												"data-prohibitions": "[editContent]"
 											})
@@ -46393,9 +46390,18 @@ var App = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrowserRouter, {
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
 											"data-uid": "src/App.tsx:78:17",
 											"data-prohibitions": "[editContent]",
+											path: "calendar",
+											element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ProfCalendar, {
+												"data-uid": "src/App.tsx:78:49",
+												"data-prohibitions": "[editContent]"
+											})
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
+											"data-uid": "src/App.tsx:79:17",
+											"data-prohibitions": "[editContent]",
 											path: "prescriptions",
 											element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ProfPrescriptions, {
-												"data-uid": "src/App.tsx:78:54",
+												"data-uid": "src/App.tsx:79:54",
 												"data-prohibitions": "[editContent]"
 											})
 										})
@@ -46403,95 +46409,95 @@ var App = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrowserRouter, {
 								})
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
-								"data-uid": "src/App.tsx:83:13",
+								"data-uid": "src/App.tsx:84:13",
 								"data-prohibitions": "[editContent]",
 								element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ProtectedRoute, {
-									"data-uid": "src/App.tsx:83:29",
+									"data-uid": "src/App.tsx:84:29",
 									"data-prohibitions": "[editContent]",
 									allowedRoles: ["client"]
 								}),
 								children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Route, {
-									"data-uid": "src/App.tsx:84:15",
+									"data-uid": "src/App.tsx:85:15",
 									"data-prohibitions": "[editContent]",
 									path: "/client",
 									element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ClientLayout, {
-										"data-uid": "src/App.tsx:84:46",
+										"data-uid": "src/App.tsx:85:46",
 										"data-prohibitions": "[editContent]"
 									}),
 									children: [
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
-											"data-uid": "src/App.tsx:85:17",
+											"data-uid": "src/App.tsx:86:17",
 											"data-prohibitions": "[editContent]",
 											index: true,
 											element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ClientDashboard, {
-												"data-uid": "src/App.tsx:85:39",
+												"data-uid": "src/App.tsx:86:39",
 												"data-prohibitions": "[editContent]"
 											})
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
-											"data-uid": "src/App.tsx:88:17",
+											"data-uid": "src/App.tsx:89:17",
 											"data-prohibitions": "[editContent]",
 											path: "nutrition",
 											element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_react.Suspense, {
-												"data-uid": "src/App.tsx:91:21",
+												"data-uid": "src/App.tsx:92:21",
 												"data-prohibitions": "[]",
 												fallback: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(LoadingFallback, {
-													"data-uid": "src/App.tsx:91:41",
+													"data-uid": "src/App.tsx:92:41",
 													"data-prohibitions": "[editContent]"
 												}),
 												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ClientNutrition, {
-													"data-uid": "src/App.tsx:92:23",
+													"data-uid": "src/App.tsx:93:23",
 													"data-prohibitions": "[editContent]"
 												})
 											})
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
-											"data-uid": "src/App.tsx:96:17",
+											"data-uid": "src/App.tsx:97:17",
 											"data-prohibitions": "[editContent]",
 											path: "training",
 											element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_react.Suspense, {
-												"data-uid": "src/App.tsx:99:21",
+												"data-uid": "src/App.tsx:100:21",
 												"data-prohibitions": "[]",
 												fallback: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(LoadingFallback, {
-													"data-uid": "src/App.tsx:99:41",
+													"data-uid": "src/App.tsx:100:41",
 													"data-prohibitions": "[editContent]"
 												}),
 												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ClientTraining, {
-													"data-uid": "src/App.tsx:100:23",
+													"data-uid": "src/App.tsx:101:23",
 													"data-prohibitions": "[editContent]"
 												})
 											})
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
-											"data-uid": "src/App.tsx:104:17",
+											"data-uid": "src/App.tsx:105:17",
 											"data-prohibitions": "[editContent]",
 											path: "mind",
 											element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_react.Suspense, {
-												"data-uid": "src/App.tsx:107:21",
+												"data-uid": "src/App.tsx:108:21",
 												"data-prohibitions": "[]",
 												fallback: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(LoadingFallback, {
-													"data-uid": "src/App.tsx:107:41",
+													"data-uid": "src/App.tsx:108:41",
 													"data-prohibitions": "[editContent]"
 												}),
 												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ClientMind, {
-													"data-uid": "src/App.tsx:108:23",
+													"data-uid": "src/App.tsx:109:23",
 													"data-prohibitions": "[editContent]"
 												})
 											})
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
-											"data-uid": "src/App.tsx:112:17",
+											"data-uid": "src/App.tsx:113:17",
 											"data-prohibitions": "[editContent]",
 											path: "study",
 											element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_react.Suspense, {
-												"data-uid": "src/App.tsx:115:21",
+												"data-uid": "src/App.tsx:116:21",
 												"data-prohibitions": "[]",
 												fallback: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(LoadingFallback, {
-													"data-uid": "src/App.tsx:115:41",
+													"data-uid": "src/App.tsx:116:41",
 													"data-prohibitions": "[editContent]"
 												}),
 												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ClientStudy, {
-													"data-uid": "src/App.tsx:116:23",
+													"data-uid": "src/App.tsx:117:23",
 													"data-prohibitions": "[editContent]"
 												})
 											})
@@ -46499,27 +46505,44 @@ var App = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrowserRouter, {
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
 											"data-uid": "src/App.tsx:121:17",
 											"data-prohibitions": "[editContent]",
+											path: "team",
+											element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_react.Suspense, {
+												"data-uid": "src/App.tsx:124:21",
+												"data-prohibitions": "[]",
+												fallback: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(LoadingFallback, {
+													"data-uid": "src/App.tsx:124:41",
+													"data-prohibitions": "[editContent]"
+												}),
+												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ClientTeam, {
+													"data-uid": "src/App.tsx:125:23",
+													"data-prohibitions": "[editContent]"
+												})
+											})
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
+											"data-uid": "src/App.tsx:130:17",
+											"data-prohibitions": "[editContent]",
 											path: "productivity",
 											element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ClientProductivity, {
-												"data-uid": "src/App.tsx:121:53",
+												"data-uid": "src/App.tsx:130:53",
 												"data-prohibitions": "[editContent]"
 											})
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
-											"data-uid": "src/App.tsx:122:17",
+											"data-uid": "src/App.tsx:131:17",
 											"data-prohibitions": "[editContent]",
 											path: "progress",
 											element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ClientProgress, {
-												"data-uid": "src/App.tsx:122:49",
+												"data-uid": "src/App.tsx:131:49",
 												"data-prohibitions": "[editContent]"
 											})
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
-											"data-uid": "src/App.tsx:123:17",
+											"data-uid": "src/App.tsx:132:17",
 											"data-prohibitions": "[editContent]",
 											path: "finances",
 											element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ClientFinances, {
-												"data-uid": "src/App.tsx:123:49",
+												"data-uid": "src/App.tsx:132:49",
 												"data-prohibitions": "[editContent]"
 											})
 										})
@@ -46528,11 +46551,11 @@ var App = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrowserRouter, {
 							})
 						]
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
-						"data-uid": "src/App.tsx:129:11",
+						"data-uid": "src/App.tsx:138:11",
 						"data-prohibitions": "[editContent]",
 						path: "*",
 						element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(NotFound, {
-							"data-uid": "src/App.tsx:129:36",
+							"data-uid": "src/App.tsx:138:36",
 							"data-prohibitions": "[editContent]"
 						})
 					})]
@@ -46548,6 +46571,6 @@ var App = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrowserRouter, {
 	"data-prohibitions": "[editContent]"
 }));
 //#endregion
-export { Label$2 as $, require__baseExtremum as A, getPercentValue as B, getMaxRadius as C, require_isEqual as D, getValueByDataKey as E, warn$1 as F, require_isNil as G, isNumber as H, Layer as I, Progress as J, require_get as K, filterProps as L, Cell as M, Global as N, require__baseLt as O, require__baseIteratee as P, Badge as Q, findAllByType as R, formatAxisMap$1 as S, polarToCartesian as T, mathSign as U, interpolateNumber$1 as V, uniqueId as W, getFullDietDetails as X, getClientActiveDiet as Y, usePrevious as Z, Dot as _, ChartContainer as a, LoaderCircle as at, LabelList as b, ChartTooltip as c, Dumbbell as ct, generateCategoricalChart as d, Activity as dt, Target as et, YAxis as f, useToast as ft, Shape as g, Bar as h, TabsTrigger as i, Plus as it, Text as j, require__baseGt as k, ChartTooltipContent as l, ChevronDown as lt, CartesianGrid as m, TabsContent as n, Search as nt, ChartLegend as o, LayoutDashboard as ot, XAxis as p, require_isFunction as q, TabsList as r, Save as rt, ChartLegendContent as s, FileText as st, Tabs as t, Smile as tt, BarChart as u, Brain as ut, es6_default as v, getTickClassName as w, Label as x, Curve as y, adaptEventsOfChild as z };
+export { Label$2 as $, require__baseExtremum as A, getPercentValue as B, getMaxRadius as C, require_isEqual as D, getValueByDataKey as E, warn$1 as F, require_isNil as G, isNumber as H, Layer as I, Progress as J, require_get as K, filterProps as L, Cell as M, Global as N, require__baseLt as O, require__baseIteratee as P, Badge as Q, findAllByType as R, formatAxisMap$1 as S, polarToCartesian as T, mathSign as U, interpolateNumber$1 as V, uniqueId as W, getFullDietDetails as X, getClientActiveDiet as Y, usePrevious as Z, Dot as _, ChartContainer as a, Plus as at, LabelList as b, ChartTooltip as c, FileText as ct, generateCategoricalChart as d, Brain as dt, Trash2 as et, YAxis as f, Apple as ft, Shape as g, Bar as h, TabsTrigger as i, Save as it, Text as j, require__baseGt as k, ChartTooltipContent as l, Dumbbell as lt, CartesianGrid as m, useToast as mt, TabsContent as n, Smile as nt, ChartLegend as o, LoaderCircle as ot, XAxis as p, Activity as pt, require_isFunction as q, TabsList as r, Search as rt, ChartLegendContent as s, LayoutDashboard as st, Tabs as t, Target as tt, BarChart as u, ChevronDown as ut, es6_default as v, getTickClassName as w, Label as x, Curve as y, adaptEventsOfChild as z };
 
-//# sourceMappingURL=index-DLhgwDuy.js.map
+//# sourceMappingURL=index-D6A_oZdb.js.map

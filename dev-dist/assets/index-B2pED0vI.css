@@ -687,6 +687,9 @@ section[aria-label='Notifications alt+T'] {
 .z-\[1\]{
   z-index: 1;
 }
+.col-span-full{
+  grid-column: 1 / -1;
+}
 .-mx-1{
   margin-left: -0.25rem;
   margin-right: -0.25rem;
@@ -724,8 +727,14 @@ section[aria-label='Notifications alt+T'] {
 .-mr-10{
   margin-right: -2.5rem;
 }
+.-mr-2{
+  margin-right: -0.5rem;
+}
 .-mt-10{
   margin-top: -2.5rem;
+}
+.-mt-2{
+  margin-top: -0.5rem;
 }
 .-mt-4{
   margin-top: -1rem;
@@ -771,6 +780,9 @@ section[aria-label='Notifications alt+T'] {
 }
 .mt-0{
   margin-top: 0px;
+}
+.mt-0\.5{
+  margin-top: 0.125rem;
 }
 .mt-1{
   margin-top: 0.25rem;
@@ -1321,6 +1333,11 @@ section[aria-label='Notifications alt+T'] {
   margin-right: calc(0.25rem * var(--tw-space-x-reverse));
   margin-left: calc(0.25rem * calc(1 - var(--tw-space-x-reverse)));
 }
+.space-x-2 > :not([hidden]) ~ :not([hidden]){
+  --tw-space-x-reverse: 0;
+  margin-right: calc(0.5rem * var(--tw-space-x-reverse));
+  margin-left: calc(0.5rem * calc(1 - var(--tw-space-x-reverse)));
+}
 .space-x-3 > :not([hidden]) ~ :not([hidden]){
   --tw-space-x-reverse: 0;
   margin-right: calc(0.75rem * var(--tw-space-x-reverse));
@@ -1500,6 +1517,9 @@ section[aria-label='Notifications alt+T'] {
 }
 .border-border\/50{
   border-color: hsl(var(--border) / 0.5);
+}
+.border-border\/60{
+  border-color: hsl(var(--border) / 0.6);
 }
 .border-destructive{
   border-color: hsl(var(--destructive));
@@ -1683,6 +1703,10 @@ section[aria-label='Notifications alt+T'] {
 }
 .bg-primary\/50{
   background-color: hsl(var(--primary) / 0.5);
+}
+.bg-purple-100{
+  --tw-bg-opacity: 1;
+  background-color: rgb(243 232 255 / var(--tw-bg-opacity, 1));
 }
 .bg-purple-50\/20{
   background-color: rgb(250 245 255 / 0.2);
@@ -2076,6 +2100,9 @@ section[aria-label='Notifications alt+T'] {
 }
 .text-foreground\/50{
   color: hsl(var(--foreground) / 0.5);
+}
+.text-foreground\/80{
+  color: hsl(var(--foreground) / 0.8);
 }
 .text-gray-600{
   --tw-text-opacity: 1;
@@ -3348,6 +3375,9 @@ section[aria-label='Notifications alt+T'] {
 .dark\:bg-amber-900\/5:is(.dark *){
   background-color: rgb(120 53 15 / 0.05);
 }
+.dark\:bg-blue-500\/20:is(.dark *){
+  background-color: rgb(59 130 246 / 0.2);
+}
 .dark\:bg-blue-900\/30:is(.dark *){
   background-color: rgb(30 58 138 / 0.3);
 }
@@ -3361,6 +3391,9 @@ section[aria-label='Notifications alt+T'] {
 .dark\:bg-blue-950\/20:is(.dark *){
   background-color: rgb(23 37 84 / 0.2);
 }
+.dark\:bg-emerald-500\/20:is(.dark *){
+  background-color: rgb(16 185 129 / 0.2);
+}
 .dark\:bg-emerald-900\/5:is(.dark *){
   background-color: rgb(6 78 59 / 0.05);
 }
@@ -3370,6 +3403,9 @@ section[aria-label='Notifications alt+T'] {
 }
 .dark\:bg-emerald-950\/30:is(.dark *){
   background-color: rgb(2 44 34 / 0.3);
+}
+.dark\:bg-purple-500\/20:is(.dark *){
+  background-color: rgb(168 85 247 / 0.2);
 }
 .dark\:bg-purple-900\/5:is(.dark *){
   background-color: rgb(88 28 135 / 0.05);
@@ -3447,6 +3483,9 @@ section[aria-label='Notifications alt+T'] {
   }
   .sm\:w-auto{
     width: auto;
+  }
+  .sm\:max-w-md{
+    max-width: 28rem;
   }
   .sm\:max-w-sm{
     max-width: 24rem;
@@ -3663,6 +3702,9 @@ section[aria-label='Notifications alt+T'] {
   }
   .xl\:hidden{
     display: none;
+  }
+  .xl\:grid-cols-3{
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 .\[\&\:first-child\[data-selected\=true\]_button\]\:rounded-l-md:first-child[data-selected=true] button{

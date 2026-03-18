@@ -9,6 +9,7 @@ import {
   Dumbbell,
   Brain,
   BookOpen,
+  Users,
 } from 'lucide-react'
 import {
   SidebarProvider,
@@ -33,6 +34,7 @@ export default function ClientLayout() {
     { title: 'Mente', icon: Brain, path: '/client/mind' },
     { title: 'Estudos', icon: BookOpen, path: '/client/study' },
     { title: 'Produtividade', icon: Target, path: '/client/productivity' },
+    { title: 'A Minha Equipe', icon: Users, path: '/client/team' },
     { title: 'Meu Progresso', icon: TrendingUp, path: '/client/progress' },
     { title: 'Finanças', icon: Wallet, path: '/client/finances' },
   ]

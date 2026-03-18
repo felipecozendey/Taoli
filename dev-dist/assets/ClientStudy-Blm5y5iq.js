@@ -1,6 +1,7 @@
-import { A as Overlay, B as Input, D as Close, E as Skeleton, G as CardHeader, H as CardContent, Ht as __commonJSMin, K as CardTitle, M as Root, N as Title, O as Content, Ot as require_jsx_runtime, U as CardDescription, V as Card, Vt as require_react, Wt as __toESM, X as supabase, Y as useAuth, at as cn, ft as clsx, j as Portal, k as Description, n as DashboardHeader, ot as X, q as Button, t as PageContent, ut as createLucideIcon } from "./PageContent-ChuXhdYa.js";
+import { B as Input, E as Skeleton, G as CardHeader, H as CardContent, Ht as __commonJSMin, K as CardTitle, Ot as require_jsx_runtime, U as CardDescription, V as Card, Vt as require_react, Wt as __toESM, X as supabase, Y as useAuth, at as cn, ft as clsx, n as DashboardHeader, q as Button, t as PageContent, ut as createLucideIcon } from "./PageContent-ChuXhdYa.js";
 import { t as Flame } from "./flame-BemAQ3ur.js";
-import { $ as Label$1, A as require__baseExtremum, B as getPercentValue, C as getMaxRadius, D as require_isEqual, E as getValueByDataKey, F as warn, G as require_isNil, H as isNumber, I as Layer, K as require_get, L as filterProps, M as Cell, N as Global, O as require__baseLt, P as require__baseIteratee, R as findAllByType, S as formatAxisMap, T as polarToCartesian, U as mathSign, V as interpolateNumber, W as uniqueId, _ as Dot, a as ChartContainer, at as LoaderCircle, b as LabelList, c as ChartTooltip, d as generateCategoricalChart, et as Target, f as YAxis, ft as useToast, g as Shape, h as Bar, i as TabsTrigger, it as Plus, j as Text, k as require__baseGt, l as ChartTooltipContent, m as CartesianGrid, n as TabsContent, nt as Search, o as ChartLegend, ot as LayoutDashboard, p as XAxis, q as require_isFunction, r as TabsList, rt as Save, s as ChartLegendContent, st as FileText, t as Tabs, u as BarChart, ut as Brain, v as es6_default, w as getTickClassName, x as Label, y as Curve, z as adaptEventsOfChild } from "./index-DLhgwDuy.js";
+import { $ as Label$1, A as require__baseExtremum, B as getPercentValue, C as getMaxRadius, D as require_isEqual, E as getValueByDataKey, F as warn, G as require_isNil, H as isNumber, I as Layer, K as require_get, L as filterProps, M as Cell, N as Global, O as require__baseLt, P as require__baseIteratee, R as findAllByType, S as formatAxisMap, T as polarToCartesian, U as mathSign, V as interpolateNumber, W as uniqueId, _ as Dot, a as ChartContainer, at as Plus, b as LabelList, c as ChartTooltip, ct as FileText, d as generateCategoricalChart, dt as Brain, f as YAxis, g as Shape, h as Bar, i as TabsTrigger, it as Save, j as Text, k as require__baseGt, l as ChartTooltipContent, m as CartesianGrid, mt as useToast, n as TabsContent, o as ChartLegend, ot as LoaderCircle, p as XAxis, q as require_isFunction, r as TabsList, rt as Search, s as ChartLegendContent, st as LayoutDashboard, t as Tabs, tt as Target, u as BarChart, v as es6_default, w as getTickClassName, x as Label, y as Curve, z as adaptEventsOfChild } from "./index-D6A_oZdb.js";
+import { a as DialogTitle, i as DialogHeader, n as DialogContent, r as DialogFooter, t as Dialog } from "./dialog-CYXHoOM6.js";
 var BrainCircuit = createLucideIcon("brain-circuit", [
 	["path", {
 		d: "M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z",
@@ -1877,78 +1878,6 @@ function SecondBrainPanel() {
 	});
 }
 //#endregion
-//#region src/components/ui/dialog.tsx
-var Dialog = Root;
-var DialogPortal = Portal;
-var DialogOverlay = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Overlay, {
-	"data-uid": "src/components/ui/dialog.tsx:20:3",
-	"data-prohibitions": "[editContent]",
-	ref,
-	className: cn("fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0", className),
-	...props
-}));
-DialogOverlay.displayName = Overlay.displayName;
-var DialogContent = import_react.forwardRef(({ className, children, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(DialogPortal, {
-	"data-uid": "src/components/ui/dialog.tsx:35:3",
-	"data-prohibitions": "[editContent]",
-	children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DialogOverlay, {
-		"data-uid": "src/components/ui/dialog.tsx:36:5",
-		"data-prohibitions": "[editContent]"
-	}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Content, {
-		"data-uid": "src/components/ui/dialog.tsx:37:5",
-		"data-prohibitions": "[editContent]",
-		ref,
-		className: cn("fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg overflow-y-auto max-h-screen", className),
-		...props,
-		children: [children, /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Close, {
-			"data-uid": "src/components/ui/dialog.tsx:46:7",
-			"data-prohibitions": "[]",
-			className: "absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground",
-			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(X, {
-				"data-uid": "src/components/ui/dialog.tsx:47:9",
-				"data-prohibitions": "[editContent]",
-				className: "h-4 w-4"
-			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-				"data-uid": "src/components/ui/dialog.tsx:48:9",
-				"data-prohibitions": "[]",
-				className: "sr-only",
-				children: "Close"
-			})]
-		})]
-	})]
-}));
-DialogContent.displayName = Content.displayName;
-var DialogHeader = ({ className, ...props }) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-	"data-uid": "src/components/ui/dialog.tsx:56:3",
-	"data-prohibitions": "[editContent]",
-	className: cn("flex flex-col space-y-1.5 text-center sm:text-left", className),
-	...props
-});
-DialogHeader.displayName = "DialogHeader";
-var DialogFooter = ({ className, ...props }) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-	"data-uid": "src/components/ui/dialog.tsx:61:3",
-	"data-prohibitions": "[editContent]",
-	className: cn("flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2", className),
-	...props
-});
-DialogFooter.displayName = "DialogFooter";
-var DialogTitle = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Title, {
-	"data-uid": "src/components/ui/dialog.tsx:72:3",
-	"data-prohibitions": "[editContent]",
-	ref,
-	className: cn("text-lg font-semibold leading-none tracking-tight", className),
-	...props
-}));
-DialogTitle.displayName = Title.displayName;
-var DialogDescription = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Description, {
-	"data-uid": "src/components/ui/dialog.tsx:84:3",
-	"data-prohibitions": "[editContent]",
-	ref,
-	className: cn("text-sm text-muted-foreground", className),
-	...props
-}));
-DialogDescription.displayName = Description.displayName;
-//#endregion
 //#region src/pages/client/components/FlashcardsPanel.tsx
 function FlashcardsPanel({ data }) {
 	const { toast } = useToast();
@@ -2931,4 +2860,4 @@ function ClientStudy() {
 //#endregion
 export { ClientStudy as default };
 
-//# sourceMappingURL=ClientStudy-CcecXcmK.js.map
+//# sourceMappingURL=ClientStudy-Blm5y5iq.js.map

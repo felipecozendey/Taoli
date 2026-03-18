@@ -1,5 +1,5 @@
-import { At as require_jsx_runtime, E as Skeleton, Gt as require_react, J as buttonVariants, Jt as __toESM, ft as createLucideIcon, n as DashboardHeader, ot as cn, t as PageContent, ut as ChevronRight } from "./PageContent-D3-qArad.js";
-import { $ as Table, Nt as useToast, Q as Badge, at as getAuditLogs, et as TableBody, it as TableRow, nt as TableHead, rt as TableHeader, tt as TableCell } from "./index-par4f0vY.js";
+import { At as require_jsx_runtime, E as Skeleton, Gt as require_react, J as buttonVariants, Jt as __toESM, ft as createLucideIcon, n as DashboardHeader, ot as cn, t as PageContent, ut as ChevronRight } from "./PageContent-DFaAkjCU.js";
+import { $ as Table, Nt as useToast, Q as Badge, at as getAuditLogs, et as TableBody, it as TableRow, nt as TableHead, rt as TableHeader, tt as TableCell } from "./index-CJCaxbOL.js";
 var ChevronLeft = createLucideIcon("chevron-left", [["path", {
 	d: "m15 18-6-6 6-6",
 	key: "1wnfg3"
@@ -430,4 +430,4 @@ function MasterLogs() {
 //#endregion
 export { MasterLogs as default };
 
-//# sourceMappingURL=MasterLogs-BCl-QmbR.js.map
+//# sourceMappingURL=MasterLogs-CPQZVjv7.js.map

@@ -144,29 +144,34 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const targetRole = targetUser.role || 'client'
 
     try {
-      await supabase.from('audit_logs' as any).insert({
+      const { error } = await supabase.from('audit_logs' as any).insert({
         admin_id: realUser.id,
         target_user_id: targetUser.id,
         action: 'IMPERSONATE_START',
         details: { targetRole },
       })
+
+      if (error) {
+        throw error
+      }
+
+      setImpersonatedUser({
+        id: targetUser.id,
+        email: targetUser.email || '',
+        name: targetUser.name || 'Usuário',
+        role: targetRole as Role,
+      })
+
+      const routes: Record<Role, string> = {
+        admin: '/master',
+        professional: '/professional',
+        client: '/client',
+      }
+      navigate(routes[targetRole as Role] || '/client')
     } catch (error) {
-      console.error('Failed to log impersonation start', error)
+      console.error('Failed to log impersonation start. Access blocked.', error)
+      alert('Failed to log impersonation start. Access blocked.')
     }
-
-    setImpersonatedUser({
-      id: targetUser.id,
-      email: targetUser.email || '',
-      name: targetUser.name || 'Usuário',
-      role: targetRole as Role,
-    })
-
-    const routes: Record<Role, string> = {
-      admin: '/master',
-      professional: '/professional',
-      client: '/client',
-    }
-    navigate(routes[targetRole as Role] || '/client')
   }
 
   const stopImpersonation = () => {

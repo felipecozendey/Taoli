@@ -1,6 +1,6 @@
-import { At as require_jsx_runtime, Bt as useNavigate, E as Skeleton, Gt as require_react, Jt as __toESM, K as Input, X as useAuth, Z as supabase, ft as createLucideIcon, i as AvatarFallback, n as DashboardHeader, q as Button, r as Avatar, t as PageContent } from "./PageContent-D3-qArad.js";
-import { At as ArrowRight, Ct as Link, Nt as useToast, Q as Badge, ct as Card, dt as CardFooter, ft as CardHeader, gt as Target, mt as Users } from "./index-par4f0vY.js";
-import { a as DialogHeader, n as DialogContent, o as DialogTitle, r as DialogDescription, s as DialogTrigger, t as Dialog } from "./dialog-DMPijQ0R.js";
+import { At as require_jsx_runtime, Bt as useNavigate, E as Skeleton, Gt as require_react, Jt as __toESM, K as Input, X as useAuth, Z as supabase, ft as createLucideIcon, i as AvatarFallback, n as DashboardHeader, q as Button, r as Avatar, t as PageContent } from "./PageContent-DFaAkjCU.js";
+import { At as ArrowRight, Ct as Link, Nt as useToast, Q as Badge, ct as Card, dt as CardFooter, ft as CardHeader, gt as Target, mt as Users } from "./index-CJCaxbOL.js";
+import { a as DialogHeader, n as DialogContent, o as DialogTitle, r as DialogDescription, s as DialogTrigger, t as Dialog } from "./dialog-BCVEVQvq.js";
 var Copy = createLucideIcon("copy", [["rect", {
 	width: "14",
 	height: "14",
@@ -364,4 +364,4 @@ function ProfPatients() {
 //#endregion
 export { ProfPatients as default };
 
-//# sourceMappingURL=ProfPatients-CImJJLIV.js.map
+//# sourceMappingURL=ProfPatients-ChELtq0z.js.map

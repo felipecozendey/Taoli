@@ -1,6 +1,6 @@
-import { At as require_jsx_runtime, E as Skeleton, Gt as require_react, Jt as __toESM, K as Input, X as useAuth, Z as supabase, dt as Check, ft as createLucideIcon, n as DashboardHeader, ot as cn, q as Button, t as PageContent } from "./PageContent-D3-qArad.js";
-import { Et as Dumbbell, Mt as Activity, Q as Badge, ct as Card, gt as Target, i as TabsTrigger, lt as CardContent, n as TabsContent, r as TabsList, t as Tabs } from "./index-par4f0vY.js";
-import { i as AccordionTrigger, n as AccordionContent, r as AccordionItem, t as Accordion } from "./accordion-BLBUGz2e.js";
+import { At as require_jsx_runtime, E as Skeleton, Gt as require_react, Jt as __toESM, K as Input, X as useAuth, Z as supabase, dt as Check, ft as createLucideIcon, n as DashboardHeader, ot as cn, q as Button, t as PageContent } from "./PageContent-DFaAkjCU.js";
+import { Et as Dumbbell, Mt as Activity, Q as Badge, ct as Card, gt as Target, i as TabsTrigger, lt as CardContent, n as TabsContent, r as TabsList, t as Tabs } from "./index-CJCaxbOL.js";
+import { i as AccordionTrigger, n as AccordionContent, r as AccordionItem, t as Accordion } from "./accordion-DNZhsLtn.js";
 var CircleCheck = createLucideIcon("circle-check", [["circle", {
 	cx: "12",
 	cy: "12",
@@ -638,4 +638,4 @@ function ClientTraining() {
 //#endregion
 export { ClientTraining as default };
 
-//# sourceMappingURL=ClientTraining-Rna02PO8.js.map
+//# sourceMappingURL=ClientTraining-DSnoVEF7.js.map

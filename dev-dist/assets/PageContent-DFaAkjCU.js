@@ -21738,26 +21738,28 @@ function AuthProvider({ children }) {
 		if (!realUser || realHighestRole !== "admin") return;
 		const targetRole = targetUser.role || "client";
 		try {
-			await supabase.from("audit_logs").insert({
+			const { error } = await supabase.from("audit_logs").insert({
 				admin_id: realUser.id,
 				target_user_id: targetUser.id,
 				action: "IMPERSONATE_START",
 				details: { targetRole }
 			});
+			if (error) throw error;
+			setImpersonatedUser({
+				id: targetUser.id,
+				email: targetUser.email || "",
+				name: targetUser.name || "Usuário",
+				role: targetRole
+			});
+			navigate({
+				admin: "/master",
+				professional: "/professional",
+				client: "/client"
+			}[targetRole] || "/client");
 		} catch (error) {
-			console.error("Failed to log impersonation start", error);
+			console.error("Failed to log impersonation start. Access blocked.", error);
+			alert("Failed to log impersonation start. Access blocked.");
 		}
-		setImpersonatedUser({
-			id: targetUser.id,
-			email: targetUser.email || "",
-			name: targetUser.name || "Usuário",
-			role: targetRole
-		});
-		navigate({
-			admin: "/master",
-			professional: "/professional",
-			client: "/client"
-		}[targetRole] || "/client");
 	};
 	const stopImpersonation = () => {
 		setImpersonatedUser(null);
@@ -21768,7 +21770,7 @@ function AuthProvider({ children }) {
 	const activeRole = impersonatedUser ? impersonatedUser.role : realActiveRole;
 	const highestRole = impersonatedUser ? impersonatedUser.role : realHighestRole;
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AuthContext.Provider, {
-		"data-uid": "src/contexts/AuthContext.tsx:183:5",
+		"data-uid": "src/contexts/AuthContext.tsx:188:5",
 		"data-prohibitions": "[editContent]",
 		value: {
 			user,
@@ -25608,4 +25610,4 @@ function PageContent({ children, className }) {
 //#endregion
 export { Anchor as $, SheetFooter as A, require_jsx_runtime as At, Trigger$1 as B, useNavigate as Bt, SidebarMenuButton as C, Root$6 as Ct, Sheet as D, createCollection as Dt, Skeleton as E, dispatchDiscreteCustomEvent as Et, Description as F, Navigate as Ft, Primitive as G, require_react as Gt, ReactRemoveScroll as H, useSearchParams as Ht, Overlay as I, Outlet as It, buttonVariants as J, __toESM as Jt, Input as K, __commonJSMin as Kt, Portal$1 as L, Route as Lt, SheetTitle as M, composeEventHandlers as Mt, Close as N, BrowserRouter as Nt, SheetContent as O, createSlot$1 as Ot, Content as P, Link as Pt, TooltipProvider as Q, Root$2 as R, Routes as Rt, SidebarMenu as S, DismissableLayer as St, SidebarProvider as T, Primitive$1 as Tt, useFocusGuards as U, __vitePreload as Ut, hideOthers as V, useParams as Vt, FocusScope as W, require_react_dom as Wt, useAuth as X, AuthProvider as Y, supabase as Z, Sidebar as _, useControllableState as _t, AvatarImage as a, useId as at, SidebarHeader as b, useLayoutEffect2 as bt, DropdownMenuContent as c, User as ct, DropdownMenuSeparator as d, Check as dt, Arrow as et, DropdownMenuTrigger as f, createLucideIcon as ft, useDirection as g, VisuallyHidden as gt, createRovingFocusGroupScope as h, VISUALLY_HIDDEN_STYLES as ht, AvatarFallback as i, useSize as it, SheetHeader as j, useComposedRefs as jt, SheetDescription as k, createContextScope$1 as kt, DropdownMenuItem as l, Sparkles as lt, Root$1 as m, clsx as mt, DashboardHeader as n, Root2$1 as nt, createContextScope as o, cn as ot, Item as p, cva as pt, Button as q, __exportAll as qt, Avatar as r, createPopperScope as rt, DropdownMenu as s, X as st, PageContent as t, Content$1 as tt, DropdownMenuLabel as u, ChevronRight as ut, SidebarContent as v, Presence as vt, SidebarMenuItem as w, useCallbackRef$1 as wt, SidebarInset as x, Branch as xt, SidebarFooter as y, Portal$2 as yt, Title as z, useLocation as zt };
 
-//# sourceMappingURL=PageContent-D3-qArad.js.map
+//# sourceMappingURL=PageContent-DFaAkjCU.js.map

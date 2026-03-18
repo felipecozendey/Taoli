@@ -121,8 +121,8 @@ export const getAuditLogs = async (
         action,
         details,
         created_at,
-        admin:profiles!audit_logs_admin_id_fkey(name, email),
-        target_user:profiles!audit_logs_target_user_id_fkey(name, email)
+        admin:profiles!admin_id(name, email),
+        target_user:profiles!target_user_id(name, email)
       `,
         { count: 'exact' },
       )

@@ -1,5 +1,5 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/MasterLogs-BCl-QmbR.js","assets/PageContent-D3-qArad.js","assets/ProfPatients-CImJJLIV.js","assets/dialog-DMPijQ0R.js","assets/ProfPatientRecord-B_32dQWK.js","assets/textarea-2fSaHooX.js","assets/ClientNutrition-Cy4bsEGo.js","assets/accordion-BLBUGz2e.js","assets/checkbox-BrUKjg4B.js","assets/flame-3kiuYNTq.js","assets/ClientTraining-Rna02PO8.js","assets/ClientMind-Cn4gAdT4.js","assets/ClientStudy-DP4DS3bF.js","assets/ClientTeam-DU_Dia1q.js"])))=>i.map(i=>d[i]);
-import { $ as Anchor, A as SheetFooter, At as require_jsx_runtime, Bt as useNavigate, C as SidebarMenuButton, Ct as Root$4, D as Sheet, Dt as createCollection, E as Skeleton, Et as dispatchDiscreteCustomEvent, Ft as Navigate, G as Primitive$1, Gt as require_react, H as ReactRemoveScroll, Ht as useSearchParams, It as Outlet, Jt as __toESM, K as Input, Kt as __commonJSMin, Lt as Route, M as SheetTitle, Mt as composeEventHandlers, Nt as BrowserRouter, O as SheetContent, Ot as createSlot, Pt as Link$1, Q as TooltipProvider, Rt as Routes, S as SidebarMenu, St as DismissableLayer, T as SidebarProvider, Tt as Primitive, U as useFocusGuards, Ut as __vitePreload, V as hideOthers, W as FocusScope, Wt as require_react_dom, X as useAuth, Y as AuthProvider, Z as supabase, _ as Sidebar, _t as useControllableState, a as AvatarImage, at as useId, b as SidebarHeader, bt as useLayoutEffect2, c as DropdownMenuContent, ct as User, d as DropdownMenuSeparator, dt as Check, et as Arrow, f as DropdownMenuTrigger, ft as createLucideIcon, g as useDirection, gt as VisuallyHidden, h as createRovingFocusGroupScope, ht as VISUALLY_HIDDEN_STYLES, i as AvatarFallback, it as useSize, j as SheetHeader, jt as useComposedRefs, k as SheetDescription, kt as createContextScope, l as DropdownMenuItem, lt as Sparkles, m as Root$5, mt as clsx, n as DashboardHeader, nt as Root2$3, o as createContextScope$1, ot as cn$1, p as Item$1, pt as cva, q as Button, qt as __exportAll, r as Avatar, rt as createPopperScope, s as DropdownMenu, st as X, t as PageContent, tt as Content$1, u as DropdownMenuLabel, v as SidebarContent, vt as Presence, w as SidebarMenuItem, wt as useCallbackRef, x as SidebarInset, xt as Branch, y as SidebarFooter, yt as Portal$1, zt as useLocation } from "./PageContent-D3-qArad.js";
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/MasterLogs-CPQZVjv7.js","assets/PageContent-DFaAkjCU.js","assets/ProfPatients-ChELtq0z.js","assets/dialog-BCVEVQvq.js","assets/ProfPatientRecord-CP7evUuN.js","assets/textarea-csMi-mAz.js","assets/ClientNutrition-1uoR7GAT.js","assets/accordion-DNZhsLtn.js","assets/checkbox-g8jML1-n.js","assets/flame-DXHs-D-_.js","assets/ClientTraining-DSnoVEF7.js","assets/ClientMind-B159lonZ.js","assets/ClientStudy-DNnu7uY1.js","assets/ClientTeam-BMjMzHdZ.js"])))=>i.map(i=>d[i]);
+import { $ as Anchor, A as SheetFooter, At as require_jsx_runtime, Bt as useNavigate, C as SidebarMenuButton, Ct as Root$4, D as Sheet, Dt as createCollection, E as Skeleton, Et as dispatchDiscreteCustomEvent, Ft as Navigate, G as Primitive$1, Gt as require_react, H as ReactRemoveScroll, Ht as useSearchParams, It as Outlet, Jt as __toESM, K as Input, Kt as __commonJSMin, Lt as Route, M as SheetTitle, Mt as composeEventHandlers, Nt as BrowserRouter, O as SheetContent, Ot as createSlot, Pt as Link$1, Q as TooltipProvider, Rt as Routes, S as SidebarMenu, St as DismissableLayer, T as SidebarProvider, Tt as Primitive, U as useFocusGuards, Ut as __vitePreload, V as hideOthers, W as FocusScope, Wt as require_react_dom, X as useAuth, Y as AuthProvider, Z as supabase, _ as Sidebar, _t as useControllableState, a as AvatarImage, at as useId, b as SidebarHeader, bt as useLayoutEffect2, c as DropdownMenuContent, ct as User, d as DropdownMenuSeparator, dt as Check, et as Arrow, f as DropdownMenuTrigger, ft as createLucideIcon, g as useDirection, gt as VisuallyHidden, h as createRovingFocusGroupScope, ht as VISUALLY_HIDDEN_STYLES, i as AvatarFallback, it as useSize, j as SheetHeader, jt as useComposedRefs, k as SheetDescription, kt as createContextScope, l as DropdownMenuItem, lt as Sparkles, m as Root$5, mt as clsx, n as DashboardHeader, nt as Root2$3, o as createContextScope$1, ot as cn$1, p as Item$1, pt as cva, q as Button, qt as __exportAll, r as Avatar, rt as createPopperScope, s as DropdownMenu, st as X, t as PageContent, tt as Content$1, u as DropdownMenuLabel, v as SidebarContent, vt as Presence, w as SidebarMenuItem, wt as useCallbackRef, x as SidebarInset, xt as Branch, y as SidebarFooter, yt as Portal$1, zt as useLocation } from "./PageContent-DFaAkjCU.js";
 //#region \0vite/modulepreload-polyfill.js
 (function polyfill() {
 	const relList = document.createElement("link").relList;
@@ -18008,8 +18008,8 @@ var getAuditLogs = async (page = 1, pageSize = 10) => {
         action,
         details,
         created_at,
-        admin:profiles!audit_logs_admin_id_fkey(name, email),
-        target_user:profiles!audit_logs_target_user_id_fkey(name, email)
+        admin:profiles!admin_id(name, email),
+        target_user:profiles!target_user_id(name, email)
       `, { count: "exact" }).order("created_at", { ascending: false }).range(from, to);
 		if (error) throw error;
 		return {
@@ -47417,14 +47417,14 @@ function ClientFinances() {
 }
 //#endregion
 //#region src/App.tsx
-var MasterLogs = (0, import_react.lazy)(() => __vitePreload(() => import("./MasterLogs-BCl-QmbR.js"), __vite__mapDeps([0,1])));
-var ProfPatients = (0, import_react.lazy)(() => __vitePreload(() => import("./ProfPatients-CImJJLIV.js"), __vite__mapDeps([2,1,3])));
-var ProfPatientRecord = (0, import_react.lazy)(() => __vitePreload(() => import("./ProfPatientRecord-B_32dQWK.js"), __vite__mapDeps([4,1,5])));
-var ClientNutrition = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientNutrition-Cy4bsEGo.js"), __vite__mapDeps([6,1,7,8,9])));
-var ClientTraining = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientTraining-Rna02PO8.js"), __vite__mapDeps([10,1,7])));
-var ClientMind = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientMind-Cn4gAdT4.js"), __vite__mapDeps([11,1,8])));
-var ClientStudy = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientStudy-DP4DS3bF.js"), __vite__mapDeps([12,1,9,3,5])));
-var ClientTeam = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientTeam-DU_Dia1q.js"), __vite__mapDeps([13,1,3])));
+var MasterLogs = (0, import_react.lazy)(() => __vitePreload(() => import("./MasterLogs-CPQZVjv7.js"), __vite__mapDeps([0,1])));
+var ProfPatients = (0, import_react.lazy)(() => __vitePreload(() => import("./ProfPatients-ChELtq0z.js"), __vite__mapDeps([2,1,3])));
+var ProfPatientRecord = (0, import_react.lazy)(() => __vitePreload(() => import("./ProfPatientRecord-CP7evUuN.js"), __vite__mapDeps([4,1,5])));
+var ClientNutrition = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientNutrition-1uoR7GAT.js"), __vite__mapDeps([6,1,7,8,9])));
+var ClientTraining = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientTraining-DSnoVEF7.js"), __vite__mapDeps([10,1,7])));
+var ClientMind = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientMind-B159lonZ.js"), __vite__mapDeps([11,1,8])));
+var ClientStudy = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientStudy-DNnu7uY1.js"), __vite__mapDeps([12,1,9,3,5])));
+var ClientTeam = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientTeam-BMjMzHdZ.js"), __vite__mapDeps([13,1,3])));
 var LoadingFallback = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 	"data-uid": "src/App.tsx:51:3",
 	"data-prohibitions": "[]",
@@ -47796,4 +47796,4 @@ var App = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrowserRouter, {
 //#endregion
 export { Table as $, require__baseExtremum as A, ArrowRight as At, getPercentValue as B, getMaxRadius as C, Link as Ct, require_isEqual as D, CirclePlus as Dt, getValueByDataKey as E, Dumbbell as Et, warn$1 as F, require_isNil as G, isNumber as H, Layer as I, getClientActiveDiet as J, require_get as K, filterProps as L, Cell as M, Activity as Mt, Global as N, useToast as Nt, require__baseLt as O, ChevronDown as Ot, require__baseIteratee as P, Badge as Q, findAllByType as R, formatAxisMap$1 as S, LoaderCircle as St, polarToCartesian as T, FileText as Tt, mathSign as U, interpolateNumber$1 as V, uniqueId as W, Switch as X, getFullDietDetails as Y, usePrevious as Z, Dot as _, Smile as _t, ChartContainer as a, getAuditLogs as at, LabelList as b, Plus as bt, ChartTooltip as c, Card as ct, generateCategoricalChart as d, CardFooter as dt, TableBody as et, YAxis as f, CardHeader as ft, Shape as g, Target as gt, Bar as h, Trash2 as ht, TabsTrigger as i, TableRow as it, Text as j, Apple as jt, require__baseGt as k, Brain as kt, ChartTooltipContent as l, CardContent as lt, CartesianGrid as m, Users as mt, TabsContent as n, TableHead as nt, ChartLegend as o, Progress as ot, XAxis as p, CardTitle as pt, require_isFunction as q, TabsList as r, TableHeader as rt, ChartLegendContent as s, Label$2 as st, Tabs as t, TableCell as tt, BarChart as u, CardDescription as ut, es6_default as v, Search as vt, getTickClassName as w, LayoutDashboard as wt, Label as x, Lock as xt, Curve as y, Save as yt, adaptEventsOfChild as z };
 
-//# sourceMappingURL=index-par4f0vY.js.map
+//# sourceMappingURL=index-CJCaxbOL.js.map

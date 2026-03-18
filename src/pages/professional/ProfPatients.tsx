@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { DashboardHeader } from '@/components/shared/DashboardHeader'
 import { PageContent } from '@/components/shared/PageContent'
 import { Button } from '@/components/ui/button'
@@ -14,47 +14,60 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
+import { Skeleton } from '@/components/ui/skeleton'
 import { useToast } from '@/hooks/use-toast'
-import { UserPlus, Copy, ArrowRight, Target, Link as LinkIcon } from 'lucide-react'
-
-interface Patient {
-  id: string
-  name: string
-  status: 'Ativo' | 'Pendente'
-  objective: string
-}
+import { useAuth } from '@/contexts/AuthContext'
+import { UserPlus, Copy, ArrowRight, Target, Link as LinkIcon, Users } from 'lucide-react'
+import { getMyPatients } from '@/services/patients'
 
 export default function ProfPatients() {
+  const { user } = useAuth()
   const { toast } = useToast()
 
-  const [patients] = useState<Patient[]>([
-    { id: '1', name: 'João Silva', status: 'Ativo', objective: 'Hipertrofia' },
-    { id: '2', name: 'Maria Santos', status: 'Pendente', objective: 'Emagrecimento' },
-  ])
+  const [patients, setPatients] = useState<any[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [inviteCode, setInviteCode] = useState('')
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
 
-  const copyCode = async (code: string) => {
-    try {
-      await navigator.clipboard.writeText(code)
-      toast({
-        title: 'Sucesso!',
-        description: 'Código copiado para a área de transferência!',
-      })
-    } catch (err) {
-      toast({
-        title: 'Erro',
-        description: 'Não foi possível copiar o código.',
-        variant: 'destructive',
-      })
+  useEffect(() => {
+    if (!user?.id) return
+    const fetchPatients = async () => {
+      setIsLoading(true)
+      try {
+        const data = await getMyPatients(user.id)
+        setPatients(data || [])
+      } catch (error) {
+        console.error(error)
+        toast({
+          title: 'Erro',
+          description: 'Não foi possível carregar os pacientes.',
+          variant: 'destructive',
+        })
+      } finally {
+        setIsLoading(false)
+      }
+    }
+    fetchPatients()
+  }, [user?.id, toast])
+
+  const handleOpenDialog = (open: boolean) => {
+    setIsDialogOpen(open)
+    if (open) {
+      setInviteCode(Math.random().toString(36).substring(2, 8).toUpperCase())
     }
   }
 
-  const handleAccess = (name: string) => {
-    toast({
-      description: `A abrir perfil de ${name}...`,
-    })
+  const copyCode = async () => {
+    try {
+      await navigator.clipboard.writeText(inviteCode)
+      toast({ title: 'Sucesso!', description: 'Código copiado para a área de transferência!' })
+    } catch {
+      toast({ title: 'Erro', description: 'Falha ao copiar código.', variant: 'destructive' })
+    }
   }
 
-  const getInitials = (name: string) => {
+  const getInitials = (name?: string | null) => {
+    if (!name) return '??'
     return name
       .split(' ')
       .map((n) => n[0])
@@ -63,10 +76,14 @@ export default function ProfPatients() {
       .toUpperCase()
   }
 
+  const formatStatus = (status: string) => {
+    return status === 'active' ? 'Ativo' : status === 'pending' ? 'Pendente' : 'Rejeitado'
+  }
+
   return (
     <div className="flex flex-col min-h-full">
       <DashboardHeader title="Os Meus Pacientes">
-        <Dialog>
+        <Dialog open={isDialogOpen} onOpenChange={handleOpenDialog}>
           <DialogTrigger asChild>
             <Button size="sm" className="gap-2">
               <UserPlus className="h-4 w-4" />
@@ -85,11 +102,11 @@ export default function ProfPatients() {
                 <LinkIcon className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                 <Input
                   readOnly
-                  value="FIT-X89B2"
-                  className="pl-9 font-mono font-medium text-base tracking-wider"
+                  value={inviteCode}
+                  className="pl-9 font-mono font-medium tracking-wider"
                 />
               </div>
-              <Button onClick={() => copyCode('FIT-X89B2')} className="shrink-0 gap-2">
+              <Button onClick={copyCode} className="shrink-0 gap-2">
                 <Copy className="h-4 w-4" />
                 <span className="hidden sm:inline">Copiar Link</span>
               </Button>
@@ -105,56 +122,86 @@ export default function ProfPatients() {
           </p>
         </div>
 
-        <div
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-fade-in-up"
-          style={{ animationDelay: '50ms' }}
-        >
-          {patients.map((patient) => (
-            <Card
-              key={patient.id}
-              className="flex flex-col transition-all hover:shadow-md border-border/50"
-            >
-              <CardHeader className="flex flex-row items-start justify-between pb-4">
-                <div className="flex items-center gap-4">
-                  <Avatar className="h-12 w-12 border shadow-sm">
-                    <AvatarFallback className="bg-primary/5 text-primary font-medium">
-                      {getInitials(patient.name)}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div>
-                    <h3 className="font-semibold text-base leading-none mb-1.5 text-foreground">
-                      {patient.name}
-                    </h3>
-                    <div className="flex items-center text-xs text-muted-foreground font-medium">
-                      <Target className="h-3 w-3 mr-1 opacity-70" />
-                      {patient.objective}
-                    </div>
+        {isLoading ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[1, 2, 3].map((i) => (
+              <Card key={i} className="flex flex-col h-[140px]">
+                <CardHeader className="flex flex-row items-start gap-4 pb-4">
+                  <Skeleton className="h-12 w-12 rounded-full" />
+                  <div className="space-y-2 flex-1">
+                    <Skeleton className="h-4 w-3/4" />
+                    <Skeleton className="h-3 w-1/2" />
                   </div>
-                </div>
-                <Badge
-                  variant="outline"
-                  className={
-                    patient.status === 'Ativo'
-                      ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-400 border-emerald-200 dark:border-emerald-900 shadow-sm'
-                      : 'bg-amber-50 text-amber-700 dark:bg-amber-950/50 dark:text-amber-400 border-amber-200 dark:border-amber-900 shadow-sm'
-                  }
+                </CardHeader>
+              </Card>
+            ))}
+          </div>
+        ) : patients.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-16 text-center animate-fade-in-up border rounded-lg bg-card/50 border-dashed">
+            <Users className="h-12 w-12 text-muted-foreground/30 mb-4" />
+            <h3 className="text-lg font-medium text-foreground">Ainda não tem pacientes.</h3>
+            <p className="text-sm text-muted-foreground mt-1 max-w-sm mb-6">
+              Gere um código de convite para conectar-se ao seu primeiro paciente.
+            </p>
+            <Button onClick={() => handleOpenDialog(true)} variant="secondary">
+              <UserPlus className="mr-2 h-4 w-4" />
+              Convidar Paciente
+            </Button>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-fade-in-up">
+            {patients.map((link) => {
+              const clientData = Array.isArray(link.client) ? link.client[0] : link.client
+              const statusStr = formatStatus(link.status)
+
+              return (
+                <Card
+                  key={link.id}
+                  className="flex flex-col transition-all hover:shadow-md border-border/50"
                 >
-                  {patient.status}
-                </Badge>
-              </CardHeader>
-              <CardFooter className="mt-auto pt-2 pb-4">
-                <Button
-                  variant="secondary"
-                  className="w-full justify-between group bg-muted/50 hover:bg-muted"
-                  onClick={() => handleAccess(patient.name)}
-                >
-                  <span className="font-medium">Aceder ao Prontuário</span>
-                  <ArrowRight className="h-4 w-4 opacity-50 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
-                </Button>
-              </CardFooter>
-            </Card>
-          ))}
-        </div>
+                  <CardHeader className="flex flex-row items-start justify-between pb-4">
+                    <div className="flex items-center gap-4">
+                      <Avatar className="h-12 w-12 border shadow-sm">
+                        <AvatarFallback className="bg-primary/5 text-primary font-medium">
+                          {getInitials(clientData?.name)}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div>
+                        <h3 className="font-semibold text-base leading-none mb-1.5 text-foreground line-clamp-1">
+                          {clientData?.name || 'Sem Nome'}
+                        </h3>
+                        <div className="flex items-center text-xs text-muted-foreground font-medium">
+                          <Target className="h-3 w-3 mr-1 opacity-70" />
+                          Saúde Geral
+                        </div>
+                      </div>
+                    </div>
+                    <Badge
+                      variant="outline"
+                      className={
+                        link.status === 'active'
+                          ? 'bg-emerald-50 text-emerald-700 border-emerald-200 shadow-sm'
+                          : 'bg-amber-50 text-amber-700 border-amber-200 shadow-sm'
+                      }
+                    >
+                      {statusStr}
+                    </Badge>
+                  </CardHeader>
+                  <CardFooter className="mt-auto pt-2 pb-4">
+                    <Button
+                      variant="secondary"
+                      className="w-full justify-between group bg-muted/50 hover:bg-muted"
+                      onClick={() => toast({ description: 'A abrir prontuário...' })}
+                    >
+                      <span className="font-medium">Aceder ao Prontuário</span>
+                      <ArrowRight className="h-4 w-4 opacity-50 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
+                    </Button>
+                  </CardFooter>
+                </Card>
+              )
+            })}
+          </div>
+        )}
       </PageContent>
     </div>
   )

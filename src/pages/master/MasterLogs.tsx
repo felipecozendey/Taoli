@@ -13,18 +13,32 @@ import { Badge } from '@/components/ui/badge'
 import { Skeleton } from '@/components/ui/skeleton'
 import { useToast } from '@/hooks/use-toast'
 import { getAuditLogs, type AuditLog } from '@/services/master'
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationNext,
+  PaginationPrevious,
+} from '@/components/ui/pagination'
 
 export default function MasterLogs() {
   const [logs, setLogs] = useState<AuditLog[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const [currentPage, setCurrentPage] = useState(1)
+  const [totalCount, setTotalCount] = useState(0)
+  const pageSize = 10
   const { toast } = useToast()
 
   useEffect(() => {
     let mounted = true
     const fetchLogs = async () => {
+      setIsLoading(true)
       try {
-        const data = await getAuditLogs()
-        if (mounted) setLogs(data)
+        const { data, count } = await getAuditLogs(currentPage, pageSize)
+        if (mounted) {
+          setLogs(data)
+          setTotalCount(count)
+        }
       } catch (error: any) {
         if (mounted) {
           toast({
@@ -42,7 +56,7 @@ export default function MasterLogs() {
     return () => {
       mounted = false
     }
-  }, [toast])
+  }, [currentPage, toast])
 
   const formatDate = (dateString: string) => {
     return new Intl.DateTimeFormat('pt-BR', {
@@ -68,6 +82,10 @@ export default function MasterLogs() {
     return <Badge variant="outline">{action}</Badge>
   }
 
+  const totalPages = Math.ceil(totalCount / pageSize)
+  const startRecord = totalCount === 0 ? 0 : (currentPage - 1) * pageSize + 1
+  const endRecord = Math.min(currentPage * pageSize, totalCount)
+
   return (
     <div className="flex flex-col min-h-full">
       <DashboardHeader title="Logs de Auditoria" />
@@ -78,7 +96,7 @@ export default function MasterLogs() {
           </p>
         </div>
 
-        <div className="rounded-md border bg-card shadow-sm overflow-hidden">
+        <div className="rounded-md border bg-card shadow-sm overflow-hidden flex-1 flex flex-col">
           <Table>
             <TableHeader className="bg-muted/30">
               <TableRow>
@@ -90,7 +108,7 @@ export default function MasterLogs() {
             </TableHeader>
             <TableBody>
               {isLoading ? (
-                Array.from({ length: 6 }).map((_, idx) => (
+                Array.from({ length: Math.min(pageSize, 6) }).map((_, idx) => (
                   <TableRow key={idx}>
                     <TableCell>
                       <Skeleton className="h-4 w-[120px]" />
@@ -146,6 +164,43 @@ export default function MasterLogs() {
               )}
             </TableBody>
           </Table>
+        </div>
+
+        <div className="mt-4 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
+          <div>
+            A mostrar {startRecord} a {endRecord} de {totalCount} registos.
+          </div>
+
+          <Pagination className="mx-0 w-auto">
+            <PaginationContent>
+              <PaginationItem>
+                <PaginationPrevious
+                  href="#"
+                  onClick={(e) => {
+                    e.preventDefault()
+                    if (currentPage > 1) setCurrentPage((p) => p - 1)
+                  }}
+                  className={
+                    currentPage === 1 ? 'pointer-events-none opacity-50' : 'cursor-pointer'
+                  }
+                />
+              </PaginationItem>
+              <PaginationItem>
+                <PaginationNext
+                  href="#"
+                  onClick={(e) => {
+                    e.preventDefault()
+                    if (currentPage < totalPages) setCurrentPage((p) => p + 1)
+                  }}
+                  className={
+                    currentPage === totalPages || totalPages === 0
+                      ? 'pointer-events-none opacity-50'
+                      : 'cursor-pointer'
+                  }
+                />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
         </div>
       </PageContent>
     </div>

@@ -694,6 +694,10 @@ section[aria-label='Notifications alt+T'] {
   margin-left: -0.25rem;
   margin-right: -0.25rem;
 }
+.mx-0{
+  margin-left: 0px;
+  margin-right: 0px;
+}
 .mx-2{
   margin-left: 0.5rem;
   margin-right: 0.5rem;

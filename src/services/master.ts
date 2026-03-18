@@ -105,24 +105,37 @@ export const updateUserAccess = async (userId: string, data: UpdateAccessData): 
 /**
  * Fetches audit logs including the admin and target user information.
  */
-export const getAuditLogs = async (): Promise<AuditLog[]> => {
+export const getAuditLogs = async (
+  page: number = 1,
+  pageSize: number = 10,
+): Promise<{ data: AuditLog[]; count: number }> => {
   try {
-    const { data, error } = await supabase
+    const from = (page - 1) * pageSize
+    const to = from + pageSize - 1
+
+    const { data, error, count } = await supabase
       .from('audit_logs')
-      .select(`
+      .select(
+        `
         id,
         action,
         details,
         created_at,
         admin:profiles!audit_logs_admin_id_fkey(name, email),
         target_user:profiles!audit_logs_target_user_id_fkey(name, email)
-      `)
+      `,
+        { count: 'exact' },
+      )
       .order('created_at', { ascending: false })
+      .range(from, to)
 
     if (error) throw error
 
     // Workaround for Supabase type generation with joined foreign keys
-    return data as unknown as AuditLog[]
+    return {
+      data: (data as unknown as AuditLog[]) || [],
+      count: count || 0,
+    }
   } catch (error: any) {
     console.error('Error fetching audit logs:', error)
     throw new Error(error.message || 'Failed to fetch audit logs')

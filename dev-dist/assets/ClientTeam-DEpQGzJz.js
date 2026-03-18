@@ -1,5 +1,5 @@
 import { $ as Button, E as Skeleton, J as CardContent, K as Input, Pt as require_jsx_runtime, Qt as __toESM, Yt as require_react, Z as CardHeader, a as AvatarImage, c as DropdownMenuContent, f as DropdownMenuTrigger, gt as createLucideIcon, i as AvatarFallback, l as DropdownMenuItem, n as DashboardHeader, nt as supabase, q as Card, r as Avatar, s as DropdownMenu, t as PageContent, tt as useAuth } from "./PageContent-CQ4JHobQ.js";
-import { Z as Switch, _t as Apple, at as Search, ft as Dumbbell, ht as Brain, nt as Trash2, st as Plus, tt as Users, yt as useToast } from "./index-BsTnM2OF.js";
+import { Z as Switch, _t as Apple, at as Search, ft as Dumbbell, ht as Brain, nt as Trash2, st as Plus, tt as Users, yt as useToast } from "./index-CiWgUVmP.js";
 import { a as DialogHeader, n as DialogContent, o as DialogTitle, s as DialogTrigger, t as Dialog } from "./dialog-RRWA0519.js";
 var EllipsisVertical = createLucideIcon("ellipsis-vertical", [
 	["circle", {
@@ -468,4 +468,4 @@ function ClientTeam() {
 //#endregion
 export { ClientTeam as default };
 
-//# sourceMappingURL=ClientTeam-Czaavd4-.js.map
+//# sourceMappingURL=ClientTeam-DEpQGzJz.js.map

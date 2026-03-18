@@ -1075,8 +1075,17 @@ section[aria-label='Notifications alt+T'] {
 .w-\[100px\]{
   width: 100px;
 }
+.w-\[120px\]{
+  width: 120px;
+}
+.w-\[150px\]{
+  width: 150px;
+}
 .w-\[1px\]{
   width: 1px;
+}
+.w-\[80px\]{
+  width: 80px;
 }
 .w-auto{
   width: auto;

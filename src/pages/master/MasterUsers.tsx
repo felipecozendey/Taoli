@@ -30,48 +30,9 @@ import {
 } from '@/components/ui/select'
 import { Switch } from '@/components/ui/switch'
 import { Label } from '@/components/ui/label'
+import { Skeleton } from '@/components/ui/skeleton'
 import { useToast } from '@/hooks/use-toast'
-import { supabase } from '@/lib/supabase/client'
-
-type Profile = {
-  id: string
-  name: string | null
-  email: string | null
-  role: string | null
-  is_nutritionist: boolean
-  is_trainer: boolean
-  is_psychologist: boolean
-}
-
-const mockUsers: Profile[] = [
-  {
-    id: 'mock-1',
-    name: 'João',
-    role: 'admin',
-    is_nutritionist: false,
-    is_trainer: false,
-    is_psychologist: false,
-    email: 'joao@master.com',
-  },
-  {
-    id: 'mock-2',
-    name: 'Carlos',
-    role: 'professional',
-    is_nutritionist: true,
-    is_trainer: true,
-    is_psychologist: false,
-    email: 'carlos@prof.com',
-  },
-  {
-    id: 'mock-3',
-    name: 'Maria',
-    role: 'client',
-    is_nutritionist: false,
-    is_trainer: false,
-    is_psychologist: false,
-    email: 'maria@client.com',
-  },
-]
+import { getAllProfiles, updateUserAccess, type Profile } from '@/services/master'
 
 const RoleBadge = ({ role }: { role: string }) => {
   switch (role) {
@@ -125,6 +86,7 @@ const SpecialtiesList = ({ user }: { user: Profile }) => {
 
 export default function MasterUsers() {
   const [users, setUsers] = useState<Profile[]>([])
+  const [isLoading, setIsLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedUser, setSelectedUser] = useState<Profile | null>(null)
   const [isSheetOpen, setIsSheetOpen] = useState(false)
@@ -137,23 +99,25 @@ export default function MasterUsers() {
 
   const { toast } = useToast()
 
+  const fetchUsers = async () => {
+    setIsLoading(true)
+    try {
+      const data = await getAllProfiles()
+      setUsers(data)
+    } catch (error: any) {
+      toast({
+        title: 'Erro ao carregar utilizadores',
+        description: error.message || 'Verifique a sua ligação ou permissões.',
+        variant: 'destructive',
+      })
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
   useEffect(() => {
     fetchUsers()
   }, [])
-
-  const fetchUsers = async () => {
-    const { data, error } = await supabase
-      .from('profiles')
-      .select('*')
-      .order('created_at', { ascending: false })
-
-    if (!error && data && data.length > 0) {
-      const hasMocks = data.some((u) => u.name === 'João' && u.role === 'admin')
-      setUsers(hasMocks ? (data as Profile[]) : [...mockUsers, ...(data as Profile[])])
-    } else {
-      setUsers(mockUsers)
-    }
-  }
 
   const filteredUsers = users.filter(
     (u) =>
@@ -175,50 +139,29 @@ export default function MasterUsers() {
   const handleSave = async () => {
     if (!selectedUser) return
 
-    const isMock = selectedUser.id.startsWith('mock-')
+    try {
+      // Auto clear specialties if downgrading from professional
+      const finalNutritionist = editForm.role === 'professional' ? editForm.is_nutritionist : false
+      const finalTrainer = editForm.role === 'professional' ? editForm.is_trainer : false
+      const finalPsychologist = editForm.role === 'professional' ? editForm.is_psychologist : false
 
-    // Auto clear specialties if downgrading from professional
-    const finalNutritionist = editForm.role === 'professional' ? editForm.is_nutritionist : false
-    const finalTrainer = editForm.role === 'professional' ? editForm.is_trainer : false
-    const finalPsychologist = editForm.role === 'professional' ? editForm.is_psychologist : false
+      await updateUserAccess(selectedUser.id, {
+        role: editForm.role,
+        is_nutritionist: finalNutritionist,
+        is_trainer: finalTrainer,
+        is_psychologist: finalPsychologist,
+      })
 
-    if (!isMock) {
-      const { error } = await supabase
-        .from('profiles')
-        .update({
-          role: editForm.role,
-          is_nutritionist: finalNutritionist,
-          is_trainer: finalTrainer,
-          is_psychologist: finalPsychologist,
-        })
-        .eq('id', selectedUser.id)
-
-      if (error) {
-        toast({
-          title: 'Erro',
-          description: 'Não foi possível atualizar os acessos.',
-          variant: 'destructive',
-        })
-        return
-      }
+      toast({ title: 'Acessos atualizados com sucesso!' })
+      setIsSheetOpen(false)
+      fetchUsers() // Refresh list to ensure strict DB sync
+    } catch (error: any) {
+      toast({
+        title: 'Erro ao salvar',
+        description: error.message || 'Não foi possível atualizar os acessos do utilizador.',
+        variant: 'destructive',
+      })
     }
-
-    setUsers(
-      users.map((u) =>
-        u.id === selectedUser.id
-          ? {
-              ...u,
-              role: editForm.role,
-              is_nutritionist: finalNutritionist,
-              is_trainer: finalTrainer,
-              is_psychologist: finalPsychologist,
-            }
-          : u,
-      ),
-    )
-
-    toast({ title: 'Acessos atualizados com sucesso!' })
-    setIsSheetOpen(false)
   }
 
   return (
@@ -254,31 +197,52 @@ export default function MasterUsers() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {filteredUsers.map((user) => (
-                <TableRow key={user.id} className="hover:bg-muted/10 transition-colors">
-                  <TableCell className="font-medium">
-                    <div className="flex flex-col">
-                      <span>{user.name || 'Sem nome'}</span>
-                      <span className="text-xs text-muted-foreground font-normal">
-                        {user.email || 'Sem email'}
-                      </span>
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <RoleBadge role={user.role || 'client'} />
-                  </TableCell>
-                  <TableCell>
-                    <SpecialtiesList user={user} />
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <Button variant="ghost" size="sm" onClick={() => openEditSheet(user)}>
-                      <Shield className="w-4 h-4 mr-2" />
-                      Gerir Acesso
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ))}
-              {filteredUsers.length === 0 && (
+              {isLoading ? (
+                Array.from({ length: 5 }).map((_, idx) => (
+                  <TableRow key={idx}>
+                    <TableCell>
+                      <div className="space-y-2">
+                        <Skeleton className="h-4 w-[150px]" />
+                        <Skeleton className="h-3 w-[100px]" />
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton className="h-6 w-[80px] rounded-full" />
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton className="h-6 w-[120px]" />
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <Skeleton className="h-8 w-[100px] ml-auto" />
+                    </TableCell>
+                  </TableRow>
+                ))
+              ) : filteredUsers.length > 0 ? (
+                filteredUsers.map((user) => (
+                  <TableRow key={user.id} className="hover:bg-muted/10 transition-colors">
+                    <TableCell className="font-medium">
+                      <div className="flex flex-col">
+                        <span>{user.name || 'Sem nome'}</span>
+                        <span className="text-xs text-muted-foreground font-normal">
+                          {user.email || 'Sem email'}
+                        </span>
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <RoleBadge role={user.role || 'client'} />
+                    </TableCell>
+                    <TableCell>
+                      <SpecialtiesList user={user} />
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <Button variant="ghost" size="sm" onClick={() => openEditSheet(user)}>
+                        <Shield className="w-4 h-4 mr-2" />
+                        Gerir Acesso
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))
+              ) : (
                 <TableRow>
                   <TableCell colSpan={4} className="text-center py-8 text-muted-foreground">
                     Nenhum utilizador encontrado.

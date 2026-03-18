@@ -1,5 +1,5 @@
 import { $ as Button, E as Skeleton, K as Input, Pt as require_jsx_runtime, Qt as __toESM, Wt as useNavigate, X as CardFooter, Yt as require_react, Z as CardHeader, gt as createLucideIcon, i as AvatarFallback, n as DashboardHeader, nt as supabase, q as Card, r as Avatar, t as PageContent, tt as useAuth } from "./PageContent-CQ4JHobQ.js";
-import { $ as Badge, gt as ArrowRight, rt as Target, tt as Users, yt as useToast } from "./index-BsTnM2OF.js";
+import { $ as Badge, gt as ArrowRight, rt as Target, tt as Users, yt as useToast } from "./index-CiWgUVmP.js";
 import { a as DialogHeader, n as DialogContent, o as DialogTitle, r as DialogDescription, s as DialogTrigger, t as Dialog } from "./dialog-RRWA0519.js";
 var Copy = createLucideIcon("copy", [["rect", {
 	width: "14",
@@ -371,4 +371,4 @@ function ProfPatients() {
 //#endregion
 export { ProfPatients as default };
 
-//# sourceMappingURL=ProfPatients-D4P9soqB.js.map
+//# sourceMappingURL=ProfPatients-CGALVstT.js.map

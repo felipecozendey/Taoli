@@ -9,7 +9,9 @@ import {
   SidebarMenu,
   SidebarMenuItem,
   SidebarMenuButton,
+  SidebarFooter,
 } from '@/components/ui/sidebar'
+import { RoleSwitcher } from '@/components/shared/RoleSwitcher'
 
 export default function MasterLayout() {
   const location = useLocation()
@@ -48,6 +50,9 @@ export default function MasterLayout() {
               ))}
             </SidebarMenu>
           </SidebarContent>
+          <SidebarFooter>
+            <RoleSwitcher />
+          </SidebarFooter>
         </Sidebar>
         <SidebarInset>
           <Outlet />

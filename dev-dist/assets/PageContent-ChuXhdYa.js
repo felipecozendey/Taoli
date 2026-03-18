@@ -21619,6 +21619,9 @@ function AuthProvider({ children }) {
 	const [user, setUser] = (0, import_react.useState)(null);
 	const [session, setSession] = (0, import_react.useState)(null);
 	const [isLoading, setIsLoading] = (0, import_react.useState)(true);
+	const [activeRole, setActiveRole] = (0, import_react.useState)(null);
+	const [highestRole, setHighestRole] = (0, import_react.useState)(null);
+	const navigate = useNavigate();
 	(0, import_react.useEffect)(() => {
 		supabase.auth.getSession().then(({ data: { session } }) => {
 			setSession(session);
@@ -21634,18 +21637,33 @@ function AuthProvider({ children }) {
 			setIsLoading(true);
 			supabase.from("profiles").select("name, role").eq("id", session.user.id).single().then(({ data, error }) => {
 				if (mounted) {
-					if (!error && data) setUser({
-						id: session.user.id,
-						email: session.user.email || "",
-						name: data.name || "Usuário",
-						role: data.role || "client"
-					});
-					else setUser(null);
+					if (!error && data) {
+						const dbRole = data.role || "client";
+						let initialActiveRole = dbRole;
+						const savedRole = localStorage.getItem("activeRole");
+						if (savedRole) {
+							if (dbRole === "admin" || dbRole === "professional" && savedRole !== "admin") initialActiveRole = savedRole;
+						}
+						setHighestRole(dbRole);
+						setActiveRole(initialActiveRole);
+						setUser({
+							id: session.user.id,
+							email: session.user.email || "",
+							name: data.name || "Usuário",
+							role: initialActiveRole
+						});
+					} else {
+						setUser(null);
+						setActiveRole(null);
+						setHighestRole(null);
+					}
 					setIsLoading(false);
 				}
 			});
 		} else {
 			setUser(null);
+			setActiveRole(null);
+			setHighestRole(null);
 			setIsLoading(false);
 		}
 		return () => {
@@ -21658,16 +21676,38 @@ function AuthProvider({ children }) {
 		else {
 			setUser(null);
 			setSession(null);
+			setActiveRole(null);
+			setHighestRole(null);
+			localStorage.removeItem("activeRole");
 		}
 	};
+	const switchRole = (newRole) => {
+		if (!highestRole || !user) return;
+		if (highestRole === "client" && newRole !== "client") return;
+		if (highestRole === "professional" && newRole === "admin") return;
+		localStorage.setItem("activeRole", newRole);
+		setActiveRole(newRole);
+		setUser({
+			...user,
+			role: newRole
+		});
+		navigate({
+			admin: "/master",
+			professional: "/professional",
+			client: "/client"
+		}[newRole]);
+	};
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AuthContext.Provider, {
-		"data-uid": "src/contexts/AuthContext.tsx:89:5",
+		"data-uid": "src/contexts/AuthContext.tsx:135:5",
 		"data-prohibitions": "[editContent]",
 		value: {
 			user,
 			session,
 			isLoading,
-			logout
+			activeRole,
+			highestRole,
+			logout,
+			switchRole
 		},
 		children
 	});
@@ -25543,6 +25583,6 @@ function PageContent({ children, className }) {
 	});
 }
 //#endregion
-export { X as $, useFocusGuards as A, useNavigate as At, Button as B, Overlay as C, BrowserRouter as Ct, Trigger$1 as D, Route as Dt, Title as E, Outlet as Et, CardContent as F, __exportAll as Ft, Anchor as G, useAuth as H, CardDescription as I, __toESM as It, Root2$1 as J, Arrow as K, CardFooter as L, Primitive as M, require_react_dom as Mt, Input as N, require_react as Nt, hideOthers as O, Routes as Ot, Card as P, __commonJSMin as Pt, cn as Q, CardHeader as R, Description as S, composeEventHandlers as St, Root$2 as T, Navigate as Tt, supabase as U, AuthProvider as V, TooltipProvider as W, useSize as X, createPopperScope as Y, useId as Z, SidebarMenuItem as _, createCollection as _t, AvatarImage as a, VISUALLY_HIDDEN_STYLES as at, Close as b, require_jsx_runtime as bt, Root$1 as c, Presence as ct, Sidebar as d, Branch as dt, Sparkles as et, SidebarContent as f, DismissableLayer as ft, SidebarMenuButton as g, dispatchDiscreteCustomEvent as gt, SidebarMenu as h, Primitive$1 as ht, AvatarFallback as i, clsx as it, FocusScope as j, __vitePreload as jt, ReactRemoveScroll as k, useLocation as kt, createRovingFocusGroupScope as l, Portal$2 as lt, SidebarInset as m, useCallbackRef$1 as mt, DashboardHeader as n, createLucideIcon as nt, createContextScope as o, VisuallyHidden as ot, SidebarHeader as p, Root$6 as pt, Content$1 as q, Avatar as r, cva as rt, Item as s, useControllableState as st, PageContent as t, Check as tt, useDirection as u, useLayoutEffect2 as ut, SidebarProvider as v, createSlot$1 as vt, Portal$1 as w, Link as wt, Content as x, useComposedRefs as xt, Skeleton as y, createContextScope$1 as yt, CardTitle as z };
+export { Arrow as $, Overlay as A, composeEventHandlers as At, Input as B, require_react_dom as Bt, SidebarMenuButton as C, Primitive$1 as Ct, Close as D, createContextScope$1 as Dt, Skeleton as E, createSlot$1 as Et, hideOthers as F, Route as Ft, CardHeader as G, CardContent as H, __commonJSMin as Ht, ReactRemoveScroll as I, Routes as It, AuthProvider as J, CardTitle as K, useFocusGuards as L, useLocation as Lt, Root$2 as M, Link as Mt, Title as N, Navigate as Nt, Content as O, require_jsx_runtime as Ot, Trigger$1 as P, Outlet as Pt, Anchor as Q, FocusScope as R, useNavigate as Rt, SidebarMenu as S, useCallbackRef$1 as St, SidebarProvider as T, createCollection as Tt, CardDescription as U, __exportAll as Ut, Card as V, require_react as Vt, CardFooter as W, __toESM as Wt, supabase as X, useAuth as Y, TooltipProvider as Z, Sidebar as _, Portal$2 as _t, AvatarImage as a, cn as at, SidebarHeader as b, DismissableLayer as bt, DropdownMenuContent as c, Sparkles as ct, DropdownMenuSeparator as d, cva as dt, Content$1 as et, DropdownMenuTrigger as f, clsx as ft, useDirection as g, Presence as gt, createRovingFocusGroupScope as h, useControllableState as ht, AvatarFallback as i, useId as it, Portal$1 as j, BrowserRouter as jt, Description as k, useComposedRefs as kt, DropdownMenuItem as l, Check as lt, Root$1 as m, VisuallyHidden as mt, DashboardHeader as n, createPopperScope as nt, createContextScope as o, X as ot, Item as p, VISUALLY_HIDDEN_STYLES as pt, Button as q, Avatar as r, useSize as rt, DropdownMenu as s, User as st, PageContent as t, Root2$1 as tt, DropdownMenuLabel as u, createLucideIcon as ut, SidebarContent as v, useLayoutEffect2 as vt, SidebarMenuItem as w, dispatchDiscreteCustomEvent as wt, SidebarInset as x, Root$6 as xt, SidebarFooter as y, Branch as yt, Primitive as z, __vitePreload as zt };
 
-//# sourceMappingURL=PageContent-RzmFadm7.js.map
+//# sourceMappingURL=PageContent-ChuXhdYa.js.map

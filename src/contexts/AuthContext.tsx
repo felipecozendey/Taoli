@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, ReactNode, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { supabase } from '@/lib/supabase/client'
 import { Session } from '@supabase/supabase-js'
 
@@ -16,7 +17,10 @@ interface AuthContextType {
   user: User | null
   session: Session | null
   isLoading: boolean
+  activeRole: Role | null
+  highestRole: Role | null
   logout: () => Promise<void>
+  switchRole: (newRole: Role) => void
 }
 
 const AuthContext = createContext<AuthContextType | null>(null)
@@ -25,6 +29,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
   const [session, setSession] = useState<Session | null>(null)
   const [isLoading, setIsLoading] = useState(true)
+  const [activeRole, setActiveRole] = useState<Role | null>(null)
+  const [highestRole, setHighestRole] = useState<Role | null>(null)
+
+  const navigate = useNavigate()
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -53,20 +61,37 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         .then(({ data, error }) => {
           if (mounted) {
             if (!error && data) {
+              const dbRole = (data.role as Role) || 'client'
+              let initialActiveRole = dbRole
+
+              const savedRole = localStorage.getItem('activeRole') as Role | null
+              if (savedRole) {
+                if (dbRole === 'admin' || (dbRole === 'professional' && savedRole !== 'admin')) {
+                  initialActiveRole = savedRole
+                }
+              }
+
+              setHighestRole(dbRole)
+              setActiveRole(initialActiveRole)
+
               setUser({
                 id: session.user.id,
                 email: session.user.email || '',
                 name: data.name || 'Usuário',
-                role: (data.role as Role) || 'client',
+                role: initialActiveRole,
               })
             } else {
               setUser(null)
+              setActiveRole(null)
+              setHighestRole(null)
             }
             setIsLoading(false)
           }
         })
     } else {
       setUser(null)
+      setActiveRole(null)
+      setHighestRole(null)
       setIsLoading(false)
     }
 
@@ -82,11 +107,34 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     } else {
       setUser(null)
       setSession(null)
+      setActiveRole(null)
+      setHighestRole(null)
+      localStorage.removeItem('activeRole')
     }
   }
 
+  const switchRole = (newRole: Role) => {
+    if (!highestRole || !user) return
+
+    if (highestRole === 'client' && newRole !== 'client') return
+    if (highestRole === 'professional' && newRole === 'admin') return
+
+    localStorage.setItem('activeRole', newRole)
+    setActiveRole(newRole)
+    setUser({ ...user, role: newRole })
+
+    const routes: Record<Role, string> = {
+      admin: '/master',
+      professional: '/professional',
+      client: '/client',
+    }
+    navigate(routes[newRole])
+  }
+
   return (
-    <AuthContext.Provider value={{ user, session, isLoading, logout }}>
+    <AuthContext.Provider
+      value={{ user, session, isLoading, activeRole, highestRole, logout, switchRole }}
+    >
       {children}
     </AuthContext.Provider>
   )

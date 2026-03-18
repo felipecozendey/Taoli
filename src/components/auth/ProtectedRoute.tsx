@@ -6,7 +6,7 @@ interface ProtectedRouteProps {
 }
 
 export function ProtectedRoute({ allowedRoles }: ProtectedRouteProps) {
-  const { user, isLoading } = useAuth()
+  const { user, activeRole, isLoading } = useAuth()
   const location = useLocation()
 
   if (isLoading) {
@@ -17,19 +17,17 @@ export function ProtectedRoute({ allowedRoles }: ProtectedRouteProps) {
     )
   }
 
-  if (!user) {
-    // Redirect to login while saving the attempted url
+  if (!user || !activeRole) {
     return <Navigate to="/login" state={{ from: location }} replace />
   }
 
-  if (!allowedRoles.includes(user.role)) {
-    // Determine fallback route based on role
+  if (!allowedRoles.includes(activeRole)) {
     const fallbackRoutes: Record<Role, string> = {
       admin: '/master',
       professional: '/professional',
       client: '/client',
     }
-    return <Navigate to={fallbackRoutes[user.role] || '/'} replace />
+    return <Navigate to={fallbackRoutes[activeRole] || '/'} replace />
   }
 
   return <Outlet />

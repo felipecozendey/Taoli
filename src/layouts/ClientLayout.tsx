@@ -19,7 +19,9 @@ import {
   SidebarMenu,
   SidebarMenuItem,
   SidebarMenuButton,
+  SidebarFooter,
 } from '@/components/ui/sidebar'
+import { RoleSwitcher } from '@/components/shared/RoleSwitcher'
 
 export default function ClientLayout() {
   const location = useLocation()
@@ -64,6 +66,9 @@ export default function ClientLayout() {
               ))}
             </SidebarMenu>
           </SidebarContent>
+          <SidebarFooter className="px-4 pb-4">
+            <RoleSwitcher />
+          </SidebarFooter>
         </Sidebar>
         <SidebarInset>
           <Outlet />

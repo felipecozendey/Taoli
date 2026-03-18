@@ -1,5 +1,5 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/ProfPatients-CGALVstT.js","assets/PageContent-CQ4JHobQ.js","assets/dialog-RRWA0519.js","assets/ProfPatientRecord-O1T9Pp-p.js","assets/textarea-B_H8-KqN.js","assets/ClientNutrition-Be6iyPRt.js","assets/accordion-ClovsZ6X.js","assets/checkbox-DKLZzRNM.js","assets/flame-I-dPvU7R.js","assets/ClientTraining-B9KpTzQQ.js","assets/ClientMind-BFUBcqWk.js","assets/ClientStudy-C67Ys6rb.js","assets/ClientTeam-DEpQGzJz.js"])))=>i.map(i=>d[i]);
-import { $ as Button, A as SheetFooter, At as dispatchDiscreteCustomEvent, Bt as Outlet, C as SidebarMenuButton, Ct as Portal$1, D as Sheet, Dt as Root$4, E as Skeleton, Et as DismissableLayer, Ft as useComposedRefs, G as Primitive$1, H as ReactRemoveScroll, Ht as Routes, It as composeEventHandlers, J as CardContent, Jt as require_react_dom, K as Input, Kt as useSearchParams, Lt as BrowserRouter, M as SheetTitle, Mt as createSlot, Nt as createContextScope, O as SheetContent, Ot as useCallbackRef, Pt as require_jsx_runtime, Q as CardTitle, Qt as __toESM, Rt as Link, S as SidebarMenu, St as Presence, T as SidebarProvider, Tt as Branch, U as useFocusGuards, Ut as useLocation, V as hideOthers, Vt as Route, W as FocusScope, Wt as useNavigate, X as CardFooter, Xt as __commonJSMin, Y as CardDescription, Yt as require_react, Z as CardHeader, Zt as __exportAll, _ as Sidebar, _t as cva, at as Arrow, b as SidebarHeader, bt as VisuallyHidden, c as DropdownMenuContent, ct as createPopperScope, d as DropdownMenuSeparator, dt as cn$1, et as AuthProvider, f as DropdownMenuTrigger, ft as X, g as useDirection, gt as createLucideIcon, h as createRovingFocusGroupScope, ht as Check, it as Anchor, j as SheetHeader, jt as createCollection, k as SheetDescription, kt as Primitive, l as DropdownMenuItem, lt as useSize, m as Root$5, mt as Sparkles, n as DashboardHeader, nt as supabase, o as createContextScope$1, ot as Content$1, p as Item$1, pt as User, q as Card, qt as __vitePreload, rt as TooltipProvider, s as DropdownMenu, st as Root2$3, t as PageContent, tt as useAuth, u as DropdownMenuLabel, ut as useId, v as SidebarContent, vt as clsx, w as SidebarMenuItem, wt as useLayoutEffect2, x as SidebarInset, xt as useControllableState, y as SidebarFooter, yt as VISUALLY_HIDDEN_STYLES, zt as Navigate } from "./PageContent-CQ4JHobQ.js";
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/ProfPatients-ZQoOZ3ei.js","assets/PageContent-CQ4JHobQ.js","assets/dialog-RRWA0519.js","assets/ProfPatientRecord-DunSStFq.js","assets/textarea-B_H8-KqN.js","assets/ClientNutrition-B6VViWaf.js","assets/accordion-DSXtRZJ3.js","assets/checkbox-DmC4RAq_.js","assets/flame-I-dPvU7R.js","assets/ClientTraining-ChltWUUI.js","assets/ClientMind-CrUv2l6x.js","assets/ClientStudy-CHMGLNSx.js","assets/ClientTeam-DJzKNdRD.js"])))=>i.map(i=>d[i]);
+import { $ as Button, A as SheetFooter, At as dispatchDiscreteCustomEvent, Bt as Outlet, C as SidebarMenuButton, Ct as Portal$1, D as Sheet, Dt as Root$4, E as Skeleton, Et as DismissableLayer, Ft as useComposedRefs, G as Primitive$1, H as ReactRemoveScroll, Ht as Routes, It as composeEventHandlers, J as CardContent, Jt as require_react_dom, K as Input, Kt as useSearchParams, Lt as BrowserRouter, M as SheetTitle, Mt as createSlot, Nt as createContextScope, O as SheetContent, Ot as useCallbackRef, Pt as require_jsx_runtime, Q as CardTitle, Qt as __toESM, Rt as Link$1, S as SidebarMenu, St as Presence, T as SidebarProvider, Tt as Branch, U as useFocusGuards, Ut as useLocation, V as hideOthers, Vt as Route, W as FocusScope, Wt as useNavigate, X as CardFooter, Xt as __commonJSMin, Y as CardDescription, Yt as require_react, Z as CardHeader, Zt as __exportAll, _ as Sidebar, _t as cva, a as AvatarImage, at as Arrow, b as SidebarHeader, bt as VisuallyHidden, c as DropdownMenuContent, ct as createPopperScope, d as DropdownMenuSeparator, dt as cn$1, et as AuthProvider, f as DropdownMenuTrigger, ft as X, g as useDirection, gt as createLucideIcon, h as createRovingFocusGroupScope, ht as Check, i as AvatarFallback, it as Anchor, j as SheetHeader, jt as createCollection, k as SheetDescription, kt as Primitive, l as DropdownMenuItem, lt as useSize, m as Root$5, mt as Sparkles, n as DashboardHeader, nt as supabase, o as createContextScope$1, ot as Content$1, p as Item$1, pt as User, q as Card, qt as __vitePreload, r as Avatar, rt as TooltipProvider, s as DropdownMenu, st as Root2$3, t as PageContent, tt as useAuth, u as DropdownMenuLabel, ut as useId, v as SidebarContent, vt as clsx, w as SidebarMenuItem, wt as useLayoutEffect2, x as SidebarInset, xt as useControllableState, y as SidebarFooter, yt as VISUALLY_HIDDEN_STYLES, zt as Navigate } from "./PageContent-CQ4JHobQ.js";
 //#region \0vite/modulepreload-polyfill.js
 (function polyfill() {
 	const relList = document.createElement("link").relList;
@@ -15243,20 +15243,6 @@ var CirclePlus = createLucideIcon("circle-plus", [
 		key: "napkw2"
 	}]
 ]);
-var CreditCard = createLucideIcon("credit-card", [["rect", {
-	width: "20",
-	height: "14",
-	x: "2",
-	y: "5",
-	rx: "2",
-	key: "ynyp8z"
-}], ["line", {
-	x1: "2",
-	x2: "22",
-	y1: "10",
-	y2: "10",
-	key: "1b3vmo"
-}]]);
 var Dumbbell = createLucideIcon("dumbbell", [
 	["path", {
 		d: "M17.596 12.768a2 2 0 1 0 2.829-2.829l-1.768-1.767a2 2 0 0 0 2.828-2.829l-2.828-2.828a2 2 0 0 0-2.829 2.828l-1.767-1.768a2 2 0 1 0-2.829 2.829z",
@@ -15378,6 +15364,13 @@ var LayoutDashboard = createLucideIcon("layout-dashboard", [
 		key: "ldoo1y"
 	}]
 ]);
+var Link = createLucideIcon("link", [["path", {
+	d: "M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71",
+	key: "1cjeqo"
+}], ["path", {
+	d: "M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71",
+	key: "19qd67"
+}]]);
 var LoaderCircle = createLucideIcon("loader-circle", [["path", {
 	d: "M21 12a9 9 0 1 1-6.219-8.56",
 	key: "13zald"
@@ -16751,7 +16744,7 @@ function Index() {
 						"data-uid": "src/pages/Index.tsx:33:11",
 						"data-prohibitions": "[]",
 						asChild: true,
-						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link$1, {
 							"data-uid": "src/pages/Index.tsx:34:13",
 							"data-prohibitions": "[]",
 							to: "/login",
@@ -16810,7 +16803,7 @@ function Index() {
 						size: "lg",
 						className: "h-14 px-8 text-lg",
 						asChild: true,
-						children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link$1, {
 							"data-uid": "src/pages/Index.tsx:60:13",
 							"data-prohibitions": "[]",
 							to: "/login",
@@ -17443,7 +17436,7 @@ function MasterLayout() {
 									asChild: true,
 									isActive: location.pathname === item.path,
 									tooltip: item.title,
-									children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
+									children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link$1, {
 										"data-uid": "src/layouts/MasterLayout.tsx:44:21",
 										"data-prohibitions": "[editContent]",
 										to: item.path,
@@ -17554,7 +17547,7 @@ function ProfessionalLayout() {
 									asChild: true,
 									isActive: location.pathname === item.path,
 									tooltip: item.title,
-									children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
+									children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link$1, {
 										"data-uid": "src/layouts/ProfessionalLayout.tsx:45:21",
 										"data-prohibitions": "[editContent]",
 										to: item.path,
@@ -17692,7 +17685,7 @@ function ClientLayout() {
 									isActive: location.pathname === item.path,
 									tooltip: item.title,
 									className: "rounded-lg h-11 transition-all duration-200",
-									children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
+									children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link$1, {
 										"data-uid": "src/layouts/ClientLayout.tsx:62:21",
 										"data-prohibitions": "[editContent]",
 										to: item.path,
@@ -17734,130 +17727,488 @@ function ClientLayout() {
 	});
 }
 //#endregion
+//#region ../../cache/modules/gerenciador-pessoal-completo-6024e/node_modules/.pnpm/@radix-ui+react-progress@1.1.8_@types+react-dom@19.2.3_@types+react@19.2.14__@types+rea_7258c0b550570cef5cd6f2d2227aa6b9/node_modules/@radix-ui/react-progress/dist/index.mjs
+var PROGRESS_NAME = "Progress";
+var DEFAULT_MAX = 100;
+var [createProgressContext, createProgressScope] = createContextScope$1(PROGRESS_NAME);
+var [ProgressProvider, useProgressContext] = createProgressContext(PROGRESS_NAME);
+var Progress$1 = import_react.forwardRef((props, forwardedRef) => {
+	const { __scopeProgress, value: valueProp = null, max: maxProp, getValueLabel = defaultGetValueLabel, ...progressProps } = props;
+	if ((maxProp || maxProp === 0) && !isValidMaxNumber(maxProp)) console.error(getInvalidMaxError(`${maxProp}`, "Progress"));
+	const max = isValidMaxNumber(maxProp) ? maxProp : DEFAULT_MAX;
+	if (valueProp !== null && !isValidValueNumber(valueProp, max)) console.error(getInvalidValueError(`${valueProp}`, "Progress"));
+	const value = isValidValueNumber(valueProp, max) ? valueProp : null;
+	const valueLabel = isNumber$1(value) ? getValueLabel(value, max) : void 0;
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ProgressProvider, {
+		scope: __scopeProgress,
+		value,
+		max,
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Primitive$1.div, {
+			"aria-valuemax": max,
+			"aria-valuemin": 0,
+			"aria-valuenow": isNumber$1(value) ? value : void 0,
+			"aria-valuetext": valueLabel,
+			role: "progressbar",
+			"data-state": getProgressState(value, max),
+			"data-value": value ?? void 0,
+			"data-max": max,
+			...progressProps,
+			ref: forwardedRef
+		})
+	});
+});
+Progress$1.displayName = PROGRESS_NAME;
+var INDICATOR_NAME = "ProgressIndicator";
+var ProgressIndicator = import_react.forwardRef((props, forwardedRef) => {
+	const { __scopeProgress, ...indicatorProps } = props;
+	const context = useProgressContext(INDICATOR_NAME, __scopeProgress);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Primitive$1.div, {
+		"data-state": getProgressState(context.value, context.max),
+		"data-value": context.value ?? void 0,
+		"data-max": context.max,
+		...indicatorProps,
+		ref: forwardedRef
+	});
+});
+ProgressIndicator.displayName = INDICATOR_NAME;
+function defaultGetValueLabel(value, max) {
+	return `${Math.round(value / max * 100)}%`;
+}
+function getProgressState(value, maxValue) {
+	return value == null ? "indeterminate" : value === maxValue ? "complete" : "loading";
+}
+function isNumber$1(value) {
+	return typeof value === "number";
+}
+function isValidMaxNumber(max) {
+	return isNumber$1(max) && !isNaN(max) && max > 0;
+}
+function isValidValueNumber(value, max) {
+	return isNumber$1(value) && !isNaN(value) && value <= max && value >= 0;
+}
+function getInvalidMaxError(propValue, componentName) {
+	return `Invalid prop \`max\` of value \`${propValue}\` supplied to \`${componentName}\`. Only numbers greater than 0 are valid max values. Defaulting to \`${DEFAULT_MAX}\`.`;
+}
+function getInvalidValueError(propValue, componentName) {
+	return `Invalid prop \`value\` of value \`${propValue}\` supplied to \`${componentName}\`. The \`value\` prop must be:
+  - a positive number
+  - less than the value passed to \`max\` (or ${DEFAULT_MAX} if no \`max\` prop is set)
+  - \`null\` or \`undefined\` if the progress is indeterminate.
+
+Defaulting to \`null\`.`;
+}
+var Root$2 = Progress$1;
+var Indicator = ProgressIndicator;
+//#endregion
+//#region src/components/ui/progress.tsx
+var Progress = import_react.forwardRef(({ className, value, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Root$2, {
+	"data-uid": "src/components/ui/progress.tsx:11:3",
+	"data-prohibitions": "[editContent]",
+	ref,
+	className: cn$1("relative h-4 w-full overflow-hidden rounded-full bg-secondary", className),
+	...props,
+	children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Indicator, {
+		"data-uid": "src/components/ui/progress.tsx:16:5",
+		"data-prohibitions": "[editContent]",
+		className: "h-full w-full flex-1 bg-primary transition-all",
+		style: { transform: `translateX(-${100 - (value || 0)}%)` }
+	})
+}));
+Progress.displayName = Root$2.displayName;
+//#endregion
 //#region src/pages/master/MasterDashboard.tsx
 function MasterDashboard() {
+	const [stats] = (0, import_react.useState)({
+		totalUsers: {
+			value: "156",
+			trend: "+12% este mês"
+		},
+		professionals: {
+			value: "24",
+			trend: "+3 novos esta semana"
+		},
+		clients: {
+			value: "130",
+			trend: "+18% este mês"
+		},
+		links: {
+			value: "112",
+			trend: "+5% esta semana"
+		}
+	});
+	const [recentUsers] = (0, import_react.useState)([
+		{
+			id: 1,
+			name: "Ana Silva",
+			email: "ana.silva@email.com",
+			time: "Entrou há 2 horas",
+			initials: "AS",
+			avatar: "https://img.usecurling.com/ppl/thumbnail?gender=female&seed=1"
+		},
+		{
+			id: 2,
+			name: "Carlos Santos",
+			email: "carlos.s@email.com",
+			time: "Entrou há 5 horas",
+			initials: "CS",
+			avatar: "https://img.usecurling.com/ppl/thumbnail?gender=male&seed=2"
+		},
+		{
+			id: 3,
+			name: "Dra. Beatriz Costa",
+			email: "beatriz.nutri@email.com",
+			time: "Entrou há 1 dia",
+			initials: "BC",
+			avatar: "https://img.usecurling.com/ppl/thumbnail?gender=female&seed=3"
+		},
+		{
+			id: 4,
+			name: "Fernando Oliveira",
+			email: "fernando.o@email.com",
+			time: "Entrou há 2 dias",
+			initials: "FO",
+			avatar: ""
+		},
+		{
+			id: 5,
+			name: "Mariana Lima",
+			email: "mariana.l@email.com",
+			time: "Entrou há 2 dias",
+			initials: "ML",
+			avatar: "https://img.usecurling.com/ppl/thumbnail?gender=female&seed=4"
+		}
+	]);
+	const [specialties] = (0, import_react.useState)([
+		{
+			name: "Nutrição",
+			value: 50
+		},
+		{
+			name: "Educação Física",
+			value: 30
+		},
+		{
+			name: "Psicologia",
+			value: 20
+		}
+	]);
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-		"data-uid": "src/pages/master/MasterDashboard.tsx:8:5",
-		"data-prohibitions": "[]",
-		className: "flex flex-col min-h-full",
+		"data-uid": "src/pages/master/MasterDashboard.tsx:67:5",
+		"data-prohibitions": "[editContent]",
+		className: "flex flex-col min-h-full bg-muted/20",
 		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DashboardHeader, {
-			"data-uid": "src/pages/master/MasterDashboard.tsx:9:7",
+			"data-uid": "src/pages/master/MasterDashboard.tsx:68:7",
 			"data-prohibitions": "[editContent]",
-			title: "Master Admin Dashboard"
+			title: "Administração do Sistema"
 		}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(PageContent, {
-			"data-uid": "src/pages/master/MasterDashboard.tsx:10:7",
-			"data-prohibitions": "[]",
-			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-				"data-uid": "src/pages/master/MasterDashboard.tsx:11:9",
-				"data-prohibitions": "[]",
-				className: "grid gap-4 md:grid-cols-3 mb-8",
-				children: [
-					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
-						"data-uid": "src/pages/master/MasterDashboard.tsx:12:11",
+			"data-uid": "src/pages/master/MasterDashboard.tsx:69:7",
+			"data-prohibitions": "[editContent]",
+			className: "max-w-7xl mx-auto w-full space-y-8 animate-fade-in-up",
+			children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					"data-uid": "src/pages/master/MasterDashboard.tsx:71:9",
+					"data-prohibitions": "[]",
+					className: "flex flex-col space-y-2",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+						"data-uid": "src/pages/master/MasterDashboard.tsx:72:11",
 						"data-prohibitions": "[]",
-						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, {
-							"data-uid": "src/pages/master/MasterDashboard.tsx:13:13",
-							"data-prohibitions": "[]",
-							className: "flex flex-row items-center justify-between space-y-0 pb-2",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
-								"data-uid": "src/pages/master/MasterDashboard.tsx:14:15",
-								"data-prohibitions": "[]",
-								className: "text-sm font-medium",
-								children: "Total de Usuários"
-							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Users, {
-								"data-uid": "src/pages/master/MasterDashboard.tsx:15:15",
-								"data-prohibitions": "[editContent]",
-								className: "h-4 w-4 text-muted-foreground"
-							})]
-						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardContent, {
-							"data-uid": "src/pages/master/MasterDashboard.tsx:17:13",
-							"data-prohibitions": "[]",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-								"data-uid": "src/pages/master/MasterDashboard.tsx:18:15",
-								"data-prohibitions": "[]",
-								className: "text-2xl font-bold",
-								children: "10,234"
-							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-								"data-uid": "src/pages/master/MasterDashboard.tsx:19:15",
-								"data-prohibitions": "[]",
-								className: "text-xs text-muted-foreground",
-								children: "+180 desde o mês passado"
-							})]
-						})]
-					}),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
-						"data-uid": "src/pages/master/MasterDashboard.tsx:23:11",
+						className: "text-3xl font-bold tracking-tight text-foreground",
+						children: "Visão Geral da Plataforma"
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+						"data-uid": "src/pages/master/MasterDashboard.tsx:75:11",
 						"data-prohibitions": "[]",
-						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, {
-							"data-uid": "src/pages/master/MasterDashboard.tsx:24:13",
-							"data-prohibitions": "[]",
-							className: "flex flex-row items-center justify-between space-y-0 pb-2",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
-								"data-uid": "src/pages/master/MasterDashboard.tsx:25:15",
+						className: "text-lg text-muted-foreground",
+						children: "Acompanhe o crescimento e as métricas em tempo real do seu sistema."
+					})]
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					"data-uid": "src/pages/master/MasterDashboard.tsx:81:9",
+					"data-prohibitions": "[editContent]",
+					className: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6",
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
+							"data-uid": "src/pages/master/MasterDashboard.tsx:82:11",
+							"data-prohibitions": "[editContent]",
+							className: "shadow-sm border-border/50 bg-card",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, {
+								"data-uid": "src/pages/master/MasterDashboard.tsx:83:13",
 								"data-prohibitions": "[]",
-								className: "text-sm font-medium",
-								children: "Profissionais Ativos"
-							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Activity, {
-								"data-uid": "src/pages/master/MasterDashboard.tsx:26:15",
+								className: "flex flex-row items-center justify-between pb-2 space-y-0",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
+									"data-uid": "src/pages/master/MasterDashboard.tsx:84:15",
+									"data-prohibitions": "[]",
+									className: "text-sm font-medium",
+									children: "Total de Utilizadores"
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Users, {
+									"data-uid": "src/pages/master/MasterDashboard.tsx:85:15",
+									"data-prohibitions": "[editContent]",
+									className: "h-4 w-4 text-muted-foreground"
+								})]
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardContent, {
+								"data-uid": "src/pages/master/MasterDashboard.tsx:87:13",
 								"data-prohibitions": "[editContent]",
-								className: "h-4 w-4 text-muted-foreground"
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+									"data-uid": "src/pages/master/MasterDashboard.tsx:88:15",
+									"data-prohibitions": "[editContent]",
+									className: "text-2xl font-bold",
+									children: stats.totalUsers.value
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+									"data-uid": "src/pages/master/MasterDashboard.tsx:89:15",
+									"data-prohibitions": "[editContent]",
+									className: "text-xs text-emerald-600 dark:text-emerald-400 font-medium flex items-center mt-1",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TrendingUp, {
+										"data-uid": "src/pages/master/MasterDashboard.tsx:90:17",
+										"data-prohibitions": "[editContent]",
+										className: "h-3 w-3 mr-1"
+									}), stats.totalUsers.trend]
+								})]
 							})]
-						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardContent, {
-							"data-uid": "src/pages/master/MasterDashboard.tsx:28:13",
-							"data-prohibitions": "[]",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-								"data-uid": "src/pages/master/MasterDashboard.tsx:29:15",
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
+							"data-uid": "src/pages/master/MasterDashboard.tsx:96:11",
+							"data-prohibitions": "[editContent]",
+							className: "shadow-sm border-border/50 bg-card",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, {
+								"data-uid": "src/pages/master/MasterDashboard.tsx:97:13",
 								"data-prohibitions": "[]",
-								className: "text-2xl font-bold",
-								children: "423"
-							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-								"data-uid": "src/pages/master/MasterDashboard.tsx:30:15",
-								"data-prohibitions": "[]",
-								className: "text-xs text-muted-foreground",
-								children: "+12 aprovações pendentes"
-							})]
-						})]
-					}),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
-						"data-uid": "src/pages/master/MasterDashboard.tsx:34:11",
-						"data-prohibitions": "[]",
-						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, {
-							"data-uid": "src/pages/master/MasterDashboard.tsx:35:13",
-							"data-prohibitions": "[]",
-							className: "flex flex-row items-center justify-between space-y-0 pb-2",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
-								"data-uid": "src/pages/master/MasterDashboard.tsx:36:15",
-								"data-prohibitions": "[]",
-								className: "text-sm font-medium",
-								children: "Receita Estimada"
-							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CreditCard, {
-								"data-uid": "src/pages/master/MasterDashboard.tsx:37:15",
+								className: "flex flex-row items-center justify-between pb-2 space-y-0",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
+									"data-uid": "src/pages/master/MasterDashboard.tsx:98:15",
+									"data-prohibitions": "[]",
+									className: "text-sm font-medium",
+									children: "Profissionais Ativos"
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Briefcase, {
+									"data-uid": "src/pages/master/MasterDashboard.tsx:99:15",
+									"data-prohibitions": "[editContent]",
+									className: "h-4 w-4 text-muted-foreground"
+								})]
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardContent, {
+								"data-uid": "src/pages/master/MasterDashboard.tsx:101:13",
 								"data-prohibitions": "[editContent]",
-								className: "h-4 w-4 text-muted-foreground"
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+									"data-uid": "src/pages/master/MasterDashboard.tsx:102:15",
+									"data-prohibitions": "[editContent]",
+									className: "text-2xl font-bold",
+									children: stats.professionals.value
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+									"data-uid": "src/pages/master/MasterDashboard.tsx:103:15",
+									"data-prohibitions": "[editContent]",
+									className: "text-xs text-emerald-600 dark:text-emerald-400 font-medium flex items-center mt-1",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TrendingUp, {
+										"data-uid": "src/pages/master/MasterDashboard.tsx:104:17",
+										"data-prohibitions": "[editContent]",
+										className: "h-3 w-3 mr-1"
+									}), stats.professionals.trend]
+								})]
 							})]
-						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardContent, {
-							"data-uid": "src/pages/master/MasterDashboard.tsx:39:13",
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
+							"data-uid": "src/pages/master/MasterDashboard.tsx:110:11",
+							"data-prohibitions": "[editContent]",
+							className: "shadow-sm border-border/50 bg-card",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, {
+								"data-uid": "src/pages/master/MasterDashboard.tsx:111:13",
+								"data-prohibitions": "[]",
+								className: "flex flex-row items-center justify-between pb-2 space-y-0",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
+									"data-uid": "src/pages/master/MasterDashboard.tsx:112:15",
+									"data-prohibitions": "[]",
+									className: "text-sm font-medium",
+									children: "Clientes (Pacientes)"
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(User, {
+									"data-uid": "src/pages/master/MasterDashboard.tsx:113:15",
+									"data-prohibitions": "[editContent]",
+									className: "h-4 w-4 text-muted-foreground"
+								})]
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardContent, {
+								"data-uid": "src/pages/master/MasterDashboard.tsx:115:13",
+								"data-prohibitions": "[editContent]",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+									"data-uid": "src/pages/master/MasterDashboard.tsx:116:15",
+									"data-prohibitions": "[editContent]",
+									className: "text-2xl font-bold",
+									children: stats.clients.value
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+									"data-uid": "src/pages/master/MasterDashboard.tsx:117:15",
+									"data-prohibitions": "[editContent]",
+									className: "text-xs text-emerald-600 dark:text-emerald-400 font-medium flex items-center mt-1",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TrendingUp, {
+										"data-uid": "src/pages/master/MasterDashboard.tsx:118:17",
+										"data-prohibitions": "[editContent]",
+										className: "h-3 w-3 mr-1"
+									}), stats.clients.trend]
+								})]
+							})]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
+							"data-uid": "src/pages/master/MasterDashboard.tsx:124:11",
+							"data-prohibitions": "[editContent]",
+							className: "shadow-sm border-border/50 bg-card",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, {
+								"data-uid": "src/pages/master/MasterDashboard.tsx:125:13",
+								"data-prohibitions": "[]",
+								className: "flex flex-row items-center justify-between pb-2 space-y-0",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
+									"data-uid": "src/pages/master/MasterDashboard.tsx:126:15",
+									"data-prohibitions": "[]",
+									className: "text-sm font-medium",
+									children: "Vínculos Estabelecidos"
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
+									"data-uid": "src/pages/master/MasterDashboard.tsx:127:15",
+									"data-prohibitions": "[editContent]",
+									className: "h-4 w-4 text-muted-foreground"
+								})]
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardContent, {
+								"data-uid": "src/pages/master/MasterDashboard.tsx:129:13",
+								"data-prohibitions": "[editContent]",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+									"data-uid": "src/pages/master/MasterDashboard.tsx:130:15",
+									"data-prohibitions": "[editContent]",
+									className: "text-2xl font-bold",
+									children: stats.links.value
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+									"data-uid": "src/pages/master/MasterDashboard.tsx:131:15",
+									"data-prohibitions": "[editContent]",
+									className: "text-xs text-emerald-600 dark:text-emerald-400 font-medium flex items-center mt-1",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TrendingUp, {
+										"data-uid": "src/pages/master/MasterDashboard.tsx:132:17",
+										"data-prohibitions": "[editContent]",
+										className: "h-3 w-3 mr-1"
+									}), stats.links.trend]
+								})]
+							})]
+						})
+					]
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					"data-uid": "src/pages/master/MasterDashboard.tsx:140:9",
+					"data-prohibitions": "[editContent]",
+					className: "grid grid-cols-1 lg:grid-cols-2 gap-6",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
+						"data-uid": "src/pages/master/MasterDashboard.tsx:141:11",
+						"data-prohibitions": "[editContent]",
+						className: "shadow-sm border-border/50",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, {
+							"data-uid": "src/pages/master/MasterDashboard.tsx:142:13",
 							"data-prohibitions": "[]",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-								"data-uid": "src/pages/master/MasterDashboard.tsx:40:15",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
+								"data-uid": "src/pages/master/MasterDashboard.tsx:143:15",
 								"data-prohibitions": "[]",
-								className: "text-2xl font-bold",
-								children: "R$ 124.500"
-							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-								"data-uid": "src/pages/master/MasterDashboard.tsx:41:15",
+								children: "Últimos Registos"
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardDescription, {
+								"data-uid": "src/pages/master/MasterDashboard.tsx:144:15",
 								"data-prohibitions": "[]",
-								className: "text-xs text-muted-foreground",
-								children: "+8.2% de crescimento"
+								children: "Os utilizadores mais recentes a aderir à plataforma."
 							})]
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContent, {
+							"data-uid": "src/pages/master/MasterDashboard.tsx:148:13",
+							"data-prohibitions": "[editContent]",
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								"data-uid": "src/pages/master/MasterDashboard.tsx:149:15",
+								"data-prohibitions": "[editContent]",
+								className: "space-y-6",
+								children: recentUsers.map((user) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									"data-uid": "src/pages/master/MasterDashboard.tsx:151:19",
+									"data-prohibitions": "[editContent]",
+									className: "flex items-center gap-4",
+									children: [
+										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Avatar, {
+											"data-uid": "src/pages/master/MasterDashboard.tsx:152:21",
+											"data-prohibitions": "[editContent]",
+											className: "h-10 w-10 border bg-muted",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(AvatarImage, {
+												"data-uid": "src/pages/master/MasterDashboard.tsx:153:23",
+												"data-prohibitions": "[editContent]",
+												src: user.avatar,
+												alt: user.name
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AvatarFallback, {
+												"data-uid": "src/pages/master/MasterDashboard.tsx:154:23",
+												"data-prohibitions": "[editContent]",
+												className: "font-medium text-xs",
+												children: user.initials
+											})]
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+											"data-uid": "src/pages/master/MasterDashboard.tsx:158:21",
+											"data-prohibitions": "[editContent]",
+											className: "flex flex-col space-y-1 overflow-hidden",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+												"data-uid": "src/pages/master/MasterDashboard.tsx:159:23",
+												"data-prohibitions": "[editContent]",
+												className: "text-sm font-medium leading-none truncate",
+												children: user.name
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+												"data-uid": "src/pages/master/MasterDashboard.tsx:160:23",
+												"data-prohibitions": "[editContent]",
+												className: "text-xs text-muted-foreground truncate",
+												children: user.email
+											})]
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+											"data-uid": "src/pages/master/MasterDashboard.tsx:162:21",
+											"data-prohibitions": "[editContent]",
+											className: "ml-auto font-medium text-xs text-muted-foreground whitespace-nowrap hidden sm:block",
+											children: user.time
+										})
+									]
+								}, user.id))
+							})
 						})]
-					})
-				]
-			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-				"data-uid": "src/pages/master/MasterDashboard.tsx:46:9",
-				"data-prohibitions": "[]",
-				className: "rounded-xl border bg-card text-card-foreground shadow-sm h-64 flex items-center justify-center text-muted-foreground",
-				children: "[Gráfico de Crescimento de Usuários - Placeholder]"
-			})]
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
+						"data-uid": "src/pages/master/MasterDashboard.tsx:171:11",
+						"data-prohibitions": "[editContent]",
+						className: "shadow-sm border-border/50",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, {
+							"data-uid": "src/pages/master/MasterDashboard.tsx:172:13",
+							"data-prohibitions": "[]",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
+								"data-uid": "src/pages/master/MasterDashboard.tsx:173:15",
+								"data-prohibitions": "[]",
+								children: "Distribuição de Especialidades"
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardDescription, {
+								"data-uid": "src/pages/master/MasterDashboard.tsx:174:15",
+								"data-prohibitions": "[]",
+								children: "Representação visual das áreas de atuação dos profissionais ativos."
+							})]
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContent, {
+							"data-uid": "src/pages/master/MasterDashboard.tsx:178:13",
+							"data-prohibitions": "[editContent]",
+							className: "pt-4",
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								"data-uid": "src/pages/master/MasterDashboard.tsx:179:15",
+								"data-prohibitions": "[editContent]",
+								className: "space-y-8",
+								children: specialties.map((spec) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									"data-uid": "src/pages/master/MasterDashboard.tsx:181:19",
+									"data-prohibitions": "[editContent]",
+									className: "space-y-2",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										"data-uid": "src/pages/master/MasterDashboard.tsx:182:21",
+										"data-prohibitions": "[editContent]",
+										className: "flex items-center justify-between text-sm",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+											"data-uid": "src/pages/master/MasterDashboard.tsx:183:23",
+											"data-prohibitions": "[editContent]",
+											className: "font-semibold text-foreground",
+											children: spec.name
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+											"data-uid": "src/pages/master/MasterDashboard.tsx:184:23",
+											"data-prohibitions": "[editContent]",
+											className: "text-muted-foreground font-medium",
+											children: [spec.value, "%"]
+										})]
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Progress, {
+										"data-uid": "src/pages/master/MasterDashboard.tsx:186:21",
+										"data-prohibitions": "[editContent]",
+										value: spec.value,
+										className: "h-2.5 bg-muted"
+									})]
+								}, spec.name))
+							})
+						})]
+					})]
+				})
+			]
 		})]
 	});
 }
@@ -19222,11 +19573,11 @@ SwitchBubbleInput.displayName = BUBBLE_INPUT_NAME;
 function getState(checked) {
 	return checked ? "checked" : "unchecked";
 }
-var Root$2 = Switch$1;
+var Root$1 = Switch$1;
 var Thumb = SwitchThumb;
 //#endregion
 //#region src/components/ui/switch.tsx
-var Switch = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Root$2, {
+var Switch = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Root$1, {
 	"data-uid": "src/components/ui/switch.tsx:11:3",
 	"data-prohibitions": "[editContent]",
 	className: cn$1("peer inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=unchecked]:bg-input", className),
@@ -19238,7 +19589,7 @@ var Switch = import_react.forwardRef(({ className, ...props }, ref) => /* @__PUR
 		className: cn$1("pointer-events-none block h-5 w-5 rounded-full bg-background shadow-lg ring-0 transition-transform data-[state=checked]:translate-x-5 data-[state=unchecked]:translate-x-0")
 	})
 }));
-Switch.displayName = Root$2.displayName;
+Switch.displayName = Root$1.displayName;
 //#endregion
 //#region src/services/master.ts
 /**
@@ -20647,12 +20998,12 @@ function useResizeObserver(element, onResize) {
 		}
 	}, [element, handleResize]);
 }
-var Root$1 = ScrollArea$1;
+var Root = ScrollArea$1;
 var Viewport = ScrollAreaViewport;
 var Corner = ScrollAreaCorner;
 //#endregion
 //#region src/components/ui/scroll-area.tsx
-var ScrollArea = import_react.forwardRef(({ className, children, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Root$1, {
+var ScrollArea = import_react.forwardRef(({ className, children, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Root, {
 	"data-uid": "src/components/ui/scroll-area.tsx:11:3",
 	"data-prohibitions": "[editContent]",
 	ref,
@@ -20675,7 +21026,7 @@ var ScrollArea = import_react.forwardRef(({ className, children, ...props }, ref
 		})
 	]
 }));
-ScrollArea.displayName = Root$1.displayName;
+ScrollArea.displayName = Root.displayName;
 var ScrollBar = import_react.forwardRef(({ className, orientation = "vertical", ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ScrollAreaScrollbar, {
 	"data-uid": "src/components/ui/scroll-area.tsx:29:3",
 	"data-prohibitions": "[editContent]",
@@ -21384,95 +21735,6 @@ function ProfPrescriptions() {
 		})]
 	});
 }
-//#endregion
-//#region ../../cache/modules/gerenciador-pessoal-completo-6024e/node_modules/.pnpm/@radix-ui+react-progress@1.1.8_@types+react-dom@19.2.3_@types+react@19.2.14__@types+rea_7258c0b550570cef5cd6f2d2227aa6b9/node_modules/@radix-ui/react-progress/dist/index.mjs
-var PROGRESS_NAME = "Progress";
-var DEFAULT_MAX = 100;
-var [createProgressContext, createProgressScope] = createContextScope$1(PROGRESS_NAME);
-var [ProgressProvider, useProgressContext] = createProgressContext(PROGRESS_NAME);
-var Progress$1 = import_react.forwardRef((props, forwardedRef) => {
-	const { __scopeProgress, value: valueProp = null, max: maxProp, getValueLabel = defaultGetValueLabel, ...progressProps } = props;
-	if ((maxProp || maxProp === 0) && !isValidMaxNumber(maxProp)) console.error(getInvalidMaxError(`${maxProp}`, "Progress"));
-	const max = isValidMaxNumber(maxProp) ? maxProp : DEFAULT_MAX;
-	if (valueProp !== null && !isValidValueNumber(valueProp, max)) console.error(getInvalidValueError(`${valueProp}`, "Progress"));
-	const value = isValidValueNumber(valueProp, max) ? valueProp : null;
-	const valueLabel = isNumber$1(value) ? getValueLabel(value, max) : void 0;
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ProgressProvider, {
-		scope: __scopeProgress,
-		value,
-		max,
-		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Primitive$1.div, {
-			"aria-valuemax": max,
-			"aria-valuemin": 0,
-			"aria-valuenow": isNumber$1(value) ? value : void 0,
-			"aria-valuetext": valueLabel,
-			role: "progressbar",
-			"data-state": getProgressState(value, max),
-			"data-value": value ?? void 0,
-			"data-max": max,
-			...progressProps,
-			ref: forwardedRef
-		})
-	});
-});
-Progress$1.displayName = PROGRESS_NAME;
-var INDICATOR_NAME = "ProgressIndicator";
-var ProgressIndicator = import_react.forwardRef((props, forwardedRef) => {
-	const { __scopeProgress, ...indicatorProps } = props;
-	const context = useProgressContext(INDICATOR_NAME, __scopeProgress);
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Primitive$1.div, {
-		"data-state": getProgressState(context.value, context.max),
-		"data-value": context.value ?? void 0,
-		"data-max": context.max,
-		...indicatorProps,
-		ref: forwardedRef
-	});
-});
-ProgressIndicator.displayName = INDICATOR_NAME;
-function defaultGetValueLabel(value, max) {
-	return `${Math.round(value / max * 100)}%`;
-}
-function getProgressState(value, maxValue) {
-	return value == null ? "indeterminate" : value === maxValue ? "complete" : "loading";
-}
-function isNumber$1(value) {
-	return typeof value === "number";
-}
-function isValidMaxNumber(max) {
-	return isNumber$1(max) && !isNaN(max) && max > 0;
-}
-function isValidValueNumber(value, max) {
-	return isNumber$1(value) && !isNaN(value) && value <= max && value >= 0;
-}
-function getInvalidMaxError(propValue, componentName) {
-	return `Invalid prop \`max\` of value \`${propValue}\` supplied to \`${componentName}\`. Only numbers greater than 0 are valid max values. Defaulting to \`${DEFAULT_MAX}\`.`;
-}
-function getInvalidValueError(propValue, componentName) {
-	return `Invalid prop \`value\` of value \`${propValue}\` supplied to \`${componentName}\`. The \`value\` prop must be:
-  - a positive number
-  - less than the value passed to \`max\` (or ${DEFAULT_MAX} if no \`max\` prop is set)
-  - \`null\` or \`undefined\` if the progress is indeterminate.
-
-Defaulting to \`null\`.`;
-}
-var Root = Progress$1;
-var Indicator = ProgressIndicator;
-//#endregion
-//#region src/components/ui/progress.tsx
-var Progress = import_react.forwardRef(({ className, value, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Root, {
-	"data-uid": "src/components/ui/progress.tsx:11:3",
-	"data-prohibitions": "[editContent]",
-	ref,
-	className: cn$1("relative h-4 w-full overflow-hidden rounded-full bg-secondary", className),
-	...props,
-	children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Indicator, {
-		"data-uid": "src/components/ui/progress.tsx:16:5",
-		"data-prohibitions": "[editContent]",
-		className: "h-full w-full flex-1 bg-primary transition-all",
-		style: { transform: `translateX(-${100 - (value || 0)}%)` }
-	})
-}));
-Progress.displayName = Root.displayName;
 //#endregion
 //#region ../../cache/modules/gerenciador-pessoal-completo-6024e/node_modules/.pnpm/lodash@4.17.23/node_modules/lodash/isArray.js
 var require_isArray = /* @__PURE__ */ __commonJSMin(((exports, module) => {
@@ -46144,7 +46406,7 @@ function ClientDashboard() {
 									size: "sm",
 									className: "w-full text-blue-600 border-blue-200 hover:bg-blue-50 hover:text-blue-700",
 									asChild: true,
-									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
+									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link$1, {
 										"data-uid": "src/pages/client/ClientDashboard.tsx:87:17",
 										"data-prohibitions": "[]",
 										to: "/client/training",
@@ -46231,7 +46493,7 @@ function ClientDashboard() {
 									size: "sm",
 									className: "w-full text-amber-600 border-amber-200 hover:bg-amber-50 hover:text-amber-700",
 									asChild: true,
-									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
+									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link$1, {
 										"data-uid": "src/pages/client/ClientDashboard.tsx:132:17",
 										"data-prohibitions": "[]",
 										to: "/client/study",
@@ -46926,13 +47188,13 @@ function ClientFinances() {
 }
 //#endregion
 //#region src/App.tsx
-var ProfPatients = (0, import_react.lazy)(() => __vitePreload(() => import("./ProfPatients-CGALVstT.js"), __vite__mapDeps([0,1,2])));
-var ProfPatientRecord = (0, import_react.lazy)(() => __vitePreload(() => import("./ProfPatientRecord-O1T9Pp-p.js"), __vite__mapDeps([3,1,4])));
-var ClientNutrition = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientNutrition-Be6iyPRt.js"), __vite__mapDeps([5,1,6,7,8])));
-var ClientTraining = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientTraining-B9KpTzQQ.js"), __vite__mapDeps([9,1,6])));
-var ClientMind = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientMind-BFUBcqWk.js"), __vite__mapDeps([10,1,7])));
-var ClientStudy = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientStudy-C67Ys6rb.js"), __vite__mapDeps([11,1,8,2,4])));
-var ClientTeam = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientTeam-DEpQGzJz.js"), __vite__mapDeps([12,1,2])));
+var ProfPatients = (0, import_react.lazy)(() => __vitePreload(() => import("./ProfPatients-ZQoOZ3ei.js"), __vite__mapDeps([0,1,2])));
+var ProfPatientRecord = (0, import_react.lazy)(() => __vitePreload(() => import("./ProfPatientRecord-DunSStFq.js"), __vite__mapDeps([3,1,4])));
+var ClientNutrition = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientNutrition-B6VViWaf.js"), __vite__mapDeps([5,1,6,7,8])));
+var ClientTraining = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientTraining-ChltWUUI.js"), __vite__mapDeps([9,1,6])));
+var ClientMind = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientMind-CrUv2l6x.js"), __vite__mapDeps([10,1,7])));
+var ClientStudy = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientStudy-CHMGLNSx.js"), __vite__mapDeps([11,1,8,2,4])));
+var ClientTeam = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientTeam-DJzKNdRD.js"), __vite__mapDeps([12,1,2])));
 var LoadingFallback = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 	"data-uid": "src/App.tsx:49:3",
 	"data-prohibitions": "[]",
@@ -47285,6 +47547,6 @@ var App = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrowserRouter, {
 	"data-prohibitions": "[editContent]"
 }));
 //#endregion
-export { Badge as $, require__baseExtremum as A, getPercentValue as B, getMaxRadius as C, require_isEqual as D, getValueByDataKey as E, warn$1 as F, require_isNil as G, isNumber as H, Layer as I, Progress as J, require_get as K, filterProps as L, Cell as M, Global as N, require__baseLt as O, require__baseIteratee as P, usePrevious as Q, findAllByType as R, formatAxisMap$1 as S, polarToCartesian as T, mathSign as U, interpolateNumber$1 as V, uniqueId as W, getFullDietDetails as X, getClientActiveDiet as Y, Switch as Z, Dot as _, Apple as _t, ChartContainer as a, Search as at, LabelList as b, ChartTooltip as c, Lock as ct, generateCategoricalChart as d, FileText as dt, Label$2 as et, YAxis as f, Dumbbell as ft, Shape as g, ArrowRight as gt, Bar as h, Brain as ht, TabsTrigger as i, Smile as it, Text as j, require__baseGt as k, ChartTooltipContent as l, LoaderCircle as lt, CartesianGrid as m, ChevronDown as mt, TabsContent as n, Trash2 as nt, ChartLegend as o, Save as ot, XAxis as p, CirclePlus as pt, require_isFunction as q, TabsList as r, Target as rt, ChartLegendContent as s, Plus as st, Tabs as t, Users as tt, BarChart as u, LayoutDashboard as ut, es6_default as v, Activity as vt, getTickClassName as w, Label as x, Curve as y, useToast as yt, adaptEventsOfChild as z };
+export { Progress as $, require__baseExtremum as A, getPercentValue as B, getMaxRadius as C, require_isEqual as D, getValueByDataKey as E, warn$1 as F, require_isNil as G, isNumber as H, Layer as I, getClientActiveDiet as J, require_get as K, filterProps as L, Cell as M, Global as N, require__baseLt as O, require__baseIteratee as P, Badge as Q, findAllByType as R, formatAxisMap$1 as S, polarToCartesian as T, mathSign as U, interpolateNumber$1 as V, uniqueId as W, Switch as X, getFullDietDetails as Y, usePrevious as Z, Dot as _, ArrowRight as _t, ChartContainer as a, Search as at, LabelList as b, useToast as bt, ChartTooltip as c, Lock as ct, generateCategoricalChart as d, LayoutDashboard as dt, Label$2 as et, YAxis as f, FileText as ft, Shape as g, Brain as gt, Bar as h, ChevronDown as ht, TabsTrigger as i, Smile as it, Text as j, require__baseGt as k, ChartTooltipContent as l, LoaderCircle as lt, CartesianGrid as m, CirclePlus as mt, TabsContent as n, Trash2 as nt, ChartLegend as o, Save as ot, XAxis as p, Dumbbell as pt, require_isFunction as q, TabsList as r, Target as rt, ChartLegendContent as s, Plus as st, Tabs as t, Users as tt, BarChart as u, Link as ut, es6_default as v, Apple as vt, getTickClassName as w, Label as x, Curve as y, Activity as yt, adaptEventsOfChild as z };
 
-//# sourceMappingURL=index-CiWgUVmP.js.map
+//# sourceMappingURL=index-CyQ3h2j3.js.map

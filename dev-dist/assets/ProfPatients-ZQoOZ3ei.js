@@ -1,5 +1,5 @@
 import { $ as Button, E as Skeleton, K as Input, Pt as require_jsx_runtime, Qt as __toESM, Wt as useNavigate, X as CardFooter, Yt as require_react, Z as CardHeader, gt as createLucideIcon, i as AvatarFallback, n as DashboardHeader, nt as supabase, q as Card, r as Avatar, t as PageContent, tt as useAuth } from "./PageContent-CQ4JHobQ.js";
-import { $ as Badge, gt as ArrowRight, rt as Target, tt as Users, yt as useToast } from "./index-CiWgUVmP.js";
+import { Q as Badge, _t as ArrowRight, bt as useToast, rt as Target, tt as Users, ut as Link } from "./index-CyQ3h2j3.js";
 import { a as DialogHeader, n as DialogContent, o as DialogTitle, r as DialogDescription, s as DialogTrigger, t as Dialog } from "./dialog-RRWA0519.js";
 var Copy = createLucideIcon("copy", [["rect", {
 	width: "14",
@@ -12,13 +12,6 @@ var Copy = createLucideIcon("copy", [["rect", {
 }], ["path", {
 	d: "M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2",
 	key: "zix9uf"
-}]]);
-var Link = createLucideIcon("link", [["path", {
-	d: "M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71",
-	key: "1cjeqo"
-}], ["path", {
-	d: "M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71",
-	key: "19qd67"
 }]]);
 var UserPlus = createLucideIcon("user-plus", [
 	["path", {
@@ -371,4 +364,4 @@ function ProfPatients() {
 //#endregion
 export { ProfPatients as default };
 
-//# sourceMappingURL=ProfPatients-CGALVstT.js.map
+//# sourceMappingURL=ProfPatients-ZQoOZ3ei.js.map

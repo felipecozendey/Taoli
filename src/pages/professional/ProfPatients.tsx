@@ -52,8 +52,8 @@ export default function ProfPatients() {
 
   const handleOpenDialog = (open: boolean) => {
     setIsDialogOpen(open)
-    if (open) {
-      setInviteCode(Math.random().toString(36).substring(2, 8).toUpperCase())
+    if (open && user?.id) {
+      setInviteCode(user.id)
     }
   }
 
@@ -94,21 +94,18 @@ export default function ProfPatients() {
             <DialogHeader>
               <DialogTitle>Convidar Paciente</DialogTitle>
               <DialogDescription>
-                Envie este código para o seu paciente para se conectarem.
+                Envie a sua Chave de Conexão (abaixo) para o seu paciente colar na aba 'A Minha
+                Equipa'.
               </DialogDescription>
             </DialogHeader>
             <div className="flex items-center gap-2 mt-4">
               <div className="relative flex-1">
                 <LinkIcon className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                <Input
-                  readOnly
-                  value={inviteCode}
-                  className="pl-9 font-mono font-medium tracking-wider"
-                />
+                <Input readOnly value={inviteCode} className="pl-9 font-mono font-medium" />
               </div>
               <Button onClick={copyCode} className="shrink-0 gap-2">
                 <Copy className="h-4 w-4" />
-                <span className="hidden sm:inline">Copiar Link</span>
+                <span className="hidden sm:inline">Copiar Chave</span>
               </Button>
             </div>
           </DialogContent>
@@ -141,7 +138,7 @@ export default function ProfPatients() {
             <Users className="h-12 w-12 text-muted-foreground/30 mb-4" />
             <h3 className="text-lg font-medium text-foreground">Ainda não tem pacientes.</h3>
             <p className="text-sm text-muted-foreground mt-1 max-w-sm mb-6">
-              Gere um código de convite para conectar-se ao seu primeiro paciente.
+              Partilhe a sua Chave de Conexão com um paciente para iniciar o acompanhamento.
             </p>
             <Button onClick={() => handleOpenDialog(true)} variant="secondary">
               <UserPlus className="mr-2 h-4 w-4" />

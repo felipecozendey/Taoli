@@ -1,5 +1,5 @@
 import { B as Input, E as Skeleton, G as CardHeader, Ot as require_jsx_runtime, V as Card, Vt as require_react, W as CardFooter, Wt as __toESM, X as supabase, Y as useAuth, i as AvatarFallback, n as DashboardHeader, q as Button, r as Avatar, t as PageContent, ut as createLucideIcon } from "./PageContent-ChuXhdYa.js";
-import { Q as Badge, et as Users, gt as useToast, nt as Target, pt as ArrowRight } from "./index-BgWUsFa5.js";
+import { Q as Badge, et as Users, gt as useToast, nt as Target, pt as ArrowRight } from "./index-CS3Ee0Ro.js";
 import { a as DialogHeader, n as DialogContent, o as DialogTitle, r as DialogDescription, s as DialogTrigger, t as Dialog } from "./dialog-mrpRqmBB.js";
 var Copy = createLucideIcon("copy", [["rect", {
 	width: "14",
@@ -90,7 +90,7 @@ function ProfPatients() {
 	}, [user?.id, toast]);
 	const handleOpenDialog = (open) => {
 		setIsDialogOpen(open);
-		if (open) setInviteCode(Math.random().toString(36).substring(2, 8).toUpperCase());
+		if (open && user?.id) setInviteCode(user.id);
 	};
 	const copyCode = async () => {
 		try {
@@ -161,61 +161,61 @@ function ProfPatients() {
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(DialogDescription, {
 							"data-uid": "src/pages/professional/ProfPatients.tsx:96:15",
 							"data-prohibitions": "[]",
-							children: "Envie este código para o seu paciente para se conectarem."
+							children: "Envie a sua Chave de Conexão (abaixo) para o seu paciente colar na aba 'A Minha Equipa'."
 						})]
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						"data-uid": "src/pages/professional/ProfPatients.tsx:100:13",
+						"data-uid": "src/pages/professional/ProfPatients.tsx:101:13",
 						"data-prohibitions": "[]",
 						className: "flex items-center gap-2 mt-4",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							"data-uid": "src/pages/professional/ProfPatients.tsx:101:15",
+							"data-uid": "src/pages/professional/ProfPatients.tsx:102:15",
 							"data-prohibitions": "[]",
 							className: "relative flex-1",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
-								"data-uid": "src/pages/professional/ProfPatients.tsx:102:17",
+								"data-uid": "src/pages/professional/ProfPatients.tsx:103:17",
 								"data-prohibitions": "[editContent]",
 								className: "absolute left-3 top-3 h-4 w-4 text-muted-foreground"
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
-								"data-uid": "src/pages/professional/ProfPatients.tsx:103:17",
+								"data-uid": "src/pages/professional/ProfPatients.tsx:104:17",
 								"data-prohibitions": "[editContent]",
 								readOnly: true,
 								value: inviteCode,
-								className: "pl-9 font-mono font-medium tracking-wider"
+								className: "pl-9 font-mono font-medium"
 							})]
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
-							"data-uid": "src/pages/professional/ProfPatients.tsx:109:15",
+							"data-uid": "src/pages/professional/ProfPatients.tsx:106:15",
 							"data-prohibitions": "[]",
 							onClick: copyCode,
 							className: "shrink-0 gap-2",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Copy, {
-								"data-uid": "src/pages/professional/ProfPatients.tsx:110:17",
+								"data-uid": "src/pages/professional/ProfPatients.tsx:107:17",
 								"data-prohibitions": "[editContent]",
 								className: "h-4 w-4"
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-								"data-uid": "src/pages/professional/ProfPatients.tsx:111:17",
+								"data-uid": "src/pages/professional/ProfPatients.tsx:108:17",
 								"data-prohibitions": "[]",
 								className: "hidden sm:inline",
-								children: "Copiar Link"
+								children: "Copiar Chave"
 							})]
 						})]
 					})]
 				})]
 			})
 		}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(PageContent, {
-			"data-uid": "src/pages/professional/ProfPatients.tsx:118:7",
+			"data-uid": "src/pages/professional/ProfPatients.tsx:115:7",
 			"data-prohibitions": "[editContent]",
 			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-				"data-uid": "src/pages/professional/ProfPatients.tsx:119:9",
+				"data-uid": "src/pages/professional/ProfPatients.tsx:116:9",
 				"data-prohibitions": "[]",
 				className: "mb-6 animate-fade-in-up",
 				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-					"data-uid": "src/pages/professional/ProfPatients.tsx:120:11",
+					"data-uid": "src/pages/professional/ProfPatients.tsx:117:11",
 					"data-prohibitions": "[]",
 					className: "text-muted-foreground text-sm md:text-base",
 					children: "Faça a gestão da sua lista de clientes e envie novos convites."
 				})
 			}), isLoading ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-				"data-uid": "src/pages/professional/ProfPatients.tsx:126:11",
+				"data-uid": "src/pages/professional/ProfPatients.tsx:123:11",
 				"data-prohibitions": "[editContent]",
 				className: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6",
 				children: [
@@ -223,27 +223,27 @@ function ProfPatients() {
 					2,
 					3
 				].map((i) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Card, {
-					"data-uid": "src/pages/professional/ProfPatients.tsx:128:15",
+					"data-uid": "src/pages/professional/ProfPatients.tsx:125:15",
 					"data-prohibitions": "[]",
 					className: "flex flex-col h-[140px]",
 					children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, {
-						"data-uid": "src/pages/professional/ProfPatients.tsx:129:17",
+						"data-uid": "src/pages/professional/ProfPatients.tsx:126:17",
 						"data-prohibitions": "[]",
 						className: "flex flex-row items-start gap-4 pb-4",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Skeleton, {
-							"data-uid": "src/pages/professional/ProfPatients.tsx:130:19",
+							"data-uid": "src/pages/professional/ProfPatients.tsx:127:19",
 							"data-prohibitions": "[editContent]",
 							className: "h-12 w-12 rounded-full"
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							"data-uid": "src/pages/professional/ProfPatients.tsx:131:19",
+							"data-uid": "src/pages/professional/ProfPatients.tsx:128:19",
 							"data-prohibitions": "[]",
 							className: "space-y-2 flex-1",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Skeleton, {
-								"data-uid": "src/pages/professional/ProfPatients.tsx:132:21",
+								"data-uid": "src/pages/professional/ProfPatients.tsx:129:21",
 								"data-prohibitions": "[editContent]",
 								className: "h-4 w-3/4"
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Skeleton, {
-								"data-uid": "src/pages/professional/ProfPatients.tsx:133:21",
+								"data-uid": "src/pages/professional/ProfPatients.tsx:130:21",
 								"data-prohibitions": "[editContent]",
 								className: "h-3 w-1/2"
 							})]
@@ -251,111 +251,111 @@ function ProfPatients() {
 					})
 				}, i))
 			}) : patients.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-				"data-uid": "src/pages/professional/ProfPatients.tsx:140:11",
+				"data-uid": "src/pages/professional/ProfPatients.tsx:137:11",
 				"data-prohibitions": "[]",
 				className: "flex flex-col items-center justify-center py-16 text-center animate-fade-in-up border rounded-lg bg-card/50 border-dashed",
 				children: [
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Users, {
-						"data-uid": "src/pages/professional/ProfPatients.tsx:141:13",
+						"data-uid": "src/pages/professional/ProfPatients.tsx:138:13",
 						"data-prohibitions": "[editContent]",
 						className: "h-12 w-12 text-muted-foreground/30 mb-4"
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
-						"data-uid": "src/pages/professional/ProfPatients.tsx:142:13",
+						"data-uid": "src/pages/professional/ProfPatients.tsx:139:13",
 						"data-prohibitions": "[]",
 						className: "text-lg font-medium text-foreground",
 						children: "Ainda não tem pacientes."
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-						"data-uid": "src/pages/professional/ProfPatients.tsx:143:13",
+						"data-uid": "src/pages/professional/ProfPatients.tsx:140:13",
 						"data-prohibitions": "[]",
 						className: "text-sm text-muted-foreground mt-1 max-w-sm mb-6",
-						children: "Gere um código de convite para conectar-se ao seu primeiro paciente."
+						children: "Partilhe a sua Chave de Conexão com um paciente para iniciar o acompanhamento."
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
-						"data-uid": "src/pages/professional/ProfPatients.tsx:146:13",
+						"data-uid": "src/pages/professional/ProfPatients.tsx:143:13",
 						"data-prohibitions": "[]",
 						onClick: () => handleOpenDialog(true),
 						variant: "secondary",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(UserPlus, {
-							"data-uid": "src/pages/professional/ProfPatients.tsx:147:15",
+							"data-uid": "src/pages/professional/ProfPatients.tsx:144:15",
 							"data-prohibitions": "[editContent]",
 							className: "mr-2 h-4 w-4"
 						}), "Convidar Paciente"]
 					})
 				]
 			}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-				"data-uid": "src/pages/professional/ProfPatients.tsx:152:11",
+				"data-uid": "src/pages/professional/ProfPatients.tsx:149:11",
 				"data-prohibitions": "[editContent]",
 				className: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-fade-in-up",
 				children: patients.map((link) => {
 					const clientData = Array.isArray(link.client) ? link.client[0] : link.client;
 					const statusStr = formatStatus(link.status);
 					return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
-						"data-uid": "src/pages/professional/ProfPatients.tsx:158:17",
+						"data-uid": "src/pages/professional/ProfPatients.tsx:155:17",
 						"data-prohibitions": "[editContent]",
 						className: "flex flex-col transition-all hover:shadow-md border-border/50",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, {
-							"data-uid": "src/pages/professional/ProfPatients.tsx:162:19",
+							"data-uid": "src/pages/professional/ProfPatients.tsx:159:19",
 							"data-prohibitions": "[editContent]",
 							className: "flex flex-row items-start justify-between pb-4",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								"data-uid": "src/pages/professional/ProfPatients.tsx:163:21",
+								"data-uid": "src/pages/professional/ProfPatients.tsx:160:21",
 								"data-prohibitions": "[editContent]",
 								className: "flex items-center gap-4",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Avatar, {
-									"data-uid": "src/pages/professional/ProfPatients.tsx:164:23",
+									"data-uid": "src/pages/professional/ProfPatients.tsx:161:23",
 									"data-prohibitions": "[editContent]",
 									className: "h-12 w-12 border shadow-sm",
 									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AvatarFallback, {
-										"data-uid": "src/pages/professional/ProfPatients.tsx:165:25",
+										"data-uid": "src/pages/professional/ProfPatients.tsx:162:25",
 										"data-prohibitions": "[editContent]",
 										className: "bg-primary/5 text-primary font-medium",
 										children: getInitials(clientData?.name)
 									})
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									"data-uid": "src/pages/professional/ProfPatients.tsx:169:23",
+									"data-uid": "src/pages/professional/ProfPatients.tsx:166:23",
 									"data-prohibitions": "[editContent]",
 									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
-										"data-uid": "src/pages/professional/ProfPatients.tsx:170:25",
+										"data-uid": "src/pages/professional/ProfPatients.tsx:167:25",
 										"data-prohibitions": "[editContent]",
 										className: "font-semibold text-base leading-none mb-1.5 text-foreground line-clamp-1",
 										children: clientData?.name || "Sem Nome"
 									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-										"data-uid": "src/pages/professional/ProfPatients.tsx:173:25",
+										"data-uid": "src/pages/professional/ProfPatients.tsx:170:25",
 										"data-prohibitions": "[]",
 										className: "flex items-center text-xs text-muted-foreground font-medium",
 										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Target, {
-											"data-uid": "src/pages/professional/ProfPatients.tsx:174:27",
+											"data-uid": "src/pages/professional/ProfPatients.tsx:171:27",
 											"data-prohibitions": "[editContent]",
 											className: "h-3 w-3 mr-1 opacity-70"
 										}), "Saúde Geral"]
 									})]
 								})]
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Badge, {
-								"data-uid": "src/pages/professional/ProfPatients.tsx:179:21",
+								"data-uid": "src/pages/professional/ProfPatients.tsx:176:21",
 								"data-prohibitions": "[editContent]",
 								variant: "outline",
 								className: link.status === "active" ? "bg-emerald-50 text-emerald-700 border-emerald-200 shadow-sm" : "bg-amber-50 text-amber-700 border-amber-200 shadow-sm",
 								children: statusStr
 							})]
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardFooter, {
-							"data-uid": "src/pages/professional/ProfPatients.tsx:190:19",
+							"data-uid": "src/pages/professional/ProfPatients.tsx:187:19",
 							"data-prohibitions": "[]",
 							className: "mt-auto pt-2 pb-4",
 							children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
-								"data-uid": "src/pages/professional/ProfPatients.tsx:191:21",
+								"data-uid": "src/pages/professional/ProfPatients.tsx:188:21",
 								"data-prohibitions": "[]",
 								variant: "secondary",
 								className: "w-full justify-between group bg-muted/50 hover:bg-muted",
 								onClick: () => toast({ description: "A abrir prontuário..." }),
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-									"data-uid": "src/pages/professional/ProfPatients.tsx:196:23",
+									"data-uid": "src/pages/professional/ProfPatients.tsx:193:23",
 									"data-prohibitions": "[]",
 									className: "font-medium",
 									children: "Aceder ao Prontuário"
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowRight, {
-									"data-uid": "src/pages/professional/ProfPatients.tsx:197:23",
+									"data-uid": "src/pages/professional/ProfPatients.tsx:194:23",
 									"data-prohibitions": "[editContent]",
 									className: "h-4 w-4 opacity-50 group-hover:opacity-100 group-hover:translate-x-1 transition-all"
 								})]
@@ -370,4 +370,4 @@ function ProfPatients() {
 //#endregion
 export { ProfPatients as default };
 
-//# sourceMappingURL=ProfPatients-ZX-p1C0P.js.map
+//# sourceMappingURL=ProfPatients-An_KwK-_.js.map

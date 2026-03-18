@@ -18,7 +18,7 @@ export default function ProfessionalLayout() {
 
   const navItems = [
     { title: 'Painel', icon: LayoutDashboard, path: '/professional' },
-    { title: 'Pacientes', icon: Users, path: '/professional/patients' },
+    { title: 'Os Meus Pacientes', icon: Users, path: '/professional/patients' },
     { title: 'Agenda', icon: CalendarDays, path: '/professional/calendar' },
     { title: 'Prescrições', icon: FileText, path: '/professional/prescriptions' },
   ]

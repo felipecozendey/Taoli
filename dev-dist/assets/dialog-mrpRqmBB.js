@@ -74,6 +74,6 @@ var DialogDescription = import_react.forwardRef(({ className, ...props }, ref) =
 }));
 DialogDescription.displayName = Description.displayName;
 //#endregion
-export { DialogTitle as a, DialogHeader as i, DialogContent as n, DialogTrigger as o, DialogFooter as r, Dialog as t };
+export { DialogHeader as a, DialogFooter as i, DialogContent as n, DialogTitle as o, DialogDescription as r, DialogTrigger as s, Dialog as t };
 
-//# sourceMappingURL=dialog-CYXHoOM6.js.map
+//# sourceMappingURL=dialog-mrpRqmBB.js.map

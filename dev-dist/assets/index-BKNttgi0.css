@@ -1576,6 +1576,10 @@ section[aria-label='Notifications alt+T'] {
 .bg-accent{
   background-color: hsl(var(--accent));
 }
+.bg-amber-50{
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 251 235 / var(--tw-bg-opacity, 1));
+}
 .bg-amber-50\/20{
   background-color: rgb(255 251 235 / 0.2);
 }
@@ -2038,6 +2042,10 @@ section[aria-label='Notifications alt+T'] {
 .text-amber-600{
   --tw-text-opacity: 1;
   color: rgb(217 119 6 / var(--tw-text-opacity, 1));
+}
+.text-amber-700{
+  --tw-text-opacity: 1;
+  color: rgb(180 83 9 / var(--tw-text-opacity, 1));
 }
 .text-amber-800{
   --tw-text-opacity: 1;
@@ -2761,6 +2769,10 @@ section[aria-label='Notifications alt+T'] {
 .group\/menu-item:focus-within .group-focus-within\/menu-item\:opacity-100{
   opacity: 1;
 }
+.group:hover .group-hover\:translate-x-1{
+  --tw-translate-x: 0.25rem;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
 .group:hover .group-hover\:bg-primary\/10{
   background-color: hsl(var(--primary) / 0.1);
 }
@@ -3353,6 +3365,10 @@ section[aria-label='Notifications alt+T'] {
     background-color: hsl(var(--background) / 0.6);
   }
 }
+.dark\:border-amber-900:is(.dark *){
+  --tw-border-opacity: 1;
+  border-color: rgb(120 53 15 / var(--tw-border-opacity, 1));
+}
 .dark\:border-amber-900\/50:is(.dark *){
   border-color: rgb(120 53 15 / 0.5);
 }
@@ -3366,6 +3382,10 @@ section[aria-label='Notifications alt+T'] {
 .dark\:border-destructive:is(.dark *){
   border-color: hsl(var(--destructive));
 }
+.dark\:border-emerald-900:is(.dark *){
+  --tw-border-opacity: 1;
+  border-color: rgb(6 78 59 / var(--tw-border-opacity, 1));
+}
 .dark\:border-emerald-900\/50:is(.dark *){
   border-color: rgb(6 78 59 / 0.5);
 }
@@ -3374,6 +3394,9 @@ section[aria-label='Notifications alt+T'] {
 }
 .dark\:bg-amber-900\/5:is(.dark *){
   background-color: rgb(120 53 15 / 0.05);
+}
+.dark\:bg-amber-950\/50:is(.dark *){
+  background-color: rgb(69 26 3 / 0.5);
 }
 .dark\:bg-blue-500\/20:is(.dark *){
   background-color: rgb(59 130 246 / 0.2);
@@ -3403,6 +3426,9 @@ section[aria-label='Notifications alt+T'] {
 }
 .dark\:bg-emerald-950\/30:is(.dark *){
   background-color: rgb(2 44 34 / 0.3);
+}
+.dark\:bg-emerald-950\/50:is(.dark *){
+  background-color: rgb(2 44 34 / 0.5);
 }
 .dark\:bg-purple-500\/20:is(.dark *){
   background-color: rgb(168 85 247 / 0.2);
@@ -3627,6 +3653,10 @@ section[aria-label='Notifications alt+T'] {
     font-size: 4.5rem;
     line-height: 1;
   }
+  .md\:text-base{
+    font-size: 1rem;
+    line-height: 1.5rem;
+  }
   .md\:text-sm{
     font-size: 0.875rem;
     line-height: 1.25rem;
@@ -3674,6 +3704,9 @@ section[aria-label='Notifications alt+T'] {
   }
   .lg\:grid-cols-2{
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .lg\:grid-cols-3{
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
   .lg\:grid-cols-4{
     grid-template-columns: repeat(4, minmax(0, 1fr));

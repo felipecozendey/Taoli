@@ -1,6 +1,6 @@
 import { At as composeEventHandlers, B as Input, Ct as Primitive, Dt as createContextScope, G as CardHeader, H as CardContent, Ot as require_jsx_runtime, V as Card, Vt as require_react, Wt as __toESM, a as AvatarImage, at as cn, c as DropdownMenuContent, f as DropdownMenuTrigger, ht as useControllableState, i as AvatarFallback, kt as useComposedRefs, l as DropdownMenuItem, n as DashboardHeader, q as Button, r as Avatar, rt as useSize, s as DropdownMenu, t as PageContent, ut as createLucideIcon } from "./PageContent-ChuXhdYa.js";
-import { Z as usePrevious, at as Plus, dt as Brain, et as Trash2, ft as Apple, lt as Dumbbell, mt as useToast, rt as Search } from "./index-D6A_oZdb.js";
-import { a as DialogTitle, i as DialogHeader, n as DialogContent, o as DialogTrigger, t as Dialog } from "./dialog-CYXHoOM6.js";
+import { Z as usePrevious, at as Plus, dt as Brain, et as Trash2, ht as useToast, lt as Dumbbell, pt as Apple, rt as Search } from "./index-a8s5enpu.js";
+import { a as DialogHeader, n as DialogContent, o as DialogTitle, s as DialogTrigger, t as Dialog } from "./dialog-mrpRqmBB.js";
 var EllipsisVertical = createLucideIcon("ellipsis-vertical", [
 	["circle", {
 		cx: "12",
@@ -447,4 +447,4 @@ function ClientTeam() {
 //#endregion
 export { ClientTeam as default };
 
-//# sourceMappingURL=ClientTeam-DH07LIP4.js.map
+//# sourceMappingURL=ClientTeam-DBX5LFgj.js.map

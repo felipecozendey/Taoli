@@ -26,7 +26,6 @@ import MasterUsers from './pages/master/MasterUsers'
 
 // Professional Pages
 import ProfDashboard from './pages/professional/ProfDashboard'
-import ProfPatients from './pages/professional/ProfPatients'
 import ProfCalendar from './pages/professional/ProfCalendar'
 import ProfPrescriptions from './pages/professional/ProfPrescriptions'
 
@@ -36,7 +35,9 @@ import ClientProductivity from './pages/client/ClientProductivity'
 import ClientProgress from './pages/client/ClientProgress'
 import ClientFinances from './pages/client/ClientFinances'
 
-// Client Lazy Pages
+// Lazy Pages
+const ProfPatients = lazy(() => import('./pages/professional/ProfPatients'))
+
 const ClientNutrition = lazy(() => import('./pages/client/ClientNutrition'))
 const ClientTraining = lazy(() => import('./pages/client/ClientTraining'))
 const ClientMind = lazy(() => import('./pages/client/ClientMind'))
@@ -74,7 +75,14 @@ const App = () => (
             <Route element={<ProtectedRoute allowedRoles={['professional']} />}>
               <Route path="/professional" element={<ProfessionalLayout />}>
                 <Route index element={<ProfDashboard />} />
-                <Route path="patients" element={<ProfPatients />} />
+                <Route
+                  path="patients"
+                  element={
+                    <Suspense fallback={<LoadingFallback />}>
+                      <ProfPatients />
+                    </Suspense>
+                  }
+                />
                 <Route path="calendar" element={<ProfCalendar />} />
                 <Route path="prescriptions" element={<ProfPrescriptions />} />
               </Route>

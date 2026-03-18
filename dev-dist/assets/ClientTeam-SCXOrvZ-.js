@@ -1,6 +1,6 @@
-import { $ as Button, E as Skeleton, J as CardContent, K as Input, Pt as require_jsx_runtime, Qt as __toESM, Yt as require_react, Z as CardHeader, a as AvatarImage, c as DropdownMenuContent, f as DropdownMenuTrigger, gt as createLucideIcon, i as AvatarFallback, l as DropdownMenuItem, n as DashboardHeader, nt as supabase, q as Card, r as Avatar, s as DropdownMenu, t as PageContent, tt as useAuth } from "./PageContent-Cxm88eRr.js";
-import { X as Switch, at as Search, bt as useToast, gt as Brain, nt as Trash2, pt as Dumbbell, st as Plus, tt as Users, vt as Apple } from "./index-Df7y65GX.js";
-import { a as DialogHeader, n as DialogContent, o as DialogTitle, s as DialogTrigger, t as Dialog } from "./dialog-DttZm_Lx.js";
+import { E as Skeleton, K as Input, Kt as __toESM, Ot as require_jsx_runtime, Ut as require_react, X as supabase, Y as useAuth, a as AvatarImage, c as DropdownMenuContent, f as DropdownMenuTrigger, i as AvatarFallback, l as DropdownMenuItem, n as DashboardHeader, q as Button, r as Avatar, s as DropdownMenu, t as PageContent, ut as createLucideIcon } from "./PageContent-Ccawl6xW.js";
+import { Et as Dumbbell, Nt as useToast, X as Switch, bt as Plus, ct as Card, ft as CardHeader, ht as Trash2, jt as Apple, kt as Brain, lt as CardContent, mt as Users, vt as Search } from "./index-DvwOTxy2.js";
+import { a as DialogHeader, n as DialogContent, o as DialogTitle, s as DialogTrigger, t as Dialog } from "./dialog-BKj0Uhhz.js";
 var EllipsisVertical = createLucideIcon("ellipsis-vertical", [
 	["circle", {
 		cx: "12",
@@ -468,4 +468,4 @@ function ClientTeam() {
 //#endregion
 export { ClientTeam as default };
 
-//# sourceMappingURL=ClientTeam-DsSDGhb8.js.map
+//# sourceMappingURL=ClientTeam-SCXOrvZ-.js.map

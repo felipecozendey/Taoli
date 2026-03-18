@@ -17,6 +17,15 @@ export interface DashboardMetrics {
   totalLinks: number
 }
 
+export interface AuditLog {
+  id: string
+  action: string
+  details: any
+  created_at: string
+  admin: { name: string | null; email: string | null } | null
+  target_user: { name: string | null; email: string | null } | null
+}
+
 /**
  * Fetches platform-wide statistics using optimized database count queries.
  */
@@ -90,5 +99,32 @@ export const updateUserAccess = async (userId: string, data: UpdateAccessData): 
   } catch (error: any) {
     console.error('Error updating user access:', error)
     throw new Error(error.message || 'Failed to update user access')
+  }
+}
+
+/**
+ * Fetches audit logs including the admin and target user information.
+ */
+export const getAuditLogs = async (): Promise<AuditLog[]> => {
+  try {
+    const { data, error } = await supabase
+      .from('audit_logs')
+      .select(`
+        id,
+        action,
+        details,
+        created_at,
+        admin:profiles!audit_logs_admin_id_fkey(name, email),
+        target_user:profiles!audit_logs_target_user_id_fkey(name, email)
+      `)
+      .order('created_at', { ascending: false })
+
+    if (error) throw error
+
+    // Workaround for Supabase type generation with joined foreign keys
+    return data as unknown as AuditLog[]
+  } catch (error: any) {
+    console.error('Error fetching audit logs:', error)
+    throw new Error(error.message || 'Failed to fetch audit logs')
   }
 }

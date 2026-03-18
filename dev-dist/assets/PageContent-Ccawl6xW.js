@@ -21923,56 +21923,6 @@ var Button = import_react.forwardRef(({ className, variant, size, asChild = fals
 });
 Button.displayName = "Button";
 //#endregion
-//#region src/components/ui/card.tsx
-var Card = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-	"data-uid": "src/components/ui/card.tsx:8:5",
-	"data-prohibitions": "[editContent]",
-	ref,
-	className: cn("rounded-lg border bg-card text-card-foreground shadow-sm", className),
-	...props
-}));
-Card.displayName = "Card";
-var CardHeader = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-	"data-uid": "src/components/ui/card.tsx:19:5",
-	"data-prohibitions": "[editContent]",
-	ref,
-	className: cn("flex flex-col space-y-1.5 p-6", className),
-	...props
-}));
-CardHeader.displayName = "CardHeader";
-var CardTitle = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-	"data-uid": "src/components/ui/card.tsx:26:5",
-	"data-prohibitions": "[editContent]",
-	ref,
-	className: cn("text-2xl font-semibold leading-none tracking-tight", className),
-	...props
-}));
-CardTitle.displayName = "CardTitle";
-var CardDescription = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-	"data-uid": "src/components/ui/card.tsx:37:5",
-	"data-prohibitions": "[editContent]",
-	ref,
-	className: cn("text-sm text-muted-foreground", className),
-	...props
-}));
-CardDescription.displayName = "CardDescription";
-var CardContent = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-	"data-uid": "src/components/ui/card.tsx:44:5",
-	"data-prohibitions": "[editContent]",
-	ref,
-	className: cn("p-6 pt-0", className),
-	...props
-}));
-CardContent.displayName = "CardContent";
-var CardFooter = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-	"data-uid": "src/components/ui/card.tsx:51:5",
-	"data-prohibitions": "[editContent]",
-	ref,
-	className: cn("flex items-center p-6 pt-0", className),
-	...props
-}));
-CardFooter.displayName = "CardFooter";
-//#endregion
 //#region src/components/ui/input.tsx
 var Input = import_react.forwardRef(({ className, type, ...props }, ref) => {
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
@@ -25656,6 +25606,6 @@ function PageContent({ children, className }) {
 	});
 }
 //#endregion
-export { Button as $, SheetFooter as A, dispatchDiscreteCustomEvent as At, Trigger$1 as B, Outlet as Bt, SidebarMenuButton as C, Portal$2 as Ct, Sheet as D, Root$6 as Dt, Skeleton as E, DismissableLayer as Et, Description as F, useComposedRefs as Ft, Primitive as G, useParams as Gt, ReactRemoveScroll as H, Routes as Ht, Overlay as I, composeEventHandlers as It, CardContent as J, require_react_dom as Jt, Input as K, useSearchParams as Kt, Portal$1 as L, BrowserRouter as Lt, SheetTitle as M, createSlot$1 as Mt, Close as N, createContextScope$1 as Nt, SheetContent as O, useCallbackRef$1 as Ot, Content as P, require_jsx_runtime as Pt, CardTitle as Q, __toESM as Qt, Root$2 as R, Link as Rt, SidebarMenu as S, Presence as St, SidebarProvider as T, Branch as Tt, useFocusGuards as U, useLocation as Ut, hideOthers as V, Route as Vt, FocusScope as W, useNavigate as Wt, CardFooter as X, __commonJSMin as Xt, CardDescription as Y, require_react as Yt, CardHeader as Z, __exportAll as Zt, Sidebar as _, cva as _t, AvatarImage as a, Arrow as at, SidebarHeader as b, VisuallyHidden as bt, DropdownMenuContent as c, createPopperScope as ct, DropdownMenuSeparator as d, cn as dt, AuthProvider as et, DropdownMenuTrigger as f, X as ft, useDirection as g, createLucideIcon as gt, createRovingFocusGroupScope as h, Check as ht, AvatarFallback as i, Anchor as it, SheetHeader as j, createCollection as jt, SheetDescription as k, Primitive$1 as kt, DropdownMenuItem as l, useSize as lt, Root$1 as m, Sparkles as mt, DashboardHeader as n, supabase as nt, createContextScope as o, Content$1 as ot, Item as p, User as pt, Card as q, __vitePreload as qt, Avatar as r, TooltipProvider as rt, DropdownMenu as s, Root2$1 as st, PageContent as t, useAuth as tt, DropdownMenuLabel as u, useId as ut, SidebarContent as v, clsx as vt, SidebarMenuItem as w, useLayoutEffect2 as wt, SidebarInset as x, useControllableState as xt, SidebarFooter as y, VISUALLY_HIDDEN_STYLES as yt, Title as z, Navigate as zt };
+export { Arrow as $, SheetFooter as A, composeEventHandlers as At, Trigger$1 as B, useSearchParams as Bt, SidebarMenuButton as C, Primitive$1 as Ct, Sheet as D, createContextScope$1 as Dt, Skeleton as E, createSlot$1 as Et, Description as F, Route as Ft, Primitive as G, __exportAll as Gt, ReactRemoveScroll as H, require_react_dom as Ht, Overlay as I, Routes as It, AuthProvider as J, Input as K, __toESM as Kt, Portal$1 as L, useLocation as Lt, SheetTitle as M, Link as Mt, Close as N, Navigate as Nt, SheetContent as O, require_jsx_runtime as Ot, Content as P, Outlet as Pt, Anchor as Q, Root$2 as R, useNavigate as Rt, SidebarMenu as S, useCallbackRef$1 as St, SidebarProvider as T, createCollection as Tt, useFocusGuards as U, require_react as Ut, hideOthers as V, __vitePreload as Vt, FocusScope as W, __commonJSMin as Wt, supabase as X, useAuth as Y, TooltipProvider as Z, Sidebar as _, Portal$2 as _t, AvatarImage as a, cn as at, SidebarHeader as b, DismissableLayer as bt, DropdownMenuContent as c, Sparkles as ct, DropdownMenuSeparator as d, cva as dt, Content$1 as et, DropdownMenuTrigger as f, clsx as ft, useDirection as g, Presence as gt, createRovingFocusGroupScope as h, useControllableState as ht, AvatarFallback as i, useId as it, SheetHeader as j, BrowserRouter as jt, SheetDescription as k, useComposedRefs as kt, DropdownMenuItem as l, Check as lt, Root$1 as m, VisuallyHidden as mt, DashboardHeader as n, createPopperScope as nt, createContextScope as o, X as ot, Item as p, VISUALLY_HIDDEN_STYLES as pt, Button as q, Avatar as r, useSize as rt, DropdownMenu as s, User as st, PageContent as t, Root2$1 as tt, DropdownMenuLabel as u, createLucideIcon as ut, SidebarContent as v, useLayoutEffect2 as vt, SidebarMenuItem as w, dispatchDiscreteCustomEvent as wt, SidebarInset as x, Root$6 as xt, SidebarFooter as y, Branch as yt, Title as z, useParams as zt };
 
-//# sourceMappingURL=PageContent-Cxm88eRr.js.map
+//# sourceMappingURL=PageContent-Ccawl6xW.js.map

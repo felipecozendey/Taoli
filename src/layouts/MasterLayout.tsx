@@ -1,5 +1,5 @@
 import { Outlet, Link, useLocation } from 'react-router-dom'
-import { LayoutDashboard, Users, Settings, Building2 } from 'lucide-react'
+import { LayoutDashboard, Users, Settings, Building2, ScrollText } from 'lucide-react'
 import {
   SidebarProvider,
   Sidebar,
@@ -19,6 +19,7 @@ export default function MasterLayout() {
   const navItems = [
     { title: 'Dashboard', icon: LayoutDashboard, path: '/master' },
     { title: 'Usuários', icon: Users, path: '/master/users' },
+    { title: 'Auditoria', icon: ScrollText, path: '/master/logs' },
     { title: 'Configurações Globais', icon: Settings, path: '/master/settings' },
   ]
 

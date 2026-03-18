@@ -36,6 +36,8 @@ import ClientProgress from './pages/client/ClientProgress'
 import ClientFinances from './pages/client/ClientFinances'
 
 // Lazy Pages
+const MasterLogs = lazy(() => import('./pages/master/MasterLogs'))
+
 const ProfPatients = lazy(() => import('./pages/professional/ProfPatients'))
 const ProfPatientRecord = lazy(() => import('./pages/professional/ProfPatientRecord'))
 
@@ -69,6 +71,14 @@ const App = () => (
                 <Route index element={<MasterDashboard />} />
                 <Route path="settings" element={<MasterSettings />} />
                 <Route path="users" element={<MasterUsers />} />
+                <Route
+                  path="logs"
+                  element={
+                    <Suspense fallback={<LoadingFallback />}>
+                      <MasterLogs />
+                    </Suspense>
+                  }
+                />
               </Route>
             </Route>
 

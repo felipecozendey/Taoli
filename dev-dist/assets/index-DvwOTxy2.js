@@ -1,5 +1,5 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/ProfPatients-CPhNdOh9.js","assets/PageContent-Cxm88eRr.js","assets/dialog-DttZm_Lx.js","assets/ProfPatientRecord-t5rV2RMu.js","assets/textarea-BESrxnVB.js","assets/ClientNutrition-CG3YpV39.js","assets/accordion-BEKgfHx3.js","assets/checkbox-BkTxSfjd.js","assets/flame-D4-7MCKP.js","assets/ClientTraining-CINn2FKu.js","assets/ClientMind-Bys8MsPl.js","assets/ClientStudy-DPeofmE8.js","assets/ClientTeam-DsSDGhb8.js"])))=>i.map(i=>d[i]);
-import { $ as Button, A as SheetFooter, At as dispatchDiscreteCustomEvent, Bt as Outlet, C as SidebarMenuButton, Ct as Portal$1, D as Sheet, Dt as Root$4, E as Skeleton, Et as DismissableLayer, Ft as useComposedRefs, G as Primitive$1, H as ReactRemoveScroll, Ht as Routes, It as composeEventHandlers, J as CardContent, Jt as require_react_dom, K as Input, Kt as useSearchParams, Lt as BrowserRouter, M as SheetTitle, Mt as createSlot, Nt as createContextScope, O as SheetContent, Ot as useCallbackRef, Pt as require_jsx_runtime, Q as CardTitle, Qt as __toESM, Rt as Link$1, S as SidebarMenu, St as Presence, T as SidebarProvider, Tt as Branch, U as useFocusGuards, Ut as useLocation, V as hideOthers, Vt as Route, W as FocusScope, Wt as useNavigate, X as CardFooter, Xt as __commonJSMin, Y as CardDescription, Yt as require_react, Z as CardHeader, Zt as __exportAll, _ as Sidebar, _t as cva, a as AvatarImage, at as Arrow, b as SidebarHeader, bt as VisuallyHidden, c as DropdownMenuContent, ct as createPopperScope, d as DropdownMenuSeparator, dt as cn$1, et as AuthProvider, f as DropdownMenuTrigger, ft as X, g as useDirection, gt as createLucideIcon, h as createRovingFocusGroupScope, ht as Check, i as AvatarFallback, it as Anchor, j as SheetHeader, jt as createCollection, k as SheetDescription, kt as Primitive, l as DropdownMenuItem, lt as useSize, m as Root$5, mt as Sparkles, n as DashboardHeader, nt as supabase, o as createContextScope$1, ot as Content$1, p as Item$1, pt as User, q as Card, qt as __vitePreload, r as Avatar, rt as TooltipProvider, s as DropdownMenu, st as Root2$3, t as PageContent, tt as useAuth, u as DropdownMenuLabel, ut as useId, v as SidebarContent, vt as clsx, w as SidebarMenuItem, wt as useLayoutEffect2, x as SidebarInset, xt as useControllableState, y as SidebarFooter, yt as VISUALLY_HIDDEN_STYLES, zt as Navigate } from "./PageContent-Cxm88eRr.js";
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/MasterLogs-BTB9dxJe.js","assets/PageContent-Ccawl6xW.js","assets/ProfPatients-D5miW5qg.js","assets/dialog-BKj0Uhhz.js","assets/ProfPatientRecord-BtsU3LeA.js","assets/textarea-DTzkb2Zi.js","assets/ClientNutrition-BW6nLvwt.js","assets/accordion-CEMC36R_.js","assets/checkbox-COR4QJo1.js","assets/flame-Bvf8LFBh.js","assets/ClientTraining-CiCc5b6N.js","assets/ClientMind-Bulxj22F.js","assets/ClientStudy-DgtiRbcL.js","assets/ClientTeam-SCXOrvZ-.js"])))=>i.map(i=>d[i]);
+import { $ as Arrow, A as SheetFooter, At as composeEventHandlers, Bt as useSearchParams, C as SidebarMenuButton, Ct as Primitive, D as Sheet, Dt as createContextScope, E as Skeleton, Et as createSlot, Ft as Route, G as Primitive$1, Gt as __exportAll, H as ReactRemoveScroll, Ht as require_react_dom, It as Routes, J as AuthProvider, K as Input, Kt as __toESM, Lt as useLocation, M as SheetTitle, Mt as Link$1, Nt as Navigate, O as SheetContent, Ot as require_jsx_runtime, Pt as Outlet, Q as Anchor, Rt as useNavigate, S as SidebarMenu, St as useCallbackRef, T as SidebarProvider, Tt as createCollection, U as useFocusGuards, Ut as require_react, V as hideOthers, Vt as __vitePreload, W as FocusScope, Wt as __commonJSMin, X as supabase, Y as useAuth, Z as TooltipProvider, _ as Sidebar, _t as Portal$1, a as AvatarImage, at as cn$1, b as SidebarHeader, bt as DismissableLayer, c as DropdownMenuContent, ct as Sparkles, d as DropdownMenuSeparator, dt as cva, et as Content$1, f as DropdownMenuTrigger, ft as clsx, g as useDirection, gt as Presence, h as createRovingFocusGroupScope, ht as useControllableState, i as AvatarFallback, it as useId, j as SheetHeader, jt as BrowserRouter, k as SheetDescription, kt as useComposedRefs, l as DropdownMenuItem, lt as Check, m as Root$5, mt as VisuallyHidden, n as DashboardHeader, nt as createPopperScope, o as createContextScope$1, ot as X, p as Item$1, pt as VISUALLY_HIDDEN_STYLES, q as Button, r as Avatar, rt as useSize, s as DropdownMenu, st as User, t as PageContent, tt as Root2$3, u as DropdownMenuLabel, ut as createLucideIcon, v as SidebarContent, vt as useLayoutEffect2, w as SidebarMenuItem, wt as dispatchDiscreteCustomEvent, x as SidebarInset, xt as Root$4, y as SidebarFooter, yt as Branch } from "./PageContent-Ccawl6xW.js";
 //#region \0vite/modulepreload-polyfill.js
 (function polyfill() {
 	const relList = document.createElement("link").relList;
@@ -15419,6 +15419,24 @@ var Save = createLucideIcon("save", [
 		key: "t51u73"
 	}]
 ]);
+var ScrollText = createLucideIcon("scroll-text", [
+	["path", {
+		d: "M15 12h-5",
+		key: "r7krc0"
+	}],
+	["path", {
+		d: "M15 8h-5",
+		key: "1khuty"
+	}],
+	["path", {
+		d: "M19 17V5a2 2 0 0 0-2-2H4",
+		key: "zz82l3"
+	}],
+	["path", {
+		d: "M8 21h12a2 2 0 0 0 2-2v-1a1 1 0 0 0-1-1H11a1 1 0 0 0-1 1v1a2 2 0 1 1-4 0V5a2 2 0 1 0-4 0v2a1 1 0 0 0 1 1h3",
+		key: "1ph1d7"
+	}]
+]);
 var Search = createLucideIcon("search", [["path", {
 	d: "m21 21-4.34-4.34",
 	key: "14j7rj"
@@ -16952,6 +16970,56 @@ function Index() {
 	});
 }
 //#endregion
+//#region src/components/ui/card.tsx
+var Card = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+	"data-uid": "src/components/ui/card.tsx:8:5",
+	"data-prohibitions": "[editContent]",
+	ref,
+	className: cn$1("rounded-lg border bg-card text-card-foreground shadow-sm", className),
+	...props
+}));
+Card.displayName = "Card";
+var CardHeader = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+	"data-uid": "src/components/ui/card.tsx:19:5",
+	"data-prohibitions": "[editContent]",
+	ref,
+	className: cn$1("flex flex-col space-y-1.5 p-6", className),
+	...props
+}));
+CardHeader.displayName = "CardHeader";
+var CardTitle = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+	"data-uid": "src/components/ui/card.tsx:26:5",
+	"data-prohibitions": "[editContent]",
+	ref,
+	className: cn$1("text-2xl font-semibold leading-none tracking-tight", className),
+	...props
+}));
+CardTitle.displayName = "CardTitle";
+var CardDescription = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+	"data-uid": "src/components/ui/card.tsx:37:5",
+	"data-prohibitions": "[editContent]",
+	ref,
+	className: cn$1("text-sm text-muted-foreground", className),
+	...props
+}));
+CardDescription.displayName = "CardDescription";
+var CardContent = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+	"data-uid": "src/components/ui/card.tsx:44:5",
+	"data-prohibitions": "[editContent]",
+	ref,
+	className: cn$1("p-6 pt-0", className),
+	...props
+}));
+CardContent.displayName = "CardContent";
+var CardFooter = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+	"data-uid": "src/components/ui/card.tsx:51:5",
+	"data-prohibitions": "[editContent]",
+	ref,
+	className: cn$1("flex items-center p-6 pt-0", className),
+	...props
+}));
+CardFooter.displayName = "CardFooter";
+//#endregion
 //#region ../../cache/modules/gerenciador-pessoal-completo-6024e/node_modules/.pnpm/@radix-ui+react-label@2.1.8_@types+react-dom@19.2.3_@types+react@19.2.14__@types+react@_55fa612a976b7bdfbf4dcdd93d861aab/node_modules/@radix-ui/react-label/dist/index.mjs
 var NAME = "Label";
 var Label$3 = import_react.forwardRef((props, forwardedRef) => {
@@ -17422,68 +17490,73 @@ function MasterLayout() {
 			path: "/master/users"
 		},
 		{
+			title: "Auditoria",
+			icon: ScrollText,
+			path: "/master/logs"
+		},
+		{
 			title: "Configurações Globais",
 			icon: Settings,
 			path: "/master/settings"
 		}
 	];
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-		"data-uid": "src/layouts/MasterLayout.tsx:26:5",
+		"data-uid": "src/layouts/MasterLayout.tsx:27:5",
 		"data-prohibitions": "[editContent]",
 		className: "theme-master w-full bg-background font-sans",
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(SidebarProvider, {
-			"data-uid": "src/layouts/MasterLayout.tsx:27:7",
+			"data-uid": "src/layouts/MasterLayout.tsx:28:7",
 			"data-prohibitions": "[editContent]",
 			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Sidebar, {
-				"data-uid": "src/layouts/MasterLayout.tsx:28:9",
+				"data-uid": "src/layouts/MasterLayout.tsx:29:9",
 				"data-prohibitions": "[editContent]",
 				variant: "inset",
 				children: [
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SidebarHeader, {
-						"data-uid": "src/layouts/MasterLayout.tsx:29:11",
+						"data-uid": "src/layouts/MasterLayout.tsx:30:11",
 						"data-prohibitions": "[]",
 						className: "py-4 px-4",
 						children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							"data-uid": "src/layouts/MasterLayout.tsx:30:13",
+							"data-uid": "src/layouts/MasterLayout.tsx:31:13",
 							"data-prohibitions": "[]",
 							className: "flex items-center gap-2 font-bold text-lg",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Building2, {
-								"data-uid": "src/layouts/MasterLayout.tsx:31:15",
+								"data-uid": "src/layouts/MasterLayout.tsx:32:15",
 								"data-prohibitions": "[editContent]",
 								className: "h-6 w-6 text-primary"
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-								"data-uid": "src/layouts/MasterLayout.tsx:32:15",
+								"data-uid": "src/layouts/MasterLayout.tsx:33:15",
 								"data-prohibitions": "[]",
 								children: "HealthSaaS Admin"
 							})]
 						})
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SidebarContent, {
-						"data-uid": "src/layouts/MasterLayout.tsx:35:11",
+						"data-uid": "src/layouts/MasterLayout.tsx:36:11",
 						"data-prohibitions": "[editContent]",
 						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SidebarMenu, {
-							"data-uid": "src/layouts/MasterLayout.tsx:36:13",
+							"data-uid": "src/layouts/MasterLayout.tsx:37:13",
 							"data-prohibitions": "[editContent]",
 							className: "px-2",
 							children: navItems.map((item) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SidebarMenuItem, {
-								"data-uid": "src/layouts/MasterLayout.tsx:38:17",
+								"data-uid": "src/layouts/MasterLayout.tsx:39:17",
 								"data-prohibitions": "[editContent]",
 								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SidebarMenuButton, {
-									"data-uid": "src/layouts/MasterLayout.tsx:39:19",
+									"data-uid": "src/layouts/MasterLayout.tsx:40:19",
 									"data-prohibitions": "[editContent]",
 									asChild: true,
 									isActive: location.pathname === item.path,
 									tooltip: item.title,
 									children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link$1, {
-										"data-uid": "src/layouts/MasterLayout.tsx:44:21",
+										"data-uid": "src/layouts/MasterLayout.tsx:45:21",
 										"data-prohibitions": "[editContent]",
 										to: item.path,
 										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(item.icon, {
-											"data-uid": "src/layouts/MasterLayout.tsx:45:23",
+											"data-uid": "src/layouts/MasterLayout.tsx:46:23",
 											"data-prohibitions": "[editContent]",
 											className: "h-4 w-4"
 										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-											"data-uid": "src/layouts/MasterLayout.tsx:46:23",
+											"data-uid": "src/layouts/MasterLayout.tsx:47:23",
 											"data-prohibitions": "[editContent]",
 											children: item.title
 										})]
@@ -17493,19 +17566,19 @@ function MasterLayout() {
 						})
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SidebarFooter, {
-						"data-uid": "src/layouts/MasterLayout.tsx:53:11",
+						"data-uid": "src/layouts/MasterLayout.tsx:54:11",
 						"data-prohibitions": "[]",
 						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(RoleSwitcher, {
-							"data-uid": "src/layouts/MasterLayout.tsx:54:13",
+							"data-uid": "src/layouts/MasterLayout.tsx:55:13",
 							"data-prohibitions": "[editContent]"
 						})
 					})
 				]
 			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SidebarInset, {
-				"data-uid": "src/layouts/MasterLayout.tsx:57:9",
+				"data-uid": "src/layouts/MasterLayout.tsx:58:9",
 				"data-prohibitions": "[]",
 				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Outlet, {
-					"data-uid": "src/layouts/MasterLayout.tsx:58:11",
+					"data-uid": "src/layouts/MasterLayout.tsx:59:11",
 					"data-prohibitions": "[editContent]"
 				})
 			})]
@@ -17921,6 +17994,26 @@ var updateUserAccess = async (userId, data) => {
 	} catch (error) {
 		console.error("Error updating user access:", error);
 		throw new Error(error.message || "Failed to update user access");
+	}
+};
+/**
+* Fetches audit logs including the admin and target user information.
+*/
+var getAuditLogs = async () => {
+	try {
+		const { data, error } = await supabase.from("audit_logs").select(`
+        id,
+        action,
+        details,
+        created_at,
+        admin:profiles!audit_logs_admin_id_fkey(name, email),
+        target_user:profiles!audit_logs_target_user_id_fkey(name, email)
+      `).order("created_at", { ascending: false });
+		if (error) throw error;
+		return data;
+	} catch (error) {
+		console.error("Error fetching audit logs:", error);
+		throw new Error(error.message || "Failed to fetch audit logs");
 	}
 };
 //#endregion
@@ -47319,337 +47412,355 @@ function ClientFinances() {
 }
 //#endregion
 //#region src/App.tsx
-var ProfPatients = (0, import_react.lazy)(() => __vitePreload(() => import("./ProfPatients-CPhNdOh9.js"), __vite__mapDeps([0,1,2])));
-var ProfPatientRecord = (0, import_react.lazy)(() => __vitePreload(() => import("./ProfPatientRecord-t5rV2RMu.js"), __vite__mapDeps([3,1,4])));
-var ClientNutrition = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientNutrition-CG3YpV39.js"), __vite__mapDeps([5,1,6,7,8])));
-var ClientTraining = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientTraining-CINn2FKu.js"), __vite__mapDeps([9,1,6])));
-var ClientMind = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientMind-Bys8MsPl.js"), __vite__mapDeps([10,1,7])));
-var ClientStudy = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientStudy-DPeofmE8.js"), __vite__mapDeps([11,1,8,2,4])));
-var ClientTeam = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientTeam-DsSDGhb8.js"), __vite__mapDeps([12,1,2])));
+var MasterLogs = (0, import_react.lazy)(() => __vitePreload(() => import("./MasterLogs-BTB9dxJe.js"), __vite__mapDeps([0,1])));
+var ProfPatients = (0, import_react.lazy)(() => __vitePreload(() => import("./ProfPatients-D5miW5qg.js"), __vite__mapDeps([2,1,3])));
+var ProfPatientRecord = (0, import_react.lazy)(() => __vitePreload(() => import("./ProfPatientRecord-BtsU3LeA.js"), __vite__mapDeps([4,1,5])));
+var ClientNutrition = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientNutrition-BW6nLvwt.js"), __vite__mapDeps([6,1,7,8,9])));
+var ClientTraining = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientTraining-CiCc5b6N.js"), __vite__mapDeps([10,1,7])));
+var ClientMind = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientMind-Bulxj22F.js"), __vite__mapDeps([11,1,8])));
+var ClientStudy = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientStudy-DgtiRbcL.js"), __vite__mapDeps([12,1,9,3,5])));
+var ClientTeam = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientTeam-SCXOrvZ-.js"), __vite__mapDeps([13,1,3])));
 var LoadingFallback = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-	"data-uid": "src/App.tsx:49:3",
+	"data-uid": "src/App.tsx:51:3",
 	"data-prohibitions": "[]",
 	className: "flex items-center justify-center min-h-[50vh]",
 	children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-		"data-uid": "src/App.tsx:50:5",
+		"data-uid": "src/App.tsx:52:5",
 		"data-prohibitions": "[editContent]",
 		className: "h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent"
 	})
 });
 var App = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrowserRouter, {
-	"data-uid": "src/App.tsx:55:3",
+	"data-uid": "src/App.tsx:57:3",
 	"data-prohibitions": "[editContent]",
 	future: {
 		v7_startTransition: false,
 		v7_relativeSplatPath: false
 	},
 	children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AuthProvider, {
-		"data-uid": "src/App.tsx:56:5",
+		"data-uid": "src/App.tsx:58:5",
 		"data-prohibitions": "[editContent]",
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(TooltipProvider, {
-			"data-uid": "src/App.tsx:57:7",
+			"data-uid": "src/App.tsx:59:7",
 			"data-prohibitions": "[editContent]",
 			children: [
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Toaster$2, {
-					"data-uid": "src/App.tsx:58:9",
+					"data-uid": "src/App.tsx:60:9",
 					"data-prohibitions": "[editContent]"
 				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Toaster, {
-					"data-uid": "src/App.tsx:59:9",
+					"data-uid": "src/App.tsx:61:9",
 					"data-prohibitions": "[editContent]"
 				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Routes, {
-					"data-uid": "src/App.tsx:60:9",
+					"data-uid": "src/App.tsx:62:9",
 					"data-prohibitions": "[editContent]",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Route, {
-						"data-uid": "src/App.tsx:61:11",
+						"data-uid": "src/App.tsx:63:11",
 						"data-prohibitions": "[editContent]",
 						element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Layout, {
-							"data-uid": "src/App.tsx:61:27",
+							"data-uid": "src/App.tsx:63:27",
 							"data-prohibitions": "[editContent]"
 						}),
 						children: [
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
-								"data-uid": "src/App.tsx:63:13",
+								"data-uid": "src/App.tsx:65:13",
 								"data-prohibitions": "[editContent]",
 								path: "/",
 								element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Index, {
-									"data-uid": "src/App.tsx:63:38",
+									"data-uid": "src/App.tsx:65:38",
 									"data-prohibitions": "[editContent]"
 								})
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
-								"data-uid": "src/App.tsx:64:13",
+								"data-uid": "src/App.tsx:66:13",
 								"data-prohibitions": "[editContent]",
 								path: "/login",
 								element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Login, {
-									"data-uid": "src/App.tsx:64:43",
+									"data-uid": "src/App.tsx:66:43",
 									"data-prohibitions": "[editContent]"
 								})
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
-								"data-uid": "src/App.tsx:67:13",
+								"data-uid": "src/App.tsx:69:13",
 								"data-prohibitions": "[]",
 								element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ProtectedRoute, {
-									"data-uid": "src/App.tsx:67:29",
+									"data-uid": "src/App.tsx:69:29",
 									"data-prohibitions": "[editContent]",
 									allowedRoles: ["admin"]
 								}),
 								children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Route, {
-									"data-uid": "src/App.tsx:68:15",
+									"data-uid": "src/App.tsx:70:15",
 									"data-prohibitions": "[]",
 									path: "/master",
 									element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(MasterLayout, {
-										"data-uid": "src/App.tsx:68:46",
+										"data-uid": "src/App.tsx:70:46",
 										"data-prohibitions": "[editContent]"
 									}),
 									children: [
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
-											"data-uid": "src/App.tsx:69:17",
+											"data-uid": "src/App.tsx:71:17",
 											"data-prohibitions": "[editContent]",
 											index: true,
 											element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(MasterDashboard, {
-												"data-uid": "src/App.tsx:69:39",
+												"data-uid": "src/App.tsx:71:39",
 												"data-prohibitions": "[editContent]"
 											})
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
-											"data-uid": "src/App.tsx:70:17",
+											"data-uid": "src/App.tsx:72:17",
 											"data-prohibitions": "[editContent]",
 											path: "settings",
 											element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(MasterSettings, {
-												"data-uid": "src/App.tsx:70:49",
+												"data-uid": "src/App.tsx:72:49",
 												"data-prohibitions": "[editContent]"
 											})
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
-											"data-uid": "src/App.tsx:71:17",
+											"data-uid": "src/App.tsx:73:17",
 											"data-prohibitions": "[editContent]",
 											path: "users",
 											element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(MasterUsers, {
-												"data-uid": "src/App.tsx:71:46",
+												"data-uid": "src/App.tsx:73:46",
 												"data-prohibitions": "[editContent]"
+											})
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
+											"data-uid": "src/App.tsx:74:17",
+											"data-prohibitions": "[editContent]",
+											path: "logs",
+											element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_react.Suspense, {
+												"data-uid": "src/App.tsx:77:21",
+												"data-prohibitions": "[]",
+												fallback: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(LoadingFallback, {
+													"data-uid": "src/App.tsx:77:41",
+													"data-prohibitions": "[editContent]"
+												}),
+												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(MasterLogs, {
+													"data-uid": "src/App.tsx:78:23",
+													"data-prohibitions": "[editContent]"
+												})
 											})
 										})
 									]
 								})
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
-								"data-uid": "src/App.tsx:76:13",
+								"data-uid": "src/App.tsx:86:13",
 								"data-prohibitions": "[]",
 								element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ProtectedRoute, {
-									"data-uid": "src/App.tsx:76:29",
+									"data-uid": "src/App.tsx:86:29",
 									"data-prohibitions": "[editContent]",
 									allowedRoles: ["professional"]
 								}),
 								children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Route, {
-									"data-uid": "src/App.tsx:77:15",
+									"data-uid": "src/App.tsx:87:15",
 									"data-prohibitions": "[]",
 									path: "/professional",
 									element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ProfessionalLayout, {
-										"data-uid": "src/App.tsx:77:52",
+										"data-uid": "src/App.tsx:87:52",
 										"data-prohibitions": "[editContent]"
 									}),
 									children: [
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
-											"data-uid": "src/App.tsx:78:17",
+											"data-uid": "src/App.tsx:88:17",
 											"data-prohibitions": "[editContent]",
 											index: true,
 											element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ProfDashboard, {
-												"data-uid": "src/App.tsx:78:39",
+												"data-uid": "src/App.tsx:88:39",
 												"data-prohibitions": "[editContent]"
 											})
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
-											"data-uid": "src/App.tsx:79:17",
+											"data-uid": "src/App.tsx:89:17",
 											"data-prohibitions": "[editContent]",
 											path: "patients",
 											element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_react.Suspense, {
-												"data-uid": "src/App.tsx:82:21",
+												"data-uid": "src/App.tsx:92:21",
 												"data-prohibitions": "[]",
 												fallback: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(LoadingFallback, {
-													"data-uid": "src/App.tsx:82:41",
+													"data-uid": "src/App.tsx:92:41",
 													"data-prohibitions": "[editContent]"
 												}),
 												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ProfPatients, {
-													"data-uid": "src/App.tsx:83:23",
+													"data-uid": "src/App.tsx:93:23",
 													"data-prohibitions": "[editContent]"
 												})
 											})
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
-											"data-uid": "src/App.tsx:87:17",
+											"data-uid": "src/App.tsx:97:17",
 											"data-prohibitions": "[editContent]",
 											path: "patient/:id",
 											element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_react.Suspense, {
-												"data-uid": "src/App.tsx:90:21",
+												"data-uid": "src/App.tsx:100:21",
 												"data-prohibitions": "[]",
 												fallback: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(LoadingFallback, {
-													"data-uid": "src/App.tsx:90:41",
+													"data-uid": "src/App.tsx:100:41",
 													"data-prohibitions": "[editContent]"
 												}),
 												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ProfPatientRecord, {
-													"data-uid": "src/App.tsx:91:23",
+													"data-uid": "src/App.tsx:101:23",
 													"data-prohibitions": "[editContent]"
 												})
 											})
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
-											"data-uid": "src/App.tsx:95:17",
+											"data-uid": "src/App.tsx:105:17",
 											"data-prohibitions": "[editContent]",
 											path: "calendar",
 											element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ProfCalendar, {
-												"data-uid": "src/App.tsx:95:49",
-												"data-prohibitions": "[editContent]"
-											})
-										}),
-										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
-											"data-uid": "src/App.tsx:96:17",
-											"data-prohibitions": "[editContent]",
-											path: "prescriptions",
-											element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ProfPrescriptions, {
-												"data-uid": "src/App.tsx:96:54",
-												"data-prohibitions": "[editContent]"
-											})
-										})
-									]
-								})
-							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
-								"data-uid": "src/App.tsx:101:13",
-								"data-prohibitions": "[editContent]",
-								element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ProtectedRoute, {
-									"data-uid": "src/App.tsx:101:29",
-									"data-prohibitions": "[editContent]",
-									allowedRoles: ["client"]
-								}),
-								children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Route, {
-									"data-uid": "src/App.tsx:102:15",
-									"data-prohibitions": "[editContent]",
-									path: "/client",
-									element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ClientLayout, {
-										"data-uid": "src/App.tsx:102:46",
-										"data-prohibitions": "[editContent]"
-									}),
-									children: [
-										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
-											"data-uid": "src/App.tsx:103:17",
-											"data-prohibitions": "[editContent]",
-											index: true,
-											element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ClientDashboard, {
-												"data-uid": "src/App.tsx:103:39",
+												"data-uid": "src/App.tsx:105:49",
 												"data-prohibitions": "[editContent]"
 											})
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
 											"data-uid": "src/App.tsx:106:17",
 											"data-prohibitions": "[editContent]",
+											path: "prescriptions",
+											element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ProfPrescriptions, {
+												"data-uid": "src/App.tsx:106:54",
+												"data-prohibitions": "[editContent]"
+											})
+										})
+									]
+								})
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
+								"data-uid": "src/App.tsx:111:13",
+								"data-prohibitions": "[editContent]",
+								element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ProtectedRoute, {
+									"data-uid": "src/App.tsx:111:29",
+									"data-prohibitions": "[editContent]",
+									allowedRoles: ["client"]
+								}),
+								children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Route, {
+									"data-uid": "src/App.tsx:112:15",
+									"data-prohibitions": "[editContent]",
+									path: "/client",
+									element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ClientLayout, {
+										"data-uid": "src/App.tsx:112:46",
+										"data-prohibitions": "[editContent]"
+									}),
+									children: [
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
+											"data-uid": "src/App.tsx:113:17",
+											"data-prohibitions": "[editContent]",
+											index: true,
+											element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ClientDashboard, {
+												"data-uid": "src/App.tsx:113:39",
+												"data-prohibitions": "[editContent]"
+											})
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
+											"data-uid": "src/App.tsx:116:17",
+											"data-prohibitions": "[editContent]",
 											path: "nutrition",
 											element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_react.Suspense, {
-												"data-uid": "src/App.tsx:109:21",
+												"data-uid": "src/App.tsx:119:21",
 												"data-prohibitions": "[]",
 												fallback: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(LoadingFallback, {
-													"data-uid": "src/App.tsx:109:41",
+													"data-uid": "src/App.tsx:119:41",
 													"data-prohibitions": "[editContent]"
 												}),
 												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ClientNutrition, {
-													"data-uid": "src/App.tsx:110:23",
+													"data-uid": "src/App.tsx:120:23",
 													"data-prohibitions": "[editContent]"
 												})
 											})
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
-											"data-uid": "src/App.tsx:114:17",
+											"data-uid": "src/App.tsx:124:17",
 											"data-prohibitions": "[editContent]",
 											path: "training",
 											element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_react.Suspense, {
-												"data-uid": "src/App.tsx:117:21",
+												"data-uid": "src/App.tsx:127:21",
 												"data-prohibitions": "[]",
 												fallback: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(LoadingFallback, {
-													"data-uid": "src/App.tsx:117:41",
+													"data-uid": "src/App.tsx:127:41",
 													"data-prohibitions": "[editContent]"
 												}),
 												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ClientTraining, {
-													"data-uid": "src/App.tsx:118:23",
+													"data-uid": "src/App.tsx:128:23",
 													"data-prohibitions": "[editContent]"
 												})
 											})
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
-											"data-uid": "src/App.tsx:122:17",
+											"data-uid": "src/App.tsx:132:17",
 											"data-prohibitions": "[editContent]",
 											path: "mind",
 											element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_react.Suspense, {
-												"data-uid": "src/App.tsx:125:21",
+												"data-uid": "src/App.tsx:135:21",
 												"data-prohibitions": "[]",
 												fallback: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(LoadingFallback, {
-													"data-uid": "src/App.tsx:125:41",
+													"data-uid": "src/App.tsx:135:41",
 													"data-prohibitions": "[editContent]"
 												}),
 												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ClientMind, {
-													"data-uid": "src/App.tsx:126:23",
+													"data-uid": "src/App.tsx:136:23",
 													"data-prohibitions": "[editContent]"
 												})
 											})
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
-											"data-uid": "src/App.tsx:130:17",
+											"data-uid": "src/App.tsx:140:17",
 											"data-prohibitions": "[editContent]",
 											path: "study",
 											element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_react.Suspense, {
-												"data-uid": "src/App.tsx:133:21",
+												"data-uid": "src/App.tsx:143:21",
 												"data-prohibitions": "[]",
 												fallback: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(LoadingFallback, {
-													"data-uid": "src/App.tsx:133:41",
+													"data-uid": "src/App.tsx:143:41",
 													"data-prohibitions": "[editContent]"
 												}),
 												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ClientStudy, {
-													"data-uid": "src/App.tsx:134:23",
+													"data-uid": "src/App.tsx:144:23",
 													"data-prohibitions": "[editContent]"
 												})
-											})
-										}),
-										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
-											"data-uid": "src/App.tsx:138:17",
-											"data-prohibitions": "[editContent]",
-											path: "team",
-											element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_react.Suspense, {
-												"data-uid": "src/App.tsx:141:21",
-												"data-prohibitions": "[]",
-												fallback: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(LoadingFallback, {
-													"data-uid": "src/App.tsx:141:41",
-													"data-prohibitions": "[editContent]"
-												}),
-												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ClientTeam, {
-													"data-uid": "src/App.tsx:142:23",
-													"data-prohibitions": "[editContent]"
-												})
-											})
-										}),
-										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
-											"data-uid": "src/App.tsx:147:17",
-											"data-prohibitions": "[editContent]",
-											path: "productivity",
-											element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ClientProductivity, {
-												"data-uid": "src/App.tsx:147:53",
-												"data-prohibitions": "[editContent]"
 											})
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
 											"data-uid": "src/App.tsx:148:17",
 											"data-prohibitions": "[editContent]",
-											path: "progress",
-											element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ClientProgress, {
-												"data-uid": "src/App.tsx:148:49",
+											path: "team",
+											element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_react.Suspense, {
+												"data-uid": "src/App.tsx:151:21",
+												"data-prohibitions": "[]",
+												fallback: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(LoadingFallback, {
+													"data-uid": "src/App.tsx:151:41",
+													"data-prohibitions": "[editContent]"
+												}),
+												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ClientTeam, {
+													"data-uid": "src/App.tsx:152:23",
+													"data-prohibitions": "[editContent]"
+												})
+											})
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
+											"data-uid": "src/App.tsx:157:17",
+											"data-prohibitions": "[editContent]",
+											path: "productivity",
+											element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ClientProductivity, {
+												"data-uid": "src/App.tsx:157:53",
 												"data-prohibitions": "[editContent]"
 											})
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
-											"data-uid": "src/App.tsx:149:17",
+											"data-uid": "src/App.tsx:158:17",
+											"data-prohibitions": "[editContent]",
+											path: "progress",
+											element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ClientProgress, {
+												"data-uid": "src/App.tsx:158:49",
+												"data-prohibitions": "[editContent]"
+											})
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
+											"data-uid": "src/App.tsx:159:17",
 											"data-prohibitions": "[editContent]",
 											path: "finances",
 											element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ClientFinances, {
-												"data-uid": "src/App.tsx:149:49",
+												"data-uid": "src/App.tsx:159:49",
 												"data-prohibitions": "[editContent]"
 											})
 										})
@@ -47658,11 +47769,11 @@ var App = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrowserRouter, {
 							})
 						]
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
-						"data-uid": "src/App.tsx:155:11",
+						"data-uid": "src/App.tsx:165:11",
 						"data-prohibitions": "[editContent]",
 						path: "*",
 						element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(NotFound, {
-							"data-uid": "src/App.tsx:155:36",
+							"data-uid": "src/App.tsx:165:36",
 							"data-prohibitions": "[editContent]"
 						})
 					})]
@@ -47678,6 +47789,6 @@ var App = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrowserRouter, {
 	"data-prohibitions": "[editContent]"
 }));
 //#endregion
-export { Progress as $, require__baseExtremum as A, getPercentValue as B, getMaxRadius as C, require_isEqual as D, getValueByDataKey as E, warn$1 as F, require_isNil as G, isNumber as H, Layer as I, getClientActiveDiet as J, require_get as K, filterProps as L, Cell as M, Global as N, require__baseLt as O, require__baseIteratee as P, Badge as Q, findAllByType as R, formatAxisMap$1 as S, polarToCartesian as T, mathSign as U, interpolateNumber$1 as V, uniqueId as W, Switch as X, getFullDietDetails as Y, usePrevious as Z, Dot as _, ArrowRight as _t, ChartContainer as a, Search as at, LabelList as b, useToast as bt, ChartTooltip as c, Lock as ct, generateCategoricalChart as d, LayoutDashboard as dt, Label$2 as et, YAxis as f, FileText as ft, Shape as g, Brain as gt, Bar as h, ChevronDown as ht, TabsTrigger as i, Smile as it, Text as j, require__baseGt as k, ChartTooltipContent as l, LoaderCircle as lt, CartesianGrid as m, CirclePlus as mt, TabsContent as n, Trash2 as nt, ChartLegend as o, Save as ot, XAxis as p, Dumbbell as pt, require_isFunction as q, TabsList as r, Target as rt, ChartLegendContent as s, Plus as st, Tabs as t, Users as tt, BarChart as u, Link as ut, es6_default as v, Apple as vt, getTickClassName as w, Label as x, Curve as y, Activity as yt, adaptEventsOfChild as z };
+export { Table as $, require__baseExtremum as A, ArrowRight as At, getPercentValue as B, getMaxRadius as C, Link as Ct, require_isEqual as D, CirclePlus as Dt, getValueByDataKey as E, Dumbbell as Et, warn$1 as F, require_isNil as G, isNumber as H, Layer as I, getClientActiveDiet as J, require_get as K, filterProps as L, Cell as M, Activity as Mt, Global as N, useToast as Nt, require__baseLt as O, ChevronDown as Ot, require__baseIteratee as P, Badge as Q, findAllByType as R, formatAxisMap$1 as S, LoaderCircle as St, polarToCartesian as T, FileText as Tt, mathSign as U, interpolateNumber$1 as V, uniqueId as W, Switch as X, getFullDietDetails as Y, usePrevious as Z, Dot as _, Smile as _t, ChartContainer as a, getAuditLogs as at, LabelList as b, Plus as bt, ChartTooltip as c, Card as ct, generateCategoricalChart as d, CardFooter as dt, TableBody as et, YAxis as f, CardHeader as ft, Shape as g, Target as gt, Bar as h, Trash2 as ht, TabsTrigger as i, TableRow as it, Text as j, Apple as jt, require__baseGt as k, Brain as kt, ChartTooltipContent as l, CardContent as lt, CartesianGrid as m, Users as mt, TabsContent as n, TableHead as nt, ChartLegend as o, Progress as ot, XAxis as p, CardTitle as pt, require_isFunction as q, TabsList as r, TableHeader as rt, ChartLegendContent as s, Label$2 as st, Tabs as t, TableCell as tt, BarChart as u, CardDescription as ut, es6_default as v, Search as vt, getTickClassName as w, LayoutDashboard as wt, Label as x, Lock as xt, Curve as y, Save as yt, adaptEventsOfChild as z };
 
-//# sourceMappingURL=index-Df7y65GX.js.map
+//# sourceMappingURL=index-DvwOTxy2.js.map

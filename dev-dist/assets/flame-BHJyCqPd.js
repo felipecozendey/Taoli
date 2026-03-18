@@ -6,4 +6,4 @@ var Flame = createLucideIcon("flame", [["path", {
 //#endregion
 export { Flame as t };
 
-//# sourceMappingURL=flame-DXHs-D-_.js.map
+//# sourceMappingURL=flame-BHJyCqPd.js.map

@@ -76,4 +76,4 @@ DialogDescription.displayName = Description.displayName;
 //#endregion
 export { DialogHeader as a, DialogFooter as i, DialogContent as n, DialogTitle as o, DialogDescription as r, DialogTrigger as s, Dialog as t };
 
-//# sourceMappingURL=dialog-Civ-RNYn.js.map
+//# sourceMappingURL=dialog-CvOZOltx.js.map

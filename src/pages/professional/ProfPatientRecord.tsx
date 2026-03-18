@@ -8,9 +8,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Textarea } from '@/components/ui/textarea'
-import { ArrowLeft, Lock, Send, PlusCircle } from 'lucide-react'
+import { ArrowLeft, Lock, Send } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
 import { supabase } from '@/lib/supabase/client'
+import { PatientNutritionMirror } from '@/components/professional/PatientNutritionMirror'
 
 export default function ProfPatientRecord() {
   const { id } = useParams()
@@ -188,34 +189,7 @@ export default function ProfPatientRecord() {
             {!permissions.can_view_nutrition ? (
               <LockedContent />
             ) : (
-              <Card>
-                <CardHeader className="flex flex-row items-start justify-between">
-                  <div>
-                    <CardTitle>Resumo Nutricional</CardTitle>
-                    <CardDescription>Visão geral da dieta atual do paciente.</CardDescription>
-                  </div>
-                  <Button
-                    size="sm"
-                    onClick={() => navigate(`/professional/prescriptions?patientId=${id}`)}
-                  >
-                    <PlusCircle className="h-4 w-4 mr-2" />
-                    Nova Prescrição
-                  </Button>
-                </CardHeader>
-                <CardContent>
-                  <div className="p-5 rounded-lg bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-100 dark:border-emerald-900/50">
-                    <div className="flex items-center gap-2 mb-2">
-                      <div className="h-2 w-2 rounded-full bg-emerald-500"></div>
-                      <h4 className="font-semibold text-emerald-900 dark:text-emerald-400">
-                        Dieta Ativa: Hipertrofia
-                      </h4>
-                    </div>
-                    <p className="text-sm text-emerald-700 dark:text-emerald-500 font-medium">
-                      2500 kcal • 180g Proteína • 250g Carboidrato • 80g Gordura
-                    </p>
-                  </div>
-                </CardContent>
-              </Card>
+              <PatientNutritionMirror patientId={id || ''} />
             )}
           </TabsContent>
 

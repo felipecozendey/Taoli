@@ -1,5 +1,5 @@
 import { At as require_jsx_runtime, Dt as createCollection, E as Skeleton, Gt as require_react, Jt as __toESM, K as Input, Mt as composeEventHandlers, Tt as Primitive, X as useAuth, Z as supabase, _t as useControllableState, at as useId, bt as useLayoutEffect2, dt as Check, ft as createLucideIcon, g as useDirection, jt as useComposedRefs, kt as createContextScope, n as DashboardHeader, ot as cn, q as Button, t as PageContent, vt as Presence } from "./PageContent-DFaAkjCU.js";
-import { At as Dumbbell, It as Activity, Mt as ChevronDown, bt as Target, ft as Card, i as TabsTrigger, n as TabsContent, nt as Badge, pt as CardContent, r as TabsList, t as Tabs } from "./index-D8HXWUFB.js";
+import { At as Dumbbell, It as Activity, Mt as ChevronDown, bt as Target, ft as Card, i as TabsTrigger, n as TabsContent, nt as Badge, pt as CardContent, r as TabsList, t as Tabs } from "./index-C2wTFHMV.js";
 var CircleCheck = createLucideIcon("circle-check", [["circle", {
 	cx: "12",
 	cy: "12",
@@ -1035,4 +1035,4 @@ function ClientTraining() {
 //#endregion
 export { ClientTraining as default };
 
-//# sourceMappingURL=ClientTraining-DDC9kP2-.js.map
+//# sourceMappingURL=ClientTraining-1XOXRdvy.js.map

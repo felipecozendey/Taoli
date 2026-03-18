@@ -1,30 +1,9 @@
-import { At as require_jsx_runtime, E as Skeleton, Gt as require_react, Jt as __toESM, K as Input, Z as supabase, dt as Check, ft as createLucideIcon, n as DashboardHeader, ot as cn, q as Button, t as PageContent, ut as ChevronRight } from "./PageContent-DFaAkjCU.js";
+import { At as require_jsx_runtime, E as Skeleton, Gt as require_react, Jt as __toESM, K as Input, Z as supabase, dt as Check, n as DashboardHeader, ot as cn, q as Button, t as PageContent, ut as ChevronRight } from "./PageContent-DFaAkjCU.js";
 import { t as ChevronLeft } from "./chevron-left-CgXgO8lG.js";
-import { t as Flame } from "./flame-BHJyCqPd.js";
-import { $ as getFullDietDetails, J as addFoodLog, Lt as useToast, Q as getDailyNutritionProgress, X as deleteFoodLog, Y as addWaterLog, Z as getClientActiveDiet, _t as CardTitle, dt as Label, ft as Card, gt as CardHeader, i as TabsTrigger, n as TabsContent, pt as CardContent, r as TabsList, t as Tabs, ut as Progress, wt as Plus, yt as Trash2 } from "./index-D8HXWUFB.js";
-import { a as DialogHeader, n as DialogContent, o as DialogTitle, s as DialogTrigger, t as Dialog } from "./dialog-Civ-RNYn.js";
-var Droplets = createLucideIcon("droplets", [["path", {
-	d: "M7 16.3c2.2 0 4-1.83 4-4.05 0-1.16-.57-2.26-1.71-3.19S7.29 6.75 7 5.3c-.29 1.45-1.14 2.84-2.29 3.76S3 11.1 3 12.25c0 2.22 1.8 4.05 4 4.05z",
-	key: "1ptgy4"
-}], ["path", {
-	d: "M12.56 6.6A10.97 10.97 0 0 0 14 3.02c.5 2.5 2 4.9 4 6.5s3 3.5 3 5.5a6.98 6.98 0 0 1-11.91 4.97",
-	key: "1sl1rz"
-}]]);
-var Utensils = createLucideIcon("utensils", [
-	["path", {
-		d: "M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2",
-		key: "cjf0a3"
-	}],
-	["path", {
-		d: "M7 2v20",
-		key: "1473qp"
-	}],
-	["path", {
-		d: "M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7",
-		key: "j28e5"
-	}]
-]);
-//#endregion
+import { n as Droplets, t as Utensils } from "./utensils-TprPUpf0.js";
+import { t as Flame } from "./flame-BaiQWJ2t.js";
+import { $ as getFullDietDetails, J as addFoodLog, Lt as useToast, Q as getDailyNutritionProgress, X as deleteFoodLog, Y as addWaterLog, Z as getClientActiveDiet, _t as CardTitle, dt as Label, ft as Card, gt as CardHeader, i as TabsTrigger, n as TabsContent, pt as CardContent, r as TabsList, t as Tabs, ut as Progress, wt as Plus, yt as Trash2 } from "./index-C2wTFHMV.js";
+import { a as DialogHeader, n as DialogContent, o as DialogTitle, s as DialogTrigger, t as Dialog } from "./dialog-CvOZOltx.js";
 //#region src/pages/client/ClientNutrition.tsx
 var import_react = /* @__PURE__ */ __toESM(require_react(), 1);
 var import_jsx_runtime = require_jsx_runtime();
@@ -899,4 +878,4 @@ function ClientNutrition() {
 //#endregion
 export { ClientNutrition as default };
 
-//# sourceMappingURL=ClientNutrition-BxmoMMii.js.map
+//# sourceMappingURL=ClientNutrition-CL_ldKY7.js.map

@@ -1,6 +1,6 @@
 import { At as require_jsx_runtime, E as Skeleton, Gt as require_react, J as buttonVariants, Jt as __toESM, ft as createLucideIcon, n as DashboardHeader, ot as cn, t as PageContent, ut as ChevronRight } from "./PageContent-DFaAkjCU.js";
 import { t as ChevronLeft } from "./chevron-left-CgXgO8lG.js";
-import { Lt as useToast, at as TableCell, ct as TableRow, it as TableBody, lt as getAuditLogs, nt as Badge, ot as TableHead, rt as Table, st as TableHeader } from "./index-D8HXWUFB.js";
+import { Lt as useToast, at as TableCell, ct as TableRow, it as TableBody, lt as getAuditLogs, nt as Badge, ot as TableHead, rt as Table, st as TableHeader } from "./index-C2wTFHMV.js";
 var Ellipsis = createLucideIcon("ellipsis", [
 	["circle", {
 		cx: "12",
@@ -427,4 +427,4 @@ function MasterLogs() {
 //#endregion
 export { MasterLogs as default };
 
-//# sourceMappingURL=MasterLogs-CTxS8UtU.js.map
+//# sourceMappingURL=MasterLogs-DhINsvbv.js.map

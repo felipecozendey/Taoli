@@ -8,6 +8,7 @@ import { Calendar } from '@/components/ui/calendar'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Badge } from '@/components/ui/badge'
 import { getDailyNutritionProgress } from '@/services/nutrition'
+import { cn } from '@/lib/utils'
 
 interface PatientNutritionMirrorProps {
   patientId: string
@@ -52,6 +53,14 @@ export function PatientNutritionMirror({ patientId }: PatientNutritionMirrorProp
       </div>
     )
   }
+
+  // Calculate Caloric Difference
+  const targetCals = data?.targets?.calories || 0
+  const consumedCals = data?.consumed?.calories || 0
+  const hasTarget = targetCals > 0
+  const diferenca = targetCals - consumedCals
+  const isExceeded = hasTarget && diferenca < 0
+  const displayValue = Math.abs(diferenca)
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
@@ -102,19 +111,50 @@ export function PatientNutritionMirror({ patientId }: PatientNutritionMirrorProp
         ) : data ? (
           <div className="space-y-6 animate-fade-in-up">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <Card>
+              <Card className={cn(isExceeded && 'border-red-500 bg-red-50 dark:bg-red-950/20')}>
                 <CardHeader className="pb-2 flex flex-row items-center justify-between space-y-0">
-                  <CardTitle className="text-sm font-medium">Calorias (kcal)</CardTitle>
-                  <Flame className="h-4 w-4 text-orange-500" />
+                  <CardTitle
+                    className={cn(
+                      'text-sm font-medium',
+                      isExceeded && 'text-red-700 dark:text-red-400',
+                    )}
+                  >
+                    Calorias (kcal)
+                  </CardTitle>
+                  <Flame
+                    className={cn('h-4 w-4', isExceeded ? 'text-red-500' : 'text-orange-500')}
+                  />
                 </CardHeader>
                 <CardContent>
-                  <div className="text-3xl font-bold tracking-tight">
-                    {data.consumed.calories}{' '}
-                    <span className="text-lg text-muted-foreground font-normal">
-                      / {data.targets.calories}
+                  <div
+                    className={cn(
+                      'text-3xl font-bold tracking-tight',
+                      isExceeded && 'text-red-600 dark:text-red-400',
+                    )}
+                  >
+                    {consumedCals}{' '}
+                    <span
+                      className={cn(
+                        'text-lg font-normal',
+                        isExceeded ? 'text-red-400' : 'text-muted-foreground',
+                      )}
+                    >
+                      / {targetCals}
                     </span>
                   </div>
-                  <p className="text-xs text-muted-foreground mt-1">Total consumido vs meta</p>
+                  {hasTarget && (
+                    <p
+                      className={cn(
+                        'text-xs mt-1 font-semibold',
+                        isExceeded ? 'text-red-600 dark:text-red-400' : 'text-muted-foreground',
+                      )}
+                    >
+                      {isExceeded ? `Excedeu ${displayValue} kcal` : `Restam ${displayValue} kcal`}
+                    </p>
+                  )}
+                  {!hasTarget && (
+                    <p className="text-xs text-muted-foreground mt-1">Total consumido vs meta</p>
+                  )}
                 </CardContent>
               </Card>
               <Card>

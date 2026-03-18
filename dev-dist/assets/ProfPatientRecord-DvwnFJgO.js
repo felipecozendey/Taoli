@@ -2,7 +2,7 @@ import { At as require_jsx_runtime, Bt as useNavigate, E as Skeleton, Gt as requ
 import { t as ChevronLeft } from "./chevron-left-CgXgO8lG.js";
 import { n as Droplets, t as Utensils } from "./utensils-TprPUpf0.js";
 import { t as Flame } from "./flame-BaiQWJ2t.js";
-import { Mt as ChevronDown, Q as getDailyNutritionProgress, Tt as Lock, _t as CardTitle, ft as Card, gt as CardHeader, i as TabsTrigger, jt as CirclePlus, mt as CardDescription, n as TabsContent, nt as Badge, pt as CardContent, r as TabsList, t as Tabs } from "./index-C2wTFHMV.js";
+import { Et as Lock, Mt as CirclePlus, Nt as ChevronDown, Q as getDailyNutritionProgress, _t as CardHeader, ht as CardDescription, i as TabsTrigger, mt as CardContent, n as TabsContent, pt as Card, r as TabsList, rt as Badge, t as Tabs, vt as CardTitle } from "./index-BlFoc-8K.js";
 import { t as Textarea } from "./textarea-DerFmMX-.js";
 var ArrowLeft = createLucideIcon("arrow-left", [["path", {
 	d: "m12 19-7-7 7-7",
@@ -6915,20 +6915,20 @@ function PatientNutritionMirror({ patientId }) {
 	const renderMacro = (label, consumed, target, colorClass) => {
 		const pct = target > 0 ? Math.min(100, Math.round(consumed / target * 100)) : 0;
 		return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-			"data-uid": "src/components/professional/PatientNutritionMirror.tsx:39:7",
+			"data-uid": "src/components/professional/PatientNutritionMirror.tsx:40:7",
 			"data-prohibitions": "[editContent]",
 			className: "space-y-1.5",
 			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-				"data-uid": "src/components/professional/PatientNutritionMirror.tsx:40:9",
+				"data-uid": "src/components/professional/PatientNutritionMirror.tsx:41:9",
 				"data-prohibitions": "[editContent]",
 				className: "flex justify-between text-sm",
 				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-					"data-uid": "src/components/professional/PatientNutritionMirror.tsx:41:11",
+					"data-uid": "src/components/professional/PatientNutritionMirror.tsx:42:11",
 					"data-prohibitions": "[editContent]",
 					className: "font-medium text-foreground",
 					children: label
 				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-					"data-uid": "src/components/professional/PatientNutritionMirror.tsx:42:11",
+					"data-uid": "src/components/professional/PatientNutritionMirror.tsx:43:11",
 					"data-prohibitions": "[editContent]",
 					className: "text-muted-foreground",
 					children: [
@@ -6939,11 +6939,11 @@ function PatientNutritionMirror({ patientId }) {
 					]
 				})]
 			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-				"data-uid": "src/components/professional/PatientNutritionMirror.tsx:46:9",
+				"data-uid": "src/components/professional/PatientNutritionMirror.tsx:47:9",
 				"data-prohibitions": "[editContent]",
 				className: "h-2.5 w-full bg-secondary rounded-full overflow-hidden",
 				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-					"data-uid": "src/components/professional/PatientNutritionMirror.tsx:47:11",
+					"data-uid": "src/components/professional/PatientNutritionMirror.tsx:48:11",
 					"data-prohibitions": "[editContent]",
 					className: `h-full ${colorClass} transition-all duration-500`,
 					style: { width: `${pct}%` }
@@ -6951,35 +6951,41 @@ function PatientNutritionMirror({ patientId }) {
 			})]
 		});
 	};
+	const targetCals = data?.targets?.calories || 0;
+	const consumedCals = data?.consumed?.calories || 0;
+	const hasTarget = targetCals > 0;
+	const diferenca = targetCals - consumedCals;
+	const isExceeded = hasTarget && diferenca < 0;
+	const displayValue = Math.abs(diferenca);
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-		"data-uid": "src/components/professional/PatientNutritionMirror.tsx:57:5",
+		"data-uid": "src/components/professional/PatientNutritionMirror.tsx:66:5",
 		"data-prohibitions": "[editContent]",
 		className: "grid grid-cols-1 lg:grid-cols-12 gap-6",
 		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-			"data-uid": "src/components/professional/PatientNutritionMirror.tsx:59:7",
+			"data-uid": "src/components/professional/PatientNutritionMirror.tsx:68:7",
 			"data-prohibitions": "[]",
 			className: "lg:col-span-4 space-y-6",
 			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
-				"data-uid": "src/components/professional/PatientNutritionMirror.tsx:60:9",
+				"data-uid": "src/components/professional/PatientNutritionMirror.tsx:69:9",
 				"data-prohibitions": "[]",
 				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, {
-					"data-uid": "src/components/professional/PatientNutritionMirror.tsx:61:11",
+					"data-uid": "src/components/professional/PatientNutritionMirror.tsx:70:11",
 					"data-prohibitions": "[]",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
-						"data-uid": "src/components/professional/PatientNutritionMirror.tsx:62:13",
+						"data-uid": "src/components/professional/PatientNutritionMirror.tsx:71:13",
 						"data-prohibitions": "[]",
 						children: "Navegação Histórica"
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardDescription, {
-						"data-uid": "src/components/professional/PatientNutritionMirror.tsx:63:13",
+						"data-uid": "src/components/professional/PatientNutritionMirror.tsx:72:13",
 						"data-prohibitions": "[]",
 						children: "Selecione uma data para analisar."
 					})]
 				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContent, {
-					"data-uid": "src/components/professional/PatientNutritionMirror.tsx:65:11",
+					"data-uid": "src/components/professional/PatientNutritionMirror.tsx:74:11",
 					"data-prohibitions": "[]",
 					className: "flex justify-center p-4",
 					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Calendar, {
-						"data-uid": "src/components/professional/PatientNutritionMirror.tsx:66:13",
+						"data-uid": "src/components/professional/PatientNutritionMirror.tsx:75:13",
 						"data-prohibitions": "[editContent]",
 						mode: "single",
 						selected: date,
@@ -6988,155 +6994,165 @@ function PatientNutritionMirror({ patientId }) {
 					})
 				})]
 			}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button$1, {
-				"data-uid": "src/components/professional/PatientNutritionMirror.tsx:74:9",
+				"data-uid": "src/components/professional/PatientNutritionMirror.tsx:83:9",
 				"data-prohibitions": "[]",
 				className: "w-full",
 				onClick: () => navigate(`/professional/prescriptions?patientId=${patientId}`),
 				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CirclePlus, {
-					"data-uid": "src/components/professional/PatientNutritionMirror.tsx:78:11",
+					"data-uid": "src/components/professional/PatientNutritionMirror.tsx:87:11",
 					"data-prohibitions": "[editContent]",
 					className: "mr-2 h-4 w-4"
 				}), " Nova Prescrição"]
 			})]
 		}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-			"data-uid": "src/components/professional/PatientNutritionMirror.tsx:83:7",
+			"data-uid": "src/components/professional/PatientNutritionMirror.tsx:92:7",
 			"data-prohibitions": "[editContent]",
 			className: "lg:col-span-8",
 			children: loading ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-				"data-uid": "src/components/professional/PatientNutritionMirror.tsx:85:11",
+				"data-uid": "src/components/professional/PatientNutritionMirror.tsx:94:11",
 				"data-prohibitions": "[]",
 				className: "space-y-6",
 				children: [
 					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						"data-uid": "src/components/professional/PatientNutritionMirror.tsx:86:13",
+						"data-uid": "src/components/professional/PatientNutritionMirror.tsx:95:13",
 						"data-prohibitions": "[]",
 						className: "grid grid-cols-1 sm:grid-cols-2 gap-4",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Skeleton, {
-							"data-uid": "src/components/professional/PatientNutritionMirror.tsx:87:15",
+							"data-uid": "src/components/professional/PatientNutritionMirror.tsx:96:15",
 							"data-prohibitions": "[editContent]",
 							className: "h-32 rounded-xl"
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Skeleton, {
-							"data-uid": "src/components/professional/PatientNutritionMirror.tsx:88:15",
+							"data-uid": "src/components/professional/PatientNutritionMirror.tsx:97:15",
 							"data-prohibitions": "[editContent]",
 							className: "h-32 rounded-xl"
 						})]
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Skeleton, {
-						"data-uid": "src/components/professional/PatientNutritionMirror.tsx:90:13",
+						"data-uid": "src/components/professional/PatientNutritionMirror.tsx:99:13",
 						"data-prohibitions": "[editContent]",
 						className: "h-48 rounded-xl"
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Skeleton, {
-						"data-uid": "src/components/professional/PatientNutritionMirror.tsx:91:13",
+						"data-uid": "src/components/professional/PatientNutritionMirror.tsx:100:13",
 						"data-prohibitions": "[editContent]",
 						className: "h-64 rounded-xl"
 					})
 				]
 			}) : data && data.targets.calories === 0 && data.logs.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Card, {
-				"data-uid": "src/components/professional/PatientNutritionMirror.tsx:94:11",
+				"data-uid": "src/components/professional/PatientNutritionMirror.tsx:103:11",
 				"data-prohibitions": "[]",
 				className: "border-dashed bg-muted/30",
 				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardContent, {
-					"data-uid": "src/components/professional/PatientNutritionMirror.tsx:95:13",
+					"data-uid": "src/components/professional/PatientNutritionMirror.tsx:104:13",
 					"data-prohibitions": "[]",
 					className: "flex flex-col items-center justify-center py-20 text-center",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Utensils, {
-						"data-uid": "src/components/professional/PatientNutritionMirror.tsx:96:15",
+						"data-uid": "src/components/professional/PatientNutritionMirror.tsx:105:15",
 						"data-prohibitions": "[editContent]",
 						className: "h-12 w-12 text-muted-foreground/40 mb-4"
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-						"data-uid": "src/components/professional/PatientNutritionMirror.tsx:97:15",
+						"data-uid": "src/components/professional/PatientNutritionMirror.tsx:106:15",
 						"data-prohibitions": "[]",
 						className: "text-muted-foreground font-medium",
 						children: "No data or active diet on this day."
 					})]
 				})
 			}) : data ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-				"data-uid": "src/components/professional/PatientNutritionMirror.tsx:103:11",
+				"data-uid": "src/components/professional/PatientNutritionMirror.tsx:112:11",
 				"data-prohibitions": "[editContent]",
 				className: "space-y-6 animate-fade-in-up",
 				children: [
 					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						"data-uid": "src/components/professional/PatientNutritionMirror.tsx:104:13",
+						"data-uid": "src/components/professional/PatientNutritionMirror.tsx:113:13",
 						"data-prohibitions": "[editContent]",
 						className: "grid grid-cols-1 sm:grid-cols-2 gap-4",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
-							"data-uid": "src/components/professional/PatientNutritionMirror.tsx:105:15",
+							"data-uid": "src/components/professional/PatientNutritionMirror.tsx:114:15",
 							"data-prohibitions": "[editContent]",
+							className: cn(isExceeded && "border-red-500 bg-red-50 dark:bg-red-950/20"),
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, {
-								"data-uid": "src/components/professional/PatientNutritionMirror.tsx:106:17",
-								"data-prohibitions": "[]",
+								"data-uid": "src/components/professional/PatientNutritionMirror.tsx:115:17",
+								"data-prohibitions": "[editContent]",
 								className: "pb-2 flex flex-row items-center justify-between space-y-0",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
-									"data-uid": "src/components/professional/PatientNutritionMirror.tsx:107:19",
-									"data-prohibitions": "[]",
-									className: "text-sm font-medium",
+									"data-uid": "src/components/professional/PatientNutritionMirror.tsx:116:19",
+									"data-prohibitions": "[editContent]",
+									className: cn("text-sm font-medium", isExceeded && "text-red-700 dark:text-red-400"),
 									children: "Calorias (kcal)"
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Flame, {
-									"data-uid": "src/components/professional/PatientNutritionMirror.tsx:108:19",
+									"data-uid": "src/components/professional/PatientNutritionMirror.tsx:124:19",
 									"data-prohibitions": "[editContent]",
-									className: "h-4 w-4 text-orange-500"
+									className: cn("h-4 w-4", isExceeded ? "text-red-500" : "text-orange-500")
 								})]
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardContent, {
-								"data-uid": "src/components/professional/PatientNutritionMirror.tsx:110:17",
+								"data-uid": "src/components/professional/PatientNutritionMirror.tsx:128:17",
 								"data-prohibitions": "[editContent]",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									"data-uid": "src/components/professional/PatientNutritionMirror.tsx:111:19",
-									"data-prohibitions": "[editContent]",
-									className: "text-3xl font-bold tracking-tight",
-									children: [
-										data.consumed.calories,
-										" ",
-										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-											"data-uid": "src/components/professional/PatientNutritionMirror.tsx:113:21",
-											"data-prohibitions": "[editContent]",
-											className: "text-lg text-muted-foreground font-normal",
-											children: ["/ ", data.targets.calories]
-										})
-									]
-								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-									"data-uid": "src/components/professional/PatientNutritionMirror.tsx:117:19",
-									"data-prohibitions": "[]",
-									className: "text-xs text-muted-foreground mt-1",
-									children: "Total consumido vs meta"
-								})]
+								children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										"data-uid": "src/components/professional/PatientNutritionMirror.tsx:129:19",
+										"data-prohibitions": "[editContent]",
+										className: cn("text-3xl font-bold tracking-tight", isExceeded && "text-red-600 dark:text-red-400"),
+										children: [
+											consumedCals,
+											" ",
+											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+												"data-uid": "src/components/professional/PatientNutritionMirror.tsx:136:21",
+												"data-prohibitions": "[editContent]",
+												className: cn("text-lg font-normal", isExceeded ? "text-red-400" : "text-muted-foreground"),
+												children: ["/ ", targetCals]
+											})
+										]
+									}),
+									hasTarget && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+										"data-uid": "src/components/professional/PatientNutritionMirror.tsx:146:21",
+										"data-prohibitions": "[editContent]",
+										className: cn("text-xs mt-1 font-semibold", isExceeded ? "text-red-600 dark:text-red-400" : "text-muted-foreground"),
+										children: isExceeded ? `Excedeu ${displayValue} kcal` : `Restam ${displayValue} kcal`
+									}),
+									!hasTarget && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+										"data-uid": "src/components/professional/PatientNutritionMirror.tsx:156:21",
+										"data-prohibitions": "[]",
+										className: "text-xs text-muted-foreground mt-1",
+										children: "Total consumido vs meta"
+									})
+								]
 							})]
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
-							"data-uid": "src/components/professional/PatientNutritionMirror.tsx:120:15",
+							"data-uid": "src/components/professional/PatientNutritionMirror.tsx:160:15",
 							"data-prohibitions": "[editContent]",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, {
-								"data-uid": "src/components/professional/PatientNutritionMirror.tsx:121:17",
+								"data-uid": "src/components/professional/PatientNutritionMirror.tsx:161:17",
 								"data-prohibitions": "[]",
 								className: "pb-2 flex flex-row items-center justify-between space-y-0",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
-									"data-uid": "src/components/professional/PatientNutritionMirror.tsx:122:19",
+									"data-uid": "src/components/professional/PatientNutritionMirror.tsx:162:19",
 									"data-prohibitions": "[]",
 									className: "text-sm font-medium",
 									children: "Ingestão de Água"
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Droplets, {
-									"data-uid": "src/components/professional/PatientNutritionMirror.tsx:123:19",
+									"data-uid": "src/components/professional/PatientNutritionMirror.tsx:163:19",
 									"data-prohibitions": "[editContent]",
 									className: "h-4 w-4 text-blue-500"
 								})]
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardContent, {
-								"data-uid": "src/components/professional/PatientNutritionMirror.tsx:125:17",
+								"data-uid": "src/components/professional/PatientNutritionMirror.tsx:165:17",
 								"data-prohibitions": "[editContent]",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									"data-uid": "src/components/professional/PatientNutritionMirror.tsx:126:19",
+									"data-uid": "src/components/professional/PatientNutritionMirror.tsx:166:19",
 									"data-prohibitions": "[editContent]",
 									className: "text-3xl font-bold tracking-tight text-blue-600 dark:text-blue-400",
 									children: [
 										data.consumed.water,
 										" ",
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-											"data-uid": "src/components/professional/PatientNutritionMirror.tsx:128:21",
+											"data-uid": "src/components/professional/PatientNutritionMirror.tsx:168:21",
 											"data-prohibitions": "[]",
 											className: "text-lg text-muted-foreground font-normal",
 											children: "ml"
 										})
 									]
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-									"data-uid": "src/components/professional/PatientNutritionMirror.tsx:130:19",
+									"data-uid": "src/components/professional/PatientNutritionMirror.tsx:170:19",
 									"data-prohibitions": "[]",
 									className: "text-xs text-muted-foreground mt-1",
 									children: "Registrado pelo paciente"
@@ -7145,23 +7161,23 @@ function PatientNutritionMirror({ patientId }) {
 						})]
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
-						"data-uid": "src/components/professional/PatientNutritionMirror.tsx:135:13",
+						"data-uid": "src/components/professional/PatientNutritionMirror.tsx:175:13",
 						"data-prohibitions": "[editContent]",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, {
-							"data-uid": "src/components/professional/PatientNutritionMirror.tsx:136:15",
+							"data-uid": "src/components/professional/PatientNutritionMirror.tsx:176:15",
 							"data-prohibitions": "[]",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
-								"data-uid": "src/components/professional/PatientNutritionMirror.tsx:137:17",
+								"data-uid": "src/components/professional/PatientNutritionMirror.tsx:177:17",
 								"data-prohibitions": "[]",
 								className: "text-lg",
 								children: "Progresso de Macronutrientes"
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardDescription, {
-								"data-uid": "src/components/professional/PatientNutritionMirror.tsx:138:17",
+								"data-uid": "src/components/professional/PatientNutritionMirror.tsx:178:17",
 								"data-prohibitions": "[]",
 								children: "Comparativo do consumo com a dieta prescrita"
 							})]
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardContent, {
-							"data-uid": "src/components/professional/PatientNutritionMirror.tsx:140:15",
+							"data-uid": "src/components/professional/PatientNutritionMirror.tsx:180:15",
 							"data-prohibitions": "[editContent]",
 							className: "space-y-5",
 							children: [
@@ -7172,39 +7188,39 @@ function PatientNutritionMirror({ patientId }) {
 						})]
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
-						"data-uid": "src/components/professional/PatientNutritionMirror.tsx:157:13",
+						"data-uid": "src/components/professional/PatientNutritionMirror.tsx:197:13",
 						"data-prohibitions": "[editContent]",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, {
-							"data-uid": "src/components/professional/PatientNutritionMirror.tsx:158:15",
+							"data-uid": "src/components/professional/PatientNutritionMirror.tsx:198:15",
 							"data-prohibitions": "[]",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
-								"data-uid": "src/components/professional/PatientNutritionMirror.tsx:159:17",
+								"data-uid": "src/components/professional/PatientNutritionMirror.tsx:199:17",
 								"data-prohibitions": "[]",
 								className: "text-lg",
 								children: "Diário de Consumo"
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardDescription, {
-								"data-uid": "src/components/professional/PatientNutritionMirror.tsx:160:17",
+								"data-uid": "src/components/professional/PatientNutritionMirror.tsx:200:17",
 								"data-prohibitions": "[]",
 								children: "Refeições e alimentos registrados no dia"
 							})]
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContent, {
-							"data-uid": "src/components/professional/PatientNutritionMirror.tsx:162:15",
+							"data-uid": "src/components/professional/PatientNutritionMirror.tsx:202:15",
 							"data-prohibitions": "[editContent]",
 							children: data.logs.length > 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-								"data-uid": "src/components/professional/PatientNutritionMirror.tsx:164:19",
+								"data-uid": "src/components/professional/PatientNutritionMirror.tsx:204:19",
 								"data-prohibitions": "[editContent]",
 								className: "space-y-3",
 								children: data.logs.map((log) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									"data-uid": "src/components/professional/PatientNutritionMirror.tsx:166:23",
+									"data-uid": "src/components/professional/PatientNutritionMirror.tsx:206:23",
 									"data-prohibitions": "[editContent]",
 									className: "flex items-center justify-between p-3 rounded-lg border bg-card hover:bg-accent/50 transition-colors",
 									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-										"data-uid": "src/components/professional/PatientNutritionMirror.tsx:170:25",
+										"data-uid": "src/components/professional/PatientNutritionMirror.tsx:210:25",
 										"data-prohibitions": "[editContent]",
 										className: "font-medium text-sm",
 										children: log.food_name
 									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Badge, {
-										"data-uid": "src/components/professional/PatientNutritionMirror.tsx:171:25",
+										"data-uid": "src/components/professional/PatientNutritionMirror.tsx:211:25",
 										"data-prohibitions": "[editContent]",
 										variant: "secondary",
 										className: "font-semibold",
@@ -7212,7 +7228,7 @@ function PatientNutritionMirror({ patientId }) {
 									})]
 								}, log.id))
 							}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-								"data-uid": "src/components/professional/PatientNutritionMirror.tsx:178:19",
+								"data-uid": "src/components/professional/PatientNutritionMirror.tsx:218:19",
 								"data-prohibitions": "[]",
 								className: "text-center py-6 text-sm text-muted-foreground border rounded-lg border-dashed",
 								children: "Nenhum registro de consumo para este dia."
@@ -7631,4 +7647,4 @@ function ProfPatientRecord() {
 //#endregion
 export { ProfPatientRecord as default };
 
-//# sourceMappingURL=ProfPatientRecord-D2tFq2uo.js.map
+//# sourceMappingURL=ProfPatientRecord-DvwnFJgO.js.map

@@ -34,6 +34,7 @@ import {
   addFoodLog,
   deleteFoodLog,
   addWaterLog,
+  searchFoodItems,
   type FullDietDetails,
   type MealDetails,
 } from '@/services/nutrition'
@@ -46,6 +47,8 @@ export default function ClientNutrition() {
   const [date, setDate] = useState(() => new Date().toISOString().split('T')[0])
   const [isLogDialogOpen, setIsLogDialogOpen] = useState(false)
   const [logForm, setLogForm] = useState({ name: '', cal: 0, pro: 0, car: 0, fat: 0 })
+  const [searchQuery, setSearchQuery] = useState('')
+  const [searchResults, setSearchResults] = useState<any[]>([])
 
   const { toast } = useToast()
 
@@ -84,6 +87,18 @@ export default function ClientNutrition() {
   useEffect(() => {
     fetchData()
   }, [date])
+
+  useEffect(() => {
+    const debounce = setTimeout(async () => {
+      if (searchQuery.length > 2) {
+        const { data } = await searchFoodItems(searchQuery)
+        setSearchResults(data || [])
+      } else {
+        setSearchResults([])
+      }
+    }, 300)
+    return () => clearTimeout(debounce)
+  }, [searchQuery])
 
   const changeDate = (days: number) => {
     const d = new Date(date)
@@ -158,16 +173,31 @@ export default function ClientNutrition() {
     toast({ title: 'Alimento avulso registrado!' })
     setIsLogDialogOpen(false)
     setLogForm({ name: '', cal: 0, pro: 0, car: 0, fat: 0 })
+    setSearchQuery('')
+  }
+
+  const handleSelectFood = (food: any) => {
+    setLogForm({
+      name: food.name,
+      cal: Math.round(Number(food.energy_kcal) || 0),
+      pro: Math.round(Number(food.protein_g) || 0),
+      car: Math.round(Number(food.carbs_g) || 0),
+      fat: Math.round(Number(food.fats_g) || 0),
+    })
+    setSearchQuery('')
+    setSearchResults([])
   }
 
   // Circular Progress Calculations
   const targetCals = progress?.targets?.calories || 2000
   const consumedCals = progress?.consumed?.calories || 0
-  const remainingCals = Math.max(targetCals - consumedCals, 0)
-  const calPercent = Math.min((consumedCals / targetCals) * 100, 100) || 0
+  const diferenca = targetCals - consumedCals
+  const isExceeded = diferenca < 0
+  const displayValue = Math.abs(diferenca)
+  const calPercent = targetCals > 0 ? Math.min((consumedCals / targetCals) * 100, 100) : 0
   const radius = 54
   const circumference = 2 * Math.PI * radius
-  const strokeDashoffset = circumference - (calPercent / 100) * circumference
+  const strokeDashoffset = isExceeded ? 0 : circumference - (calPercent / 100) * circumference
 
   // Display Date Formatting
   const displayDate = new Intl.DateTimeFormat('pt-BR', {
@@ -251,14 +281,29 @@ export default function ClientNutrition() {
                         strokeDasharray={circumference}
                         strokeDashoffset={strokeDashoffset}
                         strokeLinecap="round"
-                        className="text-primary transition-all duration-1000 ease-out"
+                        className={cn(
+                          'transition-all duration-1000 ease-out',
+                          isExceeded ? 'text-red-500' : 'text-primary',
+                        )}
                       />
                     </svg>
-                    <div className="absolute flex flex-col items-center justify-center text-center">
-                      <Flame className="h-5 w-5 text-primary mb-1 opacity-80" />
-                      <span className="text-2xl font-bold leading-none">{remainingCals}</span>
-                      <span className="text-[10px] uppercase tracking-wider text-muted-foreground mt-1">
-                        Restantes
+                    <div
+                      className={cn(
+                        'absolute flex flex-col items-center justify-center text-center',
+                        isExceeded ? 'text-red-500' : '',
+                      )}
+                    >
+                      <Flame
+                        className={cn(
+                          'h-5 w-5 mb-1 opacity-80',
+                          isExceeded ? 'text-red-500' : 'text-primary',
+                        )}
+                      />
+                      <span className="text-xl font-bold leading-none">
+                        {isExceeded ? 'Excedeu' : 'Restam'}
+                      </span>
+                      <span className="text-sm font-semibold tracking-wider text-muted-foreground mt-1">
+                        {displayValue} kcal
                       </span>
                     </div>
                   </div>
@@ -371,10 +416,31 @@ export default function ClientNutrition() {
                       <Label htmlFor="name">Alimento / Refeição</Label>
                       <Input
                         id="name"
-                        placeholder="Ex: Maçã ou Almoço Extra"
+                        autoComplete="off"
+                        placeholder="Ex: Maçã ou pesquise..."
                         value={logForm.name}
-                        onChange={(e) => setLogForm({ ...logForm, name: e.target.value })}
+                        onChange={(e) => {
+                          setLogForm({ ...logForm, name: e.target.value })
+                          setSearchQuery(e.target.value)
+                        }}
                       />
+                      {searchResults.length > 0 && (
+                        <div className="mt-1 bg-background border rounded-md shadow-sm max-h-40 overflow-y-auto">
+                          {searchResults.map((food) => (
+                            <button
+                              key={food.id}
+                              className="w-full text-left px-3 py-2 text-sm hover:bg-muted focus:bg-muted focus:outline-none transition-colors border-b last:border-b-0"
+                              onClick={() => handleSelectFood(food)}
+                            >
+                              <p className="font-medium text-foreground">{food.name}</p>
+                              <p className="text-xs text-muted-foreground mt-0.5">
+                                {food.energy_kcal} kcal • {food.protein_g}g P • {food.carbs_g}g C •{' '}
+                                {food.fats_g}g G
+                              </p>
+                            </button>
+                          ))}
+                        </div>
+                      )}
                     </div>
                     <div className="grid grid-cols-2 gap-4">
                       <div className="grid gap-2">

@@ -1,4 +1,4 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/MasterLogs-DhINsvbv.js","assets/PageContent-DFaAkjCU.js","assets/chevron-left-CgXgO8lG.js","assets/ProfPatients-BpgUu1QZ.js","assets/dialog-CvOZOltx.js","assets/ProfPatientRecord-D2tFq2uo.js","assets/utensils-TprPUpf0.js","assets/flame-BaiQWJ2t.js","assets/textarea-DerFmMX-.js","assets/ClientNutrition-CL_ldKY7.js","assets/ClientTraining-1XOXRdvy.js","assets/ClientMind-BVL_MNGs.js","assets/ClientStudy-CNaPPYft.js","assets/ClientTeam-C2-IyG41.js"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/MasterLogs-n4sx1m0X.js","assets/PageContent-DFaAkjCU.js","assets/chevron-left-CgXgO8lG.js","assets/ProfPatients-Dw3QcIRU.js","assets/dialog-CvOZOltx.js","assets/ProfPatientRecord-DvwnFJgO.js","assets/utensils-TprPUpf0.js","assets/flame-BaiQWJ2t.js","assets/textarea-DerFmMX-.js","assets/ClientNutrition-B0EY4DGp.js","assets/ClientTraining-BY-DsT8a.js","assets/ClientMind-Di8CESCH.js","assets/ClientStudy-CQxjduz9.js","assets/ClientTeam-B9os_Axq.js"])))=>i.map(i=>d[i]);
 import { $ as Anchor, A as SheetFooter, At as require_jsx_runtime, Bt as useNavigate, C as SidebarMenuButton, Ct as Root$4, D as Sheet, Dt as createCollection, E as Skeleton, Et as dispatchDiscreteCustomEvent, Ft as Navigate, G as Primitive$1, Gt as require_react, H as ReactRemoveScroll, Ht as useSearchParams, It as Outlet, Jt as __toESM, K as Input, Kt as __commonJSMin, Lt as Route, M as SheetTitle, Mt as composeEventHandlers, Nt as BrowserRouter, O as SheetContent, Ot as createSlot, Pt as Link$1, Q as TooltipProvider, Rt as Routes, S as SidebarMenu, St as DismissableLayer, T as SidebarProvider, Tt as Primitive, U as useFocusGuards, Ut as __vitePreload, V as hideOthers, W as FocusScope, Wt as require_react_dom, X as useAuth, Y as AuthProvider, Z as supabase, _ as Sidebar, _t as useControllableState, a as AvatarImage, at as useId, b as SidebarHeader, bt as useLayoutEffect2, c as DropdownMenuContent, ct as User, d as DropdownMenuSeparator, dt as Check, et as Arrow, f as DropdownMenuTrigger, ft as createLucideIcon, g as useDirection, gt as VisuallyHidden, h as createRovingFocusGroupScope, ht as VISUALLY_HIDDEN_STYLES, i as AvatarFallback, it as useSize, j as SheetHeader, jt as useComposedRefs, k as SheetDescription, kt as createContextScope, l as DropdownMenuItem, lt as Sparkles, m as Root$5, mt as clsx, n as DashboardHeader, nt as Root2$3, o as createContextScope$1, ot as cn$1, p as Item$1, pt as cva, q as Button, qt as __exportAll, r as Avatar, rt as createPopperScope, s as DropdownMenu, st as X, t as PageContent, tt as Content$1, u as DropdownMenuLabel, v as SidebarContent, vt as Presence, w as SidebarMenuItem, wt as useCallbackRef, x as SidebarInset, xt as Branch, y as SidebarFooter, yt as Portal$1, zt as useLocation } from "./PageContent-DFaAkjCU.js";
 //#region \0vite/modulepreload-polyfill.js
 (function polyfill() {
@@ -21571,6 +21571,22 @@ async function getDailyNutritionProgress(clientId, date) {
 				water: 0
 			},
 			logs: []
+		};
+	}
+}
+async function searchFoodItems(query) {
+	try {
+		const { data, error } = await supabase.from("food_items").select("id, name, energy_kcal, protein_g, carbs_g, fats_g, base_qty_g").ilike("name", `%${query}%`).limit(10);
+		if (error) throw error;
+		return {
+			data,
+			error: null
+		};
+	} catch (error) {
+		console.error("Error searching food items:", error);
+		return {
+			data: null,
+			error
 		};
 	}
 }
@@ -47568,14 +47584,14 @@ function ClientFinances() {
 }
 //#endregion
 //#region src/App.tsx
-var MasterLogs = (0, import_react.lazy)(() => __vitePreload(() => import("./MasterLogs-DhINsvbv.js"), __vite__mapDeps([0,1,2])));
-var ProfPatients = (0, import_react.lazy)(() => __vitePreload(() => import("./ProfPatients-BpgUu1QZ.js"), __vite__mapDeps([3,1,4])));
-var ProfPatientRecord = (0, import_react.lazy)(() => __vitePreload(() => import("./ProfPatientRecord-D2tFq2uo.js"), __vite__mapDeps([5,1,2,6,7,8])));
-var ClientNutrition = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientNutrition-CL_ldKY7.js"), __vite__mapDeps([9,1,2,6,7,4])));
-var ClientTraining = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientTraining-1XOXRdvy.js"), __vite__mapDeps([10,1])));
-var ClientMind = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientMind-BVL_MNGs.js"), __vite__mapDeps([11,1])));
-var ClientStudy = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientStudy-CNaPPYft.js"), __vite__mapDeps([12,1,7,4,8])));
-var ClientTeam = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientTeam-C2-IyG41.js"), __vite__mapDeps([13,1,4])));
+var MasterLogs = (0, import_react.lazy)(() => __vitePreload(() => import("./MasterLogs-n4sx1m0X.js"), __vite__mapDeps([0,1,2])));
+var ProfPatients = (0, import_react.lazy)(() => __vitePreload(() => import("./ProfPatients-Dw3QcIRU.js"), __vite__mapDeps([3,1,4])));
+var ProfPatientRecord = (0, import_react.lazy)(() => __vitePreload(() => import("./ProfPatientRecord-DvwnFJgO.js"), __vite__mapDeps([5,1,2,6,7,8])));
+var ClientNutrition = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientNutrition-B0EY4DGp.js"), __vite__mapDeps([9,1,2,6,7,4])));
+var ClientTraining = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientTraining-BY-DsT8a.js"), __vite__mapDeps([10,1])));
+var ClientMind = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientMind-Di8CESCH.js"), __vite__mapDeps([11,1])));
+var ClientStudy = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientStudy-CQxjduz9.js"), __vite__mapDeps([12,1,7,4,8])));
+var ClientTeam = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientTeam-B9os_Axq.js"), __vite__mapDeps([13,1,4])));
 var LoadingFallback = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 	"data-uid": "src/App.tsx:51:3",
 	"data-prohibitions": "[]",
@@ -47945,6 +47961,6 @@ var App = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrowserRouter, {
 	"data-prohibitions": "[editContent]"
 }));
 //#endregion
-export { getFullDietDetails as $, require__baseExtremum as A, Dumbbell as At, getPercentValue as B, getMaxRadius as C, Save as Ct, require_isEqual as D, Link as Dt, getValueByDataKey as E, LoaderCircle as Et, warn$1 as F, Apple as Ft, require_isNil as G, isNumber as H, Layer as I, Activity as It, addFoodLog as J, require_get as K, filterProps as L, useToast as Lt, Cell as M, ChevronDown as Mt, Global as N, Brain as Nt, require__baseLt as O, LayoutDashboard as Ot, require__baseIteratee as P, ArrowRight as Pt, getDailyNutritionProgress as Q, findAllByType as R, formatAxisMap$1 as S, Search as St, polarToCartesian as T, Lock as Tt, mathSign as U, interpolateNumber$1 as V, uniqueId as W, deleteFoodLog as X, addWaterLog as Y, getClientActiveDiet as Z, Dot as _, CardTitle as _t, ChartContainer as a, TableCell as at, LabelList as b, Target as bt, ChartTooltip as c, TableRow as ct, generateCategoricalChart as d, Label$2 as dt, Switch as et, YAxis as f, Card as ft, Shape as g, CardHeader as gt, Bar as h, CardFooter as ht, TabsTrigger as i, TableBody as it, Text as j, CirclePlus as jt, require__baseGt as k, FileText as kt, ChartTooltipContent as l, getAuditLogs as lt, CartesianGrid as m, CardDescription as mt, TabsContent as n, Badge as nt, ChartLegend as o, TableHead as ot, XAxis as p, CardContent as pt, require_isFunction as q, TabsList as r, Table as rt, ChartLegendContent as s, TableHeader as st, Tabs as t, usePrevious as tt, BarChart as u, Progress as ut, es6_default as v, Users as vt, getTickClassName as w, Plus as wt, Label as x, Smile as xt, Curve as y, Trash2 as yt, adaptEventsOfChild as z };
+export { getFullDietDetails as $, require__baseExtremum as A, FileText as At, getPercentValue as B, getMaxRadius as C, Search as Ct, require_isEqual as D, LoaderCircle as Dt, getValueByDataKey as E, Lock as Et, warn$1 as F, ArrowRight as Ft, require_isNil as G, isNumber as H, Layer as I, Apple as It, addFoodLog as J, require_get as K, filterProps as L, Activity as Lt, Cell as M, CirclePlus as Mt, Global as N, ChevronDown as Nt, require__baseLt as O, Link as Ot, require__baseIteratee as P, Brain as Pt, getDailyNutritionProgress as Q, findAllByType as R, useToast as Rt, formatAxisMap$1 as S, Smile as St, polarToCartesian as T, Plus as Tt, mathSign as U, interpolateNumber$1 as V, uniqueId as W, deleteFoodLog as X, addWaterLog as Y, getClientActiveDiet as Z, Dot as _, CardHeader as _t, ChartContainer as a, TableBody as at, LabelList as b, Trash2 as bt, ChartTooltip as c, TableHeader as ct, generateCategoricalChart as d, Progress as dt, searchFoodItems as et, YAxis as f, Label$2 as ft, Shape as g, CardFooter as gt, Bar as h, CardDescription as ht, TabsTrigger as i, Table as it, Text as j, Dumbbell as jt, require__baseGt as k, LayoutDashboard as kt, ChartTooltipContent as l, TableRow as lt, CartesianGrid as m, CardContent as mt, TabsContent as n, usePrevious as nt, ChartLegend as o, TableCell as ot, XAxis as p, Card as pt, require_isFunction as q, TabsList as r, Badge as rt, ChartLegendContent as s, TableHead as st, Tabs as t, Switch as tt, BarChart as u, getAuditLogs as ut, es6_default as v, CardTitle as vt, getTickClassName as w, Save as wt, Label as x, Target as xt, Curve as y, Users as yt, adaptEventsOfChild as z };
 
-//# sourceMappingURL=index-C2wTFHMV.js.map
+//# sourceMappingURL=index-BlFoc-8K.js.map

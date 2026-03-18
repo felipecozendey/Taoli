@@ -341,3 +341,19 @@ export async function getDailyNutritionProgress(clientId: string, date: string) 
     }
   }
 }
+
+export async function searchFoodItems(query: string) {
+  try {
+    const { data, error } = await supabase
+      .from('food_items')
+      .select('id, name, energy_kcal, protein_g, carbs_g, fats_g, base_qty_g')
+      .ilike('name', `%${query}%`)
+      .limit(10)
+
+    if (error) throw error
+    return { data, error: null }
+  } catch (error) {
+    console.error('Error searching food items:', error)
+    return { data: null, error }
+  }
+}

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { DashboardHeader } from '@/components/shared/DashboardHeader'
 import { PageContent } from '@/components/shared/PageContent'
 import { Input } from '@/components/ui/input'
-import { Search, Shield, Settings, Apple, Dumbbell, Brain } from 'lucide-react'
+import { Search, Shield, Settings, Apple, Dumbbell, Brain, Eye } from 'lucide-react'
 import {
   Table,
   TableBody,
@@ -33,6 +33,7 @@ import { Label } from '@/components/ui/label'
 import { Skeleton } from '@/components/ui/skeleton'
 import { useToast } from '@/hooks/use-toast'
 import { getAllProfiles, updateUserAccess, type Profile } from '@/services/master'
+import { useAuth } from '@/contexts/AuthContext'
 
 const RoleBadge = ({ role }: { role: string }) => {
   switch (role) {
@@ -85,6 +86,7 @@ const SpecialtiesList = ({ user }: { user: Profile }) => {
 }
 
 export default function MasterUsers() {
+  const { startImpersonation } = useAuth()
   const [users, setUsers] = useState<Profile[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
@@ -140,7 +142,6 @@ export default function MasterUsers() {
     if (!selectedUser) return
 
     try {
-      // Auto clear specialties if downgrading from professional
       const finalNutritionist = editForm.role === 'professional' ? editForm.is_nutritionist : false
       const finalTrainer = editForm.role === 'professional' ? editForm.is_trainer : false
       const finalPsychologist = editForm.role === 'professional' ? editForm.is_psychologist : false
@@ -154,7 +155,7 @@ export default function MasterUsers() {
 
       toast({ title: 'Acessos atualizados com sucesso!' })
       setIsSheetOpen(false)
-      fetchUsers() // Refresh list to ensure strict DB sync
+      fetchUsers()
     } catch (error: any) {
       toast({
         title: 'Erro ao salvar',
@@ -235,10 +236,16 @@ export default function MasterUsers() {
                       <SpecialtiesList user={user} />
                     </TableCell>
                     <TableCell className="text-right">
-                      <Button variant="ghost" size="sm" onClick={() => openEditSheet(user)}>
-                        <Shield className="w-4 h-4 mr-2" />
-                        Gerir Acesso
-                      </Button>
+                      <div className="flex justify-end items-center gap-2">
+                        <Button variant="ghost" size="sm" onClick={() => startImpersonation(user)}>
+                          <Eye className="w-4 h-4 md:mr-2" />
+                          <span className="hidden md:inline">Acessar Conta</span>
+                        </Button>
+                        <Button variant="ghost" size="sm" onClick={() => openEditSheet(user)}>
+                          <Shield className="w-4 h-4 md:mr-2" />
+                          <span className="hidden md:inline">Gerir Acesso</span>
+                        </Button>
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))

@@ -21649,11 +21649,12 @@ var supabase = createClient("https://vpkdawwaahutldhtskkz.supabase.co", "eyJhbGc
 //#region src/contexts/AuthContext.tsx
 var AuthContext = (0, import_react.createContext)(null);
 function AuthProvider({ children }) {
-	const [user, setUser] = (0, import_react.useState)(null);
+	const [realUser, setRealUser] = (0, import_react.useState)(null);
+	const [impersonatedUser, setImpersonatedUser] = (0, import_react.useState)(null);
 	const [session, setSession] = (0, import_react.useState)(null);
 	const [isLoading, setIsLoading] = (0, import_react.useState)(true);
-	const [activeRole, setActiveRole] = (0, import_react.useState)(null);
-	const [highestRole, setHighestRole] = (0, import_react.useState)(null);
+	const [realActiveRole, setRealActiveRole] = (0, import_react.useState)(null);
+	const [realHighestRole, setRealHighestRole] = (0, import_react.useState)(null);
 	const navigate = useNavigate();
 	(0, import_react.useEffect)(() => {
 		supabase.auth.getSession().then(({ data: { session } }) => {
@@ -21677,26 +21678,27 @@ function AuthProvider({ children }) {
 						if (savedRole) {
 							if (dbRole === "admin" || dbRole === "professional" && savedRole !== "admin") initialActiveRole = savedRole;
 						}
-						setHighestRole(dbRole);
-						setActiveRole(initialActiveRole);
-						setUser({
+						setRealHighestRole(dbRole);
+						setRealActiveRole(initialActiveRole);
+						setRealUser({
 							id: session.user.id,
 							email: session.user.email || "",
 							name: data.name || "Usuário",
 							role: initialActiveRole
 						});
 					} else {
-						setUser(null);
-						setActiveRole(null);
-						setHighestRole(null);
+						setRealUser(null);
+						setRealActiveRole(null);
+						setRealHighestRole(null);
 					}
 					setIsLoading(false);
 				}
 			});
 		} else {
-			setUser(null);
-			setActiveRole(null);
-			setHighestRole(null);
+			setRealUser(null);
+			setRealActiveRole(null);
+			setRealHighestRole(null);
+			setImpersonatedUser(null);
 			setIsLoading(false);
 		}
 		return () => {
@@ -21707,21 +21709,23 @@ function AuthProvider({ children }) {
 		const { error } = await supabase.auth.signOut();
 		if (error) console.error("Logout error:", error);
 		else {
-			setUser(null);
+			setRealUser(null);
 			setSession(null);
-			setActiveRole(null);
-			setHighestRole(null);
+			setRealActiveRole(null);
+			setRealHighestRole(null);
+			setImpersonatedUser(null);
 			localStorage.removeItem("activeRole");
 		}
 	};
 	const switchRole = (newRole) => {
-		if (!highestRole || !user) return;
-		if (highestRole === "client" && newRole !== "client") return;
-		if (highestRole === "professional" && newRole === "admin") return;
+		if (impersonatedUser) return;
+		if (!realHighestRole || !realUser) return;
+		if (realHighestRole === "client" && newRole !== "client") return;
+		if (realHighestRole === "professional" && newRole === "admin") return;
 		localStorage.setItem("activeRole", newRole);
-		setActiveRole(newRole);
-		setUser({
-			...user,
+		setRealActiveRole(newRole);
+		setRealUser({
+			...realUser,
 			role: newRole
 		});
 		navigate({
@@ -21730,8 +21734,41 @@ function AuthProvider({ children }) {
 			client: "/client"
 		}[newRole]);
 	};
+	const startImpersonation = async (targetUser) => {
+		if (!realUser || realHighestRole !== "admin") return;
+		const targetRole = targetUser.role || "client";
+		try {
+			await supabase.from("audit_logs").insert({
+				admin_id: realUser.id,
+				target_user_id: targetUser.id,
+				action: "IMPERSONATE_START",
+				details: { targetRole }
+			});
+		} catch (error) {
+			console.error("Failed to log impersonation start", error);
+		}
+		setImpersonatedUser({
+			id: targetUser.id,
+			email: targetUser.email || "",
+			name: targetUser.name || "Usuário",
+			role: targetRole
+		});
+		navigate({
+			admin: "/master",
+			professional: "/professional",
+			client: "/client"
+		}[targetRole] || "/client");
+	};
+	const stopImpersonation = () => {
+		setImpersonatedUser(null);
+		navigate("/master/users");
+	};
+	const isImpersonating = !!impersonatedUser;
+	const user = impersonatedUser || realUser;
+	const activeRole = impersonatedUser ? impersonatedUser.role : realActiveRole;
+	const highestRole = impersonatedUser ? impersonatedUser.role : realHighestRole;
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AuthContext.Provider, {
-		"data-uid": "src/contexts/AuthContext.tsx:135:5",
+		"data-uid": "src/contexts/AuthContext.tsx:183:5",
 		"data-prohibitions": "[editContent]",
 		value: {
 			user,
@@ -21740,7 +21777,10 @@ function AuthProvider({ children }) {
 			activeRole,
 			highestRole,
 			logout,
-			switchRole
+			switchRole,
+			startImpersonation,
+			stopImpersonation,
+			isImpersonating
 		},
 		children
 	});
@@ -25618,4 +25658,4 @@ function PageContent({ children, className }) {
 //#endregion
 export { Button as $, SheetFooter as A, dispatchDiscreteCustomEvent as At, Trigger$1 as B, Outlet as Bt, SidebarMenuButton as C, Portal$2 as Ct, Sheet as D, Root$6 as Dt, Skeleton as E, DismissableLayer as Et, Description as F, useComposedRefs as Ft, Primitive as G, useParams as Gt, ReactRemoveScroll as H, Routes as Ht, Overlay as I, composeEventHandlers as It, CardContent as J, require_react_dom as Jt, Input as K, useSearchParams as Kt, Portal$1 as L, BrowserRouter as Lt, SheetTitle as M, createSlot$1 as Mt, Close as N, createContextScope$1 as Nt, SheetContent as O, useCallbackRef$1 as Ot, Content as P, require_jsx_runtime as Pt, CardTitle as Q, __toESM as Qt, Root$2 as R, Link as Rt, SidebarMenu as S, Presence as St, SidebarProvider as T, Branch as Tt, useFocusGuards as U, useLocation as Ut, hideOthers as V, Route as Vt, FocusScope as W, useNavigate as Wt, CardFooter as X, __commonJSMin as Xt, CardDescription as Y, require_react as Yt, CardHeader as Z, __exportAll as Zt, Sidebar as _, cva as _t, AvatarImage as a, Arrow as at, SidebarHeader as b, VisuallyHidden as bt, DropdownMenuContent as c, createPopperScope as ct, DropdownMenuSeparator as d, cn as dt, AuthProvider as et, DropdownMenuTrigger as f, X as ft, useDirection as g, createLucideIcon as gt, createRovingFocusGroupScope as h, Check as ht, AvatarFallback as i, Anchor as it, SheetHeader as j, createCollection as jt, SheetDescription as k, Primitive$1 as kt, DropdownMenuItem as l, useSize as lt, Root$1 as m, Sparkles as mt, DashboardHeader as n, supabase as nt, createContextScope as o, Content$1 as ot, Item as p, User as pt, Card as q, __vitePreload as qt, Avatar as r, TooltipProvider as rt, DropdownMenu as s, Root2$1 as st, PageContent as t, useAuth as tt, DropdownMenuLabel as u, useId as ut, SidebarContent as v, clsx as vt, SidebarMenuItem as w, useLayoutEffect2 as wt, SidebarInset as x, useControllableState as xt, SidebarFooter as y, VISUALLY_HIDDEN_STYLES as yt, Title as z, Navigate as zt };
 
-//# sourceMappingURL=PageContent-CQ4JHobQ.js.map
+//# sourceMappingURL=PageContent-Cxm88eRr.js.map

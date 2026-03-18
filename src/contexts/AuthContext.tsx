@@ -21,16 +21,20 @@ interface AuthContextType {
   highestRole: Role | null
   logout: () => Promise<void>
   switchRole: (newRole: Role) => void
+  startImpersonation: (targetUser: any) => Promise<void>
+  stopImpersonation: () => void
+  isImpersonating: boolean
 }
 
 const AuthContext = createContext<AuthContextType | null>(null)
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null>(null)
+  const [realUser, setRealUser] = useState<User | null>(null)
+  const [impersonatedUser, setImpersonatedUser] = useState<User | null>(null)
   const [session, setSession] = useState<Session | null>(null)
   const [isLoading, setIsLoading] = useState(true)
-  const [activeRole, setActiveRole] = useState<Role | null>(null)
-  const [highestRole, setHighestRole] = useState<Role | null>(null)
+  const [realActiveRole, setRealActiveRole] = useState<Role | null>(null)
+  const [realHighestRole, setRealHighestRole] = useState<Role | null>(null)
 
   const navigate = useNavigate()
 
@@ -71,27 +75,28 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                 }
               }
 
-              setHighestRole(dbRole)
-              setActiveRole(initialActiveRole)
+              setRealHighestRole(dbRole)
+              setRealActiveRole(initialActiveRole)
 
-              setUser({
+              setRealUser({
                 id: session.user.id,
                 email: session.user.email || '',
                 name: data.name || 'Usuário',
                 role: initialActiveRole,
               })
             } else {
-              setUser(null)
-              setActiveRole(null)
-              setHighestRole(null)
+              setRealUser(null)
+              setRealActiveRole(null)
+              setRealHighestRole(null)
             }
             setIsLoading(false)
           }
         })
     } else {
-      setUser(null)
-      setActiveRole(null)
-      setHighestRole(null)
+      setRealUser(null)
+      setRealActiveRole(null)
+      setRealHighestRole(null)
+      setImpersonatedUser(null)
       setIsLoading(false)
     }
 
@@ -105,23 +110,25 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (error) {
       console.error('Logout error:', error)
     } else {
-      setUser(null)
+      setRealUser(null)
       setSession(null)
-      setActiveRole(null)
-      setHighestRole(null)
+      setRealActiveRole(null)
+      setRealHighestRole(null)
+      setImpersonatedUser(null)
       localStorage.removeItem('activeRole')
     }
   }
 
   const switchRole = (newRole: Role) => {
-    if (!highestRole || !user) return
+    if (impersonatedUser) return
+    if (!realHighestRole || !realUser) return
 
-    if (highestRole === 'client' && newRole !== 'client') return
-    if (highestRole === 'professional' && newRole === 'admin') return
+    if (realHighestRole === 'client' && newRole !== 'client') return
+    if (realHighestRole === 'professional' && newRole === 'admin') return
 
     localStorage.setItem('activeRole', newRole)
-    setActiveRole(newRole)
-    setUser({ ...user, role: newRole })
+    setRealActiveRole(newRole)
+    setRealUser({ ...realUser, role: newRole })
 
     const routes: Record<Role, string> = {
       admin: '/master',
@@ -131,9 +138,61 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     navigate(routes[newRole])
   }
 
+  const startImpersonation = async (targetUser: any) => {
+    if (!realUser || realHighestRole !== 'admin') return
+
+    const targetRole = targetUser.role || 'client'
+
+    try {
+      await supabase.from('audit_logs' as any).insert({
+        admin_id: realUser.id,
+        target_user_id: targetUser.id,
+        action: 'IMPERSONATE_START',
+        details: { targetRole },
+      })
+    } catch (error) {
+      console.error('Failed to log impersonation start', error)
+    }
+
+    setImpersonatedUser({
+      id: targetUser.id,
+      email: targetUser.email || '',
+      name: targetUser.name || 'Usuário',
+      role: targetRole as Role,
+    })
+
+    const routes: Record<Role, string> = {
+      admin: '/master',
+      professional: '/professional',
+      client: '/client',
+    }
+    navigate(routes[targetRole as Role] || '/client')
+  }
+
+  const stopImpersonation = () => {
+    setImpersonatedUser(null)
+    navigate('/master/users')
+  }
+
+  const isImpersonating = !!impersonatedUser
+  const user = impersonatedUser || realUser
+  const activeRole = impersonatedUser ? impersonatedUser.role : realActiveRole
+  const highestRole = impersonatedUser ? impersonatedUser.role : realHighestRole
+
   return (
     <AuthContext.Provider
-      value={{ user, session, isLoading, activeRole, highestRole, logout, switchRole }}
+      value={{
+        user,
+        session,
+        isLoading,
+        activeRole,
+        highestRole,
+        logout,
+        switchRole,
+        startImpersonation,
+        stopImpersonation,
+        isImpersonating,
+      }}
     >
       {children}
     </AuthContext.Provider>

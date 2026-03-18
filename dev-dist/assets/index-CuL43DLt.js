@@ -1,5 +1,5 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/ProfPatients-ZQoOZ3ei.js","assets/PageContent-CQ4JHobQ.js","assets/dialog-RRWA0519.js","assets/ProfPatientRecord-DunSStFq.js","assets/textarea-B_H8-KqN.js","assets/ClientNutrition-B6VViWaf.js","assets/accordion-DSXtRZJ3.js","assets/checkbox-DmC4RAq_.js","assets/flame-I-dPvU7R.js","assets/ClientTraining-ChltWUUI.js","assets/ClientMind-CrUv2l6x.js","assets/ClientStudy-CHMGLNSx.js","assets/ClientTeam-DJzKNdRD.js"])))=>i.map(i=>d[i]);
-import { $ as Button, A as SheetFooter, At as dispatchDiscreteCustomEvent, Bt as Outlet, C as SidebarMenuButton, Ct as Portal$1, D as Sheet, Dt as Root$4, E as Skeleton, Et as DismissableLayer, Ft as useComposedRefs, G as Primitive$1, H as ReactRemoveScroll, Ht as Routes, It as composeEventHandlers, J as CardContent, Jt as require_react_dom, K as Input, Kt as useSearchParams, Lt as BrowserRouter, M as SheetTitle, Mt as createSlot, Nt as createContextScope, O as SheetContent, Ot as useCallbackRef, Pt as require_jsx_runtime, Q as CardTitle, Qt as __toESM, Rt as Link$1, S as SidebarMenu, St as Presence, T as SidebarProvider, Tt as Branch, U as useFocusGuards, Ut as useLocation, V as hideOthers, Vt as Route, W as FocusScope, Wt as useNavigate, X as CardFooter, Xt as __commonJSMin, Y as CardDescription, Yt as require_react, Z as CardHeader, Zt as __exportAll, _ as Sidebar, _t as cva, a as AvatarImage, at as Arrow, b as SidebarHeader, bt as VisuallyHidden, c as DropdownMenuContent, ct as createPopperScope, d as DropdownMenuSeparator, dt as cn$1, et as AuthProvider, f as DropdownMenuTrigger, ft as X, g as useDirection, gt as createLucideIcon, h as createRovingFocusGroupScope, ht as Check, i as AvatarFallback, it as Anchor, j as SheetHeader, jt as createCollection, k as SheetDescription, kt as Primitive, l as DropdownMenuItem, lt as useSize, m as Root$5, mt as Sparkles, n as DashboardHeader, nt as supabase, o as createContextScope$1, ot as Content$1, p as Item$1, pt as User, q as Card, qt as __vitePreload, r as Avatar, rt as TooltipProvider, s as DropdownMenu, st as Root2$3, t as PageContent, tt as useAuth, u as DropdownMenuLabel, ut as useId, v as SidebarContent, vt as clsx, w as SidebarMenuItem, wt as useLayoutEffect2, x as SidebarInset, xt as useControllableState, y as SidebarFooter, yt as VISUALLY_HIDDEN_STYLES, zt as Navigate } from "./PageContent-CQ4JHobQ.js";
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/ProfPatients-CmOL59sV.js","assets/PageContent-Cxm88eRr.js","assets/dialog-DttZm_Lx.js","assets/ProfPatientRecord-CB-TtM6i.js","assets/textarea-BESrxnVB.js","assets/ClientNutrition-DDydLI6Q.js","assets/accordion-Bq3F3n9v.js","assets/checkbox-azYtbpTF.js","assets/flame-D4-7MCKP.js","assets/ClientTraining-CH06pD4b.js","assets/ClientMind-BbXg6Weh.js","assets/ClientStudy-fGsiVvg-.js","assets/ClientTeam-Cr-pSfIL.js"])))=>i.map(i=>d[i]);
+import { $ as Button, A as SheetFooter, At as dispatchDiscreteCustomEvent, Bt as Outlet, C as SidebarMenuButton, Ct as Portal$1, D as Sheet, Dt as Root$4, E as Skeleton, Et as DismissableLayer, Ft as useComposedRefs, G as Primitive$1, H as ReactRemoveScroll, Ht as Routes, It as composeEventHandlers, J as CardContent, Jt as require_react_dom, K as Input, Kt as useSearchParams, Lt as BrowserRouter, M as SheetTitle, Mt as createSlot, Nt as createContextScope, O as SheetContent, Ot as useCallbackRef, Pt as require_jsx_runtime, Q as CardTitle, Qt as __toESM, Rt as Link$1, S as SidebarMenu, St as Presence, T as SidebarProvider, Tt as Branch, U as useFocusGuards, Ut as useLocation, V as hideOthers, Vt as Route, W as FocusScope, Wt as useNavigate, X as CardFooter, Xt as __commonJSMin, Y as CardDescription, Yt as require_react, Z as CardHeader, Zt as __exportAll, _ as Sidebar, _t as cva, a as AvatarImage, at as Arrow, b as SidebarHeader, bt as VisuallyHidden, c as DropdownMenuContent, ct as createPopperScope, d as DropdownMenuSeparator, dt as cn$1, et as AuthProvider, f as DropdownMenuTrigger, ft as X, g as useDirection, gt as createLucideIcon, h as createRovingFocusGroupScope, ht as Check, i as AvatarFallback, it as Anchor, j as SheetHeader, jt as createCollection, k as SheetDescription, kt as Primitive, l as DropdownMenuItem, lt as useSize, m as Root$5, mt as Sparkles, n as DashboardHeader, nt as supabase, o as createContextScope$1, ot as Content$1, p as Item$1, pt as User, q as Card, qt as __vitePreload, r as Avatar, rt as TooltipProvider, s as DropdownMenu, st as Root2$3, t as PageContent, tt as useAuth, u as DropdownMenuLabel, ut as useId, v as SidebarContent, vt as clsx, w as SidebarMenuItem, wt as useLayoutEffect2, x as SidebarInset, xt as useControllableState, y as SidebarFooter, yt as VISUALLY_HIDDEN_STYLES, zt as Navigate } from "./PageContent-Cxm88eRr.js";
 //#region \0vite/modulepreload-polyfill.js
 (function polyfill() {
 	const relList = document.createElement("link").relList;
@@ -16671,16 +16671,54 @@ function ProtectedRoute({ allowedRoles }) {
 	});
 }
 //#endregion
+//#region src/components/shared/ImpersonationBanner.tsx
+function ImpersonationBanner() {
+	const { user, isImpersonating, stopImpersonation } = useAuth();
+	if (!isImpersonating) return null;
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		"data-uid": "src/components/shared/ImpersonationBanner.tsx:10:5",
+		"data-prohibitions": "[editContent]",
+		className: "fixed top-0 left-0 right-0 h-12 bg-orange-500 text-white flex items-center justify-center px-4 text-sm font-medium z-[100] shadow-md",
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+			"data-uid": "src/components/shared/ImpersonationBanner.tsx:11:7",
+			"data-prohibitions": "[editContent]",
+			className: "truncate",
+			children: ["⚠️ Você está a visualizar o sistema como: ", /* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", {
+				"data-uid": "src/components/shared/ImpersonationBanner.tsx:12:51",
+				"data-prohibitions": "[editContent]",
+				children: user?.name
+			})]
+		}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+			"data-uid": "src/components/shared/ImpersonationBanner.tsx:14:7",
+			"data-prohibitions": "[]",
+			variant: "outline",
+			size: "sm",
+			onClick: stopImpersonation,
+			className: "ml-4 shrink-0 h-8 text-xs bg-transparent border-white text-white hover:bg-white hover:text-orange-600",
+			children: "Encerrar Sessão e Voltar"
+		})]
+	});
+}
+//#endregion
 //#region src/components/Layout.tsx
 function Layout() {
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("main", {
-		"data-uid": "src/components/Layout.tsx:5:5",
-		"data-prohibitions": "[]",
+	const { isImpersonating } = useAuth();
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		"data-uid": "src/components/Layout.tsx:10:5",
+		"data-prohibitions": "[editContent]",
 		className: "flex flex-col min-h-screen bg-background",
-		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Outlet, {
-			"data-uid": "src/components/Layout.tsx:6:7",
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ImpersonationBanner, {
+			"data-uid": "src/components/Layout.tsx:11:7",
 			"data-prohibitions": "[editContent]"
-		})
+		}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("main", {
+			"data-uid": "src/components/Layout.tsx:12:7",
+			"data-prohibitions": "[editContent]",
+			className: cn$1("flex flex-col flex-1", isImpersonating && "mt-12"),
+			children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Outlet, {
+				"data-uid": "src/components/Layout.tsx:13:9",
+				"data-prohibitions": "[editContent]"
+			})
+		})]
 	});
 }
 //#endregion
@@ -19627,21 +19665,21 @@ var updateUserAccess = async (userId, data) => {
 var RoleBadge = ({ role }) => {
 	switch (role) {
 		case "admin": return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Badge, {
-			"data-uid": "src/pages/master/MasterUsers.tsx:41:9",
+			"data-uid": "src/pages/master/MasterUsers.tsx:42:9",
 			"data-prohibitions": "[]",
 			variant: "outline",
 			className: "bg-purple-50 text-purple-700 border-purple-200",
 			children: "Master"
 		});
 		case "professional": return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Badge, {
-			"data-uid": "src/pages/master/MasterUsers.tsx:47:9",
+			"data-uid": "src/pages/master/MasterUsers.tsx:48:9",
 			"data-prohibitions": "[]",
 			variant: "outline",
 			className: "bg-blue-50 text-blue-700 border-blue-200",
 			children: "Profissional"
 		});
 		default: return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Badge, {
-			"data-uid": "src/pages/master/MasterUsers.tsx:53:9",
+			"data-uid": "src/pages/master/MasterUsers.tsx:54:9",
 			"data-prohibitions": "[]",
 			variant: "outline",
 			className: "bg-slate-50 text-slate-700 border-slate-200",
@@ -19651,56 +19689,57 @@ var RoleBadge = ({ role }) => {
 };
 var SpecialtiesList = ({ user }) => {
 	if (user.role !== "professional") return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-		"data-uid": "src/pages/master/MasterUsers.tsx:61:44",
+		"data-uid": "src/pages/master/MasterUsers.tsx:62:44",
 		"data-prohibitions": "[]",
 		className: "text-muted-foreground text-sm",
 		children: "-"
 	});
 	const active = [];
 	if (user.is_nutritionist) active.push(/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-		"data-uid": "src/pages/master/MasterUsers.tsx:66:7",
+		"data-uid": "src/pages/master/MasterUsers.tsx:67:7",
 		"data-prohibitions": "[]",
 		title: "Nutrição",
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Apple, {
-			"data-uid": "src/pages/master/MasterUsers.tsx:67:9",
+			"data-uid": "src/pages/master/MasterUsers.tsx:68:9",
 			"data-prohibitions": "[editContent]",
 			className: "w-4 h-4 text-emerald-500"
 		})
 	}, "nutri"));
 	if (user.is_trainer) active.push(/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-		"data-uid": "src/pages/master/MasterUsers.tsx:72:7",
+		"data-uid": "src/pages/master/MasterUsers.tsx:73:7",
 		"data-prohibitions": "[]",
 		title: "Treino",
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Dumbbell, {
-			"data-uid": "src/pages/master/MasterUsers.tsx:73:9",
+			"data-uid": "src/pages/master/MasterUsers.tsx:74:9",
 			"data-prohibitions": "[editContent]",
 			className: "w-4 h-4 text-orange-500"
 		})
 	}, "trainer"));
 	if (user.is_psychologist) active.push(/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-		"data-uid": "src/pages/master/MasterUsers.tsx:78:7",
+		"data-uid": "src/pages/master/MasterUsers.tsx:79:7",
 		"data-prohibitions": "[]",
 		title: "Psicologia",
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Brain, {
-			"data-uid": "src/pages/master/MasterUsers.tsx:79:9",
+			"data-uid": "src/pages/master/MasterUsers.tsx:80:9",
 			"data-prohibitions": "[editContent]",
 			className: "w-4 h-4 text-pink-500"
 		})
 	}, "psy"));
 	if (active.length === 0) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-		"data-uid": "src/pages/master/MasterUsers.tsx:83:35",
+		"data-uid": "src/pages/master/MasterUsers.tsx:84:35",
 		"data-prohibitions": "[]",
 		className: "text-muted-foreground text-sm",
 		children: "Nenhuma"
 	});
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-		"data-uid": "src/pages/master/MasterUsers.tsx:84:10",
+		"data-uid": "src/pages/master/MasterUsers.tsx:85:10",
 		"data-prohibitions": "[editContent]",
 		className: "flex gap-2",
 		children: active
 	});
 };
 function MasterUsers() {
+	const { startImpersonation } = useAuth();
 	const [users, setUsers] = (0, import_react.useState)([]);
 	const [isLoading, setIsLoading] = (0, import_react.useState)(true);
 	const [searchTerm, setSearchTerm] = (0, import_react.useState)("");
@@ -19765,24 +19804,24 @@ function MasterUsers() {
 		}
 	};
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-		"data-uid": "src/pages/master/MasterUsers.tsx:168:5",
+		"data-uid": "src/pages/master/MasterUsers.tsx:169:5",
 		"data-prohibitions": "[editContent]",
 		className: "flex flex-col min-h-full",
 		children: [
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DashboardHeader, {
-				"data-uid": "src/pages/master/MasterUsers.tsx:169:7",
+				"data-uid": "src/pages/master/MasterUsers.tsx:170:7",
 				"data-prohibitions": "[]",
 				title: "Gestão de Utilizadores",
 				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					"data-uid": "src/pages/master/MasterUsers.tsx:170:9",
+					"data-uid": "src/pages/master/MasterUsers.tsx:171:9",
 					"data-prohibitions": "[]",
 					className: "relative w-64 hidden md:block",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Search, {
-						"data-uid": "src/pages/master/MasterUsers.tsx:171:11",
+						"data-uid": "src/pages/master/MasterUsers.tsx:172:11",
 						"data-prohibitions": "[editContent]",
 						className: "absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground"
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
-						"data-uid": "src/pages/master/MasterUsers.tsx:172:11",
+						"data-uid": "src/pages/master/MasterUsers.tsx:173:11",
 						"data-prohibitions": "[editContent]",
 						type: "search",
 						placeholder: "Buscar utilizadores...",
@@ -19793,50 +19832,50 @@ function MasterUsers() {
 				})
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(PageContent, {
-				"data-uid": "src/pages/master/MasterUsers.tsx:182:7",
+				"data-uid": "src/pages/master/MasterUsers.tsx:183:7",
 				"data-prohibitions": "[editContent]",
 				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-					"data-uid": "src/pages/master/MasterUsers.tsx:183:9",
+					"data-uid": "src/pages/master/MasterUsers.tsx:184:9",
 					"data-prohibitions": "[]",
 					className: "mb-6",
 					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-						"data-uid": "src/pages/master/MasterUsers.tsx:184:11",
+						"data-uid": "src/pages/master/MasterUsers.tsx:185:11",
 						"data-prohibitions": "[]",
 						className: "text-sm text-muted-foreground",
 						children: "Administre os acessos, papéis e especialidades de todos os utilizadores da plataforma."
 					})
 				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-					"data-uid": "src/pages/master/MasterUsers.tsx:189:9",
+					"data-uid": "src/pages/master/MasterUsers.tsx:190:9",
 					"data-prohibitions": "[editContent]",
 					className: "rounded-md border bg-card shadow-sm overflow-hidden",
 					children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Table, {
-						"data-uid": "src/pages/master/MasterUsers.tsx:190:11",
+						"data-uid": "src/pages/master/MasterUsers.tsx:191:11",
 						"data-prohibitions": "[editContent]",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHeader, {
-							"data-uid": "src/pages/master/MasterUsers.tsx:191:13",
+							"data-uid": "src/pages/master/MasterUsers.tsx:192:13",
 							"data-prohibitions": "[]",
 							className: "bg-muted/30",
 							children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(TableRow, {
-								"data-uid": "src/pages/master/MasterUsers.tsx:192:15",
+								"data-uid": "src/pages/master/MasterUsers.tsx:193:15",
 								"data-prohibitions": "[]",
 								children: [
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, {
-										"data-uid": "src/pages/master/MasterUsers.tsx:193:17",
+										"data-uid": "src/pages/master/MasterUsers.tsx:194:17",
 										"data-prohibitions": "[]",
 										children: "Nome"
 									}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, {
-										"data-uid": "src/pages/master/MasterUsers.tsx:194:17",
+										"data-uid": "src/pages/master/MasterUsers.tsx:195:17",
 										"data-prohibitions": "[]",
 										children: "Papel Base"
 									}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, {
-										"data-uid": "src/pages/master/MasterUsers.tsx:195:17",
+										"data-uid": "src/pages/master/MasterUsers.tsx:196:17",
 										"data-prohibitions": "[]",
 										children: "Especialidades"
 									}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, {
-										"data-uid": "src/pages/master/MasterUsers.tsx:196:17",
+										"data-uid": "src/pages/master/MasterUsers.tsx:197:17",
 										"data-prohibitions": "[]",
 										className: "text-right",
 										children: "Ações"
@@ -19844,78 +19883,78 @@ function MasterUsers() {
 								]
 							})
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableBody, {
-							"data-uid": "src/pages/master/MasterUsers.tsx:199:13",
+							"data-uid": "src/pages/master/MasterUsers.tsx:200:13",
 							"data-prohibitions": "[editContent]",
 							children: isLoading ? Array.from({ length: 5 }).map((_, idx) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(TableRow, {
-								"data-uid": "src/pages/master/MasterUsers.tsx:202:19",
+								"data-uid": "src/pages/master/MasterUsers.tsx:203:19",
 								"data-prohibitions": "[]",
 								children: [
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
-										"data-uid": "src/pages/master/MasterUsers.tsx:203:21",
+										"data-uid": "src/pages/master/MasterUsers.tsx:204:21",
 										"data-prohibitions": "[]",
 										children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-											"data-uid": "src/pages/master/MasterUsers.tsx:204:23",
+											"data-uid": "src/pages/master/MasterUsers.tsx:205:23",
 											"data-prohibitions": "[]",
 											className: "space-y-2",
 											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Skeleton, {
-												"data-uid": "src/pages/master/MasterUsers.tsx:205:25",
+												"data-uid": "src/pages/master/MasterUsers.tsx:206:25",
 												"data-prohibitions": "[editContent]",
 												className: "h-4 w-[150px]"
 											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Skeleton, {
-												"data-uid": "src/pages/master/MasterUsers.tsx:206:25",
+												"data-uid": "src/pages/master/MasterUsers.tsx:207:25",
 												"data-prohibitions": "[editContent]",
 												className: "h-3 w-[100px]"
 											})]
 										})
 									}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
-										"data-uid": "src/pages/master/MasterUsers.tsx:209:21",
+										"data-uid": "src/pages/master/MasterUsers.tsx:210:21",
 										"data-prohibitions": "[]",
 										children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Skeleton, {
-											"data-uid": "src/pages/master/MasterUsers.tsx:210:23",
+											"data-uid": "src/pages/master/MasterUsers.tsx:211:23",
 											"data-prohibitions": "[editContent]",
 											className: "h-6 w-[80px] rounded-full"
 										})
 									}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
-										"data-uid": "src/pages/master/MasterUsers.tsx:212:21",
+										"data-uid": "src/pages/master/MasterUsers.tsx:213:21",
 										"data-prohibitions": "[]",
 										children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Skeleton, {
-											"data-uid": "src/pages/master/MasterUsers.tsx:213:23",
+											"data-uid": "src/pages/master/MasterUsers.tsx:214:23",
 											"data-prohibitions": "[editContent]",
 											className: "h-6 w-[120px]"
 										})
 									}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
-										"data-uid": "src/pages/master/MasterUsers.tsx:215:21",
+										"data-uid": "src/pages/master/MasterUsers.tsx:216:21",
 										"data-prohibitions": "[]",
 										className: "text-right",
 										children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Skeleton, {
-											"data-uid": "src/pages/master/MasterUsers.tsx:216:23",
+											"data-uid": "src/pages/master/MasterUsers.tsx:217:23",
 											"data-prohibitions": "[editContent]",
 											className: "h-8 w-[100px] ml-auto"
 										})
 									})
 								]
 							}, idx)) : filteredUsers.length > 0 ? filteredUsers.map((user) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(TableRow, {
-								"data-uid": "src/pages/master/MasterUsers.tsx:222:19",
+								"data-uid": "src/pages/master/MasterUsers.tsx:223:19",
 								"data-prohibitions": "[editContent]",
 								className: "hover:bg-muted/10 transition-colors",
 								children: [
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
-										"data-uid": "src/pages/master/MasterUsers.tsx:223:21",
+										"data-uid": "src/pages/master/MasterUsers.tsx:224:21",
 										"data-prohibitions": "[editContent]",
 										className: "font-medium",
 										children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-											"data-uid": "src/pages/master/MasterUsers.tsx:224:23",
+											"data-uid": "src/pages/master/MasterUsers.tsx:225:23",
 											"data-prohibitions": "[editContent]",
 											className: "flex flex-col",
 											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-												"data-uid": "src/pages/master/MasterUsers.tsx:225:25",
+												"data-uid": "src/pages/master/MasterUsers.tsx:226:25",
 												"data-prohibitions": "[editContent]",
 												children: user.name || "Sem nome"
 											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-												"data-uid": "src/pages/master/MasterUsers.tsx:226:25",
+												"data-uid": "src/pages/master/MasterUsers.tsx:227:25",
 												"data-prohibitions": "[editContent]",
 												className: "text-xs text-muted-foreground font-normal",
 												children: user.email || "Sem email"
@@ -19923,46 +19962,72 @@ function MasterUsers() {
 										})
 									}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
-										"data-uid": "src/pages/master/MasterUsers.tsx:231:21",
+										"data-uid": "src/pages/master/MasterUsers.tsx:232:21",
 										"data-prohibitions": "[]",
 										children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(RoleBadge, {
-											"data-uid": "src/pages/master/MasterUsers.tsx:232:23",
+											"data-uid": "src/pages/master/MasterUsers.tsx:233:23",
 											"data-prohibitions": "[editContent]",
 											role: user.role || "client"
 										})
 									}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
-										"data-uid": "src/pages/master/MasterUsers.tsx:234:21",
+										"data-uid": "src/pages/master/MasterUsers.tsx:235:21",
 										"data-prohibitions": "[]",
 										children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SpecialtiesList, {
-											"data-uid": "src/pages/master/MasterUsers.tsx:235:23",
+											"data-uid": "src/pages/master/MasterUsers.tsx:236:23",
 											"data-prohibitions": "[editContent]",
 											user
 										})
 									}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
-										"data-uid": "src/pages/master/MasterUsers.tsx:237:21",
+										"data-uid": "src/pages/master/MasterUsers.tsx:238:21",
 										"data-prohibitions": "[]",
 										className: "text-right",
-										children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
-											"data-uid": "src/pages/master/MasterUsers.tsx:238:23",
+										children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+											"data-uid": "src/pages/master/MasterUsers.tsx:239:23",
 											"data-prohibitions": "[]",
-											variant: "ghost",
-											size: "sm",
-											onClick: () => openEditSheet(user),
-											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Shield, {
-												"data-uid": "src/pages/master/MasterUsers.tsx:239:25",
-												"data-prohibitions": "[editContent]",
-												className: "w-4 h-4 mr-2"
-											}), "Gerir Acesso"]
+											className: "flex justify-end items-center gap-2",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
+												"data-uid": "src/pages/master/MasterUsers.tsx:240:25",
+												"data-prohibitions": "[]",
+												variant: "ghost",
+												size: "sm",
+												onClick: () => startImpersonation(user),
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Eye, {
+													"data-uid": "src/pages/master/MasterUsers.tsx:241:27",
+													"data-prohibitions": "[editContent]",
+													className: "w-4 h-4 md:mr-2"
+												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+													"data-uid": "src/pages/master/MasterUsers.tsx:242:27",
+													"data-prohibitions": "[]",
+													className: "hidden md:inline",
+													children: "Acessar Conta"
+												})]
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
+												"data-uid": "src/pages/master/MasterUsers.tsx:244:25",
+												"data-prohibitions": "[]",
+												variant: "ghost",
+												size: "sm",
+												onClick: () => openEditSheet(user),
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Shield, {
+													"data-uid": "src/pages/master/MasterUsers.tsx:245:27",
+													"data-prohibitions": "[editContent]",
+													className: "w-4 h-4 md:mr-2"
+												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+													"data-uid": "src/pages/master/MasterUsers.tsx:246:27",
+													"data-prohibitions": "[]",
+													className: "hidden md:inline",
+													children: "Gerir Acesso"
+												})]
+											})]
 										})
 									})
 								]
 							}, user.id)) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableRow, {
-								"data-uid": "src/pages/master/MasterUsers.tsx:246:17",
+								"data-uid": "src/pages/master/MasterUsers.tsx:253:17",
 								"data-prohibitions": "[]",
 								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
-									"data-uid": "src/pages/master/MasterUsers.tsx:247:19",
+									"data-uid": "src/pages/master/MasterUsers.tsx:254:19",
 									"data-prohibitions": "[]",
 									colSpan: 4,
 									className: "text-center py-8 text-muted-foreground",
@@ -19974,42 +20039,42 @@ function MasterUsers() {
 				})]
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Sheet, {
-				"data-uid": "src/pages/master/MasterUsers.tsx:257:7",
+				"data-uid": "src/pages/master/MasterUsers.tsx:264:7",
 				"data-prohibitions": "[editContent]",
 				open: isSheetOpen,
 				onOpenChange: setIsSheetOpen,
 				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(SheetContent, {
-					"data-uid": "src/pages/master/MasterUsers.tsx:258:9",
+					"data-uid": "src/pages/master/MasterUsers.tsx:265:9",
 					"data-prohibitions": "[editContent]",
 					className: "flex flex-col overflow-y-auto",
 					children: [
 						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(SheetHeader, {
-							"data-uid": "src/pages/master/MasterUsers.tsx:259:11",
+							"data-uid": "src/pages/master/MasterUsers.tsx:266:11",
 							"data-prohibitions": "[editContent]",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(SheetTitle, {
-								"data-uid": "src/pages/master/MasterUsers.tsx:260:13",
+								"data-uid": "src/pages/master/MasterUsers.tsx:267:13",
 								"data-prohibitions": "[editContent]",
 								children: ["Editar Acessos de ", selectedUser?.name]
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SheetDescription, {
-								"data-uid": "src/pages/master/MasterUsers.tsx:261:13",
+								"data-uid": "src/pages/master/MasterUsers.tsx:268:13",
 								"data-prohibitions": "[]",
 								children: "Altere o papel principal e as especialidades ativas deste utilizador."
 							})]
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							"data-uid": "src/pages/master/MasterUsers.tsx:266:11",
+							"data-uid": "src/pages/master/MasterUsers.tsx:273:11",
 							"data-prohibitions": "[editContent]",
 							className: "flex-1 py-6 space-y-8",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								"data-uid": "src/pages/master/MasterUsers.tsx:267:13",
+								"data-uid": "src/pages/master/MasterUsers.tsx:274:13",
 								"data-prohibitions": "[]",
 								className: "space-y-3",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label$2, {
-									"data-uid": "src/pages/master/MasterUsers.tsx:268:15",
+									"data-uid": "src/pages/master/MasterUsers.tsx:275:15",
 									"data-prohibitions": "[]",
 									children: "Papel Principal"
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Select, {
-									"data-uid": "src/pages/master/MasterUsers.tsx:269:15",
+									"data-uid": "src/pages/master/MasterUsers.tsx:276:15",
 									"data-prohibitions": "[]",
 									value: editForm.role,
 									onValueChange: (val) => setEditForm({
@@ -20017,31 +20082,31 @@ function MasterUsers() {
 										role: val
 									}),
 									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectTrigger, {
-										"data-uid": "src/pages/master/MasterUsers.tsx:273:17",
+										"data-uid": "src/pages/master/MasterUsers.tsx:280:17",
 										"data-prohibitions": "[]",
 										children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectValue, {
-											"data-uid": "src/pages/master/MasterUsers.tsx:274:19",
+											"data-uid": "src/pages/master/MasterUsers.tsx:281:19",
 											"data-prohibitions": "[editContent]",
 											placeholder: "Selecione um papel"
 										})
 									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(SelectContent, {
-										"data-uid": "src/pages/master/MasterUsers.tsx:276:17",
+										"data-uid": "src/pages/master/MasterUsers.tsx:283:17",
 										"data-prohibitions": "[]",
 										children: [
 											/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectItem, {
-												"data-uid": "src/pages/master/MasterUsers.tsx:277:19",
+												"data-uid": "src/pages/master/MasterUsers.tsx:284:19",
 												"data-prohibitions": "[]",
 												value: "client",
 												children: "Cliente"
 											}),
 											/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectItem, {
-												"data-uid": "src/pages/master/MasterUsers.tsx:278:19",
+												"data-uid": "src/pages/master/MasterUsers.tsx:285:19",
 												"data-prohibitions": "[]",
 												value: "professional",
 												children: "Profissional"
 											}),
 											/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectItem, {
-												"data-uid": "src/pages/master/MasterUsers.tsx:279:19",
+												"data-uid": "src/pages/master/MasterUsers.tsx:286:19",
 												"data-prohibitions": "[]",
 												value: "admin",
 												children: "Master"
@@ -20050,49 +20115,49 @@ function MasterUsers() {
 									})]
 								})]
 							}), editForm.role === "professional" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								"data-uid": "src/pages/master/MasterUsers.tsx:285:15",
+								"data-uid": "src/pages/master/MasterUsers.tsx:292:15",
 								"data-prohibitions": "[]",
 								className: "space-y-5 pt-5 border-t animate-in fade-in slide-in-from-bottom-2 duration-300",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h4", {
-									"data-uid": "src/pages/master/MasterUsers.tsx:286:17",
+									"data-uid": "src/pages/master/MasterUsers.tsx:293:17",
 									"data-prohibitions": "[]",
 									className: "text-sm font-semibold flex items-center gap-2",
 									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Settings, {
-										"data-uid": "src/pages/master/MasterUsers.tsx:287:19",
+										"data-uid": "src/pages/master/MasterUsers.tsx:294:19",
 										"data-prohibitions": "[editContent]",
 										className: "w-4 h-4 text-primary"
 									}), "Especialidades Liberadas"]
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									"data-uid": "src/pages/master/MasterUsers.tsx:291:17",
+									"data-uid": "src/pages/master/MasterUsers.tsx:298:17",
 									"data-prohibitions": "[]",
 									className: "space-y-4",
 									children: [
 										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-											"data-uid": "src/pages/master/MasterUsers.tsx:292:19",
+											"data-uid": "src/pages/master/MasterUsers.tsx:299:19",
 											"data-prohibitions": "[]",
 											className: "flex items-center justify-between p-3 rounded-lg border bg-card/50",
 											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-												"data-uid": "src/pages/master/MasterUsers.tsx:293:21",
+												"data-uid": "src/pages/master/MasterUsers.tsx:300:21",
 												"data-prohibitions": "[]",
 												className: "flex items-center gap-3",
 												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-													"data-uid": "src/pages/master/MasterUsers.tsx:294:23",
+													"data-uid": "src/pages/master/MasterUsers.tsx:301:23",
 													"data-prohibitions": "[]",
 													className: "p-2 rounded-md bg-emerald-100/50",
 													children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Apple, {
-														"data-uid": "src/pages/master/MasterUsers.tsx:295:25",
+														"data-uid": "src/pages/master/MasterUsers.tsx:302:25",
 														"data-prohibitions": "[editContent]",
 														className: "w-4 h-4 text-emerald-600"
 													})
 												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label$2, {
-													"data-uid": "src/pages/master/MasterUsers.tsx:297:23",
+													"data-uid": "src/pages/master/MasterUsers.tsx:304:23",
 													"data-prohibitions": "[]",
 													htmlFor: "nutri",
 													className: "cursor-pointer font-medium",
 													children: "Nutrição"
 												})]
 											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Switch, {
-												"data-uid": "src/pages/master/MasterUsers.tsx:301:21",
+												"data-uid": "src/pages/master/MasterUsers.tsx:308:21",
 												"data-prohibitions": "[editContent]",
 												id: "nutri",
 												checked: editForm.is_nutritionist,
@@ -20103,31 +20168,31 @@ function MasterUsers() {
 											})]
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-											"data-uid": "src/pages/master/MasterUsers.tsx:308:19",
+											"data-uid": "src/pages/master/MasterUsers.tsx:315:19",
 											"data-prohibitions": "[]",
 											className: "flex items-center justify-between p-3 rounded-lg border bg-card/50",
 											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-												"data-uid": "src/pages/master/MasterUsers.tsx:309:21",
+												"data-uid": "src/pages/master/MasterUsers.tsx:316:21",
 												"data-prohibitions": "[]",
 												className: "flex items-center gap-3",
 												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-													"data-uid": "src/pages/master/MasterUsers.tsx:310:23",
+													"data-uid": "src/pages/master/MasterUsers.tsx:317:23",
 													"data-prohibitions": "[]",
 													className: "p-2 rounded-md bg-orange-100/50",
 													children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Dumbbell, {
-														"data-uid": "src/pages/master/MasterUsers.tsx:311:25",
+														"data-uid": "src/pages/master/MasterUsers.tsx:318:25",
 														"data-prohibitions": "[editContent]",
 														className: "w-4 h-4 text-orange-600"
 													})
 												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label$2, {
-													"data-uid": "src/pages/master/MasterUsers.tsx:313:23",
+													"data-uid": "src/pages/master/MasterUsers.tsx:320:23",
 													"data-prohibitions": "[]",
 													htmlFor: "treino",
 													className: "cursor-pointer font-medium",
 													children: "Educação Física / Fisioterapia (Treino)"
 												})]
 											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Switch, {
-												"data-uid": "src/pages/master/MasterUsers.tsx:317:21",
+												"data-uid": "src/pages/master/MasterUsers.tsx:324:21",
 												"data-prohibitions": "[editContent]",
 												id: "treino",
 												checked: editForm.is_trainer,
@@ -20138,31 +20203,31 @@ function MasterUsers() {
 											})]
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-											"data-uid": "src/pages/master/MasterUsers.tsx:324:19",
+											"data-uid": "src/pages/master/MasterUsers.tsx:331:19",
 											"data-prohibitions": "[]",
 											className: "flex items-center justify-between p-3 rounded-lg border bg-card/50",
 											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-												"data-uid": "src/pages/master/MasterUsers.tsx:325:21",
+												"data-uid": "src/pages/master/MasterUsers.tsx:332:21",
 												"data-prohibitions": "[]",
 												className: "flex items-center gap-3",
 												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-													"data-uid": "src/pages/master/MasterUsers.tsx:326:23",
+													"data-uid": "src/pages/master/MasterUsers.tsx:333:23",
 													"data-prohibitions": "[]",
 													className: "p-2 rounded-md bg-pink-100/50",
 													children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Brain, {
-														"data-uid": "src/pages/master/MasterUsers.tsx:327:25",
+														"data-uid": "src/pages/master/MasterUsers.tsx:334:25",
 														"data-prohibitions": "[editContent]",
 														className: "w-4 h-4 text-pink-600"
 													})
 												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label$2, {
-													"data-uid": "src/pages/master/MasterUsers.tsx:329:23",
+													"data-uid": "src/pages/master/MasterUsers.tsx:336:23",
 													"data-prohibitions": "[]",
 													htmlFor: "psico",
 													className: "cursor-pointer font-medium",
 													children: "Saúde Mental (Psicologia)"
 												})]
 											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Switch, {
-												"data-uid": "src/pages/master/MasterUsers.tsx:333:21",
+												"data-uid": "src/pages/master/MasterUsers.tsx:340:21",
 												"data-prohibitions": "[editContent]",
 												id: "psico",
 												checked: editForm.is_psychologist,
@@ -20177,11 +20242,11 @@ function MasterUsers() {
 							})]
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SheetFooter, {
-							"data-uid": "src/pages/master/MasterUsers.tsx:344:11",
+							"data-uid": "src/pages/master/MasterUsers.tsx:351:11",
 							"data-prohibitions": "[]",
 							className: "mt-auto pt-4 border-t",
 							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
-								"data-uid": "src/pages/master/MasterUsers.tsx:345:13",
+								"data-uid": "src/pages/master/MasterUsers.tsx:352:13",
 								"data-prohibitions": "[]",
 								onClick: handleSave,
 								className: "w-full",
@@ -47188,13 +47253,13 @@ function ClientFinances() {
 }
 //#endregion
 //#region src/App.tsx
-var ProfPatients = (0, import_react.lazy)(() => __vitePreload(() => import("./ProfPatients-ZQoOZ3ei.js"), __vite__mapDeps([0,1,2])));
-var ProfPatientRecord = (0, import_react.lazy)(() => __vitePreload(() => import("./ProfPatientRecord-DunSStFq.js"), __vite__mapDeps([3,1,4])));
-var ClientNutrition = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientNutrition-B6VViWaf.js"), __vite__mapDeps([5,1,6,7,8])));
-var ClientTraining = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientTraining-ChltWUUI.js"), __vite__mapDeps([9,1,6])));
-var ClientMind = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientMind-CrUv2l6x.js"), __vite__mapDeps([10,1,7])));
-var ClientStudy = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientStudy-CHMGLNSx.js"), __vite__mapDeps([11,1,8,2,4])));
-var ClientTeam = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientTeam-DJzKNdRD.js"), __vite__mapDeps([12,1,2])));
+var ProfPatients = (0, import_react.lazy)(() => __vitePreload(() => import("./ProfPatients-CmOL59sV.js"), __vite__mapDeps([0,1,2])));
+var ProfPatientRecord = (0, import_react.lazy)(() => __vitePreload(() => import("./ProfPatientRecord-CB-TtM6i.js"), __vite__mapDeps([3,1,4])));
+var ClientNutrition = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientNutrition-DDydLI6Q.js"), __vite__mapDeps([5,1,6,7,8])));
+var ClientTraining = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientTraining-CH06pD4b.js"), __vite__mapDeps([9,1,6])));
+var ClientMind = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientMind-BbXg6Weh.js"), __vite__mapDeps([10,1,7])));
+var ClientStudy = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientStudy-fGsiVvg-.js"), __vite__mapDeps([11,1,8,2,4])));
+var ClientTeam = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientTeam-Cr-pSfIL.js"), __vite__mapDeps([12,1,2])));
 var LoadingFallback = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 	"data-uid": "src/App.tsx:49:3",
 	"data-prohibitions": "[]",
@@ -47549,4 +47614,4 @@ var App = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrowserRouter, {
 //#endregion
 export { Progress as $, require__baseExtremum as A, getPercentValue as B, getMaxRadius as C, require_isEqual as D, getValueByDataKey as E, warn$1 as F, require_isNil as G, isNumber as H, Layer as I, getClientActiveDiet as J, require_get as K, filterProps as L, Cell as M, Global as N, require__baseLt as O, require__baseIteratee as P, Badge as Q, findAllByType as R, formatAxisMap$1 as S, polarToCartesian as T, mathSign as U, interpolateNumber$1 as V, uniqueId as W, Switch as X, getFullDietDetails as Y, usePrevious as Z, Dot as _, ArrowRight as _t, ChartContainer as a, Search as at, LabelList as b, useToast as bt, ChartTooltip as c, Lock as ct, generateCategoricalChart as d, LayoutDashboard as dt, Label$2 as et, YAxis as f, FileText as ft, Shape as g, Brain as gt, Bar as h, ChevronDown as ht, TabsTrigger as i, Smile as it, Text as j, require__baseGt as k, ChartTooltipContent as l, LoaderCircle as lt, CartesianGrid as m, CirclePlus as mt, TabsContent as n, Trash2 as nt, ChartLegend as o, Save as ot, XAxis as p, Dumbbell as pt, require_isFunction as q, TabsList as r, Target as rt, ChartLegendContent as s, Plus as st, Tabs as t, Users as tt, BarChart as u, Link as ut, es6_default as v, Apple as vt, getTickClassName as w, Label as x, Curve as y, Activity as yt, adaptEventsOfChild as z };
 
-//# sourceMappingURL=index-CyQ3h2j3.js.map
+//# sourceMappingURL=index-CuL43DLt.js.map

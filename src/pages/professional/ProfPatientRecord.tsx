@@ -194,7 +194,10 @@ export default function ProfPatientRecord() {
                     <CardTitle>Resumo Nutricional</CardTitle>
                     <CardDescription>Visão geral da dieta atual do paciente.</CardDescription>
                   </div>
-                  <Button size="sm" onClick={() => navigate('/professional/prescriptions')}>
+                  <Button
+                    size="sm"
+                    onClick={() => navigate(`/professional/prescriptions?patientId=${id}`)}
+                  >
                     <PlusCircle className="h-4 w-4 mr-2" />
                     Nova Prescrição
                   </Button>

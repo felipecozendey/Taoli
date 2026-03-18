@@ -1,6 +1,6 @@
-import { At as composeEventHandlers, B as Input, Ct as Primitive, Dt as createContextScope, E as Skeleton, G as CardHeader, Gt as __toESM, H as CardContent, Ht as require_react, Ot as require_jsx_runtime, V as Card, X as supabase, Y as useAuth, a as AvatarImage, at as cn, c as DropdownMenuContent, f as DropdownMenuTrigger, ht as useControllableState, i as AvatarFallback, kt as useComposedRefs, l as DropdownMenuItem, n as DashboardHeader, q as Button, r as Avatar, rt as useSize, s as DropdownMenu, t as PageContent, ut as createLucideIcon } from "./PageContent-UlpGY3xE.js";
-import { Z as usePrevious, dt as Dumbbell, et as Users, gt as Apple, it as Search, mt as Brain, ot as Plus, tt as Trash2, vt as useToast } from "./index-G0UUvZRf.js";
-import { a as DialogHeader, n as DialogContent, o as DialogTitle, s as DialogTrigger, t as Dialog } from "./dialog-l8Bm9iRM.js";
+import { At as composeEventHandlers, B as Input, Ct as Primitive, Dt as createContextScope, E as Skeleton, G as CardHeader, H as CardContent, Kt as __toESM, Ot as require_jsx_runtime, Ut as require_react, V as Card, X as supabase, Y as useAuth, a as AvatarImage, at as cn, c as DropdownMenuContent, f as DropdownMenuTrigger, ht as useControllableState, i as AvatarFallback, kt as useComposedRefs, l as DropdownMenuItem, n as DashboardHeader, q as Button, r as Avatar, rt as useSize, s as DropdownMenu, t as PageContent, ut as createLucideIcon } from "./PageContent-BfFW-EY_.js";
+import { Z as usePrevious, dt as Dumbbell, et as Users, gt as Apple, it as Search, mt as Brain, ot as Plus, tt as Trash2, vt as useToast } from "./index-DJOu52_V.js";
+import { a as DialogHeader, n as DialogContent, o as DialogTitle, s as DialogTrigger, t as Dialog } from "./dialog-Cc9t_Jyj.js";
 var EllipsisVertical = createLucideIcon("ellipsis-vertical", [
 	["circle", {
 		cx: "12",
@@ -592,4 +592,4 @@ function ClientTeam() {
 //#endregion
 export { ClientTeam as default };
 
-//# sourceMappingURL=ClientTeam-DZYi0Njc.js.map
+//# sourceMappingURL=ClientTeam-DKUlZZDs.js.map

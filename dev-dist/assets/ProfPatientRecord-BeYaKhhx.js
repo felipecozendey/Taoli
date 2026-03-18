@@ -1,6 +1,6 @@
-import { G as CardHeader, Gt as __toESM, H as CardContent, Ht as require_react, K as CardTitle, Ot as require_jsx_runtime, Rt as useNavigate, U as CardDescription, V as Card, X as supabase, Y as useAuth, i as AvatarFallback, n as DashboardHeader, q as Button, r as Avatar, t as PageContent, ut as createLucideIcon, zt as useParams } from "./PageContent-UlpGY3xE.js";
-import { Q as Badge, ft as CirclePlus, i as TabsTrigger, n as TabsContent, r as TabsList, st as Lock, t as Tabs } from "./index-G0UUvZRf.js";
-import { t as Textarea } from "./textarea-CL6AhMxv.js";
+import { G as CardHeader, H as CardContent, K as CardTitle, Kt as __toESM, Ot as require_jsx_runtime, Rt as useNavigate, U as CardDescription, Ut as require_react, V as Card, X as supabase, Y as useAuth, i as AvatarFallback, n as DashboardHeader, q as Button, r as Avatar, t as PageContent, ut as createLucideIcon, zt as useParams } from "./PageContent-BfFW-EY_.js";
+import { Q as Badge, ft as CirclePlus, i as TabsTrigger, n as TabsContent, r as TabsList, st as Lock, t as Tabs } from "./index-DJOu52_V.js";
+import { t as Textarea } from "./textarea-e-mwiPDY.js";
 var ArrowLeft = createLucideIcon("arrow-left", [["path", {
 	d: "m12 19-7-7 7-7",
 	key: "1l729n"
@@ -362,36 +362,36 @@ function ProfPatientRecord() {
 										"data-uid": "src/pages/professional/ProfPatientRecord.tsx:197:19",
 										"data-prohibitions": "[]",
 										size: "sm",
-										onClick: () => navigate("/professional/prescriptions"),
+										onClick: () => navigate(`/professional/prescriptions?patientId=${id}`),
 										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CirclePlus, {
-											"data-uid": "src/pages/professional/ProfPatientRecord.tsx:198:21",
+											"data-uid": "src/pages/professional/ProfPatientRecord.tsx:201:21",
 											"data-prohibitions": "[editContent]",
 											className: "h-4 w-4 mr-2"
 										}), "Nova Prescrição"]
 									})]
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContent, {
-									"data-uid": "src/pages/professional/ProfPatientRecord.tsx:202:17",
+									"data-uid": "src/pages/professional/ProfPatientRecord.tsx:205:17",
 									"data-prohibitions": "[]",
 									children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-										"data-uid": "src/pages/professional/ProfPatientRecord.tsx:203:19",
+										"data-uid": "src/pages/professional/ProfPatientRecord.tsx:206:19",
 										"data-prohibitions": "[]",
 										className: "p-5 rounded-lg bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-100 dark:border-emerald-900/50",
 										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-											"data-uid": "src/pages/professional/ProfPatientRecord.tsx:204:21",
+											"data-uid": "src/pages/professional/ProfPatientRecord.tsx:207:21",
 											"data-prohibitions": "[]",
 											className: "flex items-center gap-2 mb-2",
 											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-												"data-uid": "src/pages/professional/ProfPatientRecord.tsx:205:23",
+												"data-uid": "src/pages/professional/ProfPatientRecord.tsx:208:23",
 												"data-prohibitions": "[]",
 												className: "h-2 w-2 rounded-full bg-emerald-500"
 											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h4", {
-												"data-uid": "src/pages/professional/ProfPatientRecord.tsx:206:23",
+												"data-uid": "src/pages/professional/ProfPatientRecord.tsx:209:23",
 												"data-prohibitions": "[]",
 												className: "font-semibold text-emerald-900 dark:text-emerald-400",
 												children: "Dieta Ativa: Hipertrofia"
 											})]
 										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-											"data-uid": "src/pages/professional/ProfPatientRecord.tsx:210:21",
+											"data-uid": "src/pages/professional/ProfPatientRecord.tsx:213:21",
 											"data-prohibitions": "[]",
 											className: "text-sm text-emerald-700 dark:text-emerald-500 font-medium",
 											children: "2500 kcal • 180g Proteína • 250g Carboidrato • 80g Gordura"
@@ -401,33 +401,33 @@ function ProfPatientRecord() {
 							})
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TabsContent, {
-							"data-uid": "src/pages/professional/ProfPatientRecord.tsx:219:11",
+							"data-uid": "src/pages/professional/ProfPatientRecord.tsx:222:11",
 							"data-prohibitions": "[editContent]",
 							value: "treino",
 							className: "animate-fade-in-up mt-0",
 							children: !permissions.can_view_training ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(LockedContent, {
-								"data-uid": "src/pages/professional/ProfPatientRecord.tsx:221:15",
+								"data-uid": "src/pages/professional/ProfPatientRecord.tsx:224:15",
 								"data-prohibitions": "[editContent]"
 							}) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
-								"data-uid": "src/pages/professional/ProfPatientRecord.tsx:223:15",
+								"data-uid": "src/pages/professional/ProfPatientRecord.tsx:226:15",
 								"data-prohibitions": "[]",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, {
-									"data-uid": "src/pages/professional/ProfPatientRecord.tsx:224:17",
+									"data-uid": "src/pages/professional/ProfPatientRecord.tsx:227:17",
 									"data-prohibitions": "[]",
 									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
-										"data-uid": "src/pages/professional/ProfPatientRecord.tsx:225:19",
+										"data-uid": "src/pages/professional/ProfPatientRecord.tsx:228:19",
 										"data-prohibitions": "[]",
 										children: "Módulo de Treino"
 									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardDescription, {
-										"data-uid": "src/pages/professional/ProfPatientRecord.tsx:226:19",
+										"data-uid": "src/pages/professional/ProfPatientRecord.tsx:229:19",
 										"data-prohibitions": "[]",
 										children: "Acompanhamento físico e prescrição de exercícios."
 									})]
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContent, {
-									"data-uid": "src/pages/professional/ProfPatientRecord.tsx:230:17",
+									"data-uid": "src/pages/professional/ProfPatientRecord.tsx:233:17",
 									"data-prohibitions": "[]",
 									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-										"data-uid": "src/pages/professional/ProfPatientRecord.tsx:231:19",
+										"data-uid": "src/pages/professional/ProfPatientRecord.tsx:234:19",
 										"data-prohibitions": "[]",
 										className: "p-8 text-center text-muted-foreground border rounded-lg border-dashed",
 										children: "Nenhum treino prescrito ativamente."
@@ -436,33 +436,33 @@ function ProfPatientRecord() {
 							})
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TabsContent, {
-							"data-uid": "src/pages/professional/ProfPatientRecord.tsx:239:11",
+							"data-uid": "src/pages/professional/ProfPatientRecord.tsx:242:11",
 							"data-prohibitions": "[editContent]",
 							value: "mente",
 							className: "animate-fade-in-up mt-0",
 							children: !permissions.can_view_mind ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(LockedContent, {
-								"data-uid": "src/pages/professional/ProfPatientRecord.tsx:241:15",
+								"data-uid": "src/pages/professional/ProfPatientRecord.tsx:244:15",
 								"data-prohibitions": "[editContent]"
 							}) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
-								"data-uid": "src/pages/professional/ProfPatientRecord.tsx:243:15",
+								"data-uid": "src/pages/professional/ProfPatientRecord.tsx:246:15",
 								"data-prohibitions": "[]",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, {
-									"data-uid": "src/pages/professional/ProfPatientRecord.tsx:244:17",
+									"data-uid": "src/pages/professional/ProfPatientRecord.tsx:247:17",
 									"data-prohibitions": "[]",
 									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
-										"data-uid": "src/pages/professional/ProfPatientRecord.tsx:245:19",
+										"data-uid": "src/pages/professional/ProfPatientRecord.tsx:248:19",
 										"data-prohibitions": "[]",
 										children: "Acompanhamento Psicológico"
 									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardDescription, {
-										"data-uid": "src/pages/professional/ProfPatientRecord.tsx:246:19",
+										"data-uid": "src/pages/professional/ProfPatientRecord.tsx:249:19",
 										"data-prohibitions": "[]",
 										children: "Visualização do estado de humor e notas compartilhadas."
 									})]
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContent, {
-									"data-uid": "src/pages/professional/ProfPatientRecord.tsx:250:17",
+									"data-uid": "src/pages/professional/ProfPatientRecord.tsx:253:17",
 									"data-prohibitions": "[]",
 									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-										"data-uid": "src/pages/professional/ProfPatientRecord.tsx:251:19",
+										"data-uid": "src/pages/professional/ProfPatientRecord.tsx:254:19",
 										"data-prohibitions": "[]",
 										className: "p-8 text-center text-muted-foreground border rounded-lg border-dashed",
 										children: "Nenhum dado registrado para exibição no momento."
@@ -479,4 +479,4 @@ function ProfPatientRecord() {
 //#endregion
 export { ProfPatientRecord as default };
 
-//# sourceMappingURL=ProfPatientRecord-Cl8ouXyW.js.map
+//# sourceMappingURL=ProfPatientRecord-BeYaKhhx.js.map

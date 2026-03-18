@@ -1,5 +1,5 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/ProfPatients-CiEBHfQt.js","assets/PageContent-UlpGY3xE.js","assets/dialog-l8Bm9iRM.js","assets/ProfPatientRecord-Cl8ouXyW.js","assets/textarea-CL6AhMxv.js","assets/ClientNutrition-B233XFpt.js","assets/accordion-B2RAUzsG.js","assets/checkbox--L5NjrnP.js","assets/flame-D0BxVRa-.js","assets/ClientTraining-CZwp92kt.js","assets/ClientMind-DkF6-PUz.js","assets/ClientStudy-B-f6xQPl.js","assets/ClientTeam-DZYi0Njc.js"])))=>i.map(i=>d[i]);
-import { $ as Arrow, At as composeEventHandlers, B as Input, Bt as __vitePreload, C as SidebarMenuButton, Ct as Primitive, Dt as createContextScope, Et as createSlot, F as hideOthers, Ft as Route, G as CardHeader, Gt as __toESM, H as CardContent, Ht as require_react, I as ReactRemoveScroll, It as Routes, J as AuthProvider, K as CardTitle, L as useFocusGuards, Lt as useLocation, Mt as Link, Nt as Navigate, Ot as require_jsx_runtime, Pt as Outlet, Q as Anchor, R as FocusScope, Rt as useNavigate, S as SidebarMenu, St as useCallbackRef, T as SidebarProvider, Tt as createCollection, U as CardDescription, Ut as __commonJSMin, V as Card, Vt as require_react_dom, W as CardFooter, Wt as __exportAll, X as supabase, Y as useAuth, Z as TooltipProvider, _ as Sidebar, _t as Portal$1, at as cn$1, b as SidebarHeader, bt as DismissableLayer, c as DropdownMenuContent, ct as Sparkles, d as DropdownMenuSeparator, dt as cva, et as Content$1, f as DropdownMenuTrigger, ft as clsx, g as useDirection, gt as Presence, h as createRovingFocusGroupScope, ht as useControllableState, it as useId, jt as BrowserRouter, kt as useComposedRefs, l as DropdownMenuItem, lt as Check, m as Root$4, mt as VisuallyHidden, n as DashboardHeader, nt as createPopperScope, o as createContextScope$1, ot as X, p as Item$1, pt as VISUALLY_HIDDEN_STYLES, q as Button, s as DropdownMenu, st as User, t as PageContent, tt as Root2$3, u as DropdownMenuLabel, ut as createLucideIcon, v as SidebarContent, vt as useLayoutEffect2, w as SidebarMenuItem, wt as dispatchDiscreteCustomEvent, x as SidebarInset, xt as Root$3, y as SidebarFooter, yt as Branch, z as Primitive$1 } from "./PageContent-UlpGY3xE.js";
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/ProfPatients-BZgWe63N.js","assets/PageContent-BfFW-EY_.js","assets/dialog-Cc9t_Jyj.js","assets/ProfPatientRecord-BeYaKhhx.js","assets/textarea-e-mwiPDY.js","assets/ClientNutrition-h-BJex1O.js","assets/accordion-BG3d9Y5-.js","assets/checkbox-CaAwxCju.js","assets/flame-BdB3ZIUm.js","assets/ClientTraining-DLHikqZq.js","assets/ClientMind-CIRbuaAP.js","assets/ClientStudy-DkP-6lt6.js","assets/ClientTeam-DKUlZZDs.js"])))=>i.map(i=>d[i]);
+import { $ as Arrow, At as composeEventHandlers, B as Input, Bt as useSearchParams, C as SidebarMenuButton, Ct as Primitive, Dt as createContextScope, Et as createSlot, F as hideOthers, Ft as Route, G as CardHeader, Gt as __exportAll, H as CardContent, Ht as require_react_dom, I as ReactRemoveScroll, It as Routes, J as AuthProvider, K as CardTitle, Kt as __toESM, L as useFocusGuards, Lt as useLocation, Mt as Link, Nt as Navigate, Ot as require_jsx_runtime, Pt as Outlet, Q as Anchor, R as FocusScope, Rt as useNavigate, S as SidebarMenu, St as useCallbackRef, T as SidebarProvider, Tt as createCollection, U as CardDescription, Ut as require_react, V as Card, Vt as __vitePreload, W as CardFooter, Wt as __commonJSMin, X as supabase, Y as useAuth, Z as TooltipProvider, _ as Sidebar, _t as Portal$1, at as cn$1, b as SidebarHeader, bt as DismissableLayer, c as DropdownMenuContent, ct as Sparkles, d as DropdownMenuSeparator, dt as cva, et as Content$1, f as DropdownMenuTrigger, ft as clsx, g as useDirection, gt as Presence, h as createRovingFocusGroupScope, ht as useControllableState, it as useId, jt as BrowserRouter, kt as useComposedRefs, l as DropdownMenuItem, lt as Check, m as Root$4, mt as VisuallyHidden, n as DashboardHeader, nt as createPopperScope, o as createContextScope$1, ot as X, p as Item$1, pt as VISUALLY_HIDDEN_STYLES, q as Button, s as DropdownMenu, st as User, t as PageContent, tt as Root2$3, u as DropdownMenuLabel, ut as createLucideIcon, v as SidebarContent, vt as useLayoutEffect2, w as SidebarMenuItem, wt as dispatchDiscreteCustomEvent, x as SidebarInset, xt as Root$3, y as SidebarFooter, yt as Branch, z as Primitive$1 } from "./PageContent-BfFW-EY_.js";
 //#region \0vite/modulepreload-polyfill.js
 (function polyfill() {
 	const relList = document.createElement("link").relList;
@@ -15328,6 +15328,22 @@ var FileText = createLucideIcon("file-text", [
 		key: "z1uh3a"
 	}]
 ]);
+var Info = createLucideIcon("info", [
+	["circle", {
+		cx: "12",
+		cy: "12",
+		r: "10",
+		key: "1mglay"
+	}],
+	["path", {
+		d: "M12 16v-4",
+		key: "1dtifu"
+	}],
+	["path", {
+		d: "M12 8h.01",
+		key: "e9boi3"
+	}]
+]);
 var LayoutDashboard = createLucideIcon("layout-dashboard", [
 	["rect", {
 		width: "7",
@@ -18881,6 +18897,40 @@ var ScrollBar = import_react.forwardRef(({ className, orientation = "vertical", 
 }));
 ScrollBar.displayName = ScrollAreaScrollbar.displayName;
 //#endregion
+//#region src/components/ui/alert.tsx
+var alertVariants = cva("relative w-full rounded-lg border p-4 [&>svg~*]:pl-7 [&>svg+div]:translate-y-[-3px] [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4 [&>svg]:text-foreground", {
+	variants: { variant: {
+		default: "bg-background text-foreground",
+		destructive: "border-destructive/50 text-destructive dark:border-destructive [&>svg]:text-destructive"
+	} },
+	defaultVariants: { variant: "default" }
+});
+var Alert = import_react.forwardRef(({ className, variant, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+	"data-uid": "src/components/ui/alert.tsx:27:3",
+	"data-prohibitions": "[editContent]",
+	ref,
+	role: "alert",
+	className: cn$1(alertVariants({ variant }), className),
+	...props
+}));
+Alert.displayName = "Alert";
+var AlertTitle = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h5", {
+	"data-uid": "src/components/ui/alert.tsx:33:5",
+	"data-prohibitions": "[editContent]",
+	ref,
+	className: cn$1("mb-1 font-medium leading-none tracking-tight", className),
+	...props
+}));
+AlertTitle.displayName = "AlertTitle";
+var AlertDescription = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+	"data-uid": "src/components/ui/alert.tsx:46:3",
+	"data-prohibitions": "[editContent]",
+	ref,
+	className: cn$1("text-sm [&_p]:leading-relaxed", className),
+	...props
+}));
+AlertDescription.displayName = "AlertDescription";
+//#endregion
 //#region ../../cache/modules/gerenciador-pessoal-completo-6024e/node_modules/.pnpm/@radix-ui+react-use-previous@1.1.1_@types+react@19.2.14_react@19.2.4/node_modules/@radix-ui/react-use-previous/dist/index.mjs
 function usePrevious(value) {
 	const ref = import_react.useRef({
@@ -20089,6 +20139,9 @@ async function getFullDietDetails(dietId) {
 var calc = (val, port) => ((val || 0) / 100 * (Number(port) || 0)).toFixed(1);
 function ProfPrescriptions() {
 	const { toast } = useToast();
+	const [searchParams] = useSearchParams();
+	const navigate = useNavigate();
+	const patientId = searchParams.get("patientId");
 	const [search, setSearch] = (0, import_react.useState)("");
 	const [isSearching, setIsSearching] = (0, import_react.useState)(false);
 	const [searchResults, setSearchResults] = (0, import_react.useState)([]);
@@ -20167,16 +20220,16 @@ function ProfPrescriptions() {
 		} : m));
 	};
 	const handleSaveDiet = async () => {
+		if (!patientId) {
+			toast({
+				variant: "destructive",
+				description: "Erro: Selecione um paciente a partir da lista de pacientes antes de prescrever."
+			});
+			return;
+		}
 		setIsSaving(true);
 		try {
-			const { data: clients } = await supabase.from("profiles").select("id").eq("role", "client").limit(1);
-			let clientId = clients?.[0]?.id;
-			if (!clientId) {
-				const { data: anyProfile } = await supabase.from("profiles").select("id").limit(1);
-				clientId = anyProfile?.[0]?.id;
-			}
-			if (!clientId) throw new Error("Nenhum usuário encontrado no sistema para vincular a dieta.");
-			const { data: diet, error: dietError } = await createDiet(clientId, "Plano Atualizado");
+			const { data: diet, error: dietError } = await createDiet(patientId, "Plano Atualizado");
 			if (dietError || !diet) throw new Error("Erro ao criar a prescrição da dieta.");
 			const mealTimes = [
 				"08:00",
@@ -20222,6 +20275,7 @@ function ProfPrescriptions() {
 				}
 			]);
 			setSearch("");
+			navigate(`/professional/patient/${patientId}`);
 		} catch (error) {
 			console.error(error);
 			toast({
@@ -20235,371 +20289,389 @@ function ProfPrescriptions() {
 	};
 	const isDietEmpty = meals.every((m) => m.entries.length === 0);
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-		"data-uid": "src/pages/professional/ProfPrescriptions.tsx:197:5",
+		"data-uid": "src/pages/professional/ProfPrescriptions.tsx:199:5",
 		"data-prohibitions": "[editContent]",
 		className: "flex flex-col min-h-full",
 		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DashboardHeader, {
-			"data-uid": "src/pages/professional/ProfPrescriptions.tsx:198:7",
+			"data-uid": "src/pages/professional/ProfPrescriptions.tsx:200:7",
 			"data-prohibitions": "[editContent]",
 			title: "Prescrição de Dieta",
 			children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
-				"data-uid": "src/pages/professional/ProfPrescriptions.tsx:199:9",
+				"data-uid": "src/pages/professional/ProfPrescriptions.tsx:201:9",
 				"data-prohibitions": "[editContent]",
 				onClick: handleSaveDiet,
 				disabled: isSaving || isDietEmpty,
 				size: "sm",
 				className: "hidden sm:flex",
 				children: [isSaving ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(LoaderCircle, {
-					"data-uid": "src/pages/professional/ProfPrescriptions.tsx:206:13",
+					"data-uid": "src/pages/professional/ProfPrescriptions.tsx:208:13",
 					"data-prohibitions": "[editContent]",
 					className: "mr-2 h-4 w-4 animate-spin"
 				}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Save, {
-					"data-uid": "src/pages/professional/ProfPrescriptions.tsx:208:13",
+					"data-uid": "src/pages/professional/ProfPrescriptions.tsx:210:13",
 					"data-prohibitions": "[editContent]",
 					className: "mr-2 h-4 w-4"
 				}), "Guardar Prescrição"]
 			})
 		}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(PageContent, {
-			"data-uid": "src/pages/professional/ProfPrescriptions.tsx:213:7",
+			"data-uid": "src/pages/professional/ProfPrescriptions.tsx:215:7",
 			"data-prohibitions": "[editContent]",
 			className: "flex flex-col lg:h-[calc(100vh-4rem)] p-4 md:p-6 overflow-hidden",
-			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-				"data-uid": "src/pages/professional/ProfPrescriptions.tsx:215:9",
-				"data-prohibitions": "[editContent]",
-				className: "sm:hidden mb-4",
-				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
-					"data-uid": "src/pages/professional/ProfPrescriptions.tsx:216:11",
+			children: [
+				patientId && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Alert, {
+					"data-uid": "src/pages/professional/ProfPrescriptions.tsx:217:11",
+					"data-prohibitions": "[]",
+					className: "mb-4 bg-primary/5 text-primary border-primary/20",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Info, {
+						"data-uid": "src/pages/professional/ProfPrescriptions.tsx:218:13",
+						"data-prohibitions": "[editContent]",
+						className: "h-4 w-4"
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AlertDescription, {
+						"data-uid": "src/pages/professional/ProfPrescriptions.tsx:219:13",
+						"data-prohibitions": "[]",
+						className: "font-medium ml-2",
+						children: "A prescrever dieta para o paciente selecionado"
+					})]
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+					"data-uid": "src/pages/professional/ProfPrescriptions.tsx:226:9",
 					"data-prohibitions": "[editContent]",
-					onClick: handleSaveDiet,
-					disabled: isSaving || isDietEmpty,
-					className: "w-full",
-					children: [isSaving ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(LoaderCircle, {
-						"data-uid": "src/pages/professional/ProfPrescriptions.tsx:218:15",
+					className: "sm:hidden mb-4",
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
+						"data-uid": "src/pages/professional/ProfPrescriptions.tsx:227:11",
 						"data-prohibitions": "[editContent]",
-						className: "mr-2 h-4 w-4 animate-spin"
-					}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Save, {
-						"data-uid": "src/pages/professional/ProfPrescriptions.tsx:220:15",
-						"data-prohibitions": "[editContent]",
-						className: "mr-2 h-4 w-4"
-					}), "Guardar Prescrição"]
-				})
-			}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-				"data-uid": "src/pages/professional/ProfPrescriptions.tsx:226:9",
-				"data-prohibitions": "[editContent]",
-				className: "flex flex-col lg:flex-row gap-6 flex-1 min-h-0",
-				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
-					"data-uid": "src/pages/professional/ProfPrescriptions.tsx:227:11",
-					"data-prohibitions": "[editContent]",
-					className: "w-full lg:w-[350px] flex flex-col shrink-0 h-[400px] lg:h-full border-muted/60 shadow-sm",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, {
-						"data-uid": "src/pages/professional/ProfPrescriptions.tsx:228:13",
-						"data-prohibitions": "[editContent]",
-						className: "p-4 border-b space-y-3",
-						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
+						onClick: handleSaveDiet,
+						disabled: isSaving || isDietEmpty,
+						className: "w-full",
+						children: [isSaving ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(LoaderCircle, {
 							"data-uid": "src/pages/professional/ProfPrescriptions.tsx:229:15",
-							"data-prohibitions": "[]",
-							className: "text-base font-semibold",
-							children: "Buscar Alimentos"
-						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							"data-uid": "src/pages/professional/ProfPrescriptions.tsx:230:15",
 							"data-prohibitions": "[editContent]",
-							className: "flex flex-col gap-2",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Select, {
-								"data-uid": "src/pages/professional/ProfPrescriptions.tsx:231:17",
-								"data-prohibitions": "[editContent]",
-								value: targetMeal,
-								onValueChange: setTargetMeal,
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectTrigger, {
-									"data-uid": "src/pages/professional/ProfPrescriptions.tsx:232:19",
-									"data-prohibitions": "[]",
-									className: "w-full",
-									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectValue, {
-										"data-uid": "src/pages/professional/ProfPrescriptions.tsx:233:21",
-										"data-prohibitions": "[editContent]",
-										placeholder: "Selecione a refeição"
-									})
-								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectContent, {
-									"data-uid": "src/pages/professional/ProfPrescriptions.tsx:235:19",
-									"data-prohibitions": "[editContent]",
-									children: meals.map((m) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(SelectItem, {
-										"data-uid": "src/pages/professional/ProfPrescriptions.tsx:237:23",
-										"data-prohibitions": "[editContent]",
-										value: m.id,
-										children: ["Adicionar em: ", m.name]
-									}, m.id))
-								})]
-							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								"data-uid": "src/pages/professional/ProfPrescriptions.tsx:243:17",
+							className: "mr-2 h-4 w-4 animate-spin"
+						}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Save, {
+							"data-uid": "src/pages/professional/ProfPrescriptions.tsx:231:15",
+							"data-prohibitions": "[editContent]",
+							className: "mr-2 h-4 w-4"
+						}), "Guardar Prescrição"]
+					})
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					"data-uid": "src/pages/professional/ProfPrescriptions.tsx:237:9",
+					"data-prohibitions": "[editContent]",
+					className: "flex flex-col lg:flex-row gap-6 flex-1 min-h-0",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
+						"data-uid": "src/pages/professional/ProfPrescriptions.tsx:238:11",
+						"data-prohibitions": "[editContent]",
+						className: "w-full lg:w-[350px] flex flex-col shrink-0 h-[400px] lg:h-full border-muted/60 shadow-sm",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, {
+							"data-uid": "src/pages/professional/ProfPrescriptions.tsx:239:13",
+							"data-prohibitions": "[editContent]",
+							className: "p-4 border-b space-y-3",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
+								"data-uid": "src/pages/professional/ProfPrescriptions.tsx:240:15",
 								"data-prohibitions": "[]",
-								className: "relative",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Search, {
-									"data-uid": "src/pages/professional/ProfPrescriptions.tsx:244:19",
+								className: "text-base font-semibold",
+								children: "Buscar Alimentos"
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								"data-uid": "src/pages/professional/ProfPrescriptions.tsx:241:15",
+								"data-prohibitions": "[editContent]",
+								className: "flex flex-col gap-2",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Select, {
+									"data-uid": "src/pages/professional/ProfPrescriptions.tsx:242:17",
 									"data-prohibitions": "[editContent]",
-									className: "absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground"
-								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
-									"data-uid": "src/pages/professional/ProfPrescriptions.tsx:245:19",
-									"data-prohibitions": "[editContent]",
-									className: "pl-9",
-									placeholder: "Ex: Arroz, Frango...",
-									value: search,
-									onChange: (e) => setSearch(e.target.value)
+									value: targetMeal,
+									onValueChange: setTargetMeal,
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectTrigger, {
+										"data-uid": "src/pages/professional/ProfPrescriptions.tsx:243:19",
+										"data-prohibitions": "[]",
+										className: "w-full",
+										children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectValue, {
+											"data-uid": "src/pages/professional/ProfPrescriptions.tsx:244:21",
+											"data-prohibitions": "[editContent]",
+											placeholder: "Selecione a refeição"
+										})
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectContent, {
+										"data-uid": "src/pages/professional/ProfPrescriptions.tsx:246:19",
+										"data-prohibitions": "[editContent]",
+										children: meals.map((m) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(SelectItem, {
+											"data-uid": "src/pages/professional/ProfPrescriptions.tsx:248:23",
+											"data-prohibitions": "[editContent]",
+											value: m.id,
+											children: ["Adicionar em: ", m.name]
+										}, m.id))
+									})]
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									"data-uid": "src/pages/professional/ProfPrescriptions.tsx:254:17",
+									"data-prohibitions": "[]",
+									className: "relative",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Search, {
+										"data-uid": "src/pages/professional/ProfPrescriptions.tsx:255:19",
+										"data-prohibitions": "[editContent]",
+										className: "absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground"
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
+										"data-uid": "src/pages/professional/ProfPrescriptions.tsx:256:19",
+										"data-prohibitions": "[editContent]",
+										className: "pl-9",
+										placeholder: "Ex: Arroz, Frango...",
+										value: search,
+										onChange: (e) => setSearch(e.target.value)
+									})]
 								})]
 							})]
-						})]
-					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ScrollArea, {
-						"data-uid": "src/pages/professional/ProfPrescriptions.tsx:254:13",
-						"data-prohibitions": "[editContent]",
-						className: "flex-1 p-3",
-						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-							"data-uid": "src/pages/professional/ProfPrescriptions.tsx:255:15",
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ScrollArea, {
+							"data-uid": "src/pages/professional/ProfPrescriptions.tsx:265:13",
 							"data-prohibitions": "[editContent]",
-							className: "flex flex-col gap-2",
-							children: isSearching ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-								"data-uid": "src/pages/professional/ProfPrescriptions.tsx:257:19",
-								"data-prohibitions": "[]",
-								className: "flex items-center justify-center p-6 text-muted-foreground",
-								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(LoaderCircle, {
-									"data-uid": "src/pages/professional/ProfPrescriptions.tsx:258:21",
-									"data-prohibitions": "[editContent]",
-									className: "h-6 w-6 animate-spin"
-								})
-							}) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
-								searchResults.map((food) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
-									"data-uid": "src/pages/professional/ProfPrescriptions.tsx:263:23",
-									"data-prohibitions": "[editContent]",
-									className: "p-3 border-transparent bg-muted/30 hover:bg-muted/60 transition-colors cursor-pointer group",
-									onClick: () => addFood(food),
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-										"data-uid": "src/pages/professional/ProfPrescriptions.tsx:268:25",
+							className: "flex-1 p-3",
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								"data-uid": "src/pages/professional/ProfPrescriptions.tsx:266:15",
+								"data-prohibitions": "[editContent]",
+								className: "flex flex-col gap-2",
+								children: isSearching ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+									"data-uid": "src/pages/professional/ProfPrescriptions.tsx:268:19",
+									"data-prohibitions": "[]",
+									className: "flex items-center justify-center p-6 text-muted-foreground",
+									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(LoaderCircle, {
+										"data-uid": "src/pages/professional/ProfPrescriptions.tsx:269:21",
 										"data-prohibitions": "[editContent]",
-										className: "flex justify-between items-start mb-1.5",
-										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-											"data-uid": "src/pages/professional/ProfPrescriptions.tsx:269:27",
-											"data-prohibitions": "[editContent]",
-											className: "font-medium text-sm leading-tight group-hover:text-primary transition-colors",
-											children: food.name
-										}), food.source && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Badge, {
-											"data-uid": "src/pages/professional/ProfPrescriptions.tsx:273:29",
-											"data-prohibitions": "[editContent]",
-											variant: "outline",
-											className: "text-[10px] bg-background ml-2 shrink-0",
-											children: food.source
-										})]
-									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-										"data-uid": "src/pages/professional/ProfPrescriptions.tsx:281:25",
+										className: "h-6 w-6 animate-spin"
+									})
+								}) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
+									searchResults.map((food) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
+										"data-uid": "src/pages/professional/ProfPrescriptions.tsx:274:23",
 										"data-prohibitions": "[editContent]",
-										className: "flex justify-between text-xs text-muted-foreground items-center",
-										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-											"data-uid": "src/pages/professional/ProfPrescriptions.tsx:282:27",
+										className: "p-3 border-transparent bg-muted/30 hover:bg-muted/60 transition-colors cursor-pointer group",
+										onClick: () => addFood(food),
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+											"data-uid": "src/pages/professional/ProfPrescriptions.tsx:279:25",
 											"data-prohibitions": "[editContent]",
-											children: [food.energy_kcal || 0, " kcal / 100g"]
-										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
-											"data-uid": "src/pages/professional/ProfPrescriptions.tsx:283:27",
-											"data-prohibitions": "[]",
-											variant: "ghost",
-											size: "icon",
-											className: "h-6 w-6 rounded-full",
-											children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Plus, {
+											className: "flex justify-between items-start mb-1.5",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												"data-uid": "src/pages/professional/ProfPrescriptions.tsx:280:27",
+												"data-prohibitions": "[editContent]",
+												className: "font-medium text-sm leading-tight group-hover:text-primary transition-colors",
+												children: food.name
+											}), food.source && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Badge, {
 												"data-uid": "src/pages/professional/ProfPrescriptions.tsx:284:29",
 												"data-prohibitions": "[editContent]",
-												className: "h-3.5 w-3.5"
+												variant: "outline",
+												className: "text-[10px] bg-background ml-2 shrink-0",
+												children: food.source
+											})]
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+											"data-uid": "src/pages/professional/ProfPrescriptions.tsx:292:25",
+											"data-prohibitions": "[editContent]",
+											className: "flex justify-between text-xs text-muted-foreground items-center",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+												"data-uid": "src/pages/professional/ProfPrescriptions.tsx:293:27",
+												"data-prohibitions": "[editContent]",
+												children: [food.energy_kcal || 0, " kcal / 100g"]
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+												"data-uid": "src/pages/professional/ProfPrescriptions.tsx:294:27",
+												"data-prohibitions": "[]",
+												variant: "ghost",
+												size: "icon",
+												className: "h-6 w-6 rounded-full",
+												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Plus, {
+													"data-uid": "src/pages/professional/ProfPrescriptions.tsx:295:29",
+													"data-prohibitions": "[editContent]",
+													className: "h-3.5 w-3.5"
+												})
+											})]
+										})]
+									}, food.id)),
+									search.trim() !== "" && searchResults.length === 0 && !isSearching && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+										"data-uid": "src/pages/professional/ProfPrescriptions.tsx:301:23",
+										"data-prohibitions": "[]",
+										className: "text-center text-sm text-muted-foreground mt-6",
+										children: "Nenhum resultado encontrado."
+									}),
+									search.trim() === "" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+										"data-uid": "src/pages/professional/ProfPrescriptions.tsx:306:23",
+										"data-prohibitions": "[]",
+										className: "text-center text-sm text-muted-foreground mt-6",
+										children: "Digite para buscar alimentos na base."
+									})
+								] })
+							})
+						})]
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
+						"data-uid": "src/pages/professional/ProfPrescriptions.tsx:316:11",
+						"data-prohibitions": "[editContent]",
+						className: "flex-1 flex flex-col h-[500px] lg:h-full border-muted/60 shadow-sm overflow-hidden",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardHeader, {
+							"data-uid": "src/pages/professional/ProfPrescriptions.tsx:317:13",
+							"data-prohibitions": "[]",
+							className: "p-4 border-b bg-muted/10",
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
+								"data-uid": "src/pages/professional/ProfPrescriptions.tsx:318:15",
+								"data-prohibitions": "[]",
+								className: "text-base font-semibold",
+								children: "Plano Alimentar"
+							})
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ScrollArea, {
+							"data-uid": "src/pages/professional/ProfPrescriptions.tsx:320:13",
+							"data-prohibitions": "[editContent]",
+							className: "flex-1",
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								"data-uid": "src/pages/professional/ProfPrescriptions.tsx:321:15",
+								"data-prohibitions": "[editContent]",
+								className: "p-4 space-y-6",
+								children: meals.map((meal) => {
+									const mTotal = meal.entries.reduce((acc, e) => {
+										const p = Number(e.portion) || 0;
+										return {
+											e: acc.e + (e.energy_kcal || 0) / 100 * p,
+											p: acc.p + (e.protein_g || 0) / 100 * p,
+											c: acc.c + (e.carbs_g || 0) / 100 * p,
+											f: acc.f + (e.fats_g || 0) / 100 * p
+										};
+									}, {
+										e: 0,
+										p: 0,
+										c: 0,
+										f: 0
+									});
+									return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										"data-uid": "src/pages/professional/ProfPrescriptions.tsx:337:21",
+										"data-prohibitions": "[editContent]",
+										className: "rounded-lg border overflow-hidden",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+											"data-uid": "src/pages/professional/ProfPrescriptions.tsx:338:23",
+											"data-prohibitions": "[editContent]",
+											className: "bg-muted/40 p-3 px-4 flex flex-col sm:flex-row sm:justify-between sm:items-center border-b gap-2",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+												"data-uid": "src/pages/professional/ProfPrescriptions.tsx:339:25",
+												"data-prohibitions": "[editContent]",
+												className: "font-semibold text-sm text-primary",
+												children: meal.name
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+												"data-uid": "src/pages/professional/ProfPrescriptions.tsx:340:25",
+												"data-prohibitions": "[editContent]",
+												className: "flex gap-3 text-xs font-medium text-muted-foreground",
+												children: [
+													/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+														"data-uid": "src/pages/professional/ProfPrescriptions.tsx:341:27",
+														"data-prohibitions": "[editContent]",
+														className: "text-foreground",
+														children: [mTotal.e.toFixed(0), " kcal"]
+													}),
+													/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+														"data-uid": "src/pages/professional/ProfPrescriptions.tsx:342:27",
+														"data-prohibitions": "[editContent]",
+														children: [
+															"P: ",
+															mTotal.p.toFixed(1),
+															"g"
+														]
+													}),
+													/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+														"data-uid": "src/pages/professional/ProfPrescriptions.tsx:343:27",
+														"data-prohibitions": "[editContent]",
+														children: [
+															"C: ",
+															mTotal.c.toFixed(1),
+															"g"
+														]
+													}),
+													/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+														"data-uid": "src/pages/professional/ProfPrescriptions.tsx:344:27",
+														"data-prohibitions": "[editContent]",
+														children: [
+															"G: ",
+															mTotal.f.toFixed(1),
+															"g"
+														]
+													})
+												]
+											})]
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+											"data-uid": "src/pages/professional/ProfPrescriptions.tsx:347:23",
+											"data-prohibitions": "[editContent]",
+											className: "bg-background",
+											children: meal.entries.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+												"data-uid": "src/pages/professional/ProfPrescriptions.tsx:349:27",
+												"data-prohibitions": "[]",
+												className: "p-6 text-center text-xs text-muted-foreground",
+												children: "Nenhum alimento adicionado a esta refeição."
+											}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+												"data-uid": "src/pages/professional/ProfPrescriptions.tsx:353:27",
+												"data-prohibitions": "[editContent]",
+												className: "flex flex-col divide-y",
+												children: meal.entries.map((entry) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+													"data-uid": "src/pages/professional/ProfPrescriptions.tsx:355:31",
+													"data-prohibitions": "[editContent]",
+													className: "p-3 px-4 flex flex-col sm:flex-row sm:items-center gap-3 hover:bg-muted/10 transition-colors",
+													children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+														"data-uid": "src/pages/professional/ProfPrescriptions.tsx:359:33",
+														"data-prohibitions": "[editContent]",
+														className: "flex-1 text-sm font-medium",
+														children: entry.name
+													}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+														"data-uid": "src/pages/professional/ProfPrescriptions.tsx:360:33",
+														"data-prohibitions": "[editContent]",
+														className: "flex items-center gap-4 sm:gap-6 justify-between sm:justify-end w-full sm:w-auto mt-2 sm:mt-0",
+														children: [
+															/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+																"data-uid": "src/pages/professional/ProfPrescriptions.tsx:361:35",
+																"data-prohibitions": "[]",
+																className: "flex items-center gap-1.5",
+																children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
+																	"data-uid": "src/pages/professional/ProfPrescriptions.tsx:362:37",
+																	"data-prohibitions": "[editContent]",
+																	type: "number",
+																	className: "w-20 h-8 text-right text-xs",
+																	value: entry.portion,
+																	onChange: (e) => updatePortion(meal.id, entry.entryId, e.target.value)
+																}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+																	"data-uid": "src/pages/professional/ProfPrescriptions.tsx:370:37",
+																	"data-prohibitions": "[]",
+																	className: "text-xs text-muted-foreground font-medium",
+																	children: "g"
+																})]
+															}),
+															/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+																"data-uid": "src/pages/professional/ProfPrescriptions.tsx:374:35",
+																"data-prohibitions": "[editContent]",
+																className: "flex items-center gap-3 text-xs text-muted-foreground min-w-[120px] justify-end",
+																children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+																	"data-uid": "src/pages/professional/ProfPrescriptions.tsx:375:37",
+																	"data-prohibitions": "[editContent]",
+																	className: "font-medium text-foreground",
+																	children: [calc(entry.energy_kcal, entry.portion), " kcal"]
+																}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+																	"data-uid": "src/pages/professional/ProfPrescriptions.tsx:378:37",
+																	"data-prohibitions": "[editContent]",
+																	children: [
+																		"P: ",
+																		calc(entry.protein_g, entry.portion),
+																		"g"
+																	]
+																})]
+															}),
+															/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+																"data-uid": "src/pages/professional/ProfPrescriptions.tsx:380:35",
+																"data-prohibitions": "[]",
+																variant: "ghost",
+																size: "icon",
+																className: "h-8 w-8 text-destructive hover:bg-destructive/10 shrink-0",
+																onClick: () => removeFood(meal.id, entry.entryId),
+																children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Trash2, {
+																	"data-uid": "src/pages/professional/ProfPrescriptions.tsx:386:37",
+																	"data-prohibitions": "[editContent]",
+																	className: "h-4 w-4"
+																})
+															})
+														]
+													})]
+												}, entry.entryId))
 											})
 										})]
-									})]
-								}, food.id)),
-								search.trim() !== "" && searchResults.length === 0 && !isSearching && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-									"data-uid": "src/pages/professional/ProfPrescriptions.tsx:290:23",
-									"data-prohibitions": "[]",
-									className: "text-center text-sm text-muted-foreground mt-6",
-									children: "Nenhum resultado encontrado."
-								}),
-								search.trim() === "" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-									"data-uid": "src/pages/professional/ProfPrescriptions.tsx:295:23",
-									"data-prohibitions": "[]",
-									className: "text-center text-sm text-muted-foreground mt-6",
-									children: "Digite para buscar alimentos na base."
+									}, meal.id);
 								})
-							] })
-						})
-					})]
-				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
-					"data-uid": "src/pages/professional/ProfPrescriptions.tsx:305:11",
-					"data-prohibitions": "[editContent]",
-					className: "flex-1 flex flex-col h-[500px] lg:h-full border-muted/60 shadow-sm overflow-hidden",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardHeader, {
-						"data-uid": "src/pages/professional/ProfPrescriptions.tsx:306:13",
-						"data-prohibitions": "[]",
-						className: "p-4 border-b bg-muted/10",
-						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
-							"data-uid": "src/pages/professional/ProfPrescriptions.tsx:307:15",
-							"data-prohibitions": "[]",
-							className: "text-base font-semibold",
-							children: "Plano Alimentar"
-						})
-					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ScrollArea, {
-						"data-uid": "src/pages/professional/ProfPrescriptions.tsx:309:13",
-						"data-prohibitions": "[editContent]",
-						className: "flex-1",
-						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-							"data-uid": "src/pages/professional/ProfPrescriptions.tsx:310:15",
-							"data-prohibitions": "[editContent]",
-							className: "p-4 space-y-6",
-							children: meals.map((meal) => {
-								const mTotal = meal.entries.reduce((acc, e) => {
-									const p = Number(e.portion) || 0;
-									return {
-										e: acc.e + (e.energy_kcal || 0) / 100 * p,
-										p: acc.p + (e.protein_g || 0) / 100 * p,
-										c: acc.c + (e.carbs_g || 0) / 100 * p,
-										f: acc.f + (e.fats_g || 0) / 100 * p
-									};
-								}, {
-									e: 0,
-									p: 0,
-									c: 0,
-									f: 0
-								});
-								return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									"data-uid": "src/pages/professional/ProfPrescriptions.tsx:326:21",
-									"data-prohibitions": "[editContent]",
-									className: "rounded-lg border overflow-hidden",
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-										"data-uid": "src/pages/professional/ProfPrescriptions.tsx:327:23",
-										"data-prohibitions": "[editContent]",
-										className: "bg-muted/40 p-3 px-4 flex flex-col sm:flex-row sm:justify-between sm:items-center border-b gap-2",
-										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
-											"data-uid": "src/pages/professional/ProfPrescriptions.tsx:328:25",
-											"data-prohibitions": "[editContent]",
-											className: "font-semibold text-sm text-primary",
-											children: meal.name
-										}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-											"data-uid": "src/pages/professional/ProfPrescriptions.tsx:329:25",
-											"data-prohibitions": "[editContent]",
-											className: "flex gap-3 text-xs font-medium text-muted-foreground",
-											children: [
-												/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-													"data-uid": "src/pages/professional/ProfPrescriptions.tsx:330:27",
-													"data-prohibitions": "[editContent]",
-													className: "text-foreground",
-													children: [mTotal.e.toFixed(0), " kcal"]
-												}),
-												/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-													"data-uid": "src/pages/professional/ProfPrescriptions.tsx:331:27",
-													"data-prohibitions": "[editContent]",
-													children: [
-														"P: ",
-														mTotal.p.toFixed(1),
-														"g"
-													]
-												}),
-												/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-													"data-uid": "src/pages/professional/ProfPrescriptions.tsx:332:27",
-													"data-prohibitions": "[editContent]",
-													children: [
-														"C: ",
-														mTotal.c.toFixed(1),
-														"g"
-													]
-												}),
-												/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-													"data-uid": "src/pages/professional/ProfPrescriptions.tsx:333:27",
-													"data-prohibitions": "[editContent]",
-													children: [
-														"G: ",
-														mTotal.f.toFixed(1),
-														"g"
-													]
-												})
-											]
-										})]
-									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-										"data-uid": "src/pages/professional/ProfPrescriptions.tsx:336:23",
-										"data-prohibitions": "[editContent]",
-										className: "bg-background",
-										children: meal.entries.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-											"data-uid": "src/pages/professional/ProfPrescriptions.tsx:338:27",
-											"data-prohibitions": "[]",
-											className: "p-6 text-center text-xs text-muted-foreground",
-											children: "Nenhum alimento adicionado a esta refeição."
-										}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-											"data-uid": "src/pages/professional/ProfPrescriptions.tsx:342:27",
-											"data-prohibitions": "[editContent]",
-											className: "flex flex-col divide-y",
-											children: meal.entries.map((entry) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-												"data-uid": "src/pages/professional/ProfPrescriptions.tsx:344:31",
-												"data-prohibitions": "[editContent]",
-												className: "p-3 px-4 flex flex-col sm:flex-row sm:items-center gap-3 hover:bg-muted/10 transition-colors",
-												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-													"data-uid": "src/pages/professional/ProfPrescriptions.tsx:348:33",
-													"data-prohibitions": "[editContent]",
-													className: "flex-1 text-sm font-medium",
-													children: entry.name
-												}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-													"data-uid": "src/pages/professional/ProfPrescriptions.tsx:349:33",
-													"data-prohibitions": "[editContent]",
-													className: "flex items-center gap-4 sm:gap-6 justify-between sm:justify-end w-full sm:w-auto mt-2 sm:mt-0",
-													children: [
-														/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-															"data-uid": "src/pages/professional/ProfPrescriptions.tsx:350:35",
-															"data-prohibitions": "[]",
-															className: "flex items-center gap-1.5",
-															children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
-																"data-uid": "src/pages/professional/ProfPrescriptions.tsx:351:37",
-																"data-prohibitions": "[editContent]",
-																type: "number",
-																className: "w-20 h-8 text-right text-xs",
-																value: entry.portion,
-																onChange: (e) => updatePortion(meal.id, entry.entryId, e.target.value)
-															}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-																"data-uid": "src/pages/professional/ProfPrescriptions.tsx:359:37",
-																"data-prohibitions": "[]",
-																className: "text-xs text-muted-foreground font-medium",
-																children: "g"
-															})]
-														}),
-														/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-															"data-uid": "src/pages/professional/ProfPrescriptions.tsx:363:35",
-															"data-prohibitions": "[editContent]",
-															className: "flex items-center gap-3 text-xs text-muted-foreground min-w-[120px] justify-end",
-															children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-																"data-uid": "src/pages/professional/ProfPrescriptions.tsx:364:37",
-																"data-prohibitions": "[editContent]",
-																className: "font-medium text-foreground",
-																children: [calc(entry.energy_kcal, entry.portion), " kcal"]
-															}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-																"data-uid": "src/pages/professional/ProfPrescriptions.tsx:367:37",
-																"data-prohibitions": "[editContent]",
-																children: [
-																	"P: ",
-																	calc(entry.protein_g, entry.portion),
-																	"g"
-																]
-															})]
-														}),
-														/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
-															"data-uid": "src/pages/professional/ProfPrescriptions.tsx:369:35",
-															"data-prohibitions": "[]",
-															variant: "ghost",
-															size: "icon",
-															className: "h-8 w-8 text-destructive hover:bg-destructive/10 shrink-0",
-															onClick: () => removeFood(meal.id, entry.entryId),
-															children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Trash2, {
-																"data-uid": "src/pages/professional/ProfPrescriptions.tsx:375:37",
-																"data-prohibitions": "[editContent]",
-																className: "h-4 w-4"
-															})
-														})
-													]
-												})]
-											}, entry.entryId))
-										})
-									})]
-								}, meal.id);
 							})
-						})
+						})]
 					})]
-				})]
-			})]
+				})
+			]
 		})]
 	});
 }
@@ -46216,13 +46288,13 @@ function ClientFinances() {
 }
 //#endregion
 //#region src/App.tsx
-var ProfPatients = (0, import_react.lazy)(() => __vitePreload(() => import("./ProfPatients-CiEBHfQt.js"), __vite__mapDeps([0,1,2])));
-var ProfPatientRecord = (0, import_react.lazy)(() => __vitePreload(() => import("./ProfPatientRecord-Cl8ouXyW.js"), __vite__mapDeps([3,1,4])));
-var ClientNutrition = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientNutrition-B233XFpt.js"), __vite__mapDeps([5,1,6,7,8])));
-var ClientTraining = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientTraining-CZwp92kt.js"), __vite__mapDeps([9,1,6])));
-var ClientMind = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientMind-DkF6-PUz.js"), __vite__mapDeps([10,1,7])));
-var ClientStudy = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientStudy-B-f6xQPl.js"), __vite__mapDeps([11,1,8,2,4])));
-var ClientTeam = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientTeam-DZYi0Njc.js"), __vite__mapDeps([12,1,2])));
+var ProfPatients = (0, import_react.lazy)(() => __vitePreload(() => import("./ProfPatients-BZgWe63N.js"), __vite__mapDeps([0,1,2])));
+var ProfPatientRecord = (0, import_react.lazy)(() => __vitePreload(() => import("./ProfPatientRecord-BeYaKhhx.js"), __vite__mapDeps([3,1,4])));
+var ClientNutrition = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientNutrition-h-BJex1O.js"), __vite__mapDeps([5,1,6,7,8])));
+var ClientTraining = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientTraining-DLHikqZq.js"), __vite__mapDeps([9,1,6])));
+var ClientMind = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientMind-CIRbuaAP.js"), __vite__mapDeps([10,1,7])));
+var ClientStudy = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientStudy-DkP-6lt6.js"), __vite__mapDeps([11,1,8,2,4])));
+var ClientTeam = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientTeam-DKUlZZDs.js"), __vite__mapDeps([12,1,2])));
 var LoadingFallback = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 	"data-uid": "src/App.tsx:49:3",
 	"data-prohibitions": "[]",
@@ -46577,4 +46649,4 @@ var App = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrowserRouter, {
 //#endregion
 export { Label$2 as $, require__baseExtremum as A, getPercentValue as B, getMaxRadius as C, require_isEqual as D, getValueByDataKey as E, warn$1 as F, require_isNil as G, isNumber as H, Layer as I, Progress as J, require_get as K, filterProps as L, Cell as M, Global as N, require__baseLt as O, require__baseIteratee as P, Badge as Q, findAllByType as R, formatAxisMap$1 as S, polarToCartesian as T, mathSign as U, interpolateNumber$1 as V, uniqueId as W, getFullDietDetails as X, getClientActiveDiet as Y, usePrevious as Z, Dot as _, Activity as _t, ChartContainer as a, Save as at, LabelList as b, ChartTooltip as c, LoaderCircle as ct, generateCategoricalChart as d, Dumbbell as dt, Users as et, YAxis as f, CirclePlus as ft, Shape as g, Apple as gt, Bar as h, ArrowRight as ht, TabsTrigger as i, Search as it, Text as j, require__baseGt as k, ChartTooltipContent as l, LayoutDashboard as lt, CartesianGrid as m, Brain as mt, TabsContent as n, Target as nt, ChartLegend as o, Plus as ot, XAxis as p, ChevronDown as pt, require_isFunction as q, TabsList as r, Smile as rt, ChartLegendContent as s, Lock as st, Tabs as t, Trash2 as tt, BarChart as u, FileText as ut, es6_default as v, useToast as vt, getTickClassName as w, Label as x, Curve as y, adaptEventsOfChild as z };
 
-//# sourceMappingURL=index-G0UUvZRf.js.map
+//# sourceMappingURL=index-DJOu52_V.js.map

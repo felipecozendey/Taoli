@@ -1,6 +1,6 @@
-import { B as Input, E as Skeleton, G as CardHeader, Gt as __toESM, Ht as require_react, Ot as require_jsx_runtime, Rt as useNavigate, V as Card, W as CardFooter, X as supabase, Y as useAuth, i as AvatarFallback, n as DashboardHeader, q as Button, r as Avatar, t as PageContent, ut as createLucideIcon } from "./PageContent-UlpGY3xE.js";
-import { Q as Badge, et as Users, ht as ArrowRight, nt as Target, vt as useToast } from "./index-G0UUvZRf.js";
-import { a as DialogHeader, n as DialogContent, o as DialogTitle, r as DialogDescription, s as DialogTrigger, t as Dialog } from "./dialog-l8Bm9iRM.js";
+import { B as Input, E as Skeleton, G as CardHeader, Kt as __toESM, Ot as require_jsx_runtime, Rt as useNavigate, Ut as require_react, V as Card, W as CardFooter, X as supabase, Y as useAuth, i as AvatarFallback, n as DashboardHeader, q as Button, r as Avatar, t as PageContent, ut as createLucideIcon } from "./PageContent-BfFW-EY_.js";
+import { Q as Badge, et as Users, ht as ArrowRight, nt as Target, vt as useToast } from "./index-DJOu52_V.js";
+import { a as DialogHeader, n as DialogContent, o as DialogTitle, r as DialogDescription, s as DialogTrigger, t as Dialog } from "./dialog-Cc9t_Jyj.js";
 var Copy = createLucideIcon("copy", [["rect", {
 	width: "14",
 	height: "14",
@@ -371,4 +371,4 @@ function ProfPatients() {
 //#endregion
 export { ProfPatients as default };
 
-//# sourceMappingURL=ProfPatients-CiEBHfQt.js.map
+//# sourceMappingURL=ProfPatients-BZgWe63N.js.map

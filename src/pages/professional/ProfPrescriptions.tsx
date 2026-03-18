@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useSearchParams, useNavigate } from 'react-router-dom'
 import { DashboardHeader } from '@/components/shared/DashboardHeader'
 import { PageContent } from '@/components/shared/PageContent'
 import { Card, CardHeader, CardTitle } from '@/components/ui/card'
@@ -6,6 +7,7 @@ import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { ScrollArea } from '@/components/ui/scroll-area'
+import { Alert, AlertDescription } from '@/components/ui/alert'
 import {
   Select,
   SelectContent,
@@ -13,7 +15,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { Search, Trash2, Plus, Save, Loader2 } from 'lucide-react'
+import { Search, Trash2, Plus, Save, Loader2, Info } from 'lucide-react'
 import { useToast } from '@/hooks/use-toast'
 import { supabase } from '@/lib/supabase/client'
 import { createDiet, addMeal, addMealItem } from '@/services/nutrition'
@@ -38,6 +40,11 @@ const calc = (val: number | null | undefined, port: string | number) =>
 
 export default function ProfPrescriptions() {
   const { toast } = useToast()
+  const [searchParams] = useSearchParams()
+  const navigate = useNavigate()
+
+  const patientId = searchParams.get('patientId')
+
   const [search, setSearch] = useState('')
   const [isSearching, setIsSearching] = useState(false)
   const [searchResults, setSearchResults] = useState<FoodItem[]>([])
@@ -118,27 +125,19 @@ export default function ProfPrescriptions() {
   }
 
   const handleSaveDiet = async () => {
+    if (!patientId) {
+      toast({
+        variant: 'destructive',
+        description:
+          'Erro: Selecione um paciente a partir da lista de pacientes antes de prescrever.',
+      })
+      return
+    }
+
     setIsSaving(true)
     try {
-      // Fetch a placeholder client ID
-      const { data: clients } = await supabase
-        .from('profiles')
-        .select('id')
-        .eq('role', 'client')
-        .limit(1)
-      let clientId = clients?.[0]?.id
-
-      if (!clientId) {
-        const { data: anyProfile } = await supabase.from('profiles').select('id').limit(1)
-        clientId = anyProfile?.[0]?.id
-      }
-
-      if (!clientId) {
-        throw new Error('Nenhum usuário encontrado no sistema para vincular a dieta.')
-      }
-
       // 1. Create Diet
-      const { data: diet, error: dietError } = await createDiet(clientId, 'Plano Atualizado')
+      const { data: diet, error: dietError } = await createDiet(patientId, 'Plano Atualizado')
       if (dietError || !diet) throw new Error('Erro ao criar a prescrição da dieta.')
 
       const mealTimes = ['08:00', '12:30', '16:00', '20:00']
@@ -179,6 +178,9 @@ export default function ProfPrescriptions() {
         { id: 'jantar', name: 'Jantar', entries: [] },
       ])
       setSearch('')
+
+      // Navigate back to patient record
+      navigate(`/professional/patient/${patientId}`)
     } catch (error: any) {
       console.error(error)
       toast({
@@ -211,6 +213,15 @@ export default function ProfPrescriptions() {
         </Button>
       </DashboardHeader>
       <PageContent className="flex flex-col lg:h-[calc(100vh-4rem)] p-4 md:p-6 overflow-hidden">
+        {patientId && (
+          <Alert className="mb-4 bg-primary/5 text-primary border-primary/20">
+            <Info className="h-4 w-4" />
+            <AlertDescription className="font-medium ml-2">
+              A prescrever dieta para o paciente selecionado
+            </AlertDescription>
+          </Alert>
+        )}
+
         {/* Mobile Save Button */}
         <div className="sm:hidden mb-4">
           <Button onClick={handleSaveDiet} disabled={isSaving || isDietEmpty} className="w-full">

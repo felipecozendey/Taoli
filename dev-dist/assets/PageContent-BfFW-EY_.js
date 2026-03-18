@@ -2091,6 +2091,21 @@ function isModifiedEvent(event) {
 function shouldProcessLinkClick(event, target) {
 	return event.button === 0 && (!target || target === "_self") && !isModifiedEvent(event);
 }
+function createSearchParams(init = "") {
+	return new URLSearchParams(typeof init === "string" || Array.isArray(init) || init instanceof URLSearchParams ? init : Object.keys(init).reduce((memo2, key) => {
+		let value = init[key];
+		return memo2.concat(Array.isArray(value) ? value.map((v) => [key, v]) : [[key, value]]);
+	}, []));
+}
+function getSearchParamsForLocation(locationSearch, defaultSearchParams) {
+	let searchParams = createSearchParams(locationSearch);
+	if (defaultSearchParams) defaultSearchParams.forEach((_, key) => {
+		if (!searchParams.has(key)) defaultSearchParams.getAll(key).forEach((value) => {
+			searchParams.append(key, value);
+		});
+	});
+	return searchParams;
+}
 var _formDataSupportsSubmitter = null;
 function isFormDataSubmitterSupported() {
 	if (_formDataSupportsSubmitter === null) try {
@@ -2734,6 +2749,19 @@ function useLinkClickHandler(to, { target, replace: replaceProp, unstable_mask, 
 		unstable_defaultShouldRevalidate,
 		unstable_useTransitions
 	]);
+}
+function useSearchParams(defaultInit) {
+	warning(typeof URLSearchParams !== "undefined", `You cannot use the \`useSearchParams\` hook in a browser that does not support the URLSearchParams API. If you need to support Internet Explorer 11, we recommend you load a polyfill such as https://github.com/ungap/url-search-params.`);
+	let defaultSearchParamsRef = import_react.useRef(createSearchParams(defaultInit));
+	let hasSetSearchParamsRef = import_react.useRef(false);
+	let location = useLocation();
+	let searchParams = import_react.useMemo(() => getSearchParamsForLocation(location.search, hasSetSearchParamsRef.current ? null : defaultSearchParamsRef.current), [location.search]);
+	let navigate = useNavigate();
+	return [searchParams, import_react.useCallback((nextInit, navigateOptions) => {
+		const newSearchParams = createSearchParams(typeof nextInit === "function" ? nextInit(new URLSearchParams(searchParams)) : nextInit);
+		hasSetSearchParamsRef.current = true;
+		navigate("?" + newSearchParams, navigateOptions);
+	}, [navigate, searchParams])];
 }
 var fetcherId = 0;
 var getUniqueFetcherId = () => `__${String(++fetcherId)}__`;
@@ -25588,6 +25616,6 @@ function PageContent({ children, className }) {
 	});
 }
 //#endregion
-export { Arrow as $, Overlay as A, composeEventHandlers as At, Input as B, __vitePreload as Bt, SidebarMenuButton as C, Primitive$1 as Ct, Close as D, createContextScope$1 as Dt, Skeleton as E, createSlot$1 as Et, hideOthers as F, Route as Ft, CardHeader as G, __toESM as Gt, CardContent as H, require_react as Ht, ReactRemoveScroll as I, Routes as It, AuthProvider as J, CardTitle as K, useFocusGuards as L, useLocation as Lt, Root$2 as M, Link as Mt, Title as N, Navigate as Nt, Content as O, require_jsx_runtime as Ot, Trigger$1 as P, Outlet as Pt, Anchor as Q, FocusScope as R, useNavigate as Rt, SidebarMenu as S, useCallbackRef$1 as St, SidebarProvider as T, createCollection as Tt, CardDescription as U, __commonJSMin as Ut, Card as V, require_react_dom as Vt, CardFooter as W, __exportAll as Wt, supabase as X, useAuth as Y, TooltipProvider as Z, Sidebar as _, Portal$2 as _t, AvatarImage as a, cn as at, SidebarHeader as b, DismissableLayer as bt, DropdownMenuContent as c, Sparkles as ct, DropdownMenuSeparator as d, cva as dt, Content$1 as et, DropdownMenuTrigger as f, clsx as ft, useDirection as g, Presence as gt, createRovingFocusGroupScope as h, useControllableState as ht, AvatarFallback as i, useId as it, Portal$1 as j, BrowserRouter as jt, Description as k, useComposedRefs as kt, DropdownMenuItem as l, Check as lt, Root$1 as m, VisuallyHidden as mt, DashboardHeader as n, createPopperScope as nt, createContextScope as o, X as ot, Item as p, VISUALLY_HIDDEN_STYLES as pt, Button as q, Avatar as r, useSize as rt, DropdownMenu as s, User as st, PageContent as t, Root2$1 as tt, DropdownMenuLabel as u, createLucideIcon as ut, SidebarContent as v, useLayoutEffect2 as vt, SidebarMenuItem as w, dispatchDiscreteCustomEvent as wt, SidebarInset as x, Root$6 as xt, SidebarFooter as y, Branch as yt, Primitive as z, useParams as zt };
+export { Arrow as $, Overlay as A, composeEventHandlers as At, Input as B, useSearchParams as Bt, SidebarMenuButton as C, Primitive$1 as Ct, Close as D, createContextScope$1 as Dt, Skeleton as E, createSlot$1 as Et, hideOthers as F, Route as Ft, CardHeader as G, __exportAll as Gt, CardContent as H, require_react_dom as Ht, ReactRemoveScroll as I, Routes as It, AuthProvider as J, CardTitle as K, __toESM as Kt, useFocusGuards as L, useLocation as Lt, Root$2 as M, Link as Mt, Title as N, Navigate as Nt, Content as O, require_jsx_runtime as Ot, Trigger$1 as P, Outlet as Pt, Anchor as Q, FocusScope as R, useNavigate as Rt, SidebarMenu as S, useCallbackRef$1 as St, SidebarProvider as T, createCollection as Tt, CardDescription as U, require_react as Ut, Card as V, __vitePreload as Vt, CardFooter as W, __commonJSMin as Wt, supabase as X, useAuth as Y, TooltipProvider as Z, Sidebar as _, Portal$2 as _t, AvatarImage as a, cn as at, SidebarHeader as b, DismissableLayer as bt, DropdownMenuContent as c, Sparkles as ct, DropdownMenuSeparator as d, cva as dt, Content$1 as et, DropdownMenuTrigger as f, clsx as ft, useDirection as g, Presence as gt, createRovingFocusGroupScope as h, useControllableState as ht, AvatarFallback as i, useId as it, Portal$1 as j, BrowserRouter as jt, Description as k, useComposedRefs as kt, DropdownMenuItem as l, Check as lt, Root$1 as m, VisuallyHidden as mt, DashboardHeader as n, createPopperScope as nt, createContextScope as o, X as ot, Item as p, VISUALLY_HIDDEN_STYLES as pt, Button as q, Avatar as r, useSize as rt, DropdownMenu as s, User as st, PageContent as t, Root2$1 as tt, DropdownMenuLabel as u, createLucideIcon as ut, SidebarContent as v, useLayoutEffect2 as vt, SidebarMenuItem as w, dispatchDiscreteCustomEvent as wt, SidebarInset as x, Root$6 as xt, SidebarFooter as y, Branch as yt, Primitive as z, useParams as zt };
 
-//# sourceMappingURL=PageContent-UlpGY3xE.js.map
+//# sourceMappingURL=PageContent-BfFW-EY_.js.map

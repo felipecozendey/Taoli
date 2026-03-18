@@ -1,5 +1,6 @@
 import { $ as X, B as CardTitle, D as __rest, E as __awaiter, F as Input, I as Card, It as __toESM, L as CardContent, Nt as require_react, Pt as __commonJSMin, Q as cn, R as CardDescription, S as Title, U as useAuth, V as Button, _ as Content, b as Portal, bt as require_jsx_runtime, g as Close, h as Skeleton, it as clsx, n as DashboardHeader, nt as createLucideIcon, t as PageContent, v as Description, x as Root, y as Overlay, z as CardHeader } from "./PageContent-cRXQOFdU.js";
-import { $ as Search, A as require__baseIteratee, B as uniqueId, C as require_isEqual, D as Text, E as require__baseExtremum, F as adaptEventsOfChild, H as require_get, I as getPercentValue, J as TabsList, K as Tabs, L as interpolateNumber, M as Layer, N as filterProps, O as Cell, P as findAllByType, R as isNumber, S as getValueByDataKey, T as require__baseGt, U as require_isFunction, V as require_isNil, X as Label$1, Y as TabsTrigger, Z as Target, _ as Label, a as ChartTooltipContent, b as getTickClassName, c as YAxis, d as Bar, et as Plus, f as Shape, g as LabelList, h as Curve, i as ChartTooltip, it as useToast, j as warn, k as Global, l as XAxis, m as es6_default, n as ChartLegend, nt as FileText, o as BarChart, p as Dot, q as TabsContent, r as ChartLegendContent, rt as Brain, s as generateCategoricalChart, t as ChartContainer, tt as LayoutDashboard, u as CartesianGrid, v as formatAxisMap, w as require__baseLt, x as polarToCartesian, y as getMaxRadius, z as mathSign } from "./index-CTff70yl.js";
+import { t as Flame } from "./flame-Seuu1nWo.js";
+import { A as require__baseIteratee, B as uniqueId, C as require_isEqual, D as Text, E as require__baseExtremum, F as adaptEventsOfChild, H as require_get, I as getPercentValue, J as TabsContent, L as interpolateNumber, M as Layer, N as filterProps, O as Cell, P as findAllByType, Q as Target, R as isNumber, S as getValueByDataKey, T as require__baseGt, U as require_isFunction, V as require_isNil, X as TabsTrigger, Y as TabsList, Z as Label$1, _ as Label, a as ChartTooltipContent, at as Brain, b as getTickClassName, c as YAxis, d as Bar, et as Search, f as Shape, g as LabelList, h as Curve, i as ChartTooltip, j as warn, k as Global, l as XAxis, m as es6_default, n as ChartLegend, nt as LayoutDashboard, o as BarChart, p as Dot, q as Tabs, r as ChartLegendContent, rt as FileText, s as generateCategoricalChart, st as useToast, t as ChartContainer, tt as Plus, u as CartesianGrid, v as formatAxisMap, w as require__baseLt, x as polarToCartesian, y as getMaxRadius, z as mathSign } from "./index-DLXlA1p9.js";
 var BrainCircuit = createLucideIcon("brain-circuit", [
 	["path", {
 		d: "M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z",
@@ -79,10 +80,6 @@ var Database = createLucideIcon("database", [
 		key: "mv7ke4"
 	}]
 ]);
-var Flame = createLucideIcon("flame", [["path", {
-	d: "M12 3q1 4 4 6.5t3 5.5a1 1 0 0 1-14 0 5 5 0 0 1 1-3 1 1 0 0 0 5 0c0-2-1.5-3-1.5-5q0-2 2.5-4",
-	key: "1slcih"
-}]]);
 var Layers = createLucideIcon("layers", [
 	["path", {
 		d: "M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z",
@@ -16563,4 +16560,4 @@ function ClientStudy() {
 //#endregion
 export { ClientStudy as default };
 
-//# sourceMappingURL=ClientStudy-IeejbLEs.js.map
+//# sourceMappingURL=ClientStudy-BGwpO3uR.js.map

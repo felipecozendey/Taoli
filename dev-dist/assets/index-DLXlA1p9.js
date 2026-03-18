@@ -1,4 +1,4 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/ClientNutrition-iiscZcwG.js","assets/PageContent-cRXQOFdU.js","assets/ClientTraining-BEE3BwWa.js","assets/ClientMind-C2-PgX7W.js","assets/ClientStudy-IeejbLEs.js"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/ClientNutrition-BuJAW1Hc.js","assets/PageContent-cRXQOFdU.js","assets/checkbox-Ce-5xfTK.js","assets/flame-Seuu1nWo.js","assets/ClientTraining-CFlfBgfh.js","assets/ClientMind-3v2NTmDl.js","assets/ClientStudy-BGwpO3uR.js"])))=>i.map(i=>d[i]);
 import { $ as X, A as Item$1, At as useNavigate, B as CardTitle, Ct as BrowserRouter, Dt as Route, Et as Outlet, F as Input, Ft as __exportAll, G as Anchor, H as AuthProvider, I as Card, It as __toESM, J as Root2$3, K as Arrow, L as CardContent, M as createRovingFocusGroupScope, Mt as require_react_dom, N as useDirection, Nt as require_react, O as useFocusGuards, Ot as Routes, P as Primitive$1, Pt as __commonJSMin, Q as cn$1, R as CardDescription, St as composeEventHandlers, T as ReactRemoveScroll, Tt as Navigate, U as useAuth, V as Button, W as TooltipProvider, Y as createPopperScope, Z as useId, _t as createCollection, at as VISUALLY_HIDDEN_STYLES, bt as require_jsx_runtime, c as SidebarContent, ct as Presence, d as SidebarMenu, dt as Branch, et as Sparkles, f as SidebarMenuButton, ft as DismissableLayer, gt as dispatchDiscreteCustomEvent, ht as Primitive, it as clsx, j as Root$4, jt as __vitePreload, k as FocusScope, kt as useLocation, l as SidebarHeader, lt as Portal$1, m as SidebarProvider, mt as useCallbackRef, n as DashboardHeader, nt as createLucideIcon, o as createContextScope$1, ot as VisuallyHidden, p as SidebarMenuItem, pt as Root$3, q as Content$1, rt as cva, s as Sidebar, st as useControllableState, t as PageContent, tt as Check, u as SidebarInset, ut as useLayoutEffect2, vt as createSlot, w as hideOthers, wt as Link, xt as useComposedRefs, yt as createContextScope, z as CardHeader } from "./PageContent-cRXQOFdU.js";
 //#region \0vite/modulepreload-polyfill.js
 (function polyfill() {
@@ -45781,10 +45781,10 @@ function ClientFinances() {
 }
 //#endregion
 //#region src/App.tsx
-var ClientNutrition = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientNutrition-iiscZcwG.js"), __vite__mapDeps([0,1])));
-var ClientTraining = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientTraining-BEE3BwWa.js"), __vite__mapDeps([2,1])));
-var ClientMind = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientMind-C2-PgX7W.js"), __vite__mapDeps([3,1])));
-var ClientStudy = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientStudy-IeejbLEs.js"), __vite__mapDeps([4,1])));
+var ClientNutrition = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientNutrition-BuJAW1Hc.js"), __vite__mapDeps([0,1,2,3])));
+var ClientTraining = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientTraining-CFlfBgfh.js"), __vite__mapDeps([4,1])));
+var ClientMind = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientMind-3v2NTmDl.js"), __vite__mapDeps([5,1,2])));
+var ClientStudy = (0, import_react.lazy)(() => __vitePreload(() => import("./ClientStudy-BGwpO3uR.js"), __vite__mapDeps([6,1,3])));
 var LoadingFallback = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 	"data-uid": "src/App.tsx:46:3",
 	"data-prohibitions": "[]",
@@ -46095,6 +46095,6 @@ var App = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrowserRouter, {
 	"data-prohibitions": "[editContent]"
 }));
 //#endregion
-export { Search as $, require__baseIteratee as A, uniqueId as B, require_isEqual as C, Text as D, require__baseExtremum as E, adaptEventsOfChild as F, usePrevious as G, require_get as H, getPercentValue as I, TabsList as J, Tabs as K, interpolateNumber$1 as L, Layer as M, filterProps as N, Cell as O, findAllByType as P, Smile as Q, isNumber as R, getValueByDataKey as S, require__baseGt as T, require_isFunction as U, require_isNil as V, Progress as W, Label$2 as X, TabsTrigger as Y, Target as Z, Label as _, ChartTooltipContent as a, getTickClassName as b, YAxis as c, Bar as d, Plus as et, Shape as f, LabelList as g, Curve as h, ChartTooltip as i, useToast as it, warn$1 as j, Global as k, XAxis as l, es6_default as m, ChartLegend as n, FileText as nt, BarChart as o, Dot as p, TabsContent as q, ChartLegendContent as r, Brain as rt, generateCategoricalChart as s, ChartContainer as t, LayoutDashboard as tt, CartesianGrid as u, formatAxisMap$1 as v, require__baseLt as w, polarToCartesian as x, getMaxRadius as y, mathSign as z };
+export { Smile as $, require__baseIteratee as A, uniqueId as B, require_isEqual as C, Text as D, require__baseExtremum as E, adaptEventsOfChild as F, usePrevious as G, require_get as H, getPercentValue as I, TabsContent as J, Badge as K, interpolateNumber$1 as L, Layer as M, filterProps as N, Cell as O, findAllByType as P, Target as Q, isNumber as R, getValueByDataKey as S, require__baseGt as T, require_isFunction as U, require_isNil as V, Progress as W, TabsTrigger as X, TabsList as Y, Label$2 as Z, Label as _, ChartTooltipContent as a, Brain as at, getTickClassName as b, YAxis as c, Bar as d, Search as et, Shape as f, LabelList as g, Curve as h, ChartTooltip as i, ChevronDown as it, warn$1 as j, Global as k, XAxis as l, es6_default as m, ChartLegend as n, LayoutDashboard as nt, BarChart as o, Activity as ot, Dot as p, Tabs as q, ChartLegendContent as r, FileText as rt, generateCategoricalChart as s, useToast as st, ChartContainer as t, Plus as tt, CartesianGrid as u, formatAxisMap$1 as v, require__baseLt as w, polarToCartesian as x, getMaxRadius as y, mathSign as z };
 
-//# sourceMappingURL=index-CTff70yl.js.map
+//# sourceMappingURL=index-DLXlA1p9.js.map

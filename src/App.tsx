@@ -129,8 +129,8 @@ const App = () => (
           <Route path="*" element={<NotFound />} />
         </Routes>
       </TooltipProvider>
-    </BrowserRouter>
-  </BrowserRouter> // Wait, double tag in original file? No, just one. 
-) // Need to make sure the syntax is perfect.
+    </AuthProvider>
+  </BrowserRouter>
+)
 
 export default App

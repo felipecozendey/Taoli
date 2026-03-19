@@ -263,4 +263,82 @@ export const studyService = {
       return { error }
     }
   },
+
+  async getFlashcards(deckId: string) {
+    try {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
+      if (!user) return { data: [], error: new Error('Not authenticated') }
+
+      const { data, error } = await supabase
+        .from('study_flashcards')
+        .select('*')
+        .eq('deck_id', deckId)
+        .order('id', { ascending: true })
+
+      if (error) throw error
+      return { data, error: null }
+    } catch (error) {
+      console.error('Error fetching flashcards:', error)
+      return { data: [], error }
+    }
+  },
+
+  async createFlashcard(deckId: string, frontContent: string, backContent: string) {
+    try {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
+      if (!user) return { data: null, error: new Error('Not authenticated') }
+
+      const { data, error } = await supabase
+        .from('study_flashcards')
+        .insert([{ deck_id: deckId, front_content: frontContent, back_content: backContent }])
+        .select()
+        .single()
+
+      if (error) throw error
+      return { data, error: null }
+    } catch (error) {
+      console.error('Error creating flashcard:', error)
+      return { data: null, error }
+    }
+  },
+
+  async deleteFlashcard(cardId: string) {
+    try {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
+      if (!user) return { error: new Error('Not authenticated') }
+
+      const { error } = await supabase.from('study_flashcards').delete().eq('id', cardId)
+      if (error) throw error
+      return { error: null }
+    } catch (error) {
+      console.error('Error deleting flashcard:', error)
+      return { error }
+    }
+  },
+
+  async deleteDeck(deckId: string) {
+    try {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
+      if (!user) return { error: new Error('Not authenticated') }
+
+      const { error } = await supabase
+        .from('study_decks')
+        .delete()
+        .eq('id', deckId)
+        .eq('user_id', user.id)
+      if (error) throw error
+      return { error: null }
+    } catch (error) {
+      console.error('Error deleting deck:', error)
+      return { error }
+    }
+  },
 }

@@ -123,7 +123,26 @@ export function SecondBrainPanel() {
     ? notes.filter((n) => n.folder_id === selectedFolderId)
     : notes
 
-  const handleSelectNote = (note: StudyNote) => {
+  const handleSelectNote = async (note: StudyNote) => {
+    // Pre-selection Save (Data Loss Prevention)
+    if (
+      activeNoteId &&
+      (editorTitle !== initialNoteData.current.title ||
+        editorContent !== initialNoteData.current.content)
+    ) {
+      setIsSaving(true)
+      const { data } = await studyService.saveNote(
+        activeNoteId,
+        editorTitle.trim() || 'Nova Nota',
+        editorContent,
+        selectedFolderId,
+      )
+      if (data) {
+        setNotes((prev) => prev.map((n) => (n.id === data.id ? data : n)))
+      }
+      setIsSaving(false)
+    }
+
     initialNoteData.current = { title: note.title, content: note.content }
     setActiveNoteId(note.id)
     setEditorTitle(note.title)
@@ -131,7 +150,26 @@ export function SecondBrainPanel() {
     setLastSaved(null)
   }
 
-  const handleNewNote = () => {
+  const handleNewNote = async () => {
+    // Pre-creation Save (Data Loss Prevention)
+    if (
+      activeNoteId &&
+      (editorTitle !== initialNoteData.current.title ||
+        editorContent !== initialNoteData.current.content)
+    ) {
+      setIsSaving(true)
+      const { data } = await studyService.saveNote(
+        activeNoteId,
+        editorTitle.trim() || 'Nova Nota',
+        editorContent,
+        selectedFolderId,
+      )
+      if (data) {
+        setNotes((prev) => prev.map((n) => (n.id === data.id ? data : n)))
+      }
+      setIsSaving(false)
+    }
+
     initialNoteData.current = { title: '', content: '' }
     setActiveNoteId(null)
     setEditorTitle('')
@@ -308,6 +346,7 @@ export function SecondBrainPanel() {
               </div>
             </div>
             <RichTextEditor
+              key={activeNoteId || 'new-note'}
               content={editorContent}
               onChange={setEditorContent}
               existingNotes={notes}

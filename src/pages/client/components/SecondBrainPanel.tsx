@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Skeleton } from '@/components/ui/skeleton'
 import { Badge } from '@/components/ui/badge'
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import {
   Dialog,
   DialogContent,
@@ -11,21 +11,11 @@ import {
   DialogFooter,
 } from '@/components/ui/dialog'
 import { useToast } from '@/hooks/use-toast'
-import {
-  BrainCircuit,
-  File,
-  Plus,
-  Save,
-  Loader2,
-  Folder,
-  FolderPlus,
-  FolderOpen,
-  Hash,
-  X,
-} from 'lucide-react'
+import { BrainCircuit, Save, Loader2, Hash, X, Menu } from 'lucide-react'
 import { studyService, type StudyNote, type StudyFolder } from '@/services/study'
-import { cn } from '@/lib/utils'
 import { RichTextEditor } from '@/components/shared/RichTextEditor'
+import { SecondBrainFoldersSidebar } from './SecondBrainFoldersSidebar'
+import { SecondBrainNotesSidebar } from './SecondBrainNotesSidebar'
 
 export function SecondBrainPanel() {
   const [notes, setNotes] = useState<StudyNote[]>([])
@@ -36,6 +26,7 @@ export function SecondBrainPanel() {
   const [activeNoteId, setActiveNoteId] = useState<string | null>(null)
   const [selectedFolderId, setSelectedFolderId] = useState<string | null>(null)
   const [selectedTag, setSelectedTag] = useState<string | null>(null)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
   const [editorTitle, setEditorTitle] = useState('')
   const [editorContent, setEditorContent] = useState('')
@@ -44,7 +35,6 @@ export function SecondBrainPanel() {
   const initialNoteData = useRef({ title: '', content: '', tags: [] as string[] })
 
   const [backlinks, setBacklinks] = useState<{ id: string; title: string }[]>([])
-
   const [isFolderModalOpen, setIsFolderModalOpen] = useState(false)
   const [newFolderName, setNewFolderName] = useState('')
 
@@ -141,14 +131,16 @@ export function SecondBrainPanel() {
     return Array.from(tagsSet).sort((a, b) => a.localeCompare(b))
   }, [notes])
 
-  const filteredNotes = notes.filter((n) => {
-    const matchFolder = selectedFolderId ? n.folder_id === selectedFolderId : true
-    const matchTag = selectedTag ? n.tags?.includes(selectedTag) : true
-    return matchFolder && matchTag
-  })
+  const filteredNotes = useMemo(() => {
+    return notes.filter((n) => {
+      const matchFolder = selectedFolderId ? n.folder_id === selectedFolderId : true
+      const matchTag = selectedTag ? n.tags?.includes(selectedTag) : true
+      return matchFolder && matchTag
+    })
+  }, [notes, selectedFolderId, selectedTag])
 
   const handleSelectNote = async (note: StudyNote) => {
-    // Pre-selection Save (Data Loss Prevention)
+    setIsMobileMenuOpen(false)
     if (
       activeNoteId &&
       (editorTitle !== initialNoteData.current.title ||
@@ -179,7 +171,7 @@ export function SecondBrainPanel() {
   }
 
   const handleNewNote = async () => {
-    // Pre-creation Save (Data Loss Prevention)
+    setIsMobileMenuOpen(false)
     if (
       activeNoteId &&
       (editorTitle !== initialNoteData.current.title ||
@@ -254,133 +246,73 @@ export function SecondBrainPanel() {
     <div className="flex flex-col h-full bg-background relative z-0">
       <div className="flex items-center justify-between px-4 py-3 border-b bg-muted/20 shrink-0">
         <div className="flex items-center gap-2">
+          <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
+            <SheetTrigger asChild>
+              <Button variant="ghost" size="icon" className="md:hidden h-8 w-8 -ml-2 shrink-0">
+                <Menu className="h-5 w-5" />
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="left" className="w-[90vw] max-w-[400px] p-0 flex gap-0">
+              <div className="w-1/2 flex flex-col h-full border-r bg-muted/10">
+                <SecondBrainFoldersSidebar
+                  folders={folders}
+                  allTags={allTags}
+                  selectedFolderId={selectedFolderId}
+                  onSelectFolder={setSelectedFolderId}
+                  selectedTag={selectedTag}
+                  onToggleTag={(tag) => setSelectedTag((prev) => (prev === tag ? null : tag))}
+                  onAddFolder={() => setIsFolderModalOpen(true)}
+                  onDrop={handleDrop}
+                  onSelectAllNotes={() => {
+                    setSelectedFolderId(null)
+                    setSelectedTag(null)
+                  }}
+                />
+              </div>
+              <div className="w-1/2 flex flex-col h-full bg-muted/5">
+                <SecondBrainNotesSidebar
+                  notes={filteredNotes}
+                  isLoading={isLoading}
+                  activeNoteId={activeNoteId}
+                  onSelectNote={handleSelectNote}
+                  onNewNote={handleNewNote}
+                />
+              </div>
+            </SheetContent>
+          </Sheet>
           <BrainCircuit className="h-5 w-5 text-primary" />
           <span className="font-semibold text-sm">Segundo Cérebro</span>
         </div>
       </div>
 
       <div className="flex flex-1 min-h-0 overflow-hidden">
-        {/* Folders & Tags Sidebar */}
-        <div className="w-16 md:w-56 lg:w-64 border-r bg-muted/10 flex flex-col shrink-0">
-          <div className="p-3 border-b flex flex-col md:flex-row items-center justify-between gap-2">
-            <span className="hidden md:inline text-xs font-semibold uppercase text-muted-foreground">
-              Meu Cérebro
-            </span>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-6 w-6 shrink-0"
-              onClick={() => setIsFolderModalOpen(true)}
-            >
-              <FolderPlus className="h-4 w-4 text-primary" />
-            </Button>
-          </div>
-          <div className="flex-1 overflow-y-auto p-2 space-y-6">
-            <div className="space-y-1">
-              <button
-                onClick={() => {
-                  setSelectedFolderId(null)
-                  setSelectedTag(null)
-                }}
-                onDragOver={(e) => e.preventDefault()}
-                onDrop={(e) => handleDrop(e, null)}
-                className={cn(
-                  'w-full flex items-center justify-center md:justify-start gap-2 px-2 py-2 md:py-1.5 text-sm rounded-md transition-colors',
-                  selectedFolderId === null && selectedTag === null
-                    ? 'bg-primary/10 text-primary font-medium'
-                    : 'hover:bg-muted text-muted-foreground',
-                )}
-              >
-                <FolderOpen className="h-4 w-4 shrink-0" />
-                <span className="hidden md:inline truncate">Todas as Notas</span>
-              </button>
-              {folders.map((folder) => (
-                <button
-                  key={folder.id}
-                  onClick={() => setSelectedFolderId(folder.id)}
-                  onDragOver={(e) => e.preventDefault()}
-                  onDrop={(e) => handleDrop(e, folder.id)}
-                  className={cn(
-                    'w-full flex items-center justify-center md:justify-start gap-2 px-2 py-2 md:py-1.5 text-sm rounded-md transition-colors',
-                    selectedFolderId === folder.id
-                      ? 'bg-primary/10 text-primary font-medium'
-                      : 'hover:bg-muted text-muted-foreground',
-                  )}
-                >
-                  <Folder className="h-4 w-4 shrink-0" />
-                  <span className="hidden md:inline truncate">{folder.name}</span>
-                </button>
-              ))}
-            </div>
-
-            {allTags.length > 0 && (
-              <div className="space-y-1">
-                <div className="px-2 py-1 hidden md:flex items-center">
-                  <span className="text-xs font-semibold uppercase text-muted-foreground">
-                    Tags
-                  </span>
-                </div>
-                {allTags.map((tag) => (
-                  <button
-                    key={tag}
-                    onClick={() => setSelectedTag((prev) => (prev === tag ? null : tag))}
-                    className={cn(
-                      'w-full flex items-center justify-center md:justify-start gap-2 px-2 py-2 md:py-1.5 text-sm rounded-md transition-colors',
-                      selectedTag === tag
-                        ? 'bg-primary/10 text-primary font-medium'
-                        : 'hover:bg-muted text-muted-foreground',
-                    )}
-                  >
-                    <Hash className="h-4 w-4 shrink-0" />
-                    <span className="hidden md:inline truncate">{tag}</span>
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
+        {/* Folders & Tags Sidebar - Desktop */}
+        <div className="hidden md:flex w-56 lg:w-64 border-r bg-muted/10 flex-col shrink-0">
+          <SecondBrainFoldersSidebar
+            folders={folders}
+            allTags={allTags}
+            selectedFolderId={selectedFolderId}
+            onSelectFolder={setSelectedFolderId}
+            selectedTag={selectedTag}
+            onToggleTag={(tag) => setSelectedTag((prev) => (prev === tag ? null : tag))}
+            onAddFolder={() => setIsFolderModalOpen(true)}
+            onDrop={handleDrop}
+            onSelectAllNotes={() => {
+              setSelectedFolderId(null)
+              setSelectedTag(null)
+            }}
+          />
         </div>
 
-        {/* Notes List Sidebar */}
-        <div className="w-16 md:w-56 lg:w-64 border-r bg-muted/5 flex flex-col shrink-0">
-          <div className="p-3 border-b flex flex-col gap-2">
-            <Button
-              variant="default"
-              size="sm"
-              className="h-8 w-full gap-2 text-xs"
-              onClick={handleNewNote}
-            >
-              <Plus className="h-4 w-4" />
-              <span className="hidden md:inline">Nova Nota</span>
-            </Button>
-          </div>
-          <div className="flex-1 overflow-y-auto p-2 space-y-1">
-            {isLoading ? (
-              <Skeleton className="h-9 w-full rounded-md" />
-            ) : (
-              filteredNotes.map((note) => (
-                <button
-                  key={note.id}
-                  draggable
-                  onDragStart={(e) => e.dataTransfer.setData('noteId', note.id)}
-                  onClick={() => handleSelectNote(note)}
-                  className={cn(
-                    'w-full flex items-center justify-center md:justify-start gap-3 px-2 py-2 text-sm rounded-md transition-colors cursor-grab active:cursor-grabbing',
-                    activeNoteId === note.id
-                      ? 'bg-primary/10 text-primary font-medium'
-                      : 'hover:bg-muted text-muted-foreground',
-                  )}
-                >
-                  <File className="h-4 w-4 shrink-0" />
-                  <span className="hidden md:inline truncate text-left">{note.title}</span>
-                </button>
-              ))
-            )}
-            {!isLoading && filteredNotes.length === 0 && (
-              <p className="text-xs text-center text-muted-foreground py-4 hidden md:block">
-                Nenhuma nota.
-              </p>
-            )}
-          </div>
+        {/* Notes List Sidebar - Desktop */}
+        <div className="hidden md:flex w-56 lg:w-64 border-r bg-muted/5 flex-col shrink-0">
+          <SecondBrainNotesSidebar
+            notes={filteredNotes}
+            isLoading={isLoading}
+            activeNoteId={activeNoteId}
+            onSelectNote={handleSelectNote}
+            onNewNote={handleNewNote}
+          />
         </div>
 
         {/* Editor Center Column */}
@@ -391,9 +323,9 @@ export function SecondBrainPanel() {
                 value={editorTitle}
                 onChange={(e) => setEditorTitle(e.target.value)}
                 placeholder="Título da nota..."
-                className="text-2xl lg:text-3xl font-bold border-none px-0 focus-visible:ring-0 h-auto bg-transparent"
+                className="text-xl md:text-2xl lg:text-3xl font-bold border-none px-0 focus-visible:ring-0 h-auto bg-transparent"
               />
-              <div className="flex items-center justify-end shrink-0 min-w-32">
+              <div className="flex items-center justify-end shrink-0 min-w-[120px]">
                 {isSaving ? (
                   <span className="text-xs text-muted-foreground animate-pulse flex items-center gap-1.5">
                     <Loader2 className="h-3 w-3 animate-spin" />A guardar...
@@ -401,7 +333,6 @@ export function SecondBrainPanel() {
                 ) : lastSaved ? (
                   <span className="text-xs text-muted-foreground flex items-center gap-1.5">
                     <Save className="h-3 w-3" />
-                    Guardado às{' '}
                     {lastSaved.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                   </span>
                 ) : null}
@@ -439,7 +370,7 @@ export function SecondBrainPanel() {
                   }
                 }}
                 placeholder="Adicionar tag..."
-                className="bg-transparent border-none outline-none text-sm w-24 placeholder:text-muted-foreground"
+                className="bg-transparent border-none outline-none text-sm w-28 placeholder:text-muted-foreground focus:ring-0"
               />
             </div>
 
@@ -455,7 +386,7 @@ export function SecondBrainPanel() {
         </div>
 
         {/* Right Sidebar (Backlinks Knowledge Graph) */}
-        <div className="hidden lg:flex w-64 border-l bg-muted/10 p-4 flex-col shrink-0">
+        <div className="hidden xl:flex w-64 border-l bg-muted/10 p-4 flex-col shrink-0">
           <div className="flex items-center gap-2 mb-4 pb-2 border-b">
             <span className="font-semibold text-sm">🔗 Referências</span>
           </div>

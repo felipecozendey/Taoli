@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { studyService, type StudyDeck, type StudyFlashcard } from '@/services/study'
 import { useAuth } from '@/contexts/AuthContext'
+import { calculateSRS } from '@/lib/srs'
 
 export function useFlashcards() {
   const { user, isLoading } = useAuth()
@@ -9,7 +10,7 @@ export function useFlashcards() {
 
   const [isReviewing, setIsReviewing] = useState(false)
   const [currentDeck, setCurrentDeck] = useState<StudyDeck | null>(null)
-  const [flashcards, setFlashcards] = useState<StudyFlashcard[]>([])
+  const [dueCards, setDueCards] = useState<StudyFlashcard[]>([])
   const [loadingCards, setLoadingCards] = useState(false)
   const [currentIndex, setCurrentIndex] = useState(0)
   const [showAnswer, setShowAnswer] = useState(false)
@@ -29,7 +30,7 @@ export function useFlashcards() {
     })
   }, [user, isLoading])
 
-  const startReview = async (deck: StudyDeck) => {
+  const startReview = async (deck: StudyDeck, deckCards?: StudyFlashcard[]) => {
     if (!user) return
 
     setLoadingCards(true)
@@ -37,35 +38,54 @@ export function useFlashcards() {
     setCurrentDeck(deck)
     setCurrentIndex(0)
     setShowAnswer(false)
-    const { data } = await studyService.getDueFlashcards(deck.id)
-    setFlashcards(data || [])
+
+    let cards = deckCards
+    if (!cards) {
+      const { data } = await studyService.getFlashcards(deck.id)
+      cards = data || []
+    }
+
+    const now = new Date().toISOString()
+    const due = cards.filter((c) => !c.next_review || c.next_review <= now)
+
+    setDueCards(due)
     setLoadingCards(false)
   }
 
   const handleGrade = async (grade: number) => {
-    if (!user || !flashcards.length) return
+    if (!user || !dueCards.length) return
 
-    const card = flashcards[currentIndex]
-    console.log(`processCardReview called for card ${card.id} with grade ${grade}`)
+    const card = dueCards[currentIndex]
 
-    await studyService.processCardReview(card.id, grade, {
-      interval: card.interval,
-      repetition: card.repetition,
-      easeFactor: card.ease_factor,
+    const nextReview = calculateSRS(
+      {
+        interval: card.interval || 0,
+        repetition: card.repetition || 0,
+        easeFactor: card.efactor || card.ease_factor || 2.5,
+      },
+      grade,
+    )
+
+    await studyService.updateFlashcardReview(card.id, {
+      interval: nextReview.interval,
+      repetition: nextReview.repetition,
+      efactor: nextReview.easeFactor,
+      next_review: nextReview.nextReviewDate.toISOString(),
     })
 
-    if (currentIndex < flashcards.length - 1) {
+    if (currentIndex < dueCards.length - 1) {
       setCurrentIndex((prev) => prev + 1)
       setShowAnswer(false)
     } else {
-      setIsReviewing(false)
-      setCurrentDeck(null)
+      setCurrentIndex(dueCards.length)
     }
   }
 
   const endReview = () => {
     setIsReviewing(false)
     setCurrentDeck(null)
+    setDueCards([])
+    setCurrentIndex(0)
   }
 
   return {
@@ -73,7 +93,7 @@ export function useFlashcards() {
     loadingDecks,
     isReviewing,
     currentDeck,
-    flashcards,
+    dueCards,
     loadingCards,
     currentIndex,
     showAnswer,

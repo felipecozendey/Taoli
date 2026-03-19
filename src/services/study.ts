@@ -68,14 +68,41 @@ export const studyService = {
         .from('study_flashcards')
         .select('*')
         .eq('deck_id', deckId)
-        .or(`next_review_date.lte.${now},next_review_date.is.null`)
-        .order('next_review_date', { ascending: true })
+        .or(
+          `next_review.lte.${now},next_review.is.null,next_review_date.lte.${now},next_review_date.is.null`,
+        )
+        .order('next_review', { ascending: true })
 
       if (error) throw error
       return { data, error: null }
     } catch (error) {
       console.error('Error fetching due flashcards:', error)
       return { data: [], error }
+    }
+  },
+
+  async updateFlashcardReview(
+    cardId: string,
+    data: { next_review: string; efactor: number; interval: number; repetition: number },
+  ) {
+    try {
+      const { error } = await supabase
+        .from('study_flashcards')
+        .update({
+          next_review: data.next_review,
+          next_review_date: data.next_review,
+          efactor: data.efactor,
+          ease_factor: data.efactor,
+          interval: data.interval,
+          repetition: data.repetition,
+        })
+        .eq('id', cardId)
+
+      if (error) throw error
+      return { error: null }
+    } catch (error) {
+      console.error('Error updating flashcard review:', error)
+      return { error }
     }
   },
 
@@ -94,6 +121,8 @@ export const studyService = {
           interval: nextReview.interval,
           repetition: nextReview.repetition,
           ease_factor: nextReview.easeFactor,
+          efactor: nextReview.easeFactor,
+          next_review: nextReview.nextReviewDate.toISOString(),
           next_review_date: nextReview.nextReviewDate.toISOString(),
         })
         .eq('id', cardId)

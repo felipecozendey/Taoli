@@ -58,3 +58,5 @@ export function calculateNextReview(item: SRSItem, grade: number): SRSResult {
     nextReviewDate,
   }
 }
+
+export const calculateSRS = calculateNextReview

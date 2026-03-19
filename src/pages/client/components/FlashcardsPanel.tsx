@@ -53,7 +53,7 @@ export function FlashcardsPanel({ data }: FlashcardsPanelProps) {
     loadingDecks,
     isReviewing,
     currentDeck,
-    flashcards,
+    dueCards,
     loadingCards,
     currentIndex,
     showAnswer,
@@ -162,28 +162,47 @@ export function FlashcardsPanel({ data }: FlashcardsPanelProps) {
           <Skeleton className="h-[300px]" />
         </div>
       )
-    if (flashcards.length === 0)
+
+    if (dueCards.length === 0 || currentIndex >= dueCards.length) {
       return (
-        <div className="flex flex-col h-full items-center justify-center p-6 bg-muted/10">
-          <BrainCircuit className="h-12 w-12 text-muted-foreground mb-4" />
-          <h3 className="text-lg font-medium">Você está em dia!</h3>
-          <Button className="mt-4" onClick={endReview}>
-            Voltar
+        <div className="flex flex-col h-full items-center justify-center p-6 bg-muted/10 animate-fade-in">
+          <BrainCircuit className="h-16 w-16 text-primary mb-4" />
+          <h3 className="text-2xl font-semibold mb-2">Parabéns, terminou por hoje!</h3>
+          <p className="text-muted-foreground mb-6">
+            Você revisou todos os cartões pendentes deste baralho.
+          </p>
+          <Button
+            onClick={() => {
+              endReview()
+              setSelectedDeck(null)
+            }}
+          >
+            Voltar para Dashboard
           </Button>
         </div>
       )
-    const card = flashcards[currentIndex]
+    }
+
+    const card = dueCards[currentIndex]
     return (
       <div className="flex flex-col h-full bg-muted/10 animate-fade-in-up">
-        <div className="flex justify-between px-4 py-3 border-b bg-background/50 backdrop-blur-sm shrink-0">
-          <span className="font-semibold text-sm truncate">{currentDeck?.title}</span>
-          <span className="text-xs text-muted-foreground bg-muted px-2 py-1 rounded">
-            {currentIndex + 1} / {flashcards.length}
+        <div className="flex justify-between items-center px-4 py-3 border-b bg-background/50 backdrop-blur-sm shrink-0">
+          <div className="flex items-center gap-4">
+            <Button variant="ghost" size="sm" onClick={endReview}>
+              <ChevronLeft className="h-4 w-4 mr-1" />
+              Sair do Modo de Estudo
+            </Button>
+            <span className="font-semibold text-sm truncate hidden sm:inline">
+              {currentDeck?.title}
+            </span>
+          </div>
+          <span className="text-xs font-medium text-muted-foreground bg-muted px-3 py-1 rounded-full border shadow-sm">
+            Carta {currentIndex + 1} de {dueCards.length}
           </span>
         </div>
-        <div className="flex-1 p-4 md:p-8 flex items-center justify-center">
-          <Card className="w-full max-w-2xl min-h-[350px] p-6 flex flex-col justify-between shadow-md">
-            <div className="flex-1 flex flex-col items-center justify-center text-center space-y-6">
+        <div className="flex-1 p-4 md:p-8 flex items-center justify-center overflow-y-auto">
+          <Card className="w-full max-w-3xl min-h-[400px] p-6 sm:p-10 flex flex-col justify-between shadow-lg border-2 bg-card/95 backdrop-blur">
+            <div className="flex-1 flex flex-col items-center justify-center text-center space-y-8">
               {card.card_type === 'multiple_choice' && (
                 <Badge variant="outline" className="mb-2">
                   Múltipla Escolha
@@ -195,20 +214,22 @@ export function FlashcardsPanel({ data }: FlashcardsPanelProps) {
                 </Badge>
               )}
 
-              <div className="w-full prose prose-sm sm:prose-base dark:prose-invert">
+              <div className="w-full prose prose-sm dark:prose-invert">
                 <div dangerouslySetInnerHTML={{ __html: card.front_content }} />
               </div>
 
               {showAnswer && (
                 <>
-                  <div className="w-full h-px bg-border my-6" />
-                  <div className="w-full prose prose-sm sm:prose-base dark:prose-invert text-muted-foreground">
+                  <div className="w-full h-px bg-border my-8 opacity-50" />
+                  <div className="w-full prose prose-sm dark:prose-invert text-muted-foreground animate-fade-in">
                     {card.card_type === 'multiple_choice' && (
-                      <div className="space-y-2">
-                        <p className="font-semibold text-foreground">{card.back_content}</p>
+                      <div className="space-y-3">
+                        <p className="font-bold text-foreground text-xl">{card.back_content}</p>
                         {Array.isArray(card.options) && card.options.length > 0 && (
-                          <div className="text-sm line-through opacity-70">
-                            {card.options.join(', ')}
+                          <div className="text-sm line-through opacity-50 flex flex-col gap-1">
+                            {card.options.map((opt: string, i: number) => (
+                              <span key={i}>{opt}</span>
+                            ))}
                           </div>
                         )}
                       </div>
@@ -220,30 +241,44 @@ export function FlashcardsPanel({ data }: FlashcardsPanelProps) {
                 </>
               )}
             </div>
-            <div className="mt-8 shrink-0">
+            <div className="mt-10 shrink-0">
               {!showAnswer ? (
-                <Button onClick={() => setShowAnswer(true)} className="w-full h-12">
-                  Revelar Resposta
+                <Button
+                  onClick={() => setShowAnswer(true)}
+                  className="w-full h-14 text-lg font-medium shadow-sm"
+                  size="lg"
+                >
+                  Mostrar Resposta
                 </Button>
               ) : (
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                  <Button variant="destructive" onClick={() => handleGrade(1)}>
-                    Errei
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 animate-fade-in-up">
+                  <Button
+                    variant="outline"
+                    className="h-14 border-red-500/50 text-red-600 hover:bg-red-500 hover:text-white transition-colors"
+                    onClick={() => handleGrade(0)}
+                  >
+                    Errei (0)
                   </Button>
                   <Button
-                    className="bg-orange-500 hover:bg-orange-600"
+                    variant="outline"
+                    className="h-14 border-orange-500/50 text-orange-600 hover:bg-orange-500 hover:text-white transition-colors"
                     onClick={() => handleGrade(3)}
                   >
-                    Difícil
+                    Difícil (3)
                   </Button>
                   <Button
-                    className="bg-green-500 hover:bg-green-600"
+                    variant="outline"
+                    className="h-14 border-green-500/50 text-green-600 hover:bg-green-500 hover:text-white transition-colors"
                     onClick={() => handleGrade(4)}
                   >
-                    Bom
+                    Bom (4)
                   </Button>
-                  <Button className="bg-blue-500 hover:bg-blue-600" onClick={() => handleGrade(5)}>
-                    Fácil
+                  <Button
+                    variant="outline"
+                    className="h-14 border-blue-500/50 text-blue-600 hover:bg-blue-500 hover:text-white transition-colors"
+                    onClick={() => handleGrade(5)}
+                  >
+                    Fácil (5)
                   </Button>
                 </div>
               )}
@@ -255,6 +290,9 @@ export function FlashcardsPanel({ data }: FlashcardsPanelProps) {
   }
 
   if (selectedDeck) {
+    const nowISO = new Date().toISOString()
+    const dueCardsCount = deckCards.filter((c) => !c.next_review || c.next_review <= nowISO).length
+
     return (
       <div className="flex flex-col h-full bg-muted/10 animate-fade-in">
         <div className="flex items-center justify-between px-4 py-3 border-b bg-background/50 shrink-0">
@@ -268,11 +306,16 @@ export function FlashcardsPanel({ data }: FlashcardsPanelProps) {
             </div>
           </div>
           <div className="flex gap-2">
-            <Button size="sm" variant="outline" onClick={() => startReview(selectedDeck)}>
+            <Button
+              size="sm"
+              variant="default"
+              onClick={() => startReview(selectedDeck, deckCards)}
+              disabled={dueCardsCount === 0}
+            >
               <Play className="h-4 w-4 md:mr-2" />
-              <span className="hidden md:inline">Estudar</span>
+              <span className="hidden md:inline">Estudar Agora ({dueCardsCount})</span>
             </Button>
-            <Button size="sm" onClick={() => setIsCardModalOpen(true)}>
+            <Button size="sm" variant="outline" onClick={() => setIsCardModalOpen(true)}>
               <Plus className="h-4 w-4 md:mr-2" />
               <span className="hidden md:inline">Adicionar</span>
             </Button>
@@ -285,7 +328,10 @@ export function FlashcardsPanel({ data }: FlashcardsPanelProps) {
             <p className="text-center text-muted-foreground mt-10">Nenhum cartão adicionado.</p>
           ) : (
             deckCards.map((card) => (
-              <Card key={card.id} className="p-4 flex gap-4 items-start bg-background/80 shadow-sm">
+              <Card
+                key={card.id}
+                className="p-4 flex gap-4 items-start bg-background/80 shadow-sm hover:shadow-md transition-shadow"
+              >
                 <div className="flex-1 grid md:grid-cols-2 gap-4">
                   <div>
                     <div className="flex items-center gap-2 mb-1">
@@ -302,14 +348,14 @@ export function FlashcardsPanel({ data }: FlashcardsPanelProps) {
                       )}
                     </div>
                     <div
-                      className="prose prose-sm dark:prose-invert line-clamp-2"
+                      className="prose prose-sm dark:prose-invert line-clamp-3"
                       dangerouslySetInnerHTML={{ __html: card.front_content }}
                     />
                   </div>
                   <div>
                     <p className="text-xs font-semibold text-muted-foreground mb-1">Verso</p>
                     <div
-                      className="prose prose-sm dark:prose-invert line-clamp-2 text-muted-foreground"
+                      className="prose prose-sm dark:prose-invert line-clamp-3 text-muted-foreground"
                       dangerouslySetInnerHTML={{
                         __html:
                           card.card_type === 'cloze' ? 'Lacuna preenchida' : card.back_content,
@@ -517,7 +563,7 @@ export function FlashcardsPanel({ data }: FlashcardsPanelProps) {
                   }}
                 >
                   <Play className="h-4 w-4 fill-current" />
-                  Estudar Agora
+                  Revisar Baralho
                 </Button>
               </CardContent>
             </Card>

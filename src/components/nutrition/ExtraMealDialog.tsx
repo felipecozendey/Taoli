@@ -72,12 +72,15 @@ export function ExtraMealDialog({ date, onSuccess }: ExtraMealDialogProps) {
 
   const totals = selectedFoods.reduce(
     (acc, item) => {
-      const ratio = item.quantity / (item.food.base_qty_g || 100)
-      acc.cal += (Number(item.food.energy_kcal) || 0) * ratio
-      acc.pro += (Number(item.food.protein_g) || 0) * ratio
-      acc.car += (Number(item.food.carbs_g) || 0) * ratio
-      acc.fat += (Number(item.food.fats_g) || 0) * ratio
-      return acc
+      const qty = Number(item.quantity || 0)
+      const baseQty = Number(item.food.base_qty_g || 100)
+
+      return {
+        cal: acc.cal + (Number(item.food.energy_kcal || 0) / baseQty) * qty,
+        pro: acc.pro + (Number(item.food.protein_g || 0) / baseQty) * qty,
+        car: acc.car + (Number(item.food.carbs_g || 0) / baseQty) * qty,
+        fat: acc.fat + (Number(item.food.fats_g || 0) / baseQty) * qty,
+      }
     },
     { cal: 0, pro: 0, car: 0, fat: 0 },
   )
@@ -171,8 +174,10 @@ export function ExtraMealDialog({ date, onSuccess }: ExtraMealDialogProps) {
             <ScrollArea className="max-h-[250px] border rounded-md p-2">
               <div className="space-y-2">
                 {selectedFoods.map((item, index) => {
-                  const itemRatio = item.quantity / (item.food.base_qty_g || 100)
-                  const itemCals = Math.round((Number(item.food.energy_kcal) || 0) * itemRatio)
+                  const qty = Number(item.quantity || 0)
+                  const baseQty = Number(item.food.base_qty_g || 100)
+                  const itemCals = Math.round((Number(item.food.energy_kcal || 0) / baseQty) * qty)
+
                   return (
                     <div
                       key={index}
@@ -187,7 +192,9 @@ export function ExtraMealDialog({ date, onSuccess }: ExtraMealDialogProps) {
                           <Input
                             type="number"
                             value={item.quantity === 0 ? '' : item.quantity}
-                            onChange={(e) => handleQuantityChange(index, Number(e.target.value))}
+                            onChange={(e) =>
+                              handleQuantityChange(index, parseFloat(e.target.value) || 0)
+                            }
                             className="w-16 h-8 px-2 text-right"
                           />
                           <span className="text-sm text-muted-foreground">g</span>

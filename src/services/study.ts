@@ -134,6 +134,7 @@ export const studyService = {
     title: string,
     content: string,
     folderId?: string | null,
+    tags: string[] = [],
   ) {
     try {
       const {
@@ -147,6 +148,7 @@ export const studyService = {
         user_id: user.id,
         updated_at: new Date().toISOString(),
         folder_id: folderId || null,
+        tags,
       }
 
       let result

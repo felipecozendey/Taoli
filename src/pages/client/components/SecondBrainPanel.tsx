@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useCallback } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Skeleton } from '@/components/ui/skeleton'
+import { Badge } from '@/components/ui/badge'
 import {
   Dialog,
   DialogContent,
@@ -19,6 +20,8 @@ import {
   Folder,
   FolderPlus,
   FolderOpen,
+  Hash,
+  X,
 } from 'lucide-react'
 import { studyService, type StudyNote, type StudyFolder } from '@/services/study'
 import { cn } from '@/lib/utils'
@@ -35,7 +38,9 @@ export function SecondBrainPanel() {
 
   const [editorTitle, setEditorTitle] = useState('')
   const [editorContent, setEditorContent] = useState('')
-  const initialNoteData = useRef({ title: '', content: '' })
+  const [editorTags, setEditorTags] = useState<string[]>([])
+  const [tagInput, setTagInput] = useState('')
+  const initialNoteData = useRef({ title: '', content: '', tags: [] as string[] })
 
   const [backlinks, setBacklinks] = useState<{ id: string; title: string }[]>([])
 
@@ -63,12 +68,13 @@ export function SecondBrainPanel() {
   useEffect(() => {
     if (
       editorTitle === initialNoteData.current.title &&
-      editorContent === initialNoteData.current.content
+      editorContent === initialNoteData.current.content &&
+      JSON.stringify(editorTags) === JSON.stringify(initialNoteData.current.tags)
     ) {
       return
     }
 
-    if (!activeNoteId && !editorTitle.trim() && !editorContent.trim()) {
+    if (!activeNoteId && !editorTitle.trim() && !editorContent.trim() && editorTags.length === 0) {
       return
     }
 
@@ -81,13 +87,18 @@ export function SecondBrainPanel() {
         titleToSave,
         editorContent,
         selectedFolderId,
+        editorTags,
       )
 
       setIsSaving(false)
 
       if (data && !error) {
         setLastSaved(new Date())
-        initialNoteData.current = { title: data.title, content: data.content }
+        initialNoteData.current = {
+          title: data.title,
+          content: data.content,
+          tags: data.tags || [],
+        }
 
         if (!activeNoteId) {
           setActiveNoteId(data.id)
@@ -106,7 +117,7 @@ export function SecondBrainPanel() {
     }, 1500)
 
     return () => clearTimeout(handler)
-  }, [editorTitle, editorContent, activeNoteId, selectedFolderId, fetchData, toast])
+  }, [editorTitle, editorContent, editorTags, activeNoteId, selectedFolderId, fetchData, toast])
 
   // Backlinks Discovery Effect
   useEffect(() => {
@@ -128,7 +139,8 @@ export function SecondBrainPanel() {
     if (
       activeNoteId &&
       (editorTitle !== initialNoteData.current.title ||
-        editorContent !== initialNoteData.current.content)
+        editorContent !== initialNoteData.current.content ||
+        JSON.stringify(editorTags) !== JSON.stringify(initialNoteData.current.tags))
     ) {
       setIsSaving(true)
       const { data } = await studyService.saveNote(
@@ -136,6 +148,7 @@ export function SecondBrainPanel() {
         editorTitle.trim() || 'Nova Nota',
         editorContent,
         selectedFolderId,
+        editorTags,
       )
       if (data) {
         setNotes((prev) => prev.map((n) => (n.id === data.id ? data : n)))
@@ -143,10 +156,12 @@ export function SecondBrainPanel() {
       setIsSaving(false)
     }
 
-    initialNoteData.current = { title: note.title, content: note.content }
+    initialNoteData.current = { title: note.title, content: note.content, tags: note.tags || [] }
     setActiveNoteId(note.id)
     setEditorTitle(note.title)
     setEditorContent(note.content)
+    setEditorTags(note.tags || [])
+    setTagInput('')
     setLastSaved(null)
   }
 
@@ -155,7 +170,8 @@ export function SecondBrainPanel() {
     if (
       activeNoteId &&
       (editorTitle !== initialNoteData.current.title ||
-        editorContent !== initialNoteData.current.content)
+        editorContent !== initialNoteData.current.content ||
+        JSON.stringify(editorTags) !== JSON.stringify(initialNoteData.current.tags))
     ) {
       setIsSaving(true)
       const { data } = await studyService.saveNote(
@@ -163,6 +179,7 @@ export function SecondBrainPanel() {
         editorTitle.trim() || 'Nova Nota',
         editorContent,
         selectedFolderId,
+        editorTags,
       )
       if (data) {
         setNotes((prev) => prev.map((n) => (n.id === data.id ? data : n)))
@@ -170,15 +187,17 @@ export function SecondBrainPanel() {
       setIsSaving(false)
     }
 
-    initialNoteData.current = { title: '', content: '' }
+    initialNoteData.current = { title: '', content: '', tags: [] }
     setActiveNoteId(null)
     setEditorTitle('')
     setEditorContent('')
+    setEditorTags([])
+    setTagInput('')
     setLastSaved(null)
   }
 
   const handleCreateNoteFromLink = async (title: string): Promise<StudyNote | null> => {
-    const { data, error } = await studyService.saveNote(null, title, '', selectedFolderId)
+    const { data, error } = await studyService.saveNote(null, title, '', selectedFolderId, [])
     if (error) {
       toast({ title: 'Erro ao criar nota', description: error.message, variant: 'destructive' })
       return null
@@ -212,7 +231,7 @@ export function SecondBrainPanel() {
     const note = notes.find((n) => n.id === noteId)
 
     if (note && note.folder_id !== folderId) {
-      await studyService.saveNote(note.id, note.title, note.content, folderId)
+      await studyService.saveNote(note.id, note.title, note.content, folderId, note.tags || [])
       toast({ title: 'Nota movida com sucesso' })
       fetchData()
     }
@@ -345,6 +364,42 @@ export function SecondBrainPanel() {
                 ) : null}
               </div>
             </div>
+
+            <div className="flex flex-wrap items-center gap-2 mb-2">
+              {editorTags.map((tag) => (
+                <Badge
+                  key={tag}
+                  variant="secondary"
+                  className="px-2 py-0.5 text-xs font-medium gap-1 cursor-default"
+                >
+                  <Hash className="h-3 w-3" />
+                  {tag}
+                  <button
+                    onClick={() => setEditorTags((prev) => prev.filter((t) => t !== tag))}
+                    className="ml-1 hover:text-destructive transition-colors outline-none"
+                  >
+                    <X className="h-3 w-3" />
+                  </button>
+                </Badge>
+              ))}
+              <input
+                value={tagInput}
+                onChange={(e) => setTagInput(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ',') {
+                    e.preventDefault()
+                    const val = tagInput.trim().replace(/^#/, '')
+                    if (val && !editorTags.includes(val)) {
+                      setEditorTags((prev) => [...prev, val])
+                    }
+                    setTagInput('')
+                  }
+                }}
+                placeholder="Adicionar tag..."
+                className="bg-transparent border-none outline-none text-sm w-24 placeholder:text-muted-foreground"
+              />
+            </div>
+
             <RichTextEditor
               key={activeNoteId || 'new-note'}
               content={editorContent}

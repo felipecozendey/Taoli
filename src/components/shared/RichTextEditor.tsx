@@ -276,17 +276,17 @@ export function RichTextEditor({
     editorProps: {
       attributes: {
         class:
-          'prose prose-sm sm:prose-base dark:prose-invert focus:outline-none min-h-[500px] h-full max-w-none p-4',
+          'prose prose-sm sm:prose-base dark:prose-invert focus:outline-none w-full max-w-none p-4 min-h-[100px]',
       },
     },
   })
 
   return (
-    <div className={cn('flex flex-col border rounded-md bg-background', className)}>
+    <div className={cn('flex flex-col border rounded-md bg-background min-h-[150px]', className)}>
       <MenuBar editor={editor} />
       <EditorContent
         editor={editor}
-        className="cursor-text"
+        className="cursor-text flex-1 flex flex-col [&>div.ProseMirror]:flex-1"
         onClick={() => editor?.commands.focus()}
       />
     </div>

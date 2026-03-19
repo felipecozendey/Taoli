@@ -12,7 +12,6 @@ import {
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Textarea } from '@/components/ui/textarea'
 import {
   Select,
   SelectContent,
@@ -24,6 +23,7 @@ import { Badge } from '@/components/ui/badge'
 import { useToast } from '@/hooks/use-toast'
 import { studyService, type StudyDeck, type StudyFlashcard } from '@/services/study'
 import type { FlashcardsData } from '@/hooks/use-flashcards'
+import { RichTextEditor } from '@/components/shared/RichTextEditor'
 
 interface FlashcardsPanelProps {
   data: FlashcardsData
@@ -182,7 +182,7 @@ export function FlashcardsPanel({ data }: FlashcardsPanelProps) {
           </span>
         </div>
         <div className="flex-1 p-4 md:p-8 flex items-center justify-center">
-          <Card className="w-full max-w-lg min-h-[350px] p-6 flex flex-col justify-between shadow-md">
+          <Card className="w-full max-w-2xl min-h-[350px] p-6 flex flex-col justify-between shadow-md">
             <div className="flex-1 flex flex-col items-center justify-center text-center space-y-6">
               {card.card_type === 'multiple_choice' && (
                 <Badge variant="outline" className="mb-2">
@@ -194,12 +194,15 @@ export function FlashcardsPanel({ data }: FlashcardsPanelProps) {
                   Completar Lacuna
                 </Badge>
               )}
-              <div className="text-xl font-medium">{card.front_content}</div>
+
+              <div className="w-full prose prose-sm sm:prose-base dark:prose-invert">
+                <div dangerouslySetInnerHTML={{ __html: card.front_content }} />
+              </div>
 
               {showAnswer && (
                 <>
-                  <div className="w-full h-px bg-border" />
-                  <div className="text-lg text-muted-foreground">
+                  <div className="w-full h-px bg-border my-6" />
+                  <div className="w-full prose prose-sm sm:prose-base dark:prose-invert text-muted-foreground">
                     {card.card_type === 'multiple_choice' && (
                       <div className="space-y-2">
                         <p className="font-semibold text-foreground">{card.back_content}</p>
@@ -210,7 +213,9 @@ export function FlashcardsPanel({ data }: FlashcardsPanelProps) {
                         )}
                       </div>
                     )}
-                    {card.card_type !== 'multiple_choice' && card.back_content}
+                    {card.card_type !== 'multiple_choice' && (
+                      <div dangerouslySetInnerHTML={{ __html: card.back_content }} />
+                    )}
                   </div>
                 </>
               )}
@@ -296,13 +301,20 @@ export function FlashcardsPanel({ data }: FlashcardsPanelProps) {
                         </Badge>
                       )}
                     </div>
-                    <p className="text-sm line-clamp-3">{card.front_content}</p>
+                    <div
+                      className="prose prose-sm dark:prose-invert line-clamp-2"
+                      dangerouslySetInnerHTML={{ __html: card.front_content }}
+                    />
                   </div>
                   <div>
                     <p className="text-xs font-semibold text-muted-foreground mb-1">Verso</p>
-                    <p className="text-sm text-muted-foreground line-clamp-3">
-                      {card.card_type === 'cloze' ? 'Lacuna preenchida' : card.back_content}
-                    </p>
+                    <div
+                      className="prose prose-sm dark:prose-invert line-clamp-2 text-muted-foreground"
+                      dangerouslySetInnerHTML={{
+                        __html:
+                          card.card_type === 'cloze' ? 'Lacuna preenchida' : card.back_content,
+                      }}
+                    />
                   </div>
                 </div>
                 <Button
@@ -318,7 +330,7 @@ export function FlashcardsPanel({ data }: FlashcardsPanelProps) {
           )}
         </div>
         <Dialog open={isCardModalOpen} onOpenChange={handleOpenCardModalChange}>
-          <DialogContent className="max-h-[90vh] overflow-y-auto">
+          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>Criar Novo Cartão</DialogTitle>
             </DialogHeader>
@@ -350,16 +362,18 @@ export function FlashcardsPanel({ data }: FlashcardsPanelProps) {
                 <>
                   <div className="space-y-2">
                     <Label>Frente (Pergunta)</Label>
-                    <Textarea
-                      value={newCardFront}
-                      onChange={(e) => setNewCardFront(e.target.value)}
+                    <RichTextEditor
+                      content={newCardFront}
+                      onChange={setNewCardFront}
+                      className="min-h-[150px] border rounded-md"
                     />
                   </div>
                   <div className="space-y-2">
                     <Label>Verso (Resposta)</Label>
-                    <Textarea
-                      value={newCardBack}
-                      onChange={(e) => setNewCardBack(e.target.value)}
+                    <RichTextEditor
+                      content={newCardBack}
+                      onChange={setNewCardBack}
+                      className="min-h-[150px] border rounded-md"
                     />
                   </div>
                 </>
@@ -369,9 +383,10 @@ export function FlashcardsPanel({ data }: FlashcardsPanelProps) {
                 <>
                   <div className="space-y-2">
                     <Label>Pergunta</Label>
-                    <Textarea
-                      value={newCardFront}
-                      onChange={(e) => setNewCardFront(e.target.value)}
+                    <RichTextEditor
+                      content={newCardFront}
+                      onChange={setNewCardFront}
+                      className="min-h-[150px] border rounded-md"
                     />
                   </div>
                   <div className="space-y-2">
@@ -417,10 +432,10 @@ export function FlashcardsPanel({ data }: FlashcardsPanelProps) {
                 <>
                   <div className="space-y-2">
                     <Label>Texto com Lacuna</Label>
-                    <Textarea
-                      value={newCardFront}
-                      onChange={(e) => setNewCardFront(e.target.value)}
-                      placeholder="A capital de Portugal é {{Lisboa}}."
+                    <RichTextEditor
+                      content={newCardFront}
+                      onChange={setNewCardFront}
+                      className="min-h-[150px] border rounded-md"
                     />
                     <p className="text-[0.8rem] text-muted-foreground leading-snug">
                       Dica: Envolva a palavra em chaves duplas para criar a lacuna. Exemplo: A

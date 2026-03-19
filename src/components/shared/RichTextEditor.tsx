@@ -148,10 +148,11 @@ export function RichTextEditor({
       }),
       Mention.configure({
         HTMLAttributes: {
-          class: 'text-blue-500 underline cursor-pointer hover:text-blue-700',
+          class:
+            'text-primary bg-primary/10 hover:bg-primary/20 px-1.5 py-0.5 rounded-md no-underline font-medium cursor-pointer transition-colors',
         },
         renderLabel({ node }) {
-          return `[[${node.attrs.label ?? node.attrs.id}]]`
+          return `${node.attrs.label ?? node.attrs.id}`
         },
         suggestion: {
           char: '[[',

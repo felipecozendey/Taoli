@@ -1,20 +1,11 @@
 import { useState, useEffect } from 'react'
 import { DashboardHeader } from '@/components/shared/DashboardHeader'
 import { PageContent } from '@/components/shared/PageContent'
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Progress } from '@/components/ui/progress'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Skeleton } from '@/components/ui/skeleton'
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
 import {
   Droplets,
   Flame,
@@ -34,21 +25,17 @@ import {
   addFoodLog,
   deleteFoodLog,
   addWaterLog,
-  searchFoodItems,
   type FullDietDetails,
   type MealDetails,
 } from '@/services/nutrition'
 import { cn } from '@/lib/utils'
+import { ExtraMealDialog } from '@/components/nutrition/ExtraMealDialog'
 
 export default function ClientNutrition() {
   const [isLoading, setIsLoading] = useState(true)
   const [diet, setDiet] = useState<FullDietDetails | null>(null)
   const [progress, setProgress] = useState<any>(null)
   const [date, setDate] = useState(() => new Date().toISOString().split('T')[0])
-  const [isLogDialogOpen, setIsLogDialogOpen] = useState(false)
-  const [logForm, setLogForm] = useState({ name: '', cal: 0, pro: 0, car: 0, fat: 0 })
-  const [searchQuery, setSearchQuery] = useState('')
-  const [searchResults, setSearchResults] = useState<any[]>([])
 
   const { toast } = useToast()
 
@@ -88,18 +75,6 @@ export default function ClientNutrition() {
     fetchData()
   }, [date])
 
-  useEffect(() => {
-    const debounce = setTimeout(async () => {
-      if (searchQuery.length > 2) {
-        const { data } = await searchFoodItems(searchQuery)
-        setSearchResults(data || [])
-      } else {
-        setSearchResults([])
-      }
-    }, 300)
-    return () => clearTimeout(debounce)
-  }, [searchQuery])
-
   const changeDate = (days: number) => {
     const d = new Date(date)
     d.setDate(d.getDate() + days)
@@ -113,15 +88,6 @@ export default function ClientNutrition() {
     if (!user) return
     await addWaterLog(user.id, date, 250)
     toast({ title: '💧 250ml de água registrados!' })
-    fetchData()
-  }
-
-  const handleAddLog = async (data: any) => {
-    const {
-      data: { user },
-    } = await supabase.auth.getUser()
-    if (!user) return
-    await addFoodLog(user.id, date, data)
     fetchData()
   }
 
@@ -148,7 +114,12 @@ export default function ClientNutrition() {
       fat += (i.food_items.fats_g || 0) * r
     })
 
-    await handleAddLog({
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
+    if (!user) return
+
+    await addFoodLog(user.id, date, {
       food_name: m.name,
       calories: Math.round(cal),
       protein: Math.round(pro),
@@ -156,36 +127,7 @@ export default function ClientNutrition() {
       fat: Math.round(fat),
     })
     toast({ title: `✔️ Refeição "${m.name}" registrada com sucesso!` })
-  }
-
-  const submitManualLog = () => {
-    if (!logForm.name) {
-      toast({ title: 'Preencha o nome do alimento', variant: 'destructive' })
-      return
-    }
-    handleAddLog({
-      food_name: logForm.name,
-      calories: logForm.cal,
-      protein: logForm.pro,
-      carbs: logForm.car,
-      fat: logForm.fat,
-    })
-    toast({ title: 'Alimento avulso registrado!' })
-    setIsLogDialogOpen(false)
-    setLogForm({ name: '', cal: 0, pro: 0, car: 0, fat: 0 })
-    setSearchQuery('')
-  }
-
-  const handleSelectFood = (food: any) => {
-    setLogForm({
-      name: food.name,
-      cal: Math.round(Number(food.energy_kcal) || 0),
-      pro: Math.round(Number(food.protein_g) || 0),
-      car: Math.round(Number(food.carbs_g) || 0),
-      fat: Math.round(Number(food.fats_g) || 0),
-    })
-    setSearchQuery('')
-    setSearchResults([])
+    fetchData()
   }
 
   // Circular Progress Calculations
@@ -393,99 +335,8 @@ export default function ClientNutrition() {
                 </CardContent>
               </Card>
 
-              {/* Custom Food Log Action */}
-              <Dialog open={isLogDialogOpen} onOpenChange={setIsLogDialogOpen}>
-                <DialogTrigger asChild>
-                  <Card className="border-dashed border-2 bg-transparent hover:bg-muted/50 transition-colors cursor-pointer shadow-sm">
-                    <CardContent className="p-5 flex items-center justify-center gap-3 h-full">
-                      <div className="p-2 bg-muted rounded-full">
-                        <Utensils className="h-5 w-5 text-muted-foreground" />
-                      </div>
-                      <span className="font-medium text-muted-foreground">
-                        Adicionar Alimento Avulso
-                      </span>
-                    </CardContent>
-                  </Card>
-                </DialogTrigger>
-                <DialogContent className="sm:max-w-[425px]">
-                  <DialogHeader>
-                    <DialogTitle>Registro Manual</DialogTitle>
-                  </DialogHeader>
-                  <div className="grid gap-4 py-4">
-                    <div className="grid gap-2">
-                      <Label htmlFor="name">Alimento / Refeição</Label>
-                      <Input
-                        id="name"
-                        autoComplete="off"
-                        placeholder="Ex: Maçã ou pesquise..."
-                        value={logForm.name}
-                        onChange={(e) => {
-                          setLogForm({ ...logForm, name: e.target.value })
-                          setSearchQuery(e.target.value)
-                        }}
-                      />
-                      {searchResults.length > 0 && (
-                        <div className="mt-1 bg-background border rounded-md shadow-sm max-h-40 overflow-y-auto">
-                          {searchResults.map((food) => (
-                            <button
-                              key={food.id}
-                              className="w-full text-left px-3 py-2 text-sm hover:bg-muted focus:bg-muted focus:outline-none transition-colors border-b last:border-b-0"
-                              onClick={() => handleSelectFood(food)}
-                            >
-                              <p className="font-medium text-foreground">{food.name}</p>
-                              <p className="text-xs text-muted-foreground mt-0.5">
-                                {food.energy_kcal} kcal • {food.protein_g}g P • {food.carbs_g}g C •{' '}
-                                {food.fats_g}g G
-                              </p>
-                            </button>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="grid gap-2">
-                        <Label htmlFor="cal">Calorias (kcal)</Label>
-                        <Input
-                          type="number"
-                          id="cal"
-                          value={logForm.cal || ''}
-                          onChange={(e) => setLogForm({ ...logForm, cal: Number(e.target.value) })}
-                        />
-                      </div>
-                      <div className="grid gap-2">
-                        <Label htmlFor="pro">Proteínas (g)</Label>
-                        <Input
-                          type="number"
-                          id="pro"
-                          value={logForm.pro || ''}
-                          onChange={(e) => setLogForm({ ...logForm, pro: Number(e.target.value) })}
-                        />
-                      </div>
-                      <div className="grid gap-2">
-                        <Label htmlFor="car">Carbos (g)</Label>
-                        <Input
-                          type="number"
-                          id="car"
-                          value={logForm.car || ''}
-                          onChange={(e) => setLogForm({ ...logForm, car: Number(e.target.value) })}
-                        />
-                      </div>
-                      <div className="grid gap-2">
-                        <Label htmlFor="fat">Gorduras (g)</Label>
-                        <Input
-                          type="number"
-                          id="fat"
-                          value={logForm.fat || ''}
-                          onChange={(e) => setLogForm({ ...logForm, fat: Number(e.target.value) })}
-                        />
-                      </div>
-                    </div>
-                    <Button onClick={submitManualLog} className="mt-4 w-full">
-                      Salvar Registro
-                    </Button>
-                  </div>
-                </DialogContent>
-              </Dialog>
+              {/* Extra Meal Action */}
+              <ExtraMealDialog date={date} onSuccess={fetchData} />
             </div>
 
             {/* Daily Logs List */}

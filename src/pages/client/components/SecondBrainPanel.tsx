@@ -3,38 +3,61 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Skeleton } from '@/components/ui/skeleton'
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from '@/components/ui/dialog'
 import { useToast } from '@/hooks/use-toast'
-import { BrainCircuit, Network, FileText, Search, Plus, Save, Loader2 } from 'lucide-react'
-import { studyService, type StudyNote } from '@/services/study'
+import {
+  BrainCircuit,
+  File,
+  Plus,
+  Save,
+  Loader2,
+  Folder,
+  FolderPlus,
+  FolderOpen,
+} from 'lucide-react'
+import { studyService, type StudyNote, type StudyFolder } from '@/services/study'
 import { cn } from '@/lib/utils'
 
 export function SecondBrainPanel() {
   const [notes, setNotes] = useState<StudyNote[]>([])
+  const [folders, setFolders] = useState<StudyFolder[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [isSaving, setIsSaving] = useState(false)
   const [activeNoteId, setActiveNoteId] = useState<string | null>(null)
+  const [selectedFolderId, setSelectedFolderId] = useState<string | null>(null)
+
   const [editorTitle, setEditorTitle] = useState('')
   const [editorContent, setEditorContent] = useState('')
+
+  const [isFolderModalOpen, setIsFolderModalOpen] = useState(false)
+  const [newFolderName, setNewFolderName] = useState('')
+
   const { toast } = useToast()
 
-  const fetchNotes = async () => {
+  const fetchData = async () => {
     setIsLoading(true)
-    const { data, error } = await studyService.getNotes()
-    if (error) {
-      toast({
-        title: 'Erro ao carregar notas',
-        description: error.message,
-        variant: 'destructive',
-      })
-    } else if (data) {
-      setNotes(data)
-    }
+    const [notesRes, foldersRes] = await Promise.all([
+      studyService.getNotes(),
+      studyService.getFolders(),
+    ])
+    if (notesRes.data) setNotes(notesRes.data)
+    if (foldersRes.data) setFolders(foldersRes.data)
     setIsLoading(false)
   }
 
   useEffect(() => {
-    fetchNotes()
+    fetchData()
   }, [])
+
+  const filteredNotes = selectedFolderId
+    ? notes.filter((n) => n.folder_id === selectedFolderId)
+    : notes
 
   const handleSelectNote = (note: StudyNote) => {
     setActiveNoteId(note.id)
@@ -50,31 +73,55 @@ export function SecondBrainPanel() {
 
   const handleSaveNote = async () => {
     if (!editorTitle.trim()) {
-      toast({
+      return toast({
         title: 'Título obrigatório',
-        description: 'Por favor, insira um título para a nota.',
+        description: 'Insira um título para a nota.',
         variant: 'destructive',
       })
-      return
     }
 
     setIsSaving(true)
-    const { data, error } = await studyService.saveNote(activeNoteId, editorTitle, editorContent)
+    const { data, error } = await studyService.saveNote(
+      activeNoteId,
+      editorTitle,
+      editorContent,
+      selectedFolderId,
+    )
     setIsSaving(false)
 
     if (error) {
-      toast({
-        title: 'Erro ao salvar nota',
-        description: error.message,
-        variant: 'destructive',
-      })
+      toast({ title: 'Erro ao salvar nota', description: error.message, variant: 'destructive' })
     } else if (data) {
-      toast({
-        title: 'Nota salva',
-        description: 'Sua nota foi salva com sucesso.',
-      })
+      toast({ title: 'Nota salva', description: 'Sua nota foi salva com sucesso.' })
       setActiveNoteId(data.id)
-      fetchNotes()
+      fetchData()
+    }
+  }
+
+  const handleCreateFolder = async () => {
+    if (!newFolderName.trim()) return
+
+    const { data, error } = await studyService.createFolder(newFolderName)
+
+    if (error) {
+      toast({ title: 'Erro ao criar pasta', description: error.message, variant: 'destructive' })
+    } else if (data) {
+      toast({ title: 'Pasta criada', description: 'Sua nova pasta foi criada.' })
+      setIsFolderModalOpen(false)
+      setNewFolderName('')
+      fetchData()
+    }
+  }
+
+  const handleDrop = async (e: React.DragEvent, folderId: string | null) => {
+    e.preventDefault()
+    const noteId = e.dataTransfer.getData('noteId')
+    const note = notes.find((n) => n.id === noteId)
+
+    if (note && note.folder_id !== folderId) {
+      await studyService.saveNote(note.id, note.title, note.content, folderId)
+      toast({ title: 'Nota movida com sucesso' })
+      fetchData()
     }
   }
 
@@ -85,29 +132,62 @@ export function SecondBrainPanel() {
           <BrainCircuit className="h-5 w-5 text-primary" />
           <span className="font-semibold text-sm">Segundo Cérebro</span>
         </div>
-        <Button
-          variant="outline"
-          size="sm"
-          className="h-8 gap-2 bg-background shadow-sm hover:bg-muted/50"
-        >
-          <Network className="h-4 w-4 text-muted-foreground" />
-          <span className="hidden xl:inline">Ver Grafo de Conhecimento</span>
-          <span className="xl:hidden">Grafo</span>
-        </Button>
       </div>
 
       <div className="flex flex-1 min-h-0 overflow-hidden">
-        {/* Sidebar - Notes List */}
-        <div className="w-16 sm:w-56 lg:w-64 border-r bg-muted/5 flex flex-col shrink-0">
-          <div className="p-3 border-b flex flex-col gap-2">
-            <div className="relative hidden sm:block">
-              <Search className="absolute left-2 top-2 h-4 w-4 text-muted-foreground" />
-              <Input className="h-8 pl-8 text-xs bg-background" placeholder="Buscar notas..." />
-            </div>
-            <div className="sm:hidden flex justify-center pb-2 border-b mb-1">
-              <Search className="h-5 w-5 text-muted-foreground" />
-            </div>
+        {/* Folders Sidebar */}
+        <div className="w-16 md:w-56 lg:w-64 border-r bg-muted/10 flex flex-col shrink-0">
+          <div className="p-3 border-b flex flex-col md:flex-row items-center justify-between gap-2">
+            <span className="hidden md:inline text-xs font-semibold uppercase text-muted-foreground">
+              Meu Cérebro
+            </span>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-6 w-6 shrink-0"
+              onClick={() => setIsFolderModalOpen(true)}
+            >
+              <FolderPlus className="h-4 w-4 text-primary" />
+            </Button>
+          </div>
+          <div className="flex-1 overflow-y-auto p-2 space-y-1">
+            <button
+              onClick={() => setSelectedFolderId(null)}
+              onDragOver={(e) => e.preventDefault()}
+              onDrop={(e) => handleDrop(e, null)}
+              className={cn(
+                'w-full flex items-center justify-center md:justify-start gap-2 px-2 py-2 md:py-1.5 text-sm rounded-md transition-colors',
+                selectedFolderId === null
+                  ? 'bg-primary/10 text-primary font-medium'
+                  : 'hover:bg-muted text-muted-foreground',
+              )}
+            >
+              <FolderOpen className="h-4 w-4 shrink-0" />
+              <span className="hidden md:inline truncate">Todas as Notas</span>
+            </button>
+            {folders.map((folder) => (
+              <button
+                key={folder.id}
+                onClick={() => setSelectedFolderId(folder.id)}
+                onDragOver={(e) => e.preventDefault()}
+                onDrop={(e) => handleDrop(e, folder.id)}
+                className={cn(
+                  'w-full flex items-center justify-center md:justify-start gap-2 px-2 py-2 md:py-1.5 text-sm rounded-md transition-colors',
+                  selectedFolderId === folder.id
+                    ? 'bg-primary/10 text-primary font-medium'
+                    : 'hover:bg-muted text-muted-foreground',
+                )}
+              >
+                <Folder className="h-4 w-4 shrink-0" />
+                <span className="hidden md:inline truncate">{folder.name}</span>
+              </button>
+            ))}
+          </div>
+        </div>
 
+        {/* Notes List Sidebar */}
+        <div className="w-16 md:w-56 lg:w-64 border-r bg-muted/5 flex flex-col shrink-0">
+          <div className="p-3 border-b flex flex-col gap-2">
             <Button
               variant="default"
               size="sm"
@@ -115,48 +195,41 @@ export function SecondBrainPanel() {
               onClick={handleNewNote}
             >
               <Plus className="h-4 w-4" />
-              <span className="hidden sm:inline">Nova Nota</span>
+              <span className="hidden md:inline">Nova Nota</span>
             </Button>
           </div>
-
           <div className="flex-1 overflow-y-auto p-2 space-y-1">
             {isLoading ? (
-              <>
-                <Skeleton className="h-9 w-full rounded-md" />
-                <Skeleton className="h-9 w-full rounded-md" />
-                <Skeleton className="h-9 w-full rounded-md" />
-              </>
-            ) : notes.length === 0 ? (
-              <p className="text-xs text-center text-muted-foreground py-4 hidden sm:block">
-                Nenhuma nota.
-              </p>
+              <Skeleton className="h-9 w-full rounded-md" />
             ) : (
-              notes.map((note) => (
+              filteredNotes.map((note) => (
                 <button
                   key={note.id}
+                  draggable
+                  onDragStart={(e) => e.dataTransfer.setData('noteId', note.id)}
                   onClick={() => handleSelectNote(note)}
                   className={cn(
-                    'w-full flex items-center justify-center sm:justify-start gap-3 px-2 py-2 text-sm rounded-md transition-colors',
+                    'w-full flex items-center justify-center md:justify-start gap-3 px-2 py-2 text-sm rounded-md transition-colors cursor-grab active:cursor-grabbing',
                     activeNoteId === note.id
                       ? 'bg-primary/10 text-primary font-medium'
-                      : 'hover:bg-muted text-muted-foreground group',
+                      : 'hover:bg-muted text-muted-foreground',
                   )}
                 >
-                  <FileText
-                    className={cn(
-                      'h-4 w-4 shrink-0 transition-colors',
-                      activeNoteId !== note.id && 'group-hover:text-foreground',
-                    )}
-                  />
-                  <span className="hidden sm:inline truncate text-left">{note.title}</span>
+                  <File className="h-4 w-4 shrink-0" />
+                  <span className="hidden md:inline truncate text-left">{note.title}</span>
                 </button>
               ))
+            )}
+            {!isLoading && filteredNotes.length === 0 && (
+              <p className="text-xs text-center text-muted-foreground py-4 hidden md:block">
+                Nenhuma nota.
+              </p>
             )}
           </div>
         </div>
 
         {/* Editor */}
-        <div className="flex-1 bg-background overflow-y-auto relative flex flex-col">
+        <div className="flex-1 bg-background overflow-y-auto flex flex-col min-w-0">
           <div className="flex-1 p-4 lg:p-8 flex flex-col max-w-4xl mx-auto w-full gap-4">
             <div className="flex items-center justify-between gap-4">
               <Input
@@ -176,10 +249,9 @@ export function SecondBrainPanel() {
                 ) : (
                   <Save className="h-4 w-4" />
                 )}
-                <span className="hidden sm:inline">Guardar Nota</span>
+                <span className="hidden md:inline">Guardar</span>
               </Button>
             </div>
-
             <Textarea
               value={editorContent}
               onChange={(e) => setEditorContent(e.target.value)}
@@ -189,6 +261,24 @@ export function SecondBrainPanel() {
           </div>
         </div>
       </div>
+
+      <Dialog open={isFolderModalOpen} onOpenChange={setIsFolderModalOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Criar Nova Pasta</DialogTitle>
+          </DialogHeader>
+          <Input
+            value={newFolderName}
+            onChange={(e) => setNewFolderName(e.target.value)}
+            placeholder="Nome da pasta..."
+            autoFocus
+            onKeyDown={(e) => e.key === 'Enter' && handleCreateFolder()}
+          />
+          <DialogFooter>
+            <Button onClick={handleCreateFolder}>Salvar</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }

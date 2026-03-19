@@ -98,6 +98,20 @@ export function SecondBrainPanel() {
     }
   }
 
+  const handleCreateNoteFromLink = async (title: string): Promise<StudyNote | null> => {
+    const { data, error } = await studyService.saveNote(null, title, '', selectedFolderId)
+    if (error) {
+      toast({ title: 'Erro ao criar nota', description: error.message, variant: 'destructive' })
+      return null
+    }
+    if (data) {
+      toast({ title: 'Nota criada', description: `Nota "${title}" criada com sucesso.` })
+      fetchData()
+      return data
+    }
+    return null
+  }
+
   const handleCreateFolder = async () => {
     if (!newFolderName.trim()) return
 
@@ -255,6 +269,8 @@ export function SecondBrainPanel() {
             <RichTextEditor
               content={editorContent}
               onChange={setEditorContent}
+              existingNotes={notes}
+              onCreateNote={handleCreateNoteFromLink}
               className="flex-1 shadow-sm"
             />
           </div>

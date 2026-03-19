@@ -1,11 +1,13 @@
-import { useEffect } from 'react'
-import { useEditor, EditorContent, type Editor } from '@tiptap/react'
+import { useEffect, useRef } from 'react'
+import { useEditor, EditorContent, type Editor, ReactRenderer } from '@tiptap/react'
 import { StarterKit } from '@tiptap/starter-kit'
 import { Underline } from '@tiptap/extension-underline'
 import { TextStyle } from '@tiptap/extension-text-style'
 import { Color } from '@tiptap/extension-color'
 import { Image } from '@tiptap/extension-image'
 import { Youtube } from '@tiptap/extension-youtube'
+import Mention from '@tiptap/extension-mention'
+import tippy from 'tippy.js'
 import {
   Bold,
   Underline as UnderlineIcon,
@@ -15,11 +17,15 @@ import {
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
+import { MentionList } from './MentionList'
+import type { StudyNote } from '@/services/study'
 
 interface RichTextEditorProps {
   content: string
   onChange: (content: string) => void
   className?: string
+  existingNotes?: StudyNote[]
+  onCreateNote?: (title: string) => Promise<StudyNote | null>
 }
 
 const MenuBar = ({ editor }: { editor: Editor | null }) => {
@@ -103,7 +109,24 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
   )
 }
 
-export function RichTextEditor({ content, onChange, className }: RichTextEditorProps) {
+export function RichTextEditor({
+  content,
+  onChange,
+  className,
+  existingNotes = [],
+  onCreateNote,
+}: RichTextEditorProps) {
+  const notesRef = useRef(existingNotes)
+  const createNoteRef = useRef(onCreateNote)
+
+  useEffect(() => {
+    notesRef.current = existingNotes
+  }, [existingNotes])
+
+  useEffect(() => {
+    createNoteRef.current = onCreateNote
+  }, [onCreateNote])
+
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -121,6 +144,108 @@ export function RichTextEditor({ content, onChange, className }: RichTextEditorP
         inline: false,
         HTMLAttributes: {
           class: 'w-full aspect-video rounded-md',
+        },
+      }),
+      Mention.configure({
+        HTMLAttributes: {
+          class: 'text-blue-500 underline cursor-pointer hover:text-blue-700',
+        },
+        renderLabel({ node }) {
+          return `[[${node.attrs.label ?? node.attrs.id}]]`
+        },
+        suggestion: {
+          char: '[[',
+          allowSpaces: true,
+          items: ({ query }) => {
+            const notes = notesRef.current || []
+            const filtered = notes
+              .filter((n) => n.title.toLowerCase().includes(query.toLowerCase()))
+              .sort((a, b) => a.title.localeCompare(b.title))
+              .map((n) => ({ id: n.id, title: n.title }))
+
+            const exactMatch = filtered.find((n) => n.title.toLowerCase() === query.toLowerCase())
+
+            if (!exactMatch && query.trim().length > 0) {
+              filtered.push({
+                id: 'new',
+                title: `✨ Criar nova nota: ${query}`,
+                isNew: true,
+                query: query,
+              } as any)
+            }
+            return filtered
+          },
+          render: () => {
+            let component: ReactRenderer
+            let popup: any
+
+            return {
+              onStart: (props) => {
+                component = new ReactRenderer(MentionList, {
+                  props,
+                  editor: props.editor,
+                })
+
+                if (!props.clientRect) return
+
+                popup = tippy('body', {
+                  getReferenceClientRect: props.clientRect,
+                  appendTo: () => document.body,
+                  content: component.element,
+                  showOnCreate: true,
+                  interactive: true,
+                  trigger: 'manual',
+                  placement: 'bottom-start',
+                })
+              },
+              onUpdate(props) {
+                component.updateProps(props)
+                if (!props.clientRect) return
+                popup[0].setProps({
+                  getReferenceClientRect: props.clientRect,
+                })
+              },
+              onKeyDown(props) {
+                if (props.event.key === 'Escape') {
+                  popup[0].hide()
+                  return true
+                }
+                return component.ref?.onKeyDown(props)
+              },
+              onExit() {
+                if (popup?.[0]) popup[0].destroy()
+                component.destroy()
+              },
+            }
+          },
+          command: ({ editor, range, props }) => {
+            if (props.isNew && createNoteRef.current) {
+              editor.chain().focus().deleteRange(range).run()
+              createNoteRef.current(props.query).then((newNote) => {
+                if (newNote) {
+                  editor
+                    .chain()
+                    .focus()
+                    .insertContent({
+                      type: 'mention',
+                      attrs: { id: newNote.id, label: newNote.title },
+                    })
+                    .insertContent(' ')
+                    .run()
+                }
+              })
+            } else {
+              editor
+                .chain()
+                .focus()
+                .insertContentAt(range, {
+                  type: 'mention',
+                  attrs: { id: props.id, label: props.title },
+                })
+                .insertContent(' ')
+                .run()
+            }
+          },
         },
       }),
     ],

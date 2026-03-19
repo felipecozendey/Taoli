@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -29,18 +29,22 @@ export function SecondBrainPanel() {
   const [folders, setFolders] = useState<StudyFolder[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [isSaving, setIsSaving] = useState(false)
+  const [lastSaved, setLastSaved] = useState<Date | null>(null)
   const [activeNoteId, setActiveNoteId] = useState<string | null>(null)
   const [selectedFolderId, setSelectedFolderId] = useState<string | null>(null)
 
   const [editorTitle, setEditorTitle] = useState('')
   const [editorContent, setEditorContent] = useState('')
+  const initialNoteData = useRef({ title: '', content: '' })
+
+  const [backlinks, setBacklinks] = useState<{ id: string; title: string }[]>([])
 
   const [isFolderModalOpen, setIsFolderModalOpen] = useState(false)
   const [newFolderName, setNewFolderName] = useState('')
 
   const { toast } = useToast()
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     setIsLoading(true)
     const [notesRes, foldersRes] = await Promise.all([
       studyService.getNotes(),
@@ -49,53 +53,90 @@ export function SecondBrainPanel() {
     if (notesRes.data) setNotes(notesRes.data)
     if (foldersRes.data) setFolders(foldersRes.data)
     setIsLoading(false)
-  }
+  }, [])
 
   useEffect(() => {
     fetchData()
-  }, [])
+  }, [fetchData])
+
+  // Debounced Auto-save Engine
+  useEffect(() => {
+    if (
+      editorTitle === initialNoteData.current.title &&
+      editorContent === initialNoteData.current.content
+    ) {
+      return
+    }
+
+    if (!activeNoteId && !editorTitle.trim() && !editorContent.trim()) {
+      return
+    }
+
+    const handler = setTimeout(async () => {
+      setIsSaving(true)
+      const titleToSave = editorTitle.trim() || 'Nova Nota'
+
+      const { data, error } = await studyService.saveNote(
+        activeNoteId,
+        titleToSave,
+        editorContent,
+        selectedFolderId,
+      )
+
+      setIsSaving(false)
+
+      if (data && !error) {
+        setLastSaved(new Date())
+        initialNoteData.current = { title: data.title, content: data.content }
+
+        if (!activeNoteId) {
+          setActiveNoteId(data.id)
+          if (!editorTitle.trim()) setEditorTitle(data.title)
+          fetchData()
+        } else {
+          setNotes((prev) => prev.map((n) => (n.id === data.id ? data : n)))
+        }
+      } else if (error) {
+        toast({
+          title: 'Erro no salvamento automático',
+          description: error.message,
+          variant: 'destructive',
+        })
+      }
+    }, 1500)
+
+    return () => clearTimeout(handler)
+  }, [editorTitle, editorContent, activeNoteId, selectedFolderId, fetchData, toast])
+
+  // Backlinks Discovery Effect
+  useEffect(() => {
+    if (activeNoteId) {
+      studyService.getBacklinks(activeNoteId).then((res) => {
+        if (res.data) setBacklinks(res.data)
+      })
+    } else {
+      setBacklinks([])
+    }
+  }, [activeNoteId])
 
   const filteredNotes = selectedFolderId
     ? notes.filter((n) => n.folder_id === selectedFolderId)
     : notes
 
   const handleSelectNote = (note: StudyNote) => {
+    initialNoteData.current = { title: note.title, content: note.content }
     setActiveNoteId(note.id)
     setEditorTitle(note.title)
     setEditorContent(note.content)
+    setLastSaved(null)
   }
 
   const handleNewNote = () => {
+    initialNoteData.current = { title: '', content: '' }
     setActiveNoteId(null)
     setEditorTitle('')
     setEditorContent('')
-  }
-
-  const handleSaveNote = async () => {
-    if (!editorTitle.trim()) {
-      return toast({
-        title: 'Título obrigatório',
-        description: 'Insira um título para a nota.',
-        variant: 'destructive',
-      })
-    }
-
-    setIsSaving(true)
-    const { data, error } = await studyService.saveNote(
-      activeNoteId,
-      editorTitle,
-      editorContent,
-      selectedFolderId,
-    )
-    setIsSaving(false)
-
-    if (error) {
-      toast({ title: 'Erro ao salvar nota', description: error.message, variant: 'destructive' })
-    } else if (data) {
-      toast({ title: 'Nota salva', description: 'Sua nota foi salva com sucesso.' })
-      setActiveNoteId(data.id)
-      fetchData()
-    }
+    setLastSaved(null)
   }
 
   const handleCreateNoteFromLink = async (title: string): Promise<StudyNote | null> => {
@@ -242,37 +283,64 @@ export function SecondBrainPanel() {
           </div>
         </div>
 
-        {/* Editor */}
+        {/* Editor Center Column */}
         <div className="flex-1 bg-background overflow-y-auto flex flex-col min-w-0">
-          <div className="flex-1 p-4 lg:p-8 flex flex-col max-w-4xl mx-auto w-full gap-4">
-            <div className="flex items-center justify-between gap-4 shrink-0">
+          <div className="flex-1 p-4 lg:p-8 flex flex-col max-w-3xl mx-auto w-full gap-4">
+            <div className="flex items-center justify-between gap-4 shrink-0 border-b pb-4">
               <Input
                 value={editorTitle}
                 onChange={(e) => setEditorTitle(e.target.value)}
                 placeholder="Título da nota..."
                 className="text-2xl lg:text-3xl font-bold border-none px-0 focus-visible:ring-0 h-auto bg-transparent"
               />
-              <Button
-                onClick={handleSaveNote}
-                disabled={isSaving}
-                size="sm"
-                className="gap-2 shrink-0"
-              >
+              <div className="flex items-center justify-end shrink-0 min-w-32">
                 {isSaving ? (
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                ) : (
-                  <Save className="h-4 w-4" />
-                )}
-                <span className="hidden md:inline">Guardar</span>
-              </Button>
+                  <span className="text-xs text-muted-foreground animate-pulse flex items-center gap-1.5">
+                    <Loader2 className="h-3 w-3 animate-spin" />A guardar...
+                  </span>
+                ) : lastSaved ? (
+                  <span className="text-xs text-muted-foreground flex items-center gap-1.5">
+                    <Save className="h-3 w-3" />
+                    Guardado às{' '}
+                    {lastSaved.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                  </span>
+                ) : null}
+              </div>
             </div>
             <RichTextEditor
               content={editorContent}
               onChange={setEditorContent}
               existingNotes={notes}
               onCreateNote={handleCreateNoteFromLink}
-              className="flex-1 shadow-sm"
+              className="flex-1 shadow-sm border-none bg-transparent"
             />
+          </div>
+        </div>
+
+        {/* Right Sidebar (Backlinks Knowledge Graph) */}
+        <div className="hidden lg:flex w-64 border-l bg-muted/10 p-4 flex-col shrink-0">
+          <div className="flex items-center gap-2 mb-4 pb-2 border-b">
+            <span className="font-semibold text-sm">🔗 Referências</span>
+          </div>
+          <div className="flex-1 overflow-y-auto space-y-2">
+            {!activeNoteId ? (
+              <p className="text-sm text-muted-foreground">Salve a nota para ver referências.</p>
+            ) : backlinks.length > 0 ? (
+              backlinks.map((link) => (
+                <button
+                  key={link.id}
+                  onClick={() => {
+                    const targetNote = notes.find((n) => n.id === link.id)
+                    if (targetNote) handleSelectNote(targetNote)
+                  }}
+                  className="w-full text-left px-3 py-2 text-sm rounded-md hover:bg-muted transition-colors truncate text-primary"
+                >
+                  {link.title}
+                </button>
+              ))
+            ) : (
+              <p className="text-sm text-muted-foreground">Nenhuma nota referencia este tópico.</p>
+            )}
           </div>
         </div>
       </div>

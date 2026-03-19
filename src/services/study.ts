@@ -171,6 +171,28 @@ export const studyService = {
     }
   },
 
+  async getBacklinks(noteId: string) {
+    try {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
+      if (!user) return { data: [], error: new Error('Not authenticated') }
+
+      const { data, error } = await supabase
+        .from('study_notes')
+        .select('id, title')
+        .eq('user_id', user.id)
+        .neq('id', noteId)
+        .ilike('content', `%${noteId}%`)
+
+      if (error) throw error
+      return { data, error: null }
+    } catch (error) {
+      console.error('Error fetching backlinks:', error)
+      return { data: [], error }
+    }
+  },
+
   async getFolders() {
     try {
       const {

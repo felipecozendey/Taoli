@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from 'react'
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -35,6 +35,7 @@ export function SecondBrainPanel() {
   const [lastSaved, setLastSaved] = useState<Date | null>(null)
   const [activeNoteId, setActiveNoteId] = useState<string | null>(null)
   const [selectedFolderId, setSelectedFolderId] = useState<string | null>(null)
+  const [selectedTag, setSelectedTag] = useState<string | null>(null)
 
   const [editorTitle, setEditorTitle] = useState('')
   const [editorContent, setEditorContent] = useState('')
@@ -130,9 +131,21 @@ export function SecondBrainPanel() {
     }
   }, [activeNoteId])
 
-  const filteredNotes = selectedFolderId
-    ? notes.filter((n) => n.folder_id === selectedFolderId)
-    : notes
+  const allTags = useMemo(() => {
+    const tagsSet = new Set<string>()
+    notes.forEach((note) => {
+      if (note.tags) {
+        note.tags.forEach((tag) => tagsSet.add(tag))
+      }
+    })
+    return Array.from(tagsSet).sort((a, b) => a.localeCompare(b))
+  }, [notes])
+
+  const filteredNotes = notes.filter((n) => {
+    const matchFolder = selectedFolderId ? n.folder_id === selectedFolderId : true
+    const matchTag = selectedTag ? n.tags?.includes(selectedTag) : true
+    return matchFolder && matchTag
+  })
 
   const handleSelectNote = async (note: StudyNote) => {
     // Pre-selection Save (Data Loss Prevention)
@@ -247,7 +260,7 @@ export function SecondBrainPanel() {
       </div>
 
       <div className="flex flex-1 min-h-0 overflow-hidden">
-        {/* Folders Sidebar */}
+        {/* Folders & Tags Sidebar */}
         <div className="w-16 md:w-56 lg:w-64 border-r bg-muted/10 flex flex-col shrink-0">
           <div className="p-3 border-b flex flex-col md:flex-row items-center justify-between gap-2">
             <span className="hidden md:inline text-xs font-semibold uppercase text-muted-foreground">
@@ -262,38 +275,68 @@ export function SecondBrainPanel() {
               <FolderPlus className="h-4 w-4 text-primary" />
             </Button>
           </div>
-          <div className="flex-1 overflow-y-auto p-2 space-y-1">
-            <button
-              onClick={() => setSelectedFolderId(null)}
-              onDragOver={(e) => e.preventDefault()}
-              onDrop={(e) => handleDrop(e, null)}
-              className={cn(
-                'w-full flex items-center justify-center md:justify-start gap-2 px-2 py-2 md:py-1.5 text-sm rounded-md transition-colors',
-                selectedFolderId === null
-                  ? 'bg-primary/10 text-primary font-medium'
-                  : 'hover:bg-muted text-muted-foreground',
-              )}
-            >
-              <FolderOpen className="h-4 w-4 shrink-0" />
-              <span className="hidden md:inline truncate">Todas as Notas</span>
-            </button>
-            {folders.map((folder) => (
+          <div className="flex-1 overflow-y-auto p-2 space-y-6">
+            <div className="space-y-1">
               <button
-                key={folder.id}
-                onClick={() => setSelectedFolderId(folder.id)}
+                onClick={() => {
+                  setSelectedFolderId(null)
+                  setSelectedTag(null)
+                }}
                 onDragOver={(e) => e.preventDefault()}
-                onDrop={(e) => handleDrop(e, folder.id)}
+                onDrop={(e) => handleDrop(e, null)}
                 className={cn(
                   'w-full flex items-center justify-center md:justify-start gap-2 px-2 py-2 md:py-1.5 text-sm rounded-md transition-colors',
-                  selectedFolderId === folder.id
+                  selectedFolderId === null && selectedTag === null
                     ? 'bg-primary/10 text-primary font-medium'
                     : 'hover:bg-muted text-muted-foreground',
                 )}
               >
-                <Folder className="h-4 w-4 shrink-0" />
-                <span className="hidden md:inline truncate">{folder.name}</span>
+                <FolderOpen className="h-4 w-4 shrink-0" />
+                <span className="hidden md:inline truncate">Todas as Notas</span>
               </button>
-            ))}
+              {folders.map((folder) => (
+                <button
+                  key={folder.id}
+                  onClick={() => setSelectedFolderId(folder.id)}
+                  onDragOver={(e) => e.preventDefault()}
+                  onDrop={(e) => handleDrop(e, folder.id)}
+                  className={cn(
+                    'w-full flex items-center justify-center md:justify-start gap-2 px-2 py-2 md:py-1.5 text-sm rounded-md transition-colors',
+                    selectedFolderId === folder.id
+                      ? 'bg-primary/10 text-primary font-medium'
+                      : 'hover:bg-muted text-muted-foreground',
+                  )}
+                >
+                  <Folder className="h-4 w-4 shrink-0" />
+                  <span className="hidden md:inline truncate">{folder.name}</span>
+                </button>
+              ))}
+            </div>
+
+            {allTags.length > 0 && (
+              <div className="space-y-1">
+                <div className="px-2 py-1 hidden md:flex items-center">
+                  <span className="text-xs font-semibold uppercase text-muted-foreground">
+                    Tags
+                  </span>
+                </div>
+                {allTags.map((tag) => (
+                  <button
+                    key={tag}
+                    onClick={() => setSelectedTag((prev) => (prev === tag ? null : tag))}
+                    className={cn(
+                      'w-full flex items-center justify-center md:justify-start gap-2 px-2 py-2 md:py-1.5 text-sm rounded-md transition-colors',
+                      selectedTag === tag
+                        ? 'bg-primary/10 text-primary font-medium'
+                        : 'hover:bg-muted text-muted-foreground',
+                    )}
+                  >
+                    <Hash className="h-4 w-4 shrink-0" />
+                    <span className="hidden md:inline truncate">{tag}</span>
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
         </div>
 

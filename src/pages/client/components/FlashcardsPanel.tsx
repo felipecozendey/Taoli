@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Layers, Play, BrainCircuit, Plus, Trash2, ChevronLeft } from 'lucide-react'
+import { Layers, Play, BrainCircuit, Plus, Trash2, ChevronLeft, X } from 'lucide-react'
 import { Skeleton } from '@/components/ui/skeleton'
 import {
   Dialog,
@@ -13,6 +13,14 @@ import {
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
+import { Badge } from '@/components/ui/badge'
 import { useToast } from '@/hooks/use-toast'
 import { studyService, type StudyDeck, type StudyFlashcard } from '@/services/study'
 import type { FlashcardsData } from '@/hooks/use-flashcards'
@@ -31,7 +39,11 @@ export function FlashcardsPanel({ data }: FlashcardsPanelProps) {
   const [selectedDeck, setSelectedDeck] = useState<StudyDeck | null>(null)
   const [deckCards, setDeckCards] = useState<StudyFlashcard[]>([])
   const [loadingDeckCards, setLoadingDeckCards] = useState(false)
+
   const [isCardModalOpen, setIsCardModalOpen] = useState(false)
+  const [newCardType, setNewCardType] = useState('traditional')
+  const [newCardOptions, setNewCardOptions] = useState<string[]>([])
+  const [optionInput, setOptionInput] = useState('')
   const [newCardFront, setNewCardFront] = useState('')
   const [newCardBack, setNewCardBack] = useState('')
   const [isCreatingCard, setIsCreatingCard] = useState(false)
@@ -89,16 +101,48 @@ export function FlashcardsPanel({ data }: FlashcardsPanelProps) {
     setLoadingDeckCards(false)
   }
 
+  const handleOpenCardModalChange = (open: boolean) => {
+    setIsCardModalOpen(open)
+    if (!open) {
+      setNewCardFront('')
+      setNewCardBack('')
+      setNewCardType('traditional')
+      setNewCardOptions([])
+      setOptionInput('')
+    }
+  }
+
+  const handleAddOption = () => {
+    if (!optionInput.trim()) return
+    if (newCardOptions.includes(optionInput.trim())) return
+    setNewCardOptions([...newCardOptions, optionInput.trim()])
+    setOptionInput('')
+  }
+
+  const handleRemoveOption = (index: number) => {
+    setNewCardOptions(newCardOptions.filter((_, i) => i !== index))
+  }
+
   const handleCreateCard = async () => {
-    if (!selectedDeck || !newCardFront.trim() || !newCardBack.trim()) return
+    if (!selectedDeck || !newCardFront.trim()) return
+    if (newCardType === 'traditional' && !newCardBack.trim()) return
+    if (newCardType === 'multiple_choice' && !newCardBack.trim()) return
+
+    const backContent = newCardType === 'cloze' ? newCardFront : newCardBack
+
     setIsCreatingCard(true)
-    const { error } = await studyService.createFlashcard(selectedDeck.id, newCardFront, newCardBack)
+    const { error } = await studyService.createFlashcard(
+      selectedDeck.id,
+      newCardFront,
+      backContent,
+      newCardType,
+      newCardOptions,
+    )
     setIsCreatingCard(false)
     if (error) return toast({ title: 'Erro', description: error.message, variant: 'destructive' })
     toast({ title: 'Cartão criado!' })
-    setIsCardModalOpen(false)
-    setNewCardFront('')
-    setNewCardBack('')
+
+    handleOpenCardModalChange(false)
     handleSelectDeck(selectedDeck)
   }
 
@@ -139,12 +183,35 @@ export function FlashcardsPanel({ data }: FlashcardsPanelProps) {
         </div>
         <div className="flex-1 p-4 md:p-8 flex items-center justify-center">
           <Card className="w-full max-w-lg min-h-[350px] p-6 flex flex-col justify-between shadow-md">
-            <div className="flex-1 flex flex-col items-center justify-center text-center">
+            <div className="flex-1 flex flex-col items-center justify-center text-center space-y-6">
+              {card.card_type === 'multiple_choice' && (
+                <Badge variant="outline" className="mb-2">
+                  Múltipla Escolha
+                </Badge>
+              )}
+              {card.card_type === 'cloze' && (
+                <Badge variant="outline" className="mb-2">
+                  Completar Lacuna
+                </Badge>
+              )}
               <div className="text-xl font-medium">{card.front_content}</div>
+
               {showAnswer && (
                 <>
-                  <div className="w-full h-px bg-border my-6" />
-                  <div className="text-lg text-muted-foreground">{card.back_content}</div>
+                  <div className="w-full h-px bg-border" />
+                  <div className="text-lg text-muted-foreground">
+                    {card.card_type === 'multiple_choice' && (
+                      <div className="space-y-2">
+                        <p className="font-semibold text-foreground">{card.back_content}</p>
+                        {Array.isArray(card.options) && card.options.length > 0 && (
+                          <div className="text-sm line-through opacity-70">
+                            {card.options.join(', ')}
+                          </div>
+                        )}
+                      </div>
+                    )}
+                    {card.card_type !== 'multiple_choice' && card.back_content}
+                  </div>
                 </>
               )}
             </div>
@@ -216,13 +283,25 @@ export function FlashcardsPanel({ data }: FlashcardsPanelProps) {
               <Card key={card.id} className="p-4 flex gap-4 items-start bg-background/80 shadow-sm">
                 <div className="flex-1 grid md:grid-cols-2 gap-4">
                   <div>
-                    <p className="text-xs font-semibold text-muted-foreground mb-1">Frente</p>
+                    <div className="flex items-center gap-2 mb-1">
+                      <p className="text-xs font-semibold text-muted-foreground">Frente</p>
+                      {card.card_type === 'multiple_choice' && (
+                        <Badge variant="outline" className="text-[10px] px-1.5 py-0 h-4">
+                          Múltipla Escolha
+                        </Badge>
+                      )}
+                      {card.card_type === 'cloze' && (
+                        <Badge variant="outline" className="text-[10px] px-1.5 py-0 h-4">
+                          Cloze
+                        </Badge>
+                      )}
+                    </div>
                     <p className="text-sm line-clamp-3">{card.front_content}</p>
                   </div>
                   <div>
                     <p className="text-xs font-semibold text-muted-foreground mb-1">Verso</p>
                     <p className="text-sm text-muted-foreground line-clamp-3">
-                      {card.back_content}
+                      {card.card_type === 'cloze' ? 'Lacuna preenchida' : card.back_content}
                     </p>
                   </div>
                 </div>
@@ -238,25 +317,123 @@ export function FlashcardsPanel({ data }: FlashcardsPanelProps) {
             ))
           )}
         </div>
-        <Dialog open={isCardModalOpen} onOpenChange={setIsCardModalOpen}>
-          <DialogContent>
+        <Dialog open={isCardModalOpen} onOpenChange={handleOpenCardModalChange}>
+          <DialogContent className="max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>Criar Novo Cartão</DialogTitle>
             </DialogHeader>
             <div className="py-4 space-y-4">
               <div className="space-y-2">
-                <Label>Frente (Pergunta)</Label>
-                <Textarea value={newCardFront} onChange={(e) => setNewCardFront(e.target.value)} />
+                <Label>Tipo de Cartão</Label>
+                <Select
+                  value={newCardType}
+                  onValueChange={(val) => {
+                    setNewCardType(val)
+                    setNewCardOptions([])
+                    setOptionInput('')
+                    setNewCardFront('')
+                    setNewCardBack('')
+                  }}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Selecione o tipo" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="traditional">Tradicional</SelectItem>
+                    <SelectItem value="multiple_choice">Múltipla Escolha</SelectItem>
+                    <SelectItem value="cloze">Completar Lacuna (Cloze)</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
-              <div className="space-y-2">
-                <Label>Verso (Resposta)</Label>
-                <Textarea value={newCardBack} onChange={(e) => setNewCardBack(e.target.value)} />
-              </div>
+
+              {newCardType === 'traditional' && (
+                <>
+                  <div className="space-y-2">
+                    <Label>Frente (Pergunta)</Label>
+                    <Textarea
+                      value={newCardFront}
+                      onChange={(e) => setNewCardFront(e.target.value)}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Verso (Resposta)</Label>
+                    <Textarea
+                      value={newCardBack}
+                      onChange={(e) => setNewCardBack(e.target.value)}
+                    />
+                  </div>
+                </>
+              )}
+
+              {newCardType === 'multiple_choice' && (
+                <>
+                  <div className="space-y-2">
+                    <Label>Pergunta</Label>
+                    <Textarea
+                      value={newCardFront}
+                      onChange={(e) => setNewCardFront(e.target.value)}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Resposta Correta</Label>
+                    <Input value={newCardBack} onChange={(e) => setNewCardBack(e.target.value)} />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Opções Incorretas (Distratores)</Label>
+                    <div className="flex gap-2">
+                      <Input
+                        value={optionInput}
+                        onChange={(e) => setOptionInput(e.target.value)}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter') {
+                            e.preventDefault()
+                            handleAddOption()
+                          }
+                        }}
+                        placeholder="Ex: Opção errada"
+                      />
+                      <Button type="button" onClick={handleAddOption} variant="secondary">
+                        <Plus className="h-4 w-4" />
+                      </Button>
+                    </div>
+                    {newCardOptions.length > 0 && (
+                      <div className="flex flex-wrap gap-2 mt-2">
+                        {newCardOptions.map((opt, i) => (
+                          <Badge key={i} variant="secondary" className="flex items-center gap-1">
+                            {opt}
+                            <X
+                              className="h-3 w-3 ml-1 cursor-pointer hover:text-destructive"
+                              onClick={() => handleRemoveOption(i)}
+                            />
+                          </Badge>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </>
+              )}
+
+              {newCardType === 'cloze' && (
+                <>
+                  <div className="space-y-2">
+                    <Label>Texto com Lacuna</Label>
+                    <Textarea
+                      value={newCardFront}
+                      onChange={(e) => setNewCardFront(e.target.value)}
+                      placeholder="A capital de Portugal é {{Lisboa}}."
+                    />
+                    <p className="text-[0.8rem] text-muted-foreground leading-snug">
+                      Dica: Envolva a palavra em chaves duplas para criar a lacuna. Exemplo: A
+                      capital de Portugal é {'{{Lisboa}}'}.
+                    </p>
+                  </div>
+                </>
+              )}
             </div>
             <DialogFooter>
               <Button
                 variant="outline"
-                onClick={() => setIsCardModalOpen(false)}
+                onClick={() => handleOpenCardModalChange(false)}
                 disabled={isCreatingCard}
               >
                 Cancelar

@@ -285,7 +285,13 @@ export const studyService = {
     }
   },
 
-  async createFlashcard(deckId: string, frontContent: string, backContent: string) {
+  async createFlashcard(
+    deckId: string,
+    frontContent: string,
+    backContent: string,
+    cardType: string = 'traditional',
+    options: string[] = [],
+  ) {
     try {
       const {
         data: { user },
@@ -294,7 +300,15 @@ export const studyService = {
 
       const { data, error } = await supabase
         .from('study_flashcards')
-        .insert([{ deck_id: deckId, front_content: frontContent, back_content: backContent }])
+        .insert([
+          {
+            deck_id: deckId,
+            front_content: frontContent,
+            back_content: backContent,
+            card_type: cardType,
+            options: options,
+          },
+        ])
         .select()
         .single()
 

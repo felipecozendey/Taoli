@@ -1,11 +1,11 @@
 import { useEffect } from 'react'
 import { useEditor, EditorContent, type Editor } from '@tiptap/react'
-import StarterKit from '@tiptap/starter-kit'
-import Underline from '@tiptap/extension-underline'
-import TextStyle from '@tiptap/extension-text-style'
-import Color from '@tiptap/extension-color'
-import Image from '@tiptap/extension-image'
-import Youtube from '@tiptap/extension-youtube'
+import { StarterKit } from '@tiptap/starter-kit'
+import { Underline } from '@tiptap/extension-underline'
+import { TextStyle } from '@tiptap/extension-text-style'
+import { Color } from '@tiptap/extension-color'
+import { Image } from '@tiptap/extension-image'
+import { Youtube } from '@tiptap/extension-youtube'
 import {
   Bold,
   Underline as UnderlineIcon,

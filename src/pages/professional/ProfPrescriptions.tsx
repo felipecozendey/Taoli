@@ -24,10 +24,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { Search, Trash2, Plus, Save, Loader2, Info } from 'lucide-react'
+import { Search, Trash2, Plus, Save, Loader2, Info, Pencil } from 'lucide-react'
 import { useToast } from '@/hooks/use-toast'
 import { supabase } from '@/lib/supabase/client'
-import { createDiet, addMeal, addMealItem, addCustomFoodItem } from '@/services/nutrition'
+import {
+  createDiet,
+  addMeal,
+  addMealItem,
+  addCustomFoodItem,
+  updateCustomFoodItem,
+} from '@/services/nutrition'
 
 interface FoodItem {
   id: string
@@ -63,6 +69,7 @@ export default function ProfPrescriptions() {
   // New Food Modal State
   const [isNewFoodModalOpen, setIsNewFoodModalOpen] = useState(false)
   const [isSavingFood, setIsSavingFood] = useState(false)
+  const [editingFoodId, setEditingFoodId] = useState<string | null>(null)
   const [newFood, setNewFood] = useState({
     name: '',
     calories: '',
@@ -220,23 +227,33 @@ export default function ProfPrescriptions() {
 
     setIsSavingFood(true)
     try {
-      const { error } = await addCustomFoodItem({
+      const foodPayload = {
         name: newFood.name,
         calories: parseFloat(newFood.calories) || 0,
         protein: parseFloat(newFood.protein) || 0,
         carbs: parseFloat(newFood.carbs) || 0,
         fat: parseFloat(newFood.fat) || 0,
         serving_size: '100',
-      })
+      }
 
-      if (error) throw error
-
-      toast({
-        title: 'Sucesso',
-        description: 'Alimento cadastrado com sucesso! Já está disponível para busca.',
-      })
+      if (editingFoodId) {
+        const { error } = await updateCustomFoodItem(editingFoodId, foodPayload)
+        if (error) throw error
+        toast({
+          title: 'Sucesso',
+          description: 'Alimento atualizado com sucesso!',
+        })
+      } else {
+        const { error } = await addCustomFoodItem(foodPayload)
+        if (error) throw error
+        toast({
+          title: 'Sucesso',
+          description: 'Alimento cadastrado com sucesso! Já está disponível para busca.',
+        })
+      }
 
       setNewFood({ name: '', calories: '', protein: '', carbs: '', fat: '' })
+      setEditingFoodId(null)
       setIsNewFoodModalOpen(false)
 
       if (search) {
@@ -247,7 +264,9 @@ export default function ProfPrescriptions() {
       console.error(error)
       toast({
         title: 'Erro',
-        description: 'Não foi possível cadastrar o alimento.',
+        description: editingFoodId
+          ? 'Não foi possível atualizar o alimento.'
+          : 'Não foi possível cadastrar o alimento.',
         variant: 'destructive',
       })
     } finally {
@@ -303,7 +322,11 @@ export default function ProfPrescriptions() {
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => setIsNewFoodModalOpen(true)}
+                  onClick={() => {
+                    setNewFood({ name: '', calories: '', protein: '', carbs: '', fat: '' })
+                    setEditingFoodId(null)
+                    setIsNewFoodModalOpen(true)
+                  }}
                   className="h-8 text-xs px-2"
                 >
                   <Plus className="mr-1 h-3 w-3" /> Cadastrar Alimento
@@ -362,9 +385,30 @@ export default function ProfPrescriptions() {
                         </div>
                         <div className="flex justify-between text-xs text-muted-foreground items-center">
                           <span>{food.energy_kcal || 0} kcal / 100g</span>
-                          <Button variant="ghost" size="icon" className="h-6 w-6 rounded-full">
-                            <Plus className="h-3.5 w-3.5" />
-                          </Button>
+                          <div className="flex items-center gap-1">
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="h-6 w-6 rounded-full text-muted-foreground hover:text-primary"
+                              onClick={(e) => {
+                                e.stopPropagation()
+                                setNewFood({
+                                  name: food.name,
+                                  calories: food.energy_kcal?.toString() || '',
+                                  protein: food.protein_g?.toString() || '',
+                                  carbs: food.carbs_g?.toString() || '',
+                                  fat: food.fats_g?.toString() || '',
+                                })
+                                setEditingFoodId(food.id)
+                                setIsNewFoodModalOpen(true)
+                              }}
+                            >
+                              <Pencil className="h-3.5 w-3.5" />
+                            </Button>
+                            <Button variant="ghost" size="icon" className="h-6 w-6 rounded-full">
+                              <Plus className="h-3.5 w-3.5" />
+                            </Button>
+                          </div>
                         </div>
                       </Card>
                     ))}
@@ -474,7 +518,9 @@ export default function ProfPrescriptions() {
       <Dialog open={isNewFoodModalOpen} onOpenChange={setIsNewFoodModalOpen}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Cadastrar Novo Alimento</DialogTitle>
+            <DialogTitle>
+              {editingFoodId ? 'Editar Alimento' : 'Cadastrar Novo Alimento'}
+            </DialogTitle>
             <DialogDescription>
               Insira os valores nutricionais equivalentes a 100g do alimento.
             </DialogDescription>
@@ -533,12 +579,18 @@ export default function ProfPrescriptions() {
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsNewFoodModalOpen(false)}>
+            <Button
+              variant="outline"
+              onClick={() => {
+                setIsNewFoodModalOpen(false)
+                setEditingFoodId(null)
+              }}
+            >
               Cancelar
             </Button>
             <Button onClick={handleSaveNewFood} disabled={isSavingFood}>
               {isSavingFood && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Salvar Alimento
+              {editingFoodId ? 'Salvar Alterações' : 'Cadastrar'}
             </Button>
           </DialogFooter>
         </DialogContent>

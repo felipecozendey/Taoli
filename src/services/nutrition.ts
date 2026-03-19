@@ -388,3 +388,37 @@ export async function addCustomFoodItem(data: {
     return { data: null, error }
   }
 }
+
+export async function updateCustomFoodItem(
+  id: string,
+  data: {
+    name: string
+    calories: number
+    protein: number
+    carbs: number
+    fat: number
+    serving_size: string | number
+  },
+) {
+  try {
+    const { data: result, error } = await supabase
+      .from('food_items')
+      .update({
+        name: data.name,
+        energy_kcal: data.calories,
+        protein_g: data.protein,
+        carbs_g: data.carbs,
+        fats_g: data.fat,
+        base_qty_g: 100, // Normalized to 100g as per requirements
+      })
+      .eq('id', id)
+      .select()
+      .single()
+
+    if (error) throw error
+    return { data: result, error: null }
+  } catch (error) {
+    console.error('Error updating custom food item:', error)
+    return { data: null, error }
+  }
+}

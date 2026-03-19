@@ -158,20 +158,23 @@ export function RichTextEditor({
           char: '[[',
           allowSpaces: true,
           items: ({ query }) => {
+            const cleanQuery = query.replace(/\]/g, '')
             const notes = notesRef.current || []
             const filtered = notes
-              .filter((n) => n.title.toLowerCase().includes(query.toLowerCase()))
+              .filter((n) => n.title.toLowerCase().includes(cleanQuery.toLowerCase()))
               .sort((a, b) => a.title.localeCompare(b.title))
               .map((n) => ({ id: n.id, title: n.title }))
 
-            const exactMatch = filtered.find((n) => n.title.toLowerCase() === query.toLowerCase())
+            const exactMatch = filtered.find(
+              (n) => n.title.toLowerCase() === cleanQuery.toLowerCase(),
+            )
 
-            if (!exactMatch && query.trim().length > 0) {
+            if (!exactMatch && cleanQuery.trim().length > 0) {
               filtered.push({
                 id: 'new',
-                title: `✨ Criar nova nota: ${query}`,
+                title: `✨ Criar nova nota: ${cleanQuery}`,
                 isNew: true,
-                query: query,
+                query: cleanQuery,
               } as any)
             }
             return filtered
@@ -220,8 +223,23 @@ export function RichTextEditor({
             }
           },
           command: ({ editor, range, props }) => {
+            const docSize = editor.state.doc.content.size
+            const textAfter = editor.state.doc.textBetween(
+              range.to,
+              Math.min(range.to + 2, docSize),
+            )
+
+            let deleteTo = range.to
+            if (textAfter.startsWith(']]')) {
+              deleteTo += 2
+            } else if (textAfter.startsWith(']')) {
+              deleteTo += 1
+            }
+
+            const extendedRange = { from: range.from, to: deleteTo }
+
             if (props.isNew && createNoteRef.current) {
-              editor.chain().focus().deleteRange(range).run()
+              editor.chain().focus().deleteRange(extendedRange).run()
               createNoteRef.current(props.query).then((newNote) => {
                 if (newNote) {
                   editor
@@ -239,7 +257,8 @@ export function RichTextEditor({
               editor
                 .chain()
                 .focus()
-                .insertContentAt(range, {
+                .deleteRange(extendedRange)
+                .insertContent({
                   type: 'mention',
                   attrs: { id: props.id, label: props.title },
                 })
@@ -261,15 +280,6 @@ export function RichTextEditor({
       },
     },
   })
-
-  useEffect(() => {
-    if (editor && content !== editor.getHTML()) {
-      const currentContent = editor.getHTML()
-      if (content !== currentContent) {
-        editor.commands.setContent(content, false)
-      }
-    }
-  }, [content, editor])
 
   return (
     <div className={cn('flex flex-col border rounded-md bg-background', className)}>

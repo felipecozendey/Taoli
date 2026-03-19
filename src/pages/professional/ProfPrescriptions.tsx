@@ -8,6 +8,15 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Alert, AlertDescription } from '@/components/ui/alert'
+import { Label } from '@/components/ui/label'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog'
 import {
   Select,
   SelectContent,
@@ -18,7 +27,7 @@ import {
 import { Search, Trash2, Plus, Save, Loader2, Info } from 'lucide-react'
 import { useToast } from '@/hooks/use-toast'
 import { supabase } from '@/lib/supabase/client'
-import { createDiet, addMeal, addMealItem } from '@/services/nutrition'
+import { createDiet, addMeal, addMealItem, addCustomFoodItem } from '@/services/nutrition'
 
 interface FoodItem {
   id: string
@@ -50,6 +59,17 @@ export default function ProfPrescriptions() {
   const [searchResults, setSearchResults] = useState<FoodItem[]>([])
   const [targetMeal, setTargetMeal] = useState('cafe')
   const [isSaving, setIsSaving] = useState(false)
+
+  // New Food Modal State
+  const [isNewFoodModalOpen, setIsNewFoodModalOpen] = useState(false)
+  const [isSavingFood, setIsSavingFood] = useState(false)
+  const [newFood, setNewFood] = useState({
+    name: '',
+    calories: '',
+    protein: '',
+    carbs: '',
+    fat: '',
+  })
 
   const [meals, setMeals] = useState([
     { id: 'cafe', name: 'Café da Manhã', entries: [] as DietEntry[] },
@@ -136,17 +156,14 @@ export default function ProfPrescriptions() {
 
     setIsSaving(true)
     try {
-      // 1. Create Diet
       const { data: diet, error: dietError } = await createDiet(patientId, 'Plano Atualizado')
       if (dietError || !diet) throw new Error('Erro ao criar a prescrição da dieta.')
 
       const mealTimes = ['08:00', '12:30', '16:00', '20:00']
 
-      // 2 & 3. Create Meals and Meal Items
       for (let i = 0; i < meals.length; i++) {
         const meal = meals[i]
 
-        // Skip empty meals
         if (meal.entries.length === 0) continue
 
         const { data: savedMeal, error: mealError } = await addMeal(
@@ -170,7 +187,6 @@ export default function ProfPrescriptions() {
         description: 'Dieta guardada com sucesso!',
       })
 
-      // Reset state
       setMeals([
         { id: 'cafe', name: 'Café da Manhã', entries: [] },
         { id: 'almoco', name: 'Almoço', entries: [] },
@@ -179,7 +195,6 @@ export default function ProfPrescriptions() {
       ])
       setSearch('')
 
-      // Navigate back to patient record
       navigate(`/professional/patient/${patientId}`)
     } catch (error: any) {
       console.error(error)
@@ -190,6 +205,53 @@ export default function ProfPrescriptions() {
       })
     } finally {
       setIsSaving(false)
+    }
+  }
+
+  const handleSaveNewFood = async () => {
+    if (!newFood.name.trim()) {
+      toast({
+        title: 'Campos obrigatórios',
+        description: 'Por favor, preencha o nome do alimento.',
+        variant: 'destructive',
+      })
+      return
+    }
+
+    setIsSavingFood(true)
+    try {
+      const { error } = await addCustomFoodItem({
+        name: newFood.name,
+        calories: parseFloat(newFood.calories) || 0,
+        protein: parseFloat(newFood.protein) || 0,
+        carbs: parseFloat(newFood.carbs) || 0,
+        fat: parseFloat(newFood.fat) || 0,
+        serving_size: '100',
+      })
+
+      if (error) throw error
+
+      toast({
+        title: 'Sucesso',
+        description: 'Alimento cadastrado com sucesso! Já está disponível para busca.',
+      })
+
+      setNewFood({ name: '', calories: '', protein: '', carbs: '', fat: '' })
+      setIsNewFoodModalOpen(false)
+
+      if (search) {
+        setSearch(search + ' ') // trigger slight change to re-fetch
+        setTimeout(() => setSearch(search), 50)
+      }
+    } catch (error) {
+      console.error(error)
+      toast({
+        title: 'Erro',
+        description: 'Não foi possível cadastrar o alimento.',
+        variant: 'destructive',
+      })
+    } finally {
+      setIsSavingFood(false)
     }
   }
 
@@ -222,7 +284,6 @@ export default function ProfPrescriptions() {
           </Alert>
         )}
 
-        {/* Mobile Save Button */}
         <div className="sm:hidden mb-4">
           <Button onClick={handleSaveDiet} disabled={isSaving || isDietEmpty} className="w-full">
             {isSaving ? (
@@ -237,7 +298,17 @@ export default function ProfPrescriptions() {
         <div className="flex flex-col lg:flex-row gap-6 flex-1 min-h-0">
           <Card className="w-full lg:w-[350px] flex flex-col shrink-0 h-[400px] lg:h-full border-muted/60 shadow-sm">
             <CardHeader className="p-4 border-b space-y-3">
-              <CardTitle className="text-base font-semibold">Buscar Alimentos</CardTitle>
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-base font-semibold">Buscar Alimentos</CardTitle>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setIsNewFoodModalOpen(true)}
+                  className="h-8 text-xs px-2"
+                >
+                  <Plus className="mr-1 h-3 w-3" /> Cadastrar Alimento
+                </Button>
+              </div>
               <div className="flex flex-col gap-2">
                 <Select value={targetMeal} onValueChange={setTargetMeal}>
                   <SelectTrigger className="w-full">
@@ -399,6 +470,79 @@ export default function ProfPrescriptions() {
           </Card>
         </div>
       </PageContent>
+
+      <Dialog open={isNewFoodModalOpen} onOpenChange={setIsNewFoodModalOpen}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Cadastrar Novo Alimento</DialogTitle>
+            <DialogDescription>
+              Insira os valores nutricionais equivalentes a 100g do alimento.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="grid gap-2">
+              <Label htmlFor="name">Nome do Alimento</Label>
+              <Input
+                id="name"
+                placeholder="Ex: Arroz Integral Cozido"
+                value={newFood.name}
+                onChange={(e) => setNewFood({ ...newFood, name: e.target.value })}
+              />
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="grid gap-2">
+                <Label htmlFor="calories">Calorias (kcal)</Label>
+                <Input
+                  id="calories"
+                  type="number"
+                  placeholder="0"
+                  value={newFood.calories}
+                  onChange={(e) => setNewFood({ ...newFood, calories: e.target.value })}
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="protein">Proteínas (g)</Label>
+                <Input
+                  id="protein"
+                  type="number"
+                  placeholder="0"
+                  value={newFood.protein}
+                  onChange={(e) => setNewFood({ ...newFood, protein: e.target.value })}
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="carbs">Carboidratos (g)</Label>
+                <Input
+                  id="carbs"
+                  type="number"
+                  placeholder="0"
+                  value={newFood.carbs}
+                  onChange={(e) => setNewFood({ ...newFood, carbs: e.target.value })}
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="fat">Gorduras (g)</Label>
+                <Input
+                  id="fat"
+                  type="number"
+                  placeholder="0"
+                  value={newFood.fat}
+                  onChange={(e) => setNewFood({ ...newFood, fat: e.target.value })}
+                />
+              </div>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsNewFoodModalOpen(false)}>
+              Cancelar
+            </Button>
+            <Button onClick={handleSaveNewFood} disabled={isSavingFood}>
+              {isSavingFood && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              Salvar Alimento
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }

@@ -346,7 +346,7 @@ export async function searchFoodItems(query: string) {
   try {
     const { data, error } = await supabase
       .from('food_items')
-      .select('id, name, energy_kcal, protein_g, carbs_g, fats_g, base_qty_g')
+      .select('id, name, energy_kcal, protein_g, carbs_g, fats_g, base_qty_g, source')
       .ilike('name', `%${query}%`)
       .limit(10)
 
@@ -354,6 +354,37 @@ export async function searchFoodItems(query: string) {
     return { data, error: null }
   } catch (error) {
     console.error('Error searching food items:', error)
+    return { data: null, error }
+  }
+}
+
+export async function addCustomFoodItem(data: {
+  name: string
+  calories: number
+  protein: number
+  carbs: number
+  fat: number
+  serving_size: string | number
+}) {
+  try {
+    const { data: result, error } = await supabase
+      .from('food_items')
+      .insert({
+        name: data.name,
+        energy_kcal: data.calories,
+        protein_g: data.protein,
+        carbs_g: data.carbs,
+        fats_g: data.fat,
+        base_qty_g: 100, // Normalized to 100g as per requirements
+        source: 'Customizado', // Tagging as a custom entry
+      })
+      .select()
+      .single()
+
+    if (error) throw error
+    return { data: result, error: null }
+  } catch (error) {
+    console.error('Error adding custom food item:', error)
     return { data: null, error }
   }
 }

@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
 import { Skeleton } from '@/components/ui/skeleton'
 import {
   Dialog,
@@ -23,6 +22,7 @@ import {
 } from 'lucide-react'
 import { studyService, type StudyNote, type StudyFolder } from '@/services/study'
 import { cn } from '@/lib/utils'
+import { RichTextEditor } from '@/components/shared/RichTextEditor'
 
 export function SecondBrainPanel() {
   const [notes, setNotes] = useState<StudyNote[]>([])
@@ -231,7 +231,7 @@ export function SecondBrainPanel() {
         {/* Editor */}
         <div className="flex-1 bg-background overflow-y-auto flex flex-col min-w-0">
           <div className="flex-1 p-4 lg:p-8 flex flex-col max-w-4xl mx-auto w-full gap-4">
-            <div className="flex items-center justify-between gap-4">
+            <div className="flex items-center justify-between gap-4 shrink-0">
               <Input
                 value={editorTitle}
                 onChange={(e) => setEditorTitle(e.target.value)}
@@ -252,11 +252,10 @@ export function SecondBrainPanel() {
                 <span className="hidden md:inline">Guardar</span>
               </Button>
             </div>
-            <Textarea
-              value={editorContent}
-              onChange={(e) => setEditorContent(e.target.value)}
-              placeholder="Comece a escrever sua nota aqui..."
-              className="flex-1 resize-none border-none px-0 focus-visible:ring-0 bg-transparent text-base lg:text-lg leading-relaxed text-muted-foreground focus:text-foreground transition-colors"
+            <RichTextEditor
+              content={editorContent}
+              onChange={setEditorContent}
+              className="flex-1 shadow-sm"
             />
           </div>
         </div>

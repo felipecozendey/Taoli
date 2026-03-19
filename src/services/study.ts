@@ -5,6 +5,7 @@ import type { Database } from '@/lib/supabase/types'
 export type StudyDeck = Database['public']['Tables']['study_decks']['Row']
 export type StudyFlashcard = Database['public']['Tables']['study_flashcards']['Row']
 export type StudyNote = Database['public']['Tables']['study_notes']['Row']
+export type StudyFolder = Database['public']['Tables']['study_folders']['Row']
 
 export const studyService = {
   async getDecks() {
@@ -128,7 +129,12 @@ export const studyService = {
     }
   },
 
-  async saveNote(id: string | null | undefined, title: string, content: string) {
+  async saveNote(
+    id: string | null | undefined,
+    title: string,
+    content: string,
+    folderId?: string | null,
+  ) {
     try {
       const {
         data: { user },
@@ -140,6 +146,7 @@ export const studyService = {
         content,
         user_id: user.id,
         updated_at: new Date().toISOString(),
+        folder_id: folderId || null,
       }
 
       let result
@@ -161,6 +168,75 @@ export const studyService = {
     } catch (error) {
       console.error('Error saving note:', error)
       return { data: null, error }
+    }
+  },
+
+  async getFolders() {
+    try {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
+      if (!user) return { data: [], error: new Error('Not authenticated') }
+
+      const { data, error } = await supabase
+        .from('study_folders')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('name', { ascending: true })
+
+      if (error) throw error
+      return { data, error: null }
+    } catch (error) {
+      console.error('Error fetching folders:', error)
+      return { data: [], error }
+    }
+  },
+
+  async createFolder(name: string, parentId?: string | null) {
+    try {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
+      if (!user) return { data: null, error: new Error('Not authenticated') }
+
+      const folderData = {
+        name,
+        parent_id: parentId || null,
+        user_id: user.id,
+      }
+
+      const { data, error } = await supabase
+        .from('study_folders')
+        .insert([folderData])
+        .select()
+        .single()
+
+      if (error) throw error
+      return { data, error: null }
+    } catch (error) {
+      console.error('Error creating folder:', error)
+      return { data: null, error }
+    }
+  },
+
+  async deleteFolder(id: string) {
+    try {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
+      if (!user) return { error: new Error('Not authenticated') }
+
+      const { error } = await supabase
+        .from('study_folders')
+        .delete()
+        .eq('id', id)
+        .eq('user_id', user.id)
+
+      if (error) throw error
+      return { error: null }
+    } catch (error) {
+      console.error('Error deleting folder:', error)
+      return { error }
     }
   },
 }

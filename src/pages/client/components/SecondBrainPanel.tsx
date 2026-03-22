@@ -2,7 +2,13 @@ import { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+  SheetTitle,
+  SheetDescription,
+} from '@/components/ui/sheet'
 import {
   Dialog,
   DialogContent,
@@ -253,6 +259,10 @@ export function SecondBrainPanel() {
               </Button>
             </SheetTrigger>
             <SheetContent side="left" className="w-[90vw] max-w-[400px] p-0 flex gap-0">
+              <SheetTitle className="sr-only">Menu de Navegação</SheetTitle>
+              <SheetDescription className="sr-only">
+                Pastas e notas do seu Segundo Cérebro
+              </SheetDescription>
               <div className="w-1/2 flex flex-col h-full border-r bg-muted/10">
                 <SecondBrainFoldersSidebar
                   folders={folders}

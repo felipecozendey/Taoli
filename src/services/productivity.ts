@@ -17,6 +17,9 @@ export interface ProductivityHabit {
   title: string
   color?: string | null
   frequency?: string | null
+  target_value?: number | null
+  target_unit?: string | null
+  is_active?: boolean | null
   created_at: string
 }
 
@@ -24,7 +27,16 @@ export interface ProductivityHabitLog {
   id: string
   habit_id: string
   completed_date: string
+  progress_made?: number | null
   created_at: string
+}
+
+export interface FocusSettings {
+  user_id: string
+  reminder_interval: number | null
+  is_enabled: boolean | null
+  sound_volume: number | null
+  created_at: string | null
 }
 
 export const productivityService = {
@@ -209,36 +221,48 @@ export const productivityService = {
     }
   },
 
-  async toggleHabitLog(habitId: string, date: string) {
+  async toggleHabitLog(habitId: string, date: string, progress?: number) {
     try {
       const {
         data: { user },
       } = await supabase.auth.getUser()
       if (!user) throw new Error('Not authenticated')
 
-      // Check if log exists
       const { data: existingLogs, error: checkError } = await supabase
         .from('productivity_habit_logs')
-        .select('id')
+        .select('*')
         .eq('habit_id', habitId)
         .eq('completed_date', date)
 
       if (checkError) throw checkError
 
       if (existingLogs && existingLogs.length > 0) {
-        // Log exists, so we delete it (uncheck)
-        const { error: deleteError } = await supabase
-          .from('productivity_habit_logs')
-          .delete()
-          .eq('id', existingLogs[0].id)
+        const log = existingLogs[0]
+        if (progress !== undefined) {
+          // Add progress to existing log
+          const newProgress = (log.progress_made || 0) + progress
+          const { error } = await supabase
+            .from('productivity_habit_logs')
+            .update({ progress_made: newProgress })
+            .eq('id', log.id)
 
-        if (deleteError) throw deleteError
-        return { status: false, error: null }
+          if (error) throw error
+          return { status: true, error: null }
+        } else {
+          // Log exists, so we delete it (uncheck)
+          const { error: deleteError } = await supabase
+            .from('productivity_habit_logs')
+            .delete()
+            .eq('id', log.id)
+
+          if (deleteError) throw deleteError
+          return { status: false, error: null }
+        }
       } else {
-        // Log does not exist, so we create it (check)
+        // Log does not exist, so we create it
         const { error: insertError } = await supabase
           .from('productivity_habit_logs')
-          .insert([{ habit_id: habitId, completed_date: date }])
+          .insert([{ habit_id: habitId, completed_date: date, progress_made: progress || 1 }])
 
         if (insertError) throw insertError
         return { status: true, error: null }
@@ -246,6 +270,68 @@ export const productivityService = {
     } catch (error) {
       console.error('Error toggling habit log:', error)
       return { status: false, error }
+    }
+  },
+
+  // --- Focus Guardian Settings ---
+  async getFocusSettings() {
+    try {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
+      if (!user) throw new Error('Not authenticated')
+
+      const { data, error } = await supabase
+        .from('productivity_focus_settings')
+        .select('*')
+        .eq('user_id', user.id)
+        .maybeSingle()
+
+      if (error) throw error
+
+      if (!data) {
+        const defaultSettings = {
+          user_id: user.id,
+          reminder_interval: 15,
+          is_enabled: false,
+          sound_volume: 0.5,
+        }
+        const { data: newData, error: insertError } = await supabase
+          .from('productivity_focus_settings')
+          .insert([defaultSettings])
+          .select()
+          .single()
+
+        if (insertError) throw insertError
+        return { data: newData as FocusSettings, error: null }
+      }
+
+      return { data: data as FocusSettings, error: null }
+    } catch (error) {
+      console.error('Error fetching focus settings:', error)
+      return { data: null, error }
+    }
+  },
+
+  async updateFocusSettings(settings: Partial<FocusSettings>) {
+    try {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
+      if (!user) throw new Error('Not authenticated')
+
+      const { data, error } = await supabase
+        .from('productivity_focus_settings')
+        .update(settings)
+        .eq('user_id', user.id)
+        .select()
+        .single()
+
+      if (error) throw error
+      return { data, error: null }
+    } catch (error) {
+      console.error('Error updating focus settings:', error)
+      return { data: null, error }
     }
   },
 }

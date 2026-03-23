@@ -10,6 +10,17 @@ import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Badge } from '@/components/ui/badge'
 import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog'
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
+import { Label } from '@/components/ui/label'
+import { Switch } from '@/components/ui/switch'
+import { useFocusGuardian } from '@/hooks/use-focus-guardian'
+import {
   CheckCircle2,
   Circle,
   Plus,
@@ -21,6 +32,7 @@ import {
   RotateCcw,
   Coffee,
   Briefcase,
+  Sparkles,
 } from 'lucide-react'
 import {
   productivityService,
@@ -40,8 +52,17 @@ export default function ClientProductivity() {
   const [tasks, setTasks] = useState<ProductivityTask[]>([])
   const [habits, setHabits] = useState<ProductivityHabit[]>([])
   const [habitLogs, setHabitLogs] = useState<ProductivityHabitLog[]>([])
-  const [newTaskTitle, setNewTaskTitle] = useState('')
   const [isLoading, setIsLoading] = useState(true)
+
+  // New Item Modal State
+  const [isNewModalOpen, setIsNewModalOpen] = useState(false)
+  const [newItemType, setNewItemType] = useState<'task' | 'habit'>('task')
+  const [newItemTitle, setNewItemTitle] = useState('')
+  const [newHabitTarget, setNewHabitTarget] = useState('1')
+  const [newHabitUnit, setNewHabitUnit] = useState('vezes')
+
+  // Focus Guardian Hook
+  const { settings: focusSettings, toggleGuardian, updateInterval } = useFocusGuardian()
 
   // Pomodoro State
   const WORK_TIME = 25 * 60
@@ -120,8 +141,14 @@ export default function ClientProductivity() {
   const todaysTasks = tasks.filter((t) => t.due_date === currentDate || !t.due_date)
   const todaysHabitLogs = habitLogs.filter((l) => l.completed_date === currentDate)
   const totalItems = habits.length + todaysTasks.length
+
   const completedItems =
-    todaysHabitLogs.length + todaysTasks.filter((t) => t.status === 'done').length
+    habits.filter((h) => {
+      const log = todaysHabitLogs.find((l) => l.habit_id === h.id)
+      const isQuant = (h.target_value || 1) > 1
+      return log ? (isQuant ? (log.progress_made || 0) >= (h.target_value || 1) : true) : false
+    }).length + todaysTasks.filter((t) => t.status === 'done').length
+
   const progressPercentage = totalItems === 0 ? 0 : Math.round((completedItems / totalItems) * 100)
 
   let motivationText = 'Vamos começar!'
@@ -134,30 +161,61 @@ export default function ClientProductivity() {
     month: 'long',
   }).format(new Date(currentDate + 'T12:00:00'))
 
-  const handleToggleHabit = async (habitId: string) => {
-    const isCompleted = todaysHabitLogs.some((log) => log.habit_id === habitId)
+  const handleToggleHabit = async (habitId: string, amount?: number) => {
+    if (amount) {
+      confetti({ particleCount: 50, spread: 40, origin: { y: 0.6 } })
 
-    if (!isCompleted) {
-      confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } })
-      setHabitLogs([
-        ...habitLogs,
-        {
-          id: 'temp',
-          habit_id: habitId,
-          completed_date: currentDate,
-          created_at: new Date().toISOString(),
-        },
-      ])
+      // Optimistic update for amount
+      setHabitLogs((logs) => {
+        const existing = logs.find(
+          (l) => l.habit_id === habitId && l.completed_date === currentDate,
+        )
+        if (existing) {
+          return logs.map((l) =>
+            l.id === existing.id ? { ...l, progress_made: (l.progress_made || 0) + amount } : l,
+          )
+        } else {
+          return [
+            ...logs,
+            {
+              id: 'temp-' + Date.now(),
+              habit_id: habitId,
+              completed_date: currentDate,
+              progress_made: amount,
+              created_at: new Date().toISOString(),
+            },
+          ]
+        }
+      })
+
+      await productivityService.toggleHabitLog(habitId, currentDate, amount)
+      loadData(true)
     } else {
-      setHabitLogs(
-        habitLogs.filter(
-          (log) => !(log.habit_id === habitId && log.completed_date === currentDate),
-        ),
-      )
-    }
+      const isCompleted = todaysHabitLogs.some((log) => log.habit_id === habitId)
 
-    await productivityService.toggleHabitLog(habitId, currentDate)
-    loadData(true)
+      if (!isCompleted) {
+        confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } })
+        setHabitLogs([
+          ...habitLogs,
+          {
+            id: 'temp',
+            habit_id: habitId,
+            completed_date: currentDate,
+            progress_made: 1,
+            created_at: new Date().toISOString(),
+          },
+        ])
+      } else {
+        setHabitLogs(
+          habitLogs.filter(
+            (log) => !(log.habit_id === habitId && log.completed_date === currentDate),
+          ),
+        )
+      }
+
+      await productivityService.toggleHabitLog(habitId, currentDate)
+      loadData(true)
+    }
   }
 
   const handleToggleTask = async (task: ProductivityTask) => {
@@ -173,21 +231,31 @@ export default function ClientProductivity() {
     loadData(true)
   }
 
-  const handleAddTask = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!newTaskTitle.trim()) return
-
-    const tempTitle = newTaskTitle
-    setNewTaskTitle('')
+  const handleCreateNew = async () => {
+    if (!newItemTitle.trim()) return
     setIsLoading(true)
 
-    await productivityService.createTask({
-      title: tempTitle,
-      due_date: currentDate,
-      status: 'todo',
-      priority: 'medium',
-    })
+    if (newItemType === 'task') {
+      await productivityService.createTask({
+        title: newItemTitle,
+        due_date: currentDate,
+        status: 'todo',
+        priority: 'medium',
+      })
+    } else {
+      await productivityService.createHabit({
+        title: newItemTitle,
+        target_value: parseInt(newHabitTarget) || 1,
+        target_unit: newHabitUnit || 'vezes',
+        frequency: 'daily',
+        color: 'blue',
+      })
+    }
 
+    setNewItemTitle('')
+    setNewHabitTarget('1')
+    setNewHabitUnit('vezes')
+    setIsNewModalOpen(false)
     loadData()
   }
 
@@ -294,8 +362,80 @@ export default function ClientProductivity() {
   }
 
   return (
-    <div className="flex flex-col min-h-full pb-20">
+    <div className="flex flex-col min-h-full pb-20 relative">
       <DashboardHeader title="Produtividade" />
+
+      {/* Floating Action Button for New Item */}
+      <Dialog open={isNewModalOpen} onOpenChange={setIsNewModalOpen}>
+        <DialogTrigger asChild>
+          <Button
+            size="icon"
+            className="fixed bottom-20 right-6 h-14 w-14 rounded-full shadow-lg z-40 lg:bottom-10 lg:right-10"
+          >
+            <Plus className="h-6 w-6" />
+          </Button>
+        </DialogTrigger>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Criar Novo</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <ToggleGroup
+              type="single"
+              value={newItemType}
+              onValueChange={(v) => v && setNewItemType(v as 'task' | 'habit')}
+              className="justify-start"
+            >
+              <ToggleGroupItem value="task" className="flex-1">
+                Tarefa
+              </ToggleGroupItem>
+              <ToggleGroupItem value="habit" className="flex-1">
+                Hábito
+              </ToggleGroupItem>
+            </ToggleGroup>
+
+            <div className="space-y-2">
+              <Label>Título</Label>
+              <Input
+                value={newItemTitle}
+                onChange={(e) => setNewItemTitle(e.target.value)}
+                placeholder={newItemType === 'task' ? 'Ex: Ler 10 páginas' : 'Ex: Beber água'}
+              />
+            </div>
+
+            {newItemType === 'habit' && (
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label>Meta</Label>
+                  <Input
+                    type="number"
+                    value={newHabitTarget}
+                    onChange={(e) => setNewHabitTarget(e.target.value)}
+                    min="1"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Unidade</Label>
+                  <Input
+                    value={newHabitUnit}
+                    onChange={(e) => setNewHabitUnit(e.target.value)}
+                    placeholder="ex: ml, min, vezes"
+                  />
+                </div>
+              </div>
+            )}
+
+            <Button
+              className="w-full mt-2"
+              onClick={handleCreateNew}
+              disabled={!newItemTitle.trim() || isLoading}
+            >
+              {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Criar'}
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
       <PageContent className="max-w-6xl mx-auto w-full">
         <div className="flex items-center gap-3 mb-6 px-1">
           <div className="bg-primary/10 p-3 rounded-2xl">
@@ -336,32 +476,84 @@ export default function ClientProductivity() {
                 </div>
                 <div className="flex flex-col gap-3">
                   {habits.map((habit) => {
-                    const isCompleted = todaysHabitLogs.some((log) => log.habit_id === habit.id)
+                    const log = todaysHabitLogs.find((l) => l.habit_id === habit.id)
+                    const isQuantitative = (habit.target_value || 1) > 1
+                    const progress = log?.progress_made || 0
+                    const isCompleted = isQuantitative
+                      ? progress >= (habit.target_value || 1)
+                      : !!log
+
                     return (
-                      <button
+                      <div
                         key={habit.id}
-                        onClick={() => handleToggleHabit(habit.id)}
                         className={cn(
-                          'flex items-center gap-4 p-4 rounded-2xl border transition-all text-left active:scale-[0.98]',
+                          'flex items-center justify-between p-4 rounded-2xl border transition-all gap-4',
                           isCompleted
                             ? 'bg-primary/10 border-transparent shadow-inner'
                             : 'bg-card hover:bg-secondary/40 shadow-sm',
                         )}
                       >
-                        {isCompleted ? (
-                          <CheckCircle2 className="h-6 w-6 text-primary shrink-0 transition-transform" />
-                        ) : (
-                          <Circle className="h-6 w-6 text-muted-foreground/40 shrink-0" />
-                        )}
-                        <span
-                          className={cn(
-                            'font-medium text-base transition-colors',
-                            isCompleted && 'text-muted-foreground',
-                          )}
+                        <button
+                          onClick={() => !isQuantitative && handleToggleHabit(habit.id)}
+                          className="flex items-center gap-4 text-left active:scale-[0.98] flex-1"
                         >
-                          {habit.title}
-                        </span>
-                      </button>
+                          {isCompleted ? (
+                            <CheckCircle2 className="h-6 w-6 text-primary shrink-0 transition-transform" />
+                          ) : (
+                            <Circle className="h-6 w-6 text-muted-foreground/40 shrink-0" />
+                          )}
+                          <div className="flex flex-col">
+                            <span
+                              className={cn(
+                                'font-medium text-base transition-colors',
+                                isCompleted && 'text-muted-foreground',
+                              )}
+                            >
+                              {habit.title}
+                            </span>
+                            {isQuantitative && (
+                              <span className="text-xs text-muted-foreground mt-0.5 font-medium">
+                                {progress} / {habit.target_value} {habit.target_unit}
+                              </span>
+                            )}
+                          </div>
+                        </button>
+
+                        {isQuantitative && !isCompleted && (
+                          <div className="flex items-center gap-1 shrink-0">
+                            <Button
+                              size="sm"
+                              variant="ghost"
+                              className="h-8 px-2 text-xs bg-secondary/50 hover:bg-secondary"
+                              onClick={() => handleToggleHabit(habit.id, 1)}
+                            >
+                              +1
+                            </Button>
+                            {['minutos', 'min', 'm', 'paginas', 'páginas', 'ml'].includes(
+                              habit.target_unit?.toLowerCase() || '',
+                            ) && (
+                              <Button
+                                size="sm"
+                                variant="ghost"
+                                className="h-8 px-2 text-xs bg-secondary/50 hover:bg-secondary"
+                                onClick={() => handleToggleHabit(habit.id, 5)}
+                              >
+                                +5
+                              </Button>
+                            )}
+                            <Button
+                              size="sm"
+                              variant="default"
+                              className="h-8 px-2 text-xs"
+                              onClick={() =>
+                                handleToggleHabit(habit.id, habit.target_value! - progress)
+                              }
+                            >
+                              Concluir
+                            </Button>
+                          </div>
+                        )}
+                      </div>
                     )
                   })}
                 </div>
@@ -398,35 +590,21 @@ export default function ClientProductivity() {
                     )
                   })
                 ) : (
-                  <p className="text-sm text-muted-foreground text-center py-6">
+                  <p className="text-sm text-muted-foreground text-center py-6 bg-muted/20 rounded-xl border border-dashed">
                     Nenhuma tarefa pendente para hoje.
                   </p>
                 )}
 
-                <form
-                  onSubmit={handleAddTask}
-                  className="flex items-center gap-2 mt-4 p-1.5 rounded-xl border bg-background focus-within:ring-2 focus-within:ring-primary/20 focus-within:border-primary/50 transition-all shadow-sm"
+                <Button
+                  variant="outline"
+                  className="w-full mt-2 border-dashed border-2 bg-transparent text-muted-foreground hover:bg-secondary/50"
+                  onClick={() => {
+                    setNewItemType('task')
+                    setIsNewModalOpen(true)
+                  }}
                 >
-                  <Input
-                    value={newTaskTitle}
-                    onChange={(e) => setNewTaskTitle(e.target.value)}
-                    placeholder="Adicionar nova tarefa para hoje..."
-                    className="border-0 shadow-none focus-visible:ring-0 bg-transparent h-10 text-base"
-                  />
-                  <Button
-                    type="submit"
-                    size="icon"
-                    variant="ghost"
-                    className="shrink-0 text-primary hover:bg-primary/10 h-10 w-10 rounded-lg"
-                    disabled={!newTaskTitle.trim() || isLoading}
-                  >
-                    {isLoading && newTaskTitle.trim() ? (
-                      <Loader2 className="h-5 w-5 animate-spin" />
-                    ) : (
-                      <Plus className="h-5 w-5" />
-                    )}
-                  </Button>
-                </form>
+                  <Plus className="mr-2 h-4 w-4" /> Adicionar nova tarefa
+                </Button>
               </div>
             </div>
           </TabsContent>
@@ -440,6 +618,38 @@ export default function ClientProductivity() {
           </TabsContent>
 
           <TabsContent value="analytics" className="space-y-6 mt-0">
+            {/* Focus Guardian Settings */}
+            <Card className="p-6 max-w-4xl mx-auto shadow-sm">
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <div>
+                  <h3 className="text-lg font-semibold flex items-center gap-2">
+                    <Sparkles className="h-5 w-5 text-primary" /> Guardião de Foco
+                  </h3>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    Receba notificações esporádicas para garantir que não se distraiu.
+                  </p>
+                </div>
+                <div className="flex items-center gap-4 bg-muted/30 p-2 rounded-lg border">
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm text-muted-foreground font-medium">A cada</span>
+                    <select
+                      className="bg-transparent border border-border/50 rounded-md text-sm p-1.5 focus:outline-none focus:ring-1 focus:ring-primary"
+                      value={focusSettings?.reminder_interval || 15}
+                      onChange={(e) => updateInterval(Number(e.target.value))}
+                      disabled={!focusSettings?.is_enabled}
+                    >
+                      <option value={5}>5 min</option>
+                      <option value={15}>15 min</option>
+                      <option value={30}>30 min</option>
+                      <option value={60}>60 min</option>
+                    </select>
+                  </div>
+                  <div className="h-6 w-[1px] bg-border/50 mx-1"></div>
+                  <Switch checked={!!focusSettings?.is_enabled} onCheckedChange={toggleGuardian} />
+                </div>
+              </div>
+            </Card>
+
             {/* Pomodoro Timer */}
             <Card className="p-8 flex flex-col items-center justify-center max-w-2xl mx-auto shadow-sm">
               <div className="flex bg-muted p-1 rounded-full mb-8">
@@ -521,9 +731,15 @@ export default function ClientProductivity() {
                       </span>
                       <div className="flex gap-1.5 flex-1 sm:justify-end overflow-x-auto pb-1 hide-scrollbar">
                         {last14Days.map((dateStr) => {
-                          const isCompleted = habitLogs.some(
-                            (log) => log.habit_id === habit.id && log.completed_date === dateStr,
+                          const log = habitLogs.find(
+                            (l) => l.habit_id === habit.id && l.completed_date === dateStr,
                           )
+                          const isQuantitative = (habit.target_value || 1) > 1
+                          const isCompleted = log
+                            ? isQuantitative
+                              ? (log.progress_made || 0) >= (habit.target_value || 1)
+                              : true
+                            : false
                           const formattedDate = new Date(dateStr + 'T12:00:00').toLocaleDateString(
                             'pt-BR',
                             {

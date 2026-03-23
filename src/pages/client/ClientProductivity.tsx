@@ -47,6 +47,7 @@ import {
   ShieldAlert,
   Volume2,
   BellRing,
+  X,
 } from 'lucide-react'
 import {
   productivityService,
@@ -91,6 +92,10 @@ export default function ClientProductivity() {
   const [newHabitUnit, setNewHabitUnit] = useState('vezes')
   const [newTaskIsUrgent, setNewTaskIsUrgent] = useState(false)
   const [newTaskIsImportant, setNewTaskIsImportant] = useState(true)
+
+  // Tags State
+  const [newTags, setNewTags] = useState<string[]>([])
+  const [newTagInput, setNewTagInput] = useState('')
 
   // Log Progress Modal State
   const [logModalOpen, setLogModalOpen] = useState(false)
@@ -427,6 +432,35 @@ export default function ClientProductivity() {
     loadData(true)
   }
 
+  const getTagColor = (tag: string) => {
+    const colors = [
+      'bg-blue-100 text-blue-700 border-blue-200 dark:bg-blue-900/30 dark:text-blue-300 dark:border-blue-800',
+      'bg-purple-100 text-purple-700 border-purple-200 dark:bg-purple-900/30 dark:text-purple-300 dark:border-purple-800',
+      'bg-pink-100 text-pink-700 border-pink-200 dark:bg-pink-900/30 dark:text-pink-300 dark:border-pink-800',
+      'bg-green-100 text-green-700 border-green-200 dark:bg-green-900/30 dark:text-green-300 dark:border-green-800',
+      'bg-orange-100 text-orange-700 border-orange-200 dark:bg-orange-900/30 dark:text-orange-300 dark:border-orange-800',
+      'bg-red-100 text-red-700 border-red-200 dark:bg-red-900/30 dark:text-red-300 dark:border-red-800',
+      'bg-yellow-100 text-yellow-700 border-yellow-200 dark:bg-yellow-900/30 dark:text-yellow-300 dark:border-yellow-800',
+      'bg-indigo-100 text-indigo-700 border-indigo-200 dark:bg-indigo-900/30 dark:text-indigo-300 dark:border-indigo-800',
+    ]
+    const index = tag.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0)
+    return colors[index % colors.length]
+  }
+
+  const handleAddTag = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && newTagInput.trim() !== '') {
+      e.preventDefault()
+      if (!newTags.includes(newTagInput.trim())) {
+        setNewTags([...newTags, newTagInput.trim()])
+      }
+      setNewTagInput('')
+    }
+  }
+
+  const handleRemoveTag = (tagToRemove: string) => {
+    setNewTags(newTags.filter((tag) => tag !== tagToRemove))
+  }
+
   const handleCreateNew = async () => {
     if (!newItemTitle.trim()) return
     setIsLoading(true)
@@ -438,6 +472,7 @@ export default function ClientProductivity() {
         status: 'todo',
         priority: newTaskIsImportant ? 'high' : 'low',
         is_urgent: newTaskIsUrgent,
+        tags: newTags,
       })
     } else {
       await productivityService.createHabit({
@@ -446,6 +481,7 @@ export default function ClientProductivity() {
         target_unit: newHabitUnit || 'vezes',
         frequency: 'daily',
         color: 'blue',
+        tags: newTags,
       })
     }
 
@@ -454,6 +490,8 @@ export default function ClientProductivity() {
     setNewHabitUnit('vezes')
     setNewTaskIsUrgent(false)
     setNewTaskIsImportant(true)
+    setNewTags([])
+    setNewTagInput('')
     setIsNewModalOpen(false)
     loadData()
   }
@@ -524,7 +562,20 @@ export default function ClientProductivity() {
         >
           {task.title}
         </span>
-        <div className="flex items-center justify-between">
+        {task.tags && task.tags.length > 0 && (
+          <div className="flex flex-wrap gap-1 mt-0.5">
+            {task.tags.map((tag) => (
+              <Badge
+                key={tag}
+                variant="outline"
+                className={`text-[10px] py-0 h-4 px-1.5 font-medium ${getTagColor(tag)}`}
+              >
+                {tag}
+              </Badge>
+            ))}
+          </div>
+        )}
+        <div className="flex items-center justify-between mt-1">
           <div className="flex items-center gap-2">
             <Badge
               variant={
@@ -686,6 +737,35 @@ export default function ClientProductivity() {
                 onChange={(e) => setNewItemTitle(e.target.value)}
                 placeholder={newItemType === 'task' ? 'Ex: Ler 10 páginas' : 'Ex: Beber água'}
               />
+            </div>
+
+            <div className="space-y-2">
+              <Label>Tags</Label>
+              <Input
+                value={newTagInput}
+                onChange={(e) => setNewTagInput(e.target.value)}
+                onKeyDown={handleAddTag}
+                placeholder="Pressione Enter para adicionar"
+              />
+              {newTags.length > 0 && (
+                <div className="flex flex-wrap gap-1 mt-2">
+                  {newTags.map((tag) => (
+                    <Badge
+                      key={tag}
+                      variant="outline"
+                      className={`text-[10px] py-0 h-5 px-1.5 font-medium flex items-center gap-1 pr-1 ${getTagColor(tag)}`}
+                    >
+                      {tag}
+                      <button
+                        onClick={() => handleRemoveTag(tag)}
+                        className="hover:bg-black/10 rounded-full p-0.5 ml-1 transition-colors"
+                      >
+                        <X className="h-3 w-3" />
+                      </button>
+                    </Badge>
+                  ))}
+                </div>
+              )}
             </div>
 
             {newItemType === 'task' && (
@@ -859,16 +939,31 @@ export default function ClientProductivity() {
                         {isQuantitative ? (
                           <div className="flex items-center justify-between w-full gap-4">
                             <div className="flex flex-col flex-1">
-                              <div className="flex justify-between items-center mb-1.5">
-                                <span
-                                  className={cn(
-                                    'font-medium text-base',
-                                    isCompleted && 'text-muted-foreground',
+                              <div className="flex justify-between items-start mb-1.5 gap-2">
+                                <div className="flex flex-col gap-1">
+                                  <span
+                                    className={cn(
+                                      'font-medium text-base',
+                                      isCompleted && 'text-muted-foreground',
+                                    )}
+                                  >
+                                    {habit.title}
+                                  </span>
+                                  {habit.tags && habit.tags.length > 0 && (
+                                    <div className="flex flex-wrap gap-1">
+                                      {habit.tags.map((tag) => (
+                                        <Badge
+                                          key={tag}
+                                          variant="outline"
+                                          className={`text-[10px] py-0 h-4 px-1.5 font-medium ${getTagColor(tag)}`}
+                                        >
+                                          {tag}
+                                        </Badge>
+                                      ))}
+                                    </div>
                                   )}
-                                >
-                                  {habit.title}
-                                </span>
-                                <span className="text-xs text-muted-foreground font-medium">
+                                </div>
+                                <span className="text-xs text-muted-foreground font-medium shrink-0 pt-1">
                                   {currentProgress} / {habit.target_value} {habit.target_unit}
                                 </span>
                               </div>
@@ -908,14 +1003,29 @@ export default function ClientProductivity() {
                             ) : (
                               <Circle className="h-6 w-6 text-muted-foreground/40 shrink-0" />
                             )}
-                            <span
-                              className={cn(
-                                'font-medium text-base transition-colors',
-                                isCompleted && 'text-muted-foreground',
+                            <div className="flex flex-col gap-1">
+                              <span
+                                className={cn(
+                                  'font-medium text-base transition-colors',
+                                  isCompleted && 'text-muted-foreground',
+                                )}
+                              >
+                                {habit.title}
+                              </span>
+                              {habit.tags && habit.tags.length > 0 && (
+                                <div className="flex flex-wrap gap-1">
+                                  {habit.tags.map((tag) => (
+                                    <Badge
+                                      key={tag}
+                                      variant="outline"
+                                      className={`text-[10px] py-0 h-4 px-1.5 font-medium ${getTagColor(tag)}`}
+                                    >
+                                      {tag}
+                                    </Badge>
+                                  ))}
+                                </div>
                               )}
-                            >
-                              {habit.title}
-                            </span>
+                            </div>
                           </button>
                         )}
                       </div>
@@ -934,31 +1044,48 @@ export default function ClientProductivity() {
                     return (
                       <div
                         key={task.id}
-                        className="flex items-center gap-3 p-3 rounded-xl hover:bg-secondary/50 transition-colors group"
+                        className="flex items-start gap-3 p-3 rounded-xl hover:bg-secondary/50 transition-colors group"
                       >
-                        <Checkbox
-                          id={`task-${task.id}`}
-                          checked={isDone}
-                          onCheckedChange={() => handleToggleTask(task)}
-                          className="h-5 w-5 rounded-md"
-                        />
+                        <div className="pt-0.5">
+                          <Checkbox
+                            id={`task-${task.id}`}
+                            checked={isDone}
+                            onCheckedChange={() => handleToggleTask(task)}
+                            className="h-5 w-5 rounded-md"
+                          />
+                        </div>
                         <label
                           htmlFor={`task-${task.id}`}
                           className={cn(
-                            'text-base transition-all duration-300 cursor-pointer flex-1',
+                            'text-base transition-all duration-300 cursor-pointer flex-1 flex flex-col gap-1',
                             isDone && 'line-through text-muted-foreground opacity-70',
                           )}
                         >
-                          {task.title}
+                          <div className="flex items-center gap-2">
+                            <span>{task.title}</span>
+                            {task.is_urgent && !isDone && (
+                              <Badge
+                                variant="outline"
+                                className="text-red-500 border-red-500/30 bg-red-500/10 px-1.5 py-0 h-5 text-[10px] uppercase"
+                              >
+                                Urgente
+                              </Badge>
+                            )}
+                          </div>
+                          {task.tags && task.tags.length > 0 && (
+                            <div className="flex flex-wrap gap-1 mt-0.5">
+                              {task.tags.map((tag) => (
+                                <Badge
+                                  key={tag}
+                                  variant="outline"
+                                  className={`text-[10px] py-0 h-4 px-1.5 font-medium ${getTagColor(tag)}`}
+                                >
+                                  {tag}
+                                </Badge>
+                              ))}
+                            </div>
+                          )}
                         </label>
-                        {task.is_urgent && !isDone && (
-                          <Badge
-                            variant="outline"
-                            className="text-red-500 border-red-500/30 bg-red-500/10 px-1.5 py-0 h-5 text-[10px] uppercase"
-                          >
-                            Urgente
-                          </Badge>
-                        )}
                       </div>
                     )
                   })

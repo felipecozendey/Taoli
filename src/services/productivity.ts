@@ -9,6 +9,7 @@ export interface ProductivityTask {
   priority: 'low' | 'medium' | 'high' | string
   due_date?: string | null
   is_urgent?: boolean | null
+  tags?: string[] | null
   created_at: string
 }
 
@@ -21,6 +22,7 @@ export interface ProductivityHabit {
   target_value?: number | null
   target_unit?: string | null
   is_active?: boolean | null
+  tags?: string[] | null
   created_at: string
 }
 

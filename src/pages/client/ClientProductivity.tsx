@@ -89,14 +89,17 @@ export default function ClientProductivity() {
   const [newItemTitle, setNewItemTitle] = useState('')
   const [newHabitTarget, setNewHabitTarget] = useState('1')
   const [newHabitUnit, setNewHabitUnit] = useState('vezes')
+  const [newTaskIsUrgent, setNewTaskIsUrgent] = useState(false)
+  const [newTaskIsImportant, setNewTaskIsImportant] = useState(true)
 
   // Log Progress Modal State
   const [logModalOpen, setLogModalOpen] = useState(false)
   const [selectedHabitToLog, setSelectedHabitToLog] = useState<ProductivityHabit | null>(null)
   const [logAmount, setLogAmount] = useState<string>('')
 
-  // Dashboard State
+  // Dashboard & Planning State
   const [dashboardPeriod, setDashboardPeriod] = useState('7')
+  const [kanbanView, setKanbanView] = useState<'status' | 'eisenhower'>('status')
 
   // Focus Guardian State
   const [isGuardianEnabled, setIsGuardianEnabled] = useState(false)
@@ -433,7 +436,8 @@ export default function ClientProductivity() {
         title: newItemTitle,
         due_date: currentDate,
         status: 'todo',
-        priority: 'medium',
+        priority: newTaskIsImportant ? 'high' : 'low',
+        is_urgent: newTaskIsUrgent,
       })
     } else {
       await productivityService.createHabit({
@@ -448,6 +452,8 @@ export default function ClientProductivity() {
     setNewItemTitle('')
     setNewHabitTarget('1')
     setNewHabitUnit('vezes')
+    setNewTaskIsUrgent(false)
+    setNewTaskIsImportant(true)
     setIsNewModalOpen(false)
     loadData()
   }
@@ -475,6 +481,88 @@ export default function ClientProductivity() {
     loadData(true)
   }
 
+  const handleDropEisenhower = async (
+    e: React.DragEvent<HTMLDivElement>,
+    isUrgent: boolean,
+    isImportant: boolean,
+  ) => {
+    e.preventDefault()
+    const taskId = e.dataTransfer.getData('taskId')
+
+    const task = tasks.find((t) => t.id === taskId)
+    if (!task) return
+
+    const newPriority = isImportant ? 'high' : 'low'
+
+    // Optimistic update
+    setTasks(
+      tasks.map((t) =>
+        t.id === taskId ? { ...t, is_urgent: isUrgent, priority: newPriority } : t,
+      ),
+    )
+
+    await productivityService.updateTask(taskId, {
+      is_urgent: isUrgent,
+      priority: newPriority,
+    })
+    loadData(true)
+  }
+
+  const renderTaskCard = (task: ProductivityTask) => (
+    <Card
+      key={task.id}
+      draggable
+      onDragStart={(e) => handleDragStartTask(e, task.id)}
+      className="p-3 cursor-grab active:cursor-grabbing hover:border-primary/50 transition-colors bg-background"
+    >
+      <div className="flex flex-col gap-2">
+        <span
+          className={cn(
+            'font-medium text-sm transition-colors',
+            task.status === 'done' && 'line-through text-muted-foreground opacity-70',
+          )}
+        >
+          {task.title}
+        </span>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Badge
+              variant={
+                task.priority === 'high'
+                  ? 'destructive'
+                  : task.priority === 'medium'
+                    ? 'default'
+                    : 'secondary'
+              }
+              className={cn(
+                task.priority === 'medium' && 'bg-yellow-500 hover:bg-yellow-600 text-white',
+              )}
+            >
+              {task.priority === 'high' ? 'Alta' : task.priority === 'medium' ? 'Média' : 'Baixa'}
+            </Badge>
+            {task.is_urgent && (
+              <Badge
+                variant="outline"
+                className="text-red-500 border-red-500/30 bg-red-500/10 px-1.5 py-0 h-5 text-[10px] uppercase tracking-wider font-bold"
+              >
+                Urgente
+              </Badge>
+            )}
+          </div>
+          {task.due_date && (
+            <span className="text-xs text-muted-foreground flex items-center gap-1">
+              <Calendar className="h-3 w-3" />
+              {new Date(task.due_date + 'T12:00:00').toLocaleDateString('pt-BR', {
+                day: '2-digit',
+                month: 'short',
+              })}
+            </span>
+          )}
+        </div>
+      </div>
+    </Card>
+  )
+
   const renderKanbanColumn = (status: 'todo' | 'in_progress' | 'done', title: string) => {
     const columnTasks = tasks.filter((t) => t.status === status)
 
@@ -490,48 +578,49 @@ export default function ClientProductivity() {
             ({columnTasks.length})
           </span>
         </h3>
+        {columnTasks.map(renderTaskCard)}
+      </div>
+    )
+  }
 
-        {columnTasks.map((task) => (
-          <Card
-            key={task.id}
-            draggable
-            onDragStart={(e) => handleDragStartTask(e, task.id)}
-            className="p-3 cursor-grab active:cursor-grabbing hover:border-primary/50 transition-colors"
-          >
-            <div className="flex flex-col gap-2">
-              <span className="font-medium text-sm">{task.title}</span>
-              <div className="flex items-center justify-between">
-                <Badge
-                  variant={
-                    task.priority === 'high'
-                      ? 'destructive'
-                      : task.priority === 'medium'
-                        ? 'default'
-                        : 'secondary'
-                  }
-                  className={cn(
-                    task.priority === 'medium' && 'bg-yellow-500 hover:bg-yellow-600 text-white',
-                  )}
-                >
-                  {task.priority === 'high'
-                    ? 'Alta'
-                    : task.priority === 'medium'
-                      ? 'Média'
-                      : 'Baixa'}
-                </Badge>
-                {task.due_date && (
-                  <span className="text-xs text-muted-foreground flex items-center gap-1">
-                    <Calendar className="h-3 w-3" />
-                    {new Date(task.due_date + 'T12:00:00').toLocaleDateString('pt-BR', {
-                      day: '2-digit',
-                      month: 'short',
-                    })}
-                  </span>
-                )}
-              </div>
-            </div>
-          </Card>
-        ))}
+  const renderEisenhowerQuadrant = (
+    title: string,
+    subtitle: string,
+    isUrgent: boolean,
+    isImportant: boolean,
+    styleClass: string,
+  ) => {
+    const quadTasks = tasks.filter((t) => {
+      const taskIsImportant = t.priority === 'high' || t.priority === 'medium'
+      const taskIsUrgent = !!t.is_urgent
+      // Usually, completed tasks don't need prioritization
+      return taskIsUrgent === isUrgent && taskIsImportant === isImportant && t.status !== 'done'
+    })
+
+    return (
+      <div
+        className={cn('p-4 rounded-xl border flex flex-col gap-3 min-h-[300px]', styleClass)}
+        onDragOver={(e) => e.preventDefault()}
+        onDrop={(e) => handleDropEisenhower(e, isUrgent, isImportant)}
+      >
+        <h3 className="font-semibold text-base mb-2 flex items-start justify-between">
+          <div className="flex flex-col gap-0.5">
+            <span>{title}</span>
+            <span className="text-xs font-normal opacity-70">{subtitle}</span>
+          </div>
+          <span className="text-muted-foreground text-sm font-normal bg-background/50 px-2 py-0.5 rounded-full border">
+            {quadTasks.length}
+          </span>
+        </h3>
+        <div className="flex flex-col gap-2 overflow-y-auto max-h-[400px] hide-scrollbar pr-1">
+          {quadTasks.length > 0 ? (
+            quadTasks.map(renderTaskCard)
+          ) : (
+            <p className="text-xs text-muted-foreground/60 text-center py-6 border border-dashed rounded-lg border-current/20">
+              Arraste tarefas para cá
+            </p>
+          )}
+        </div>
       </div>
     )
   }
@@ -598,6 +687,41 @@ export default function ClientProductivity() {
                 placeholder={newItemType === 'task' ? 'Ex: Ler 10 páginas' : 'Ex: Beber água'}
               />
             </div>
+
+            {newItemType === 'task' && (
+              <div className="flex flex-col gap-3 pt-2">
+                <div className="flex items-center justify-between bg-muted/30 p-3 rounded-lg border">
+                  <div className="space-y-0.5">
+                    <Label className="text-base cursor-pointer" htmlFor="important-toggle">
+                      É Importante?
+                    </Label>
+                    <p className="text-xs text-muted-foreground">
+                      Alinhado aos seus objetivos de longo prazo
+                    </p>
+                  </div>
+                  <Switch
+                    id="important-toggle"
+                    checked={newTaskIsImportant}
+                    onCheckedChange={setNewTaskIsImportant}
+                  />
+                </div>
+                <div className="flex items-center justify-between bg-muted/30 p-3 rounded-lg border">
+                  <div className="space-y-0.5">
+                    <Label className="text-base cursor-pointer" htmlFor="urgent-toggle">
+                      É Urgente?
+                    </Label>
+                    <p className="text-xs text-muted-foreground">
+                      Precisa ser feito o mais rápido possível
+                    </p>
+                  </div>
+                  <Switch
+                    id="urgent-toggle"
+                    checked={newTaskIsUrgent}
+                    onCheckedChange={setNewTaskIsUrgent}
+                  />
+                </div>
+              </div>
+            )}
 
             {newItemType === 'habit' && (
               <div className="grid grid-cols-2 gap-4">
@@ -827,6 +951,14 @@ export default function ClientProductivity() {
                         >
                           {task.title}
                         </label>
+                        {task.is_urgent && !isDone && (
+                          <Badge
+                            variant="outline"
+                            className="text-red-500 border-red-500/30 bg-red-500/10 px-1.5 py-0 h-5 text-[10px] uppercase"
+                          >
+                            Urgente
+                          </Badge>
+                        )}
                       </div>
                     )
                   })
@@ -850,12 +982,58 @@ export default function ClientProductivity() {
             </div>
           </TabsContent>
 
-          <TabsContent value="kanban" className="mt-0">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
-              {renderKanbanColumn('todo', 'Para Fazer')}
-              {renderKanbanColumn('in_progress', 'Em Progresso')}
-              {renderKanbanColumn('done', 'Concluído')}
+          <TabsContent value="kanban" className="mt-0 space-y-4">
+            <div className="flex justify-end mb-2">
+              <Tabs
+                value={kanbanView}
+                onValueChange={(v) => setKanbanView(v as 'status' | 'eisenhower')}
+                className="w-full sm:w-[400px]"
+              >
+                <TabsList className="grid w-full grid-cols-2">
+                  <TabsTrigger value="status">Por Status</TabsTrigger>
+                  <TabsTrigger value="eisenhower">Matriz Eisenhower</TabsTrigger>
+                </TabsList>
+              </Tabs>
             </div>
+
+            {kanbanView === 'status' ? (
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
+                {renderKanbanColumn('todo', 'Para Fazer')}
+                {renderKanbanColumn('in_progress', 'Em Progresso')}
+                {renderKanbanColumn('done', 'Concluído')}
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {renderEisenhowerQuadrant(
+                  'Fazer Agora',
+                  'Urgente e Importante',
+                  true,
+                  true,
+                  'border-red-500/30 bg-red-500/5',
+                )}
+                {renderEisenhowerQuadrant(
+                  'Agendar',
+                  'Importante, Não Urgente',
+                  false,
+                  true,
+                  'border-blue-500/30 bg-blue-500/5',
+                )}
+                {renderEisenhowerQuadrant(
+                  'Delegar',
+                  'Urgente, Não Importante',
+                  true,
+                  false,
+                  'border-orange-500/30 bg-orange-500/5',
+                )}
+                {renderEisenhowerQuadrant(
+                  'Eliminar',
+                  'Não Urgente, Não Importante',
+                  false,
+                  false,
+                  'border-muted bg-muted/10',
+                )}
+              </div>
+            )}
           </TabsContent>
 
           <TabsContent value="analytics" className="space-y-6 mt-0">

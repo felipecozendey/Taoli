@@ -8,6 +8,7 @@ export interface ProductivityTask {
   status: 'todo' | 'in_progress' | 'done' | string
   priority: 'low' | 'medium' | 'high' | string
   due_date?: string | null
+  is_urgent?: boolean | null
   created_at: string
 }
 

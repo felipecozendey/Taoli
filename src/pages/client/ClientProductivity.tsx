@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo, useRef } from 'react'
 import confetti from 'canvas-confetti'
 import { DashboardHeader } from '@/components/shared/DashboardHeader'
 import { PageContent } from '@/components/shared/PageContent'
@@ -15,6 +15,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  DialogDescription,
 } from '@/components/ui/dialog'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 import { Label } from '@/components/ui/label'
@@ -28,6 +29,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { useFocusGuardian } from '@/hooks/use-focus-guardian'
+import { useToast } from '@/hooks/use-toast'
 import {
   CheckCircle2,
   Circle,
@@ -40,7 +42,6 @@ import {
   RotateCcw,
   Coffee,
   Briefcase,
-  Sparkles,
   Activity,
   Trophy,
   ShieldAlert,
@@ -80,12 +81,19 @@ export default function ClientProductivity() {
   const [habitLogs, setHabitLogs] = useState<ProductivityHabitLog[]>([])
   const [isLoading, setIsLoading] = useState(true)
 
+  const { toast } = useToast()
+
   // New Item Modal State
   const [isNewModalOpen, setIsNewModalOpen] = useState(false)
   const [newItemType, setNewItemType] = useState<'task' | 'habit'>('task')
   const [newItemTitle, setNewItemTitle] = useState('')
   const [newHabitTarget, setNewHabitTarget] = useState('1')
   const [newHabitUnit, setNewHabitUnit] = useState('vezes')
+
+  // Log Progress Modal State
+  const [logModalOpen, setLogModalOpen] = useState(false)
+  const [selectedHabitToLog, setSelectedHabitToLog] = useState<ProductivityHabit | null>(null)
+  const [logAmount, setLogAmount] = useState<string>('')
 
   // Dashboard State
   const [dashboardPeriod, setDashboardPeriod] = useState('7')
@@ -106,6 +114,7 @@ export default function ClientProductivity() {
   const [timerMode, setTimerMode] = useState<'work' | 'break'>('work')
   const [timeLeft, setTimeLeft] = useState(WORK_TIME)
   const [isTimerRunning, setIsTimerRunning] = useState(false)
+  const [selectedPomodoroHabitId, setSelectedPomodoroHabitId] = useState<string>('none')
 
   const loadData = async (silent = false) => {
     if (!silent) setIsLoading(true)
@@ -156,6 +165,50 @@ export default function ClientProductivity() {
     await productivityService.updateFocusSettings({ reminder_interval: newInterval })
   }
 
+  const handleLogProgress = async (habitId: string, amount: number) => {
+    const habit = habits.find((h) => h.id === habitId)
+    if (!habit) return
+
+    const currentLog = habitLogs.find(
+      (l) => l.habit_id === habitId && l.completed_date === currentDate,
+    )
+    const currentProgress = currentLog?.progress_made || 0
+    const newProgress = currentProgress + amount
+    const target = habit.target_value || 1
+
+    if (newProgress >= target && currentProgress < target) {
+      confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } })
+    }
+
+    // Optimistic update
+    setHabitLogs((logs) => {
+      const existing = logs.find((l) => l.habit_id === habitId && l.completed_date === currentDate)
+      if (existing) {
+        return logs.map((l) => (l.id === existing.id ? { ...l, progress_made: newProgress } : l))
+      } else {
+        return [
+          ...logs,
+          {
+            id: 'temp-' + Date.now(),
+            habit_id: habitId,
+            completed_date: currentDate,
+            progress_made: amount,
+            created_at: new Date().toISOString(),
+          },
+        ]
+      }
+    })
+
+    await productivityService.toggleHabitLog(habitId, currentDate, amount)
+    loadData(true)
+  }
+
+  // Ref to safely access handleLogProgress inside Pomodoro useEffect without dependency loop
+  const handleLogProgressRef = useRef(handleLogProgress)
+  useEffect(() => {
+    handleLogProgressRef.current = handleLogProgress
+  }, [handleLogProgress])
+
   // Pomodoro Timer Logic
   useEffect(() => {
     let interval: NodeJS.Timeout
@@ -167,13 +220,35 @@ export default function ClientProductivity() {
       } catch (e) {
         // Ignore audio errors
       }
+
+      if (timerMode === 'work') {
+        if (selectedPomodoroHabitId && selectedPomodoroHabitId !== 'none') {
+          const addedMinutes = Math.round(WORK_TIME / 60)
+          handleLogProgressRef.current(selectedPomodoroHabitId, addedMinutes)
+          toast({
+            title: 'Sessão concluída!',
+            description: `${addedMinutes} minutos adicionados ao seu hábito automaticamente.`,
+          })
+        } else {
+          toast({
+            title: 'Sessão concluída!',
+            description: 'Bom trabalho! Hora de uma pausa.',
+          })
+        }
+      } else {
+        toast({
+          title: 'Pausa concluída!',
+          description: 'Pronto para voltar ao trabalho?',
+        })
+      }
+
       const newMode = timerMode === 'work' ? 'break' : 'work'
       setTimerMode(newMode)
       setTimeLeft(newMode === 'work' ? WORK_TIME : BREAK_TIME)
       setIsTimerRunning(false)
     }
     return () => clearInterval(interval)
-  }, [isTimerRunning, timeLeft, timerMode])
+  }, [isTimerRunning, timeLeft, timerMode, selectedPomodoroHabitId, WORK_TIME, BREAK_TIME, toast])
 
   const toggleTimer = () => setIsTimerRunning(!isTimerRunning)
 
@@ -309,61 +384,31 @@ export default function ClientProductivity() {
     month: 'long',
   }).format(new Date(currentDate + 'T12:00:00'))
 
-  const handleToggleHabit = async (habitId: string, amount?: number) => {
-    if (amount) {
-      confetti({ particleCount: 50, spread: 40, origin: { y: 0.6 } })
+  const handleToggleHabit = async (habitId: string) => {
+    const isCompleted = todaysHabitLogs.some((log) => log.habit_id === habitId)
 
-      // Optimistic update
-      setHabitLogs((logs) => {
-        const existing = logs.find(
-          (l) => l.habit_id === habitId && l.completed_date === currentDate,
-        )
-        if (existing) {
-          return logs.map((l) =>
-            l.id === existing.id ? { ...l, progress_made: (l.progress_made || 0) + amount } : l,
-          )
-        } else {
-          return [
-            ...logs,
-            {
-              id: 'temp-' + Date.now(),
-              habit_id: habitId,
-              completed_date: currentDate,
-              progress_made: amount,
-              created_at: new Date().toISOString(),
-            },
-          ]
-        }
-      })
-
-      await productivityService.toggleHabitLog(habitId, currentDate, amount)
-      loadData(true)
+    if (!isCompleted) {
+      confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } })
+      setHabitLogs([
+        ...habitLogs,
+        {
+          id: 'temp-' + Date.now(),
+          habit_id: habitId,
+          completed_date: currentDate,
+          progress_made: 1,
+          created_at: new Date().toISOString(),
+        },
+      ])
     } else {
-      const isCompleted = todaysHabitLogs.some((log) => log.habit_id === habitId)
-
-      if (!isCompleted) {
-        confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } })
-        setHabitLogs([
-          ...habitLogs,
-          {
-            id: 'temp',
-            habit_id: habitId,
-            completed_date: currentDate,
-            progress_made: 1,
-            created_at: new Date().toISOString(),
-          },
-        ])
-      } else {
-        setHabitLogs(
-          habitLogs.filter(
-            (log) => !(log.habit_id === habitId && log.completed_date === currentDate),
-          ),
-        )
-      }
-
-      await productivityService.toggleHabitLog(habitId, currentDate)
-      loadData(true)
+      setHabitLogs(
+        habitLogs.filter(
+          (log) => !(log.habit_id === habitId && log.completed_date === currentDate),
+        ),
+      )
     }
+
+    await productivityService.toggleHabitLog(habitId, currentDate)
+    loadData(true)
   }
 
   const handleToggleTask = async (task: ProductivityTask) => {
@@ -526,6 +571,9 @@ export default function ClientProductivity() {
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle>Criar Novo</DialogTitle>
+            <DialogDescription className="sr-only">
+              Crie uma nova tarefa ou hábito
+            </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-4">
             <ToggleGroup
@@ -554,7 +602,7 @@ export default function ClientProductivity() {
             {newItemType === 'habit' && (
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label>Meta</Label>
+                  <Label>Meta Diária</Label>
                   <Input
                     type="number"
                     value={newHabitTarget}
@@ -579,6 +627,48 @@ export default function ClientProductivity() {
               disabled={!newItemTitle.trim() || isLoading}
             >
               {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Criar'}
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Log Progress Modal */}
+      <Dialog open={logModalOpen} onOpenChange={setLogModalOpen}>
+        <DialogContent className="sm:max-w-xs">
+          <DialogHeader>
+            <DialogTitle>Registrar Progresso</DialogTitle>
+            <DialogDescription className="sr-only">
+              Registrar quantidade do hábito
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label>Quanto você quer adicionar?</Label>
+              <div className="flex items-center gap-2">
+                <Input
+                  type="number"
+                  value={logAmount}
+                  onChange={(e) => setLogAmount(e.target.value)}
+                  placeholder="ex: 10"
+                  autoFocus
+                />
+                <span className="text-sm text-muted-foreground whitespace-nowrap">
+                  {selectedHabitToLog?.target_unit}
+                </span>
+              </div>
+            </div>
+            <Button
+              className="w-full"
+              onClick={() => {
+                const amount = parseFloat(logAmount)
+                if (!isNaN(amount) && amount > 0 && selectedHabitToLog) {
+                  handleLogProgress(selectedHabitToLog.id, amount)
+                  setLogModalOpen(false)
+                  setLogAmount('')
+                }
+              }}
+            >
+              Salvar
             </Button>
           </div>
         </DialogContent>
@@ -627,9 +717,9 @@ export default function ClientProductivity() {
                   {habits.map((habit) => {
                     const log = todaysHabitLogs.find((l) => l.habit_id === habit.id)
                     const isQuantitative = (habit.target_value || 1) > 1
-                    const progress = log?.progress_made || 0
+                    const currentProgress = log?.progress_made || 0
                     const isCompleted = isQuantitative
-                      ? progress >= (habit.target_value || 1)
+                      ? currentProgress >= (habit.target_value || 1)
                       : !!log
 
                     return (
@@ -642,16 +732,58 @@ export default function ClientProductivity() {
                             : 'bg-card hover:bg-secondary/40 shadow-sm',
                         )}
                       >
-                        <button
-                          onClick={() => !isQuantitative && handleToggleHabit(habit.id)}
-                          className="flex items-center gap-4 text-left active:scale-[0.98] flex-1"
-                        >
-                          {isCompleted ? (
-                            <CheckCircle2 className="h-6 w-6 text-primary shrink-0 transition-transform" />
-                          ) : (
-                            <Circle className="h-6 w-6 text-muted-foreground/40 shrink-0" />
-                          )}
-                          <div className="flex flex-col">
+                        {isQuantitative ? (
+                          <div className="flex items-center justify-between w-full gap-4">
+                            <div className="flex flex-col flex-1">
+                              <div className="flex justify-between items-center mb-1.5">
+                                <span
+                                  className={cn(
+                                    'font-medium text-base',
+                                    isCompleted && 'text-muted-foreground',
+                                  )}
+                                >
+                                  {habit.title}
+                                </span>
+                                <span className="text-xs text-muted-foreground font-medium">
+                                  {currentProgress} / {habit.target_value} {habit.target_unit}
+                                </span>
+                              </div>
+                              <Progress
+                                value={Math.min(
+                                  (currentProgress / (habit.target_value || 1)) * 100,
+                                  100,
+                                )}
+                                className="h-2 w-full bg-secondary"
+                              />
+                            </div>
+                            {!isCompleted && (
+                              <Button
+                                size="icon"
+                                variant="outline"
+                                className="h-8 w-8 rounded-full shrink-0 border-primary/30"
+                                onClick={() => {
+                                  setSelectedHabitToLog(habit)
+                                  setLogAmount('')
+                                  setLogModalOpen(true)
+                                }}
+                              >
+                                <Plus className="h-4 w-4 text-primary" />
+                              </Button>
+                            )}
+                            {isCompleted && (
+                              <CheckCircle2 className="h-6 w-6 text-primary shrink-0 transition-transform" />
+                            )}
+                          </div>
+                        ) : (
+                          <button
+                            onClick={() => handleToggleHabit(habit.id)}
+                            className="flex items-center gap-4 text-left active:scale-[0.98] flex-1"
+                          >
+                            {isCompleted ? (
+                              <CheckCircle2 className="h-6 w-6 text-primary shrink-0 transition-transform" />
+                            ) : (
+                              <Circle className="h-6 w-6 text-muted-foreground/40 shrink-0" />
+                            )}
                             <span
                               className={cn(
                                 'font-medium text-base transition-colors',
@@ -660,47 +792,7 @@ export default function ClientProductivity() {
                             >
                               {habit.title}
                             </span>
-                            {isQuantitative && (
-                              <span className="text-xs text-muted-foreground mt-0.5 font-medium">
-                                {progress} / {habit.target_value} {habit.target_unit}
-                              </span>
-                            )}
-                          </div>
-                        </button>
-
-                        {isQuantitative && !isCompleted && (
-                          <div className="flex items-center gap-1 shrink-0">
-                            <Button
-                              size="sm"
-                              variant="ghost"
-                              className="h-8 px-2 text-xs bg-secondary/50 hover:bg-secondary"
-                              onClick={() => handleToggleHabit(habit.id, 1)}
-                            >
-                              +1
-                            </Button>
-                            {['minutos', 'min', 'm', 'paginas', 'páginas', 'ml'].includes(
-                              habit.target_unit?.toLowerCase() || '',
-                            ) && (
-                              <Button
-                                size="sm"
-                                variant="ghost"
-                                className="h-8 px-2 text-xs bg-secondary/50 hover:bg-secondary"
-                                onClick={() => handleToggleHabit(habit.id, 5)}
-                              >
-                                +5
-                              </Button>
-                            )}
-                            <Button
-                              size="sm"
-                              variant="default"
-                              className="h-8 px-2 text-xs"
-                              onClick={() =>
-                                handleToggleHabit(habit.id, habit.target_value! - progress)
-                              }
-                            >
-                              Concluir
-                            </Button>
-                          </div>
+                          </button>
                         )}
                       </div>
                     )
@@ -769,6 +861,30 @@ export default function ClientProductivity() {
           <TabsContent value="analytics" className="space-y-6 mt-0">
             {/* Pomodoro Timer */}
             <Card className="p-8 flex flex-col items-center justify-center max-w-2xl mx-auto shadow-sm">
+              <div className="w-full max-w-xs mb-8 flex flex-col gap-2 mx-auto">
+                <Label className="text-center text-muted-foreground font-normal">
+                  Vincular foco a um hábito:
+                </Label>
+                <Select value={selectedPomodoroHabitId} onValueChange={setSelectedPomodoroHabitId}>
+                  <SelectTrigger className="bg-background shadow-sm border-primary/20">
+                    <SelectValue placeholder="Selecione um hábito (minutos)" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="none">Nenhum</SelectItem>
+                    {habits
+                      .filter((h) => {
+                        const unit = h.target_unit?.toLowerCase() || ''
+                        return unit.includes('minuto') || unit.includes('min')
+                      })
+                      .map((h) => (
+                        <SelectItem key={h.id} value={h.id}>
+                          {h.title}
+                        </SelectItem>
+                      ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
               <div className="flex bg-muted p-1 rounded-full mb-8">
                 <button
                   onClick={() => switchTimerMode('work')}

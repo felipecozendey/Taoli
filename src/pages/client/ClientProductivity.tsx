@@ -19,6 +19,7 @@ import {
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
+import { Slider } from '@/components/ui/slider'
 import {
   Select,
   SelectContent,
@@ -42,6 +43,9 @@ import {
   Sparkles,
   Activity,
   Trophy,
+  ShieldAlert,
+  Volume2,
+  BellRing,
 } from 'lucide-react'
 import {
   productivityService,
@@ -86,8 +90,15 @@ export default function ClientProductivity() {
   // Dashboard State
   const [dashboardPeriod, setDashboardPeriod] = useState('7')
 
-  // Focus Guardian Hook
-  const { settings: focusSettings, toggleGuardian, updateInterval } = useFocusGuardian()
+  // Focus Guardian State
+  const [isGuardianEnabled, setIsGuardianEnabled] = useState(false)
+  const [guardianInterval, setGuardianInterval] = useState(15)
+
+  const { requestPermission, testNotification } = useFocusGuardian({
+    isEnabled: isGuardianEnabled,
+    intervalMinutes: guardianInterval,
+    volume: 0.5,
+  })
 
   // Pomodoro State
   const WORK_TIME = 25 * 60
@@ -121,8 +132,29 @@ export default function ClientProductivity() {
 
   useEffect(() => {
     loadData()
+    // Load initial focus settings once
+    productivityService.getFocusSettings().then(({ data }) => {
+      if (data) {
+        setIsGuardianEnabled(!!data.is_enabled)
+        setGuardianInterval(data.reminder_interval || 15)
+      }
+    })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentDate])
+
+  const handleToggleGuardian = async (checked: boolean) => {
+    setIsGuardianEnabled(checked)
+    if (checked) {
+      await requestPermission()
+    }
+    await productivityService.updateFocusSettings({ is_enabled: checked })
+  }
+
+  const handleIntervalChange = async (val: number[]) => {
+    const newInterval = val[0]
+    setGuardianInterval(newInterval)
+    await productivityService.updateFocusSettings({ reminder_interval: newInterval })
+  }
 
   // Pomodoro Timer Logic
   useEffect(() => {
@@ -567,7 +599,7 @@ export default function ClientProductivity() {
           <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 max-w-[800px] mb-6 h-auto p-1">
             <TabsTrigger value="daily">O Meu Dia</TabsTrigger>
             <TabsTrigger value="kanban">Planeamento</TabsTrigger>
-            <TabsTrigger value="analytics">Estatísticas</TabsTrigger>
+            <TabsTrigger value="analytics">Estatísticas & Foco</TabsTrigger>
             <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
           </TabsList>
 
@@ -735,38 +767,6 @@ export default function ClientProductivity() {
           </TabsContent>
 
           <TabsContent value="analytics" className="space-y-6 mt-0">
-            {/* Focus Guardian Settings */}
-            <Card className="p-6 max-w-4xl mx-auto shadow-sm">
-              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                <div>
-                  <h3 className="text-lg font-semibold flex items-center gap-2">
-                    <Sparkles className="h-5 w-5 text-primary" /> Guardião de Foco
-                  </h3>
-                  <p className="text-sm text-muted-foreground mt-1">
-                    Receba notificações esporádicas para garantir que não se distraiu.
-                  </p>
-                </div>
-                <div className="flex items-center gap-4 bg-muted/30 p-2 rounded-lg border">
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm text-muted-foreground font-medium">A cada</span>
-                    <select
-                      className="bg-transparent border border-border/50 rounded-md text-sm p-1.5 focus:outline-none focus:ring-1 focus:ring-primary"
-                      value={focusSettings?.reminder_interval || 15}
-                      onChange={(e) => updateInterval(Number(e.target.value))}
-                      disabled={!focusSettings?.is_enabled}
-                    >
-                      <option value={5}>5 min</option>
-                      <option value={15}>15 min</option>
-                      <option value={30}>30 min</option>
-                      <option value={60}>60 min</option>
-                    </select>
-                  </div>
-                  <div className="h-6 w-[1px] bg-border/50 mx-1"></div>
-                  <Switch checked={!!focusSettings?.is_enabled} onCheckedChange={toggleGuardian} />
-                </div>
-              </div>
-            </Card>
-
             {/* Pomodoro Timer */}
             <Card className="p-8 flex flex-col items-center justify-center max-w-2xl mx-auto shadow-sm">
               <div className="flex bg-muted p-1 rounded-full mb-8">
@@ -822,6 +822,76 @@ export default function ClientProductivity() {
                 >
                   <RotateCcw className="h-5 w-5 text-muted-foreground" />
                 </Button>
+              </div>
+            </Card>
+
+            {/* Focus Guardian Settings */}
+            <Card className="p-6 max-w-4xl mx-auto border-primary/20 bg-primary/5 shadow-sm">
+              <div className="flex flex-col md:flex-row justify-between gap-6">
+                <div className="flex-1 space-y-4">
+                  <div className="flex items-center gap-2">
+                    <ShieldAlert className="h-6 w-6 text-primary" />
+                    <h3 className="text-xl font-semibold text-primary">
+                      Guardião de Foco (Anti-Distração)
+                    </h3>
+                  </div>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    Ative o Guardião para receber um lembrete sonoro e visual a cada X minutos.
+                    Ideal para manter pessoas com TDAH no caminho certo e evitar hiperfoco na tarefa
+                    errada.
+                  </p>
+
+                  <div className="flex flex-col gap-4 pt-2">
+                    <div className="flex items-center justify-between">
+                      <Label className="text-base cursor-pointer" htmlFor="guardian-toggle">
+                        Ativar Guardião
+                      </Label>
+                      <Switch
+                        id="guardian-toggle"
+                        checked={isGuardianEnabled}
+                        onCheckedChange={handleToggleGuardian}
+                      />
+                    </div>
+
+                    {isGuardianEnabled && (
+                      <div className="space-y-4 animate-in fade-in slide-in-from-top-2 duration-300">
+                        <div className="flex justify-between items-center">
+                          <Label className="text-sm text-muted-foreground">
+                            Intervalo de lembrete:
+                          </Label>
+                          <span className="font-mono font-medium text-primary bg-primary/10 px-2 py-1 rounded-md">
+                            {guardianInterval} minutos
+                          </span>
+                        </div>
+                        <Slider
+                          value={[guardianInterval]}
+                          onValueChange={handleIntervalChange}
+                          max={60}
+                          min={5}
+                          step={5}
+                          className="py-2"
+                        />
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                <div className="md:w-[300px] flex flex-col justify-center gap-4 bg-background p-4 rounded-xl border border-primary/10 shadow-sm shrink-0">
+                  <div className="text-center space-y-2 mb-2">
+                    <BellRing className="h-8 w-8 text-primary/60 mx-auto" />
+                    <p className="text-xs text-muted-foreground">
+                      O guardião emite um sino duplo suave e uma notificação no sistema.
+                    </p>
+                  </div>
+                  <Button
+                    variant="outline"
+                    className="w-full gap-2 border-primary/20 hover:bg-primary/5"
+                    onClick={testNotification}
+                  >
+                    <Volume2 className="h-4 w-4 text-primary" />
+                    Testar Som e Notificação
+                  </Button>
+                </div>
               </div>
             </Card>
 

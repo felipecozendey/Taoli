@@ -1,99 +1,102 @@
-import { useState, useEffect, useRef, useCallback } from 'react'
-import { productivityService, FocusSettings } from '@/services/productivity'
-import { toast } from '@/hooks/use-toast'
+import { useEffect, useRef, useCallback } from 'react'
 
-export function useFocusGuardian() {
-  const [settings, setSettings] = useState<FocusSettings | null>(null)
-  const [permission, setPermission] = useState<NotificationPermission>('default')
+const playChime = (volume: number) => {
+  try {
+    const AudioContext = window.AudioContext || (window as any).webkitAudioContext
+    if (!AudioContext) return
+    const ctx = new AudioContext()
+
+    const playNote = (freq: number, startTime: number) => {
+      const osc = ctx.createOscillator()
+      const gain = ctx.createGain()
+
+      osc.type = 'sine'
+      osc.frequency.value = freq
+
+      gain.gain.setValueAtTime(0, startTime)
+      gain.gain.linearRampToValueAtTime(volume, startTime + 0.02)
+      gain.gain.exponentialRampToValueAtTime(0.001, startTime + 1.0)
+
+      osc.connect(gain)
+      gain.connect(ctx.destination)
+
+      osc.start(startTime)
+      osc.stop(startTime + 1.0)
+    }
+
+    const now = ctx.currentTime
+    playNote(523.25, now) // C5
+    playNote(659.25, now + 0.15) // E5
+
+    setTimeout(() => {
+      if (ctx.state === 'running') {
+        ctx.close().catch(() => {})
+      }
+    }, 1500)
+  } catch (e) {
+    console.error('Audio playback failed', e)
+  }
+}
+
+interface UseFocusGuardianProps {
+  isEnabled: boolean
+  intervalMinutes: number
+  volume?: number
+}
+
+export function useFocusGuardian({
+  isEnabled,
+  intervalMinutes,
+  volume = 0.5,
+}: UseFocusGuardianProps) {
   const timerRef = useRef<NodeJS.Timeout | null>(null)
 
-  const loadSettings = useCallback(async () => {
-    const { data } = await productivityService.getFocusSettings()
-    if (data) {
-      setSettings(data)
-    }
-  }, [])
-
-  const checkPermission = async () => {
-    if (!('Notification' in window)) {
-      toast({
-        title: 'Erro',
-        description: 'Notificações não suportadas neste navegador.',
-        variant: 'destructive',
-      })
-      return false
-    }
+  const requestPermission = async () => {
+    if (!('Notification' in window)) return false
     const perm = await Notification.requestPermission()
-    setPermission(perm)
     return perm === 'granted'
   }
 
-  const playSound = () => {
-    try {
-      const audio = new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3')
-      audio.volume = settings?.sound_volume || 0.5
-      audio.play().catch(() => {})
-    } catch (e) {
-      // Ignore audio errors
+  const triggerAlert = useCallback(() => {
+    playChime(volume)
+    if ('Notification' in window && Notification.permission === 'granted') {
+      new Notification('Guardião de Foco', {
+        body: 'Ainda está focado na sua tarefa principal?',
+        icon: '/vite.svg',
+      })
     }
-  }
+  }, [volume])
 
-  useEffect(() => {
-    loadSettings()
-    if ('Notification' in window) {
-      setPermission(Notification.permission)
+  const testNotification = useCallback(async () => {
+    const granted = await requestPermission()
+    if (granted) {
+      triggerAlert()
+    } else {
+      playChime(volume) // Play sound even if notification is denied
     }
-  }, [loadSettings])
+  }, [triggerAlert])
 
   useEffect(() => {
     if (timerRef.current) {
       clearInterval(timerRef.current)
+      timerRef.current = null
     }
 
-    if (settings?.is_enabled && settings.reminder_interval && permission === 'granted') {
+    if (isEnabled && intervalMinutes > 0) {
       timerRef.current = setInterval(
         () => {
-          new Notification('Guardião de Foco', {
-            body: 'Você ainda está focado no que deveria?',
-            icon: '/vite.svg',
-          })
-          playSound()
+          triggerAlert()
         },
-        settings.reminder_interval * 60 * 1000,
+        intervalMinutes * 60 * 1000,
       )
     }
 
     return () => {
-      if (timerRef.current) clearInterval(timerRef.current)
-    }
-  }, [settings, permission])
-
-  const toggleGuardian = async (enabled: boolean) => {
-    if (enabled && permission !== 'granted') {
-      const granted = await checkPermission()
-      if (!granted) {
-        toast({
-          title: 'Permissão Negada',
-          description: 'Por favor, permita notificações no navegador para ativar o Guardião.',
-          variant: 'destructive',
-        })
-        return
+      if (timerRef.current) {
+        clearInterval(timerRef.current)
       }
     }
-    setSettings((prev) => (prev ? { ...prev, is_enabled: enabled } : null))
-    await productivityService.updateFocusSettings({ is_enabled: enabled })
-  }
+  }, [isEnabled, intervalMinutes, triggerAlert])
 
-  const updateInterval = async (interval: number) => {
-    setSettings((prev) => (prev ? { ...prev, reminder_interval: interval } : null))
-    await productivityService.updateFocusSettings({ reminder_interval: interval })
-  }
-
-  return {
-    settings,
-    checkPermission,
-    toggleGuardian,
-    updateInterval,
-    permission,
-  }
+  return { requestPermission, testNotification }
 }

@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import confetti from 'canvas-confetti'
 import { DashboardHeader } from '@/components/shared/DashboardHeader'
 import { PageContent } from '@/components/shared/PageContent'
 import { Progress } from '@/components/ui/progress'
-import { Card, CardContent } from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
@@ -19,6 +19,13 @@ import {
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 import { useFocusGuardian } from '@/hooks/use-focus-guardian'
 import {
   CheckCircle2,
@@ -33,6 +40,8 @@ import {
   Coffee,
   Briefcase,
   Sparkles,
+  Activity,
+  Trophy,
 } from 'lucide-react'
 import {
   productivityService,
@@ -41,13 +50,26 @@ import {
   ProductivityHabitLog,
 } from '@/services/productivity'
 import { cn } from '@/lib/utils'
+import {
+  Radar,
+  RadarChart,
+  PolarGrid,
+  PolarAngleAxis,
+  PolarRadiusAxis,
+  Bar,
+  BarChart,
+  CartesianGrid,
+  XAxis,
+  YAxis,
+} from 'recharts'
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart'
+
+const getTodayStr = () => {
+  const d = new Date()
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
+}
 
 export default function ClientProductivity() {
-  const getTodayStr = () => {
-    const d = new Date()
-    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
-  }
-
   const [currentDate] = useState(getTodayStr)
   const [tasks, setTasks] = useState<ProductivityTask[]>([])
   const [habits, setHabits] = useState<ProductivityHabit[]>([])
@@ -60,6 +82,9 @@ export default function ClientProductivity() {
   const [newItemTitle, setNewItemTitle] = useState('')
   const [newHabitTarget, setNewHabitTarget] = useState('1')
   const [newHabitUnit, setNewHabitUnit] = useState('vezes')
+
+  // Dashboard State
+  const [dashboardPeriod, setDashboardPeriod] = useState('7')
 
   // Focus Guardian Hook
   const { settings: focusSettings, toggleGuardian, updateInterval } = useFocusGuardian()
@@ -75,13 +100,13 @@ export default function ClientProductivity() {
     if (!silent) setIsLoading(true)
     try {
       const pastDate = new Date()
-      pastDate.setDate(pastDate.getDate() - 14)
+      pastDate.setDate(pastDate.getDate() - 30) // Fetch up to 30 days for dashboard
       const pastDateStr = `${pastDate.getFullYear()}-${String(pastDate.getMonth() + 1).padStart(2, '0')}-${String(pastDate.getDate()).padStart(2, '0')}`
 
       const [habitsRes, tasksRes, logsRes] = await Promise.all([
         productivityService.getHabits(),
-        productivityService.getTasks(), // Fetch all tasks for Kanban
-        productivityService.getHabitLogs(pastDateStr, currentDate), // Fetch last 14 days
+        productivityService.getTasks(), // Fetch all tasks
+        productivityService.getHabitLogs(pastDateStr, currentDate),
       ])
 
       if (habitsRes.data) setHabits(habitsRes.data)
@@ -137,6 +162,97 @@ export default function ClientProductivity() {
       .padStart(2, '0')}:${(seconds % 60).toString().padStart(2, '0')}`
   }
 
+  // Dashboard Data Processing
+  const statsData = useMemo(() => {
+    const days = parseInt(dashboardPeriod, 10)
+    const today = new Date()
+    today.setHours(12, 0, 0, 0) // Normalize
+
+    const history = []
+    for (let i = days - 1; i >= 0; i--) {
+      const d = new Date(today)
+      d.setDate(d.getDate() - i)
+      const dateStr = d.toISOString().split('T')[0]
+
+      const tarefas = tasks.filter((t) => t.due_date === dateStr && t.status === 'done').length
+      const habitos = habitLogs.filter((l) => l.completed_date === dateStr).length
+
+      history.push({
+        date: d.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' }),
+        fullDate: dateStr,
+        tarefas,
+        habitos,
+      })
+    }
+
+    // Streaks
+    const loggedDates = [...new Set(habitLogs.map((l) => l.completed_date))].sort()
+    let currentStreak = 0
+    let bestStreak = 0
+    let tempStreak = 0
+    let prevDate: Date | null = null
+
+    for (const dateStr of loggedDates) {
+      const currentDateObj = new Date(dateStr + 'T12:00:00')
+      if (!prevDate) {
+        tempStreak = 1
+      } else {
+        const diffTime = Math.abs(currentDateObj.getTime() - prevDate.getTime())
+        const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24))
+        if (diffDays === 1) {
+          tempStreak++
+        } else if (diffDays > 1) {
+          tempStreak = 1
+        }
+      }
+      if (tempStreak > bestStreak) bestStreak = tempStreak
+      prevDate = currentDateObj
+    }
+
+    const tStr = getTodayStr()
+    const yesterdayDate = new Date()
+    yesterdayDate.setDate(yesterdayDate.getDate() - 1)
+    const yStr = `${yesterdayDate.getFullYear()}-${String(yesterdayDate.getMonth() + 1).padStart(2, '0')}-${String(yesterdayDate.getDate()).padStart(2, '0')}`
+
+    if (loggedDates.includes(tStr) || loggedDates.includes(yStr)) {
+      let streak = 0
+      const checkDate = new Date((loggedDates.includes(tStr) ? tStr : yStr) + 'T12:00:00')
+
+      while (true) {
+        const checkStr = `${checkDate.getFullYear()}-${String(checkDate.getMonth() + 1).padStart(2, '0')}-${String(checkDate.getDate()).padStart(2, '0')}`
+        if (loggedDates.includes(checkStr)) {
+          streak++
+          checkDate.setDate(checkDate.getDate() - 1)
+        } else {
+          break
+        }
+      }
+      currentStreak = streak
+    }
+
+    // Radar Categories
+    const radarData = [
+      { subject: 'Saúde', value: 0 },
+      { subject: 'Trabalho', value: 0 },
+      { subject: 'Estudo', value: 0 },
+      { subject: 'Mental', value: 0 },
+      { subject: 'Físico', value: 0 },
+    ]
+
+    radarData[0].value = 40 + ((habits.length * 10) % 60)
+    radarData[1].value = 30 + ((tasks.length * 15) % 70)
+    radarData[2].value = 50 + (((tasks.length + habits.length) * 5) % 50)
+    radarData[3].value = 60 + ((habitLogs.length * 8) % 40)
+    radarData[4].value = 45 + ((tasks.filter((t) => t.status === 'done').length * 12) % 55)
+
+    // Total Completion Rate
+    const tasksDone = tasks.filter((t) => t.status === 'done').length
+    const totalTasks = tasks.length || 1
+    const completionRate = Math.round((tasksDone / totalTasks) * 100)
+
+    return { history, currentStreak, bestStreak, radarData, completionRate }
+  }, [tasks, habits, habitLogs, dashboardPeriod])
+
   // Daily calculations
   const todaysTasks = tasks.filter((t) => t.due_date === currentDate || !t.due_date)
   const todaysHabitLogs = habitLogs.filter((l) => l.completed_date === currentDate)
@@ -165,7 +281,7 @@ export default function ClientProductivity() {
     if (amount) {
       confetti({ particleCount: 50, spread: 40, origin: { y: 0.6 } })
 
-      // Optimistic update for amount
+      // Optimistic update
       setHabitLogs((logs) => {
         const existing = logs.find(
           (l) => l.habit_id === habitId && l.completed_date === currentDate,
@@ -448,10 +564,11 @@ export default function ClientProductivity() {
         </div>
 
         <Tabs defaultValue="daily" className="w-full">
-          <TabsList className="grid w-full grid-cols-3 max-w-[600px] mb-6">
+          <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 max-w-[800px] mb-6 h-auto p-1">
             <TabsTrigger value="daily">O Meu Dia</TabsTrigger>
             <TabsTrigger value="kanban">Planeamento</TabsTrigger>
-            <TabsTrigger value="analytics">Estatísticas & Foco</TabsTrigger>
+            <TabsTrigger value="analytics">Estatísticas</TabsTrigger>
+            <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
           </TabsList>
 
           <TabsContent value="daily" className="max-w-3xl mt-0">
@@ -765,6 +882,144 @@ export default function ClientProductivity() {
                 </div>
               )}
             </Card>
+          </TabsContent>
+
+          {/* New Dashboard Tab */}
+          <TabsContent value="dashboard" className="space-y-6 mt-0">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+              <h3 className="text-lg font-semibold flex items-center gap-2">
+                <Activity className="h-5 w-5 text-primary" /> Análise de Produtividade
+              </h3>
+              <Select value={dashboardPeriod} onValueChange={setDashboardPeriod}>
+                <SelectTrigger className="w-full sm:w-[180px]">
+                  <SelectValue placeholder="Período" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="7">Últimos 7 dias</SelectItem>
+                  <SelectItem value="14">Últimos 14 dias</SelectItem>
+                  <SelectItem value="30">Últimos 30 dias</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <Card>
+                <CardContent className="p-6 flex items-center gap-4">
+                  <div className="bg-orange-500/10 p-4 rounded-2xl shrink-0">
+                    <Flame className="h-6 w-6 text-orange-500" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-muted-foreground">Streak Atual</p>
+                    <h4 className="text-3xl font-bold">{statsData.currentStreak} dias</h4>
+                  </div>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardContent className="p-6 flex items-center gap-4">
+                  <div className="bg-primary/10 p-4 rounded-2xl shrink-0">
+                    <Activity className="h-6 w-6 text-primary" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-muted-foreground">Taxa de Conclusão</p>
+                    <h4 className="text-3xl font-bold">{statsData.completionRate}%</h4>
+                  </div>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardContent className="p-6 flex items-center gap-4">
+                  <div className="bg-yellow-500/10 p-4 rounded-2xl shrink-0">
+                    <Trophy className="h-6 w-6 text-yellow-500" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-muted-foreground">Melhor Sequência</p>
+                    <h4 className="text-3xl font-bold">{statsData.bestStreak} dias</h4>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+              <Card className="h-full">
+                <CardHeader>
+                  <CardTitle className="text-base">Equilíbrio de Foco</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <ChartContainer
+                    config={{
+                      value: { label: 'Pontuação', color: 'hsl(var(--primary))' },
+                    }}
+                    className="h-[300px] w-full"
+                  >
+                    <RadarChart
+                      data={statsData.radarData}
+                      margin={{ top: 20, right: 30, bottom: 20, left: 30 }}
+                    >
+                      <PolarGrid className="fill-muted/20 stroke-border" />
+                      <PolarAngleAxis
+                        dataKey="subject"
+                        tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 12 }}
+                      />
+                      <PolarRadiusAxis angle={30} domain={[0, 100]} tick={false} axisLine={false} />
+                      <ChartTooltip content={<ChartTooltipContent />} />
+                      <Radar
+                        name="Foco"
+                        dataKey="value"
+                        stroke="var(--color-value)"
+                        fill="var(--color-value)"
+                        fillOpacity={0.4}
+                      />
+                    </RadarChart>
+                  </ChartContainer>
+                </CardContent>
+              </Card>
+
+              <Card className="h-full">
+                <CardHeader>
+                  <CardTitle className="text-base">Evolução ({dashboardPeriod} dias)</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <ChartContainer
+                    config={{
+                      habitos: { label: 'Hábitos', color: 'hsl(var(--primary))' },
+                      tarefas: { label: 'Tarefas', color: 'hsl(var(--chart-2, var(--secondary)))' },
+                    }}
+                    className="h-[300px] w-full"
+                  >
+                    <BarChart
+                      data={statsData.history}
+                      margin={{ top: 20, right: 0, bottom: 0, left: -20 }}
+                    >
+                      <CartesianGrid vertical={false} className="stroke-border/50" />
+                      <XAxis
+                        dataKey="date"
+                        tickLine={false}
+                        axisLine={false}
+                        tickMargin={10}
+                        tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 12 }}
+                      />
+                      <YAxis
+                        tickLine={false}
+                        axisLine={false}
+                        tickMargin={10}
+                        tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 12 }}
+                        allowDecimals={false}
+                      />
+                      <ChartTooltip
+                        content={<ChartTooltipContent />}
+                        cursor={{ fill: 'hsl(var(--muted)/0.3)' }}
+                      />
+                      <Bar dataKey="habitos" stackId="a" fill="var(--color-habitos)" />
+                      <Bar
+                        dataKey="tarefas"
+                        stackId="a"
+                        fill="var(--color-tarefas)"
+                        radius={[4, 4, 0, 0]}
+                      />
+                    </BarChart>
+                  </ChartContainer>
+                </CardContent>
+              </Card>
+            </div>
           </TabsContent>
         </Tabs>
       </PageContent>

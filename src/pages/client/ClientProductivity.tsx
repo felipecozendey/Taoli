@@ -950,7 +950,7 @@ export default function ClientProductivity() {
                                     {habit.title}
                                   </span>
                                   {habit.tags && habit.tags.length > 0 && (
-                                    <div className="flex flex-wrap gap-1">
+                                    <div className="flex flex-wrap gap-1 mt-1">
                                       {habit.tags.map((tag) => (
                                         <Badge
                                           key={tag}
@@ -1013,7 +1013,7 @@ export default function ClientProductivity() {
                                 {habit.title}
                               </span>
                               {habit.tags && habit.tags.length > 0 && (
-                                <div className="flex flex-wrap gap-1">
+                                <div className="flex flex-wrap gap-1 mt-1">
                                   {habit.tags.map((tag) => (
                                     <Badge
                                       key={tag}

@@ -301,10 +301,8 @@ export const studyService = {
       if (!user) return { error: new Error('Not authenticated') }
 
       if (deleteNotes) {
-        // Delete all notes in this folder first
         await supabase.from('study_notes').delete().eq('folder_id', id).eq('user_id', user.id)
       } else {
-        // Move notes to "Notas a Organizar"
         const { data: searchFolder } = await supabase
           .from('study_folders')
           .select('id')
@@ -437,6 +435,24 @@ export const studyService = {
     } catch (error) {
       console.error('Error deleting deck:', error)
       return { error }
+    }
+  },
+
+  async getAllUserFlashcards() {
+    try {
+      const { data: userData } = await supabase.auth.getUser()
+      if (!userData.user) throw new Error('Não autenticado')
+
+      const { data, error } = await supabase
+        .from('study_flashcards')
+        .select('*, study_decks!inner(id, user_id)')
+        .eq('study_decks.user_id', userData.user.id)
+
+      if (error) throw error
+      return { data, error: null }
+    } catch (error) {
+      console.error('Error fetching all user flashcards:', error)
+      return { data: [], error }
     }
   },
 }

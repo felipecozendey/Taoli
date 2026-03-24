@@ -174,7 +174,7 @@ importers:
         specifier: ^7.13.1
         version: 7.13.2(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       react-sketch-canvas:
-        specifier: ^6.2.0
+        specifier: 6.2.0
         version: 6.2.0(react@19.2.4)
       recharts:
         specifier: ^2.15.4
@@ -192,7 +192,7 @@ importers:
         specifier: 6.3.7
         version: 6.3.7
       uuid:
-        specifier: ^11.0.3
+        specifier: 11.1.0
         version: 11.1.0
       vaul:
         specifier: ^1.1.2
@@ -213,9 +213,6 @@ importers:
       '@types/react-dom':
         specifier: ^19.2.3
         version: 19.2.3(@types/react@19.2.14)
-      '@types/uuid':
-        specifier: ^10.0.0
-        version: 10.0.0
       '@vitejs/plugin-react':
         specifier: ^6.0.1
         version: 6.0.1(vite@8.0.0(@types/node@25.5.0)(jiti@1.21.7))
@@ -1742,9 +1739,6 @@ packages:
 
   '@types/use-sync-external-store@0.0.6':
     resolution: {integrity: sha512-zFDAD+tlpf2r4asuHEj0XH6pY6i0g5NeAHPn+15wk3BV6JA69eERFXC1gyGThDkVa1zCyKr5jox1+2LbV/AMLg==}
-
-  '@types/uuid@10.0.0':
-    resolution: {integrity: sha512-7gqG38EyHgyP1S+7+xomFtL+ZNHcKv6DwNaCZmJmo1vgMugyF3TCnXVg4t1uk89mLNwnLtnY3TpOpCOyp1/xHQ==}
 
   '@types/ws@8.18.1':
     resolution: {integrity: sha512-ThVF6DCVhA8kUGy+aazFQ4kXQ7E1Ty7A3ypFOe0IcJV8O/M511G99AW24irKrW56Wt44yG9+ij8FaqoBGkuBXg==}
@@ -3998,8 +3992,6 @@ snapshots:
       csstype: 3.2.3
 
   '@types/use-sync-external-store@0.0.6': {}
-
-  '@types/uuid@10.0.0': {}
 
   '@types/ws@8.18.1':
     dependencies:

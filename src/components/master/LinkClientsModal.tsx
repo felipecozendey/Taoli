@@ -61,13 +61,13 @@ export function LinkClientsModal({
   }
 
   useEffect(() => {
-    if (isOpen && professional) {
+    if (isOpen && professional?.id) {
       fetchClients()
       setSelectedClientId('')
     } else {
       setLinkedClients([])
     }
-  }, [isOpen, professional])
+  }, [isOpen, professional?.id])
 
   const availableClients = allUsers.filter(
     (u) => u.role === 'client' && !linkedClients.some((lc) => lc.client_id === u.id),
@@ -99,6 +99,7 @@ export function LinkClientsModal({
     }
   }
 
+  // Ensure this is called after all hooks to comply with React hook rules
   if (!professional) return null
 
   return (

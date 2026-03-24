@@ -380,12 +380,14 @@ export default function MasterUsers() {
         </SheetContent>
       </Sheet>
 
-      <LinkClientsModal
-        isOpen={!!linkingProf}
-        onClose={() => setLinkingProf(null)}
-        professional={linkingProf}
-        allUsers={users}
-      />
+      {linkingProf && (
+        <LinkClientsModal
+          isOpen={!!linkingProf}
+          onClose={() => setLinkingProf(null)}
+          professional={linkingProf}
+          allUsers={users}
+        />
+      )}
     </div>
   )
 }

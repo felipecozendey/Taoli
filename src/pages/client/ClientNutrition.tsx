@@ -7,6 +7,8 @@ import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Badge } from '@/components/ui/badge'
+import { Switch } from '@/components/ui/switch'
+import { Label } from '@/components/ui/label'
 import {
   Droplets,
   Flame,
@@ -17,6 +19,7 @@ import {
   ChevronRight,
   Trash2,
   Pill,
+  BellRing,
 } from 'lucide-react'
 import { supabase } from '@/lib/supabase/client'
 import { useToast } from '@/hooks/use-toast'
@@ -44,6 +47,7 @@ export default function ClientNutrition() {
   const [assessments, setAssessments] = useState<NutritionAssessment[]>([])
   const [supplements, setSupplements] = useState<NutritionSupplement[]>([])
   const [date, setDate] = useState(() => new Date().toISOString().split('T')[0])
+  const [remindersEnabled, setRemindersEnabled] = useState(false)
 
   const { toast } = useToast()
 
@@ -86,6 +90,49 @@ export default function ClientNutrition() {
   useEffect(() => {
     fetchData()
   }, [date])
+
+  const playBeep = () => {
+    try {
+      const AudioContext = window.AudioContext || (window as any).webkitAudioContext
+      if (!AudioContext) return
+      const ctx = new AudioContext()
+      const osc = ctx.createOscillator()
+      osc.type = 'sine'
+      osc.frequency.setValueAtTime(800, ctx.currentTime)
+      osc.connect(ctx.destination)
+      osc.start()
+      osc.stop(ctx.currentTime + 0.2)
+    } catch (e) {
+      console.error('Audio blocked', e)
+    }
+  }
+
+  useEffect(() => {
+    let interval: NodeJS.Timeout
+    if (remindersEnabled) {
+      Notification.requestPermission().then((permission) => {
+        if (permission === 'granted') {
+          interval = setInterval(() => {
+            if (supplements.length > 0) {
+              playBeep()
+              new Notification('Hora da Suplementação! 💊', {
+                body: 'Verifique a sua lista de suplementos para este horário.',
+                icon: '/favicon.ico',
+              })
+            }
+          }, 60 * 1000) // 1 minuto para testes, ajustar conforme necessário
+        } else {
+          setRemindersEnabled(false)
+          toast({
+            title: 'Permissão negada',
+            description: 'Para receber alertas, ative as notificações no seu navegador.',
+            variant: 'destructive',
+          })
+        }
+      })
+    }
+    return () => clearInterval(interval)
+  }, [remindersEnabled, supplements])
 
   const changeDate = (days: number) => {
     const d = new Date(date)
@@ -491,6 +538,33 @@ export default function ClientNutrition() {
 
           {/* SUPPLEMENTS TAB */}
           <TabsContent value="supplements" className="space-y-4">
+            <Card className="mb-6 bg-primary/5 border-primary/20 shadow-sm p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-primary/10 rounded-full shrink-0">
+                  <BellRing className="h-5 w-5 text-primary" />
+                </div>
+                <div>
+                  <h4 className="font-medium">Lembretes de Suplementação</h4>
+                  <p className="text-sm text-muted-foreground">
+                    Receba notificações no navegador/telemóvel para não se esquecer.
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <Label
+                  htmlFor="reminders"
+                  className="text-sm text-muted-foreground whitespace-nowrap"
+                >
+                  {remindersEnabled ? 'Ativados' : 'Desativados'}
+                </Label>
+                <Switch
+                  id="reminders"
+                  checked={remindersEnabled}
+                  onCheckedChange={setRemindersEnabled}
+                />
+              </div>
+            </Card>
+
             {supplements.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {supplements.map((sup) => (

@@ -8,11 +8,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Textarea } from '@/components/ui/textarea'
-import { ArrowLeft, Lock, Send, Activity } from 'lucide-react'
+import { ArrowLeft, Lock, Send, Activity, Pill, Trash2 } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
 import { supabase } from '@/lib/supabase/client'
 import { PatientNutritionMirror } from '@/components/professional/PatientNutritionMirror'
 import { NutritionAssessmentModal } from '@/components/professional/NutritionAssessmentModal'
+import { NutritionSupplementModal } from '@/components/professional/NutritionSupplementModal'
+import { getPatientSupplements, deleteSupplement } from '@/services/nutrition'
 
 export default function ProfPatientRecord() {
   const { id } = useParams()
@@ -41,6 +43,14 @@ export default function ProfPatientRecord() {
   ])
 
   const [isAssessmentModalOpen, setIsAssessmentModalOpen] = useState(false)
+  const [isSupplementModalOpen, setIsSupplementModalOpen] = useState(false)
+  const [supplements, setSupplements] = useState<any[]>([])
+
+  const fetchSupplements = async () => {
+    if (!id) return
+    const { data } = await getPatientSupplements(id)
+    if (data) setSupplements(data)
+  }
 
   useEffect(() => {
     if (!id || !user?.id) return
@@ -68,6 +78,7 @@ export default function ProfPatientRecord() {
       }
     }
     fetchPatient()
+    fetchSupplements()
   }, [id, user?.id])
 
   const handleAddNote = () => {
@@ -75,6 +86,11 @@ export default function ProfPatientRecord() {
     const today = new Date().toISOString().split('T')[0]
     setNotes([{ id: Date.now(), date: today, content: newNote }, ...notes])
     setNewNote('')
+  }
+
+  const handleDeleteSupplement = async (supId: string) => {
+    await deleteSupplement(supId)
+    fetchSupplements()
   }
 
   const LockedContent = () => (
@@ -192,14 +208,95 @@ export default function ProfPatientRecord() {
             {!permissions.can_view_nutrition ? (
               <LockedContent />
             ) : (
-              <div className="space-y-6">
-                <div className="flex justify-end">
-                  <Button onClick={() => setIsAssessmentModalOpen(true)}>
-                    <Activity className="h-4 w-4 mr-2" />
-                    Nova Avaliação Física
-                  </Button>
+              <div className="space-y-8">
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                  <div>
+                    <h3 className="text-lg font-semibold">Nutrição e Suplementação</h3>
+                    <p className="text-sm text-muted-foreground">
+                      Gerencie o plano alimentar e a prescrição de suplementos.
+                    </p>
+                  </div>
+                  <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
+                    <Button
+                      onClick={() => setIsSupplementModalOpen(true)}
+                      variant="outline"
+                      className="w-full sm:w-auto"
+                    >
+                      <Pill className="h-4 w-4 mr-2" />
+                      Prescrever Suplemento
+                    </Button>
+                    <Button
+                      onClick={() => setIsAssessmentModalOpen(true)}
+                      className="w-full sm:w-auto"
+                    >
+                      <Activity className="h-4 w-4 mr-2" />
+                      Nova Avaliação Física
+                    </Button>
+                  </div>
                 </div>
-                <PatientNutritionMirror patientId={id || ''} />
+
+                <div className="space-y-4">
+                  <h4 className="font-semibold text-sm text-muted-foreground uppercase tracking-wider flex items-center gap-2">
+                    <Pill className="h-4 w-4" /> Suplementação Ativa
+                  </h4>
+                  {supplements.length > 0 ? (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                      {supplements.map((sup) => (
+                        <Card key={sup.id} className="relative group shadow-sm border-border/50">
+                          <Button
+                            variant="destructive"
+                            size="icon"
+                            className="absolute top-3 right-3 h-7 w-7 opacity-0 group-hover:opacity-100 transition-opacity"
+                            onClick={() => handleDeleteSupplement(sup.id)}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                          <CardHeader className="pb-2 pr-12">
+                            <CardTitle className="text-base">{sup.name}</CardTitle>
+                          </CardHeader>
+                          <CardContent className="space-y-2">
+                            <Badge variant="secondary">{sup.dosage}</Badge>
+                            <div className="text-sm space-y-1">
+                              {sup.frequency && (
+                                <p className="flex justify-between text-muted-foreground">
+                                  <span>Frequência:</span>
+                                  <span className="font-medium text-foreground">
+                                    {sup.frequency}
+                                  </span>
+                                </p>
+                              )}
+                              {sup.timing && (
+                                <p className="flex justify-between text-muted-foreground">
+                                  <span>Horário:</span>
+                                  <span className="font-medium text-foreground">{sup.timing}</span>
+                                </p>
+                              )}
+                            </div>
+                            {sup.observations && (
+                              <p className="text-xs italic text-muted-foreground pt-2 mt-1 border-t">
+                                "{sup.observations}"
+                              </p>
+                            )}
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </div>
+                  ) : (
+                    <Card className="border-dashed">
+                      <CardContent className="py-8 text-center text-muted-foreground flex flex-col items-center justify-center">
+                        <Pill className="h-8 w-8 opacity-20 mb-3" />
+                        <p>Nenhum suplemento prescrito ativamente.</p>
+                      </CardContent>
+                    </Card>
+                  )}
+                </div>
+
+                <div className="pt-6 border-t space-y-4">
+                  <h4 className="font-semibold text-sm text-muted-foreground uppercase tracking-wider flex items-center gap-2">
+                    <Activity className="h-4 w-4" /> Progresso Diário do Paciente
+                  </h4>
+                  <PatientNutritionMirror patientId={id || ''} />
+                </div>
               </div>
             )}
           </TabsContent>
@@ -249,6 +346,12 @@ export default function ProfPatientRecord() {
         isOpen={isAssessmentModalOpen}
         onClose={() => setIsAssessmentModalOpen(false)}
         clientId={id || ''}
+      />
+      <NutritionSupplementModal
+        isOpen={isSupplementModalOpen}
+        onClose={() => setIsSupplementModalOpen(false)}
+        clientId={id || ''}
+        onSuccess={fetchSupplements}
       />
     </div>
   )

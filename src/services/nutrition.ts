@@ -521,3 +521,61 @@ export async function getClientSupplements(clientId: string) {
     return { data: null, error }
   }
 }
+
+export async function createSupplement(supplement: Partial<NutritionSupplement>) {
+  try {
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser()
+
+    if (authError) throw authError
+    if (!user) throw new Error('Not authenticated')
+
+    const newSupplement = {
+      ...supplement,
+      professional_id: user.id,
+    }
+
+    const { data, error } = await supabase
+      .from('nutrition_supplements')
+      .insert(newSupplement as any)
+      .select()
+      .single()
+
+    if (error) throw error
+    return { data, error: null }
+  } catch (error) {
+    console.error('Error creating supplement:', error)
+    return { data: null, error }
+  }
+}
+
+export async function deleteSupplement(id: string) {
+  try {
+    const { error } = await supabase.from('nutrition_supplements').delete().eq('id', id)
+
+    if (error) throw error
+    return { error: null }
+  } catch (error) {
+    console.error('Error deleting supplement:', error)
+    return { error }
+  }
+}
+
+export async function getPatientSupplements(patientId: string) {
+  try {
+    const { data, error } = await supabase
+      .from('nutrition_supplements')
+      .select('*')
+      .eq('client_id', patientId)
+      .eq('is_active', true)
+      .order('created_at', { ascending: false })
+
+    if (error) throw error
+    return { data: data as NutritionSupplement[], error: null }
+  } catch (error) {
+    console.error('Error fetching patient supplements:', error)
+    return { data: null, error }
+  }
+}

@@ -1,7 +1,7 @@
 import React from 'react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
-import { Folder, FolderPlus, FolderOpen, Hash } from 'lucide-react'
+import { Folder, FolderPlus, FolderOpen, Hash, Trash2 } from 'lucide-react'
 import type { StudyFolder } from '@/services/study'
 
 interface SecondBrainFoldersSidebarProps {
@@ -14,6 +14,7 @@ interface SecondBrainFoldersSidebarProps {
   onAddFolder: () => void
   onDrop: (e: React.DragEvent, folderId: string | null) => void
   onSelectAllNotes: () => void
+  onDeleteFolder?: (id: string) => void
 }
 
 export function SecondBrainFoldersSidebar({
@@ -26,6 +27,7 @@ export function SecondBrainFoldersSidebar({
   onAddFolder,
   onDrop,
   onSelectAllNotes,
+  onDeleteFolder,
 }: SecondBrainFoldersSidebarProps) {
   return (
     <>
@@ -54,21 +56,35 @@ export function SecondBrainFoldersSidebar({
             <span className="truncate">Todas as Notas</span>
           </button>
           {folders.map((folder) => (
-            <button
+            <div
               key={folder.id}
               onClick={() => onSelectFolder(folder.id)}
               onDragOver={(e) => e.preventDefault()}
               onDrop={(e) => onDrop(e, folder.id)}
               className={cn(
-                'w-full flex items-center justify-start gap-2 px-2 py-1.5 text-sm rounded-md transition-colors',
+                'group w-full flex items-center justify-between gap-2 px-2 py-1.5 text-sm rounded-md transition-colors cursor-pointer',
                 selectedFolderId === folder.id
                   ? 'bg-primary/10 text-primary font-medium'
                   : 'hover:bg-muted text-muted-foreground',
               )}
             >
-              <Folder className="h-4 w-4 shrink-0" />
-              <span className="truncate">{folder.name}</span>
-            </button>
+              <div className="flex items-center gap-2 truncate">
+                <Folder className="h-4 w-4 shrink-0" />
+                <span className="truncate">{folder.name}</span>
+              </div>
+              {onDeleteFolder && (
+                <div
+                  role="button"
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    onDeleteFolder(folder.id)
+                  }}
+                  className="opacity-0 group-hover:opacity-100 p-1 hover:bg-destructive/10 hover:text-destructive rounded transition-all shrink-0"
+                >
+                  <Trash2 className="h-3.5 w-3.5" />
+                </div>
+              )}
+            </div>
           ))}
         </div>
 

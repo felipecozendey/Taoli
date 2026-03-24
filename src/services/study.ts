@@ -202,6 +202,27 @@ export const studyService = {
     }
   },
 
+  async deleteNote(id: string) {
+    try {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
+      if (!user) return { error: new Error('Not authenticated') }
+
+      const { error } = await supabase
+        .from('study_notes')
+        .delete()
+        .eq('id', id)
+        .eq('user_id', user.id)
+
+      if (error) throw error
+      return { error: null }
+    } catch (error) {
+      console.error('Error deleting note:', error)
+      return { error }
+    }
+  },
+
   async getBacklinks(noteId: string) {
     try {
       const {
@@ -272,12 +293,46 @@ export const studyService = {
     }
   },
 
-  async deleteFolder(id: string) {
+  async deleteFolder(id: string, deleteNotes: boolean = false) {
     try {
       const {
         data: { user },
       } = await supabase.auth.getUser()
       if (!user) return { error: new Error('Not authenticated') }
+
+      if (deleteNotes) {
+        // Delete all notes in this folder first
+        await supabase.from('study_notes').delete().eq('folder_id', id).eq('user_id', user.id)
+      } else {
+        // Move notes to "Notas a Organizar"
+        const { data: searchFolder } = await supabase
+          .from('study_folders')
+          .select('id')
+          .eq('user_id', user.id)
+          .eq('name', 'Notas a Organizar')
+          .maybeSingle()
+
+        let defaultFolderId = searchFolder?.id
+
+        if (!defaultFolderId) {
+          const { data: newFolder, error: createError } = await supabase
+            .from('study_folders')
+            .insert([{ name: 'Notas a Organizar', user_id: user.id }])
+            .select()
+            .single()
+
+          if (createError) throw createError
+          defaultFolderId = newFolder.id
+        }
+
+        if (defaultFolderId) {
+          await supabase
+            .from('study_notes')
+            .update({ folder_id: defaultFolderId })
+            .eq('folder_id', id)
+            .eq('user_id', user.id)
+        }
+      }
 
       const { error } = await supabase
         .from('study_folders')

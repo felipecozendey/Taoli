@@ -22,7 +22,7 @@ import {
 } from '@/services/nutrition'
 
 export default function ProfPatientRecord() {
-  const { id } = useParams()
+  const { id: patientId } = useParams()
   const navigate = useNavigate()
   const { user } = useAuth()
 
@@ -53,25 +53,25 @@ export default function ProfPatientRecord() {
   const [assessments, setAssessments] = useState<NutritionAssessment[]>([])
 
   const fetchSupplements = async () => {
-    if (!id) return
-    const { data } = await getPatientSupplements(id)
+    if (!patientId) return
+    const { data } = await getPatientSupplements(patientId)
     if (data) setSupplements(data)
   }
 
   const fetchAssessments = async () => {
-    if (!id) return
-    const { data } = await getPatientAssessments(id)
+    if (!patientId) return
+    const { data } = await getPatientAssessments(patientId)
     if (data) setAssessments(data)
   }
 
   useEffect(() => {
-    if (!id || !user?.id) return
+    if (!patientId || !user?.id) return
     const fetchPatient = async () => {
       try {
         const { data } = await supabase
           .from('professional_client_links')
           .select('*, client:profiles!professional_client_links_client_id_fkey(*)')
-          .eq('client_id', id)
+          .eq('client_id', patientId)
           .eq('professional_id', user.id)
           .single()
 
@@ -92,7 +92,7 @@ export default function ProfPatientRecord() {
     fetchPatient()
     fetchSupplements()
     fetchAssessments()
-  }, [id, user?.id])
+  }, [patientId, user?.id])
 
   const handleAddNote = () => {
     if (!newNote.trim()) return
@@ -348,7 +348,7 @@ export default function ProfPatientRecord() {
                   <h4 className="font-semibold text-sm text-muted-foreground uppercase tracking-wider flex items-center gap-2">
                     <Activity className="h-4 w-4" /> Progresso Diário do Paciente
                   </h4>
-                  <PatientNutritionMirror patientId={id || ''} />
+                  <PatientNutritionMirror patientId={patientId || ''} />
                 </div>
               </div>
             )}
@@ -395,16 +395,17 @@ export default function ProfPatientRecord() {
           </TabsContent>
         </Tabs>
       </PageContent>
+
       <NutritionAssessmentModal
         isOpen={isAssessmentModalOpen}
         onClose={() => setIsAssessmentModalOpen(false)}
-        clientId={id || ''}
+        clientId={patientId || ''}
         onSuccess={fetchAssessments}
       />
       <NutritionSupplementModal
         isOpen={isSupplementModalOpen}
         onClose={() => setIsSupplementModalOpen(false)}
-        clientId={id || ''}
+        clientId={patientId || ''}
         onSuccess={fetchSupplements}
       />
     </div>

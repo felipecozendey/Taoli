@@ -129,6 +129,15 @@ export function NutritionAssessmentModal({ isOpen, onClose, clientId, onSuccess 
   }, [basic, folds, bia, energy])
 
   const handleSave = async () => {
+    if (!clientId) {
+      toast({
+        title: 'Erro de Sincronização',
+        description: 'O ID do paciente não foi identificado.',
+        variant: 'destructive',
+      })
+      return
+    }
+
     if (!basic.weight || !basic.height || !basic.age || !basic.gender) {
       toast({
         title: 'Campos incompletos',
@@ -152,10 +161,10 @@ export function NutritionAssessmentModal({ isOpen, onClose, clientId, onSuccess 
             .map(([k, v]) => [k, parseFloat(v as string)]),
         )
 
-      const { error } = await createAssessment({
+      const assessmentData = {
         client_id: clientId,
-        weight: parseFloat(basic.weight),
-        height: parseFloat(basic.height),
+        weight: parseFloat(basic.weight) || 0,
+        height: parseFloat(basic.height) || 0,
         body_fat_percentage: parseFloat(results.finalFat as string) || undefined,
         bmr: parseFloat(results.bmr as string) || undefined,
         tdee: parseFloat(results.tdee as string) || undefined,
@@ -164,12 +173,17 @@ export function NutritionAssessmentModal({ isOpen, onClose, clientId, onSuccess 
         formulas_used: { energy: energy.formula, fat: 'jackson_pollock_7', bia },
         date: new Date().toISOString().split('T')[0],
         ...urls,
-      })
+      }
+
+      const { error } = await createAssessment(assessmentData)
 
       if (error) throw error
 
       toast({ title: 'Avaliação salva!', description: 'Registada com sucesso.' })
+
+      // Chamada obrigatória ANTES do fechamento do modal
       if (onSuccess) onSuccess()
+
       onClose()
     } catch (err) {
       toast({ title: 'Erro ao salvar', description: 'Ocorreu um erro.', variant: 'destructive' })

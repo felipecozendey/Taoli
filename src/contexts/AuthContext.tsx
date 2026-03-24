@@ -15,6 +15,7 @@ export interface User {
 
 interface AuthContextType {
   user: User | null
+  impersonatedUser: User | null
   session: Session | null
   isLoading: boolean
   activeRole: Role | null
@@ -188,6 +189,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     <AuthContext.Provider
       value={{
         user,
+        impersonatedUser,
         session,
         isLoading,
         activeRole,

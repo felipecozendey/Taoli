@@ -82,7 +82,8 @@ const radarConfig = {
 } satisfies ChartConfig
 
 export default function ClientNutrition() {
-  const { user } = useAuth()
+  const { user, impersonatedUser } = useAuth()
+  const activeUser = impersonatedUser || user
   const [isLoading, setIsLoading] = useState(true)
   const [diet, setDiet] = useState<FullDietDetails | null>(null)
   const [progress, setProgress] = useState<any>(null)
@@ -94,15 +95,15 @@ export default function ClientNutrition() {
   const { toast } = useToast()
 
   const fetchData = async () => {
-    if (!user?.id) return
+    if (!activeUser?.id) return
 
     setIsLoading(true)
     try {
       const [activeDietRes, progData, assessmentsRes, supplementsRes] = await Promise.all([
-        getClientActiveDiet(user.id),
-        getDailyNutritionProgress(user.id, date),
-        getClientAssessments(user.id),
-        getClientSupplements(user.id),
+        getClientActiveDiet(activeUser.id),
+        getDailyNutritionProgress(activeUser.id, date),
+        getClientAssessments(activeUser.id),
+        getClientSupplements(activeUser.id),
       ])
 
       setProgress(progData)
@@ -127,10 +128,10 @@ export default function ClientNutrition() {
   }
 
   useEffect(() => {
-    if (user?.id) {
+    if (activeUser?.id) {
       fetchData()
     }
-  }, [date, user?.id])
+  }, [date, activeUser?.id])
 
   const latestAssessment = assessments?.[0]
 
@@ -215,8 +216,8 @@ export default function ClientNutrition() {
   }
 
   const handleAddWater = async () => {
-    if (!user?.id) return
-    await addWaterLog(user.id, date, 250)
+    if (!activeUser?.id) return
+    await addWaterLog(activeUser.id, date, 250)
     toast({ title: '💧 250ml de água registrados!' })
     fetchData()
   }
@@ -244,9 +245,9 @@ export default function ClientNutrition() {
       fat += (i.food_items.fats_g || 0) * r
     })
 
-    if (!user?.id) return
+    if (!activeUser?.id) return
 
-    await addFoodLog(user.id, date, {
+    await addFoodLog(activeUser.id, date, {
       food_name: m.name,
       calories: Math.round(cal),
       protein: Math.round(pro),

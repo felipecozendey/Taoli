@@ -5,7 +5,6 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Progress } from '@/components/ui/progress'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Skeleton } from '@/components/ui/skeleton'
 import { Badge } from '@/components/ui/badge'
 import { Switch } from '@/components/ui/switch'
 import { Label } from '@/components/ui/label'
@@ -25,7 +24,6 @@ import {
   CartesianGrid,
   Tooltip,
   Legend,
-  ResponsiveContainer,
   RadarChart,
   PolarGrid,
   PolarAngleAxis,
@@ -48,8 +46,9 @@ import {
   Info,
   Scale,
   Dna,
+  Loader2,
 } from 'lucide-react'
-import { supabase } from '@/lib/supabase/client'
+import { useAuth } from '@/contexts/AuthContext'
 import { useToast } from '@/hooks/use-toast'
 import {
   getClientActiveDiet,
@@ -83,6 +82,7 @@ const radarConfig = {
 } satisfies ChartConfig
 
 export default function ClientNutrition() {
+  const { user } = useAuth()
   const [isLoading, setIsLoading] = useState(true)
   const [diet, setDiet] = useState<FullDietDetails | null>(null)
   const [progress, setProgress] = useState<any>(null)
@@ -94,13 +94,10 @@ export default function ClientNutrition() {
   const { toast } = useToast()
 
   const fetchData = async () => {
+    if (!user?.id) return
+
     setIsLoading(true)
     try {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser()
-      if (!user) return
-
       const [activeDietRes, progData, assessmentsRes, supplementsRes] = await Promise.all([
         getClientActiveDiet(user.id),
         getDailyNutritionProgress(user.id, date),
@@ -130,8 +127,10 @@ export default function ClientNutrition() {
   }
 
   useEffect(() => {
-    fetchData()
-  }, [date])
+    if (user?.id) {
+      fetchData()
+    }
+  }, [date, user?.id])
 
   const latestAssessment = assessments?.[0]
 
@@ -216,10 +215,7 @@ export default function ClientNutrition() {
   }
 
   const handleAddWater = async () => {
-    const {
-      data: { user },
-    } = await supabase.auth.getUser()
-    if (!user) return
+    if (!user?.id) return
     await addWaterLog(user.id, date, 250)
     toast({ title: '💧 250ml de água registrados!' })
     fetchData()
@@ -248,10 +244,7 @@ export default function ClientNutrition() {
       fat += (i.food_items.fats_g || 0) * r
     })
 
-    const {
-      data: { user },
-    } = await supabase.auth.getUser()
-    if (!user) return
+    if (!user?.id) return
 
     await addFoodLog(user.id, date, {
       food_name: m.name,
@@ -281,22 +274,6 @@ export default function ClientNutrition() {
   })
     .format(new Date(date + 'T12:00:00'))
     .replace('.', '')
-
-  if (isLoading) {
-    return (
-      <div className="flex flex-col min-h-full">
-        <DashboardHeader title="Minha Nutrição" />
-        <PageContent className="max-w-3xl mx-auto w-full space-y-6">
-          <Skeleton className="h-12 w-full" />
-          <Skeleton className="h-64 w-full" />
-          <div className="grid gap-4">
-            <Skeleton className="h-32 w-full" />
-            <Skeleton className="h-32 w-full" />
-          </div>
-        </PageContent>
-      </div>
-    )
-  }
 
   return (
     <div className="flex flex-col min-h-full">
@@ -331,7 +308,11 @@ export default function ClientNutrition() {
           </TabsList>
 
           <TabsContent value="dashboard" className="space-y-6">
-            {!latestAssessment ? (
+            {isLoading ? (
+              <Card className="p-8 flex justify-center">
+                <Loader2 className="h-8 w-8 animate-spin text-primary" />
+              </Card>
+            ) : !latestAssessment ? (
               <Card className="p-8 flex flex-col items-center justify-center text-center border-dashed">
                 <Activity className="h-12 w-12 text-muted-foreground mb-4 opacity-20" />
                 <h3 className="text-lg font-semibold">Sem dados físicos</h3>
@@ -748,7 +729,11 @@ export default function ClientNutrition() {
           </TabsContent>
 
           <TabsContent value="diet" className="space-y-4">
-            {diet ? (
+            {isLoading ? (
+              <Card className="p-8 flex justify-center">
+                <Loader2 className="h-8 w-8 animate-spin text-primary" />
+              </Card>
+            ) : diet ? (
               <div className="space-y-4">
                 <div className="mb-6">
                   <h3 className="text-xl font-bold flex items-center gap-2">
@@ -862,7 +847,11 @@ export default function ClientNutrition() {
               </div>
             </Card>
 
-            {supplements.length > 0 ? (
+            {isLoading ? (
+              <Card className="p-8 flex justify-center">
+                <Loader2 className="h-8 w-8 animate-spin text-primary" />
+              </Card>
+            ) : supplements.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {supplements.map((sup) => (
                   <Card

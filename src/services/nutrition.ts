@@ -489,12 +489,19 @@ export async function updateCustomFoodItem(
   }
 }
 
-export async function getClientAssessments(clientId: string) {
+export async function getClientAssessments(userId?: string) {
   try {
+    let targetId = userId
+    if (!targetId) {
+      const { data } = await supabase.auth.getUser()
+      targetId = data?.user?.id
+    }
+    if (!targetId) throw new Error('Não autenticado ou ID não fornecido')
+
     const { data, error } = await supabase
       .from('nutrition_assessments')
       .select('*')
-      .eq('client_id', clientId)
+      .eq('client_id', targetId)
       .order('date', { ascending: false })
 
     if (error) throw error
@@ -521,12 +528,19 @@ export async function getPatientAssessments(patientId: string) {
   }
 }
 
-export async function getClientSupplements(clientId: string) {
+export async function getClientSupplements(userId?: string) {
   try {
+    let targetId = userId
+    if (!targetId) {
+      const { data } = await supabase.auth.getUser()
+      targetId = data?.user?.id
+    }
+    if (!targetId) throw new Error('Não autenticado ou ID não fornecido')
+
     const { data, error } = await supabase
       .from('nutrition_supplements')
       .select('*')
-      .eq('client_id', clientId)
+      .eq('client_id', targetId)
       .eq('is_active', true)
       .order('created_at', { ascending: false })
 

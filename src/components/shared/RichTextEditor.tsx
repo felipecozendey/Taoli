@@ -14,6 +14,7 @@ import {
   Palette,
   Image as ImageIcon,
   Youtube as YoutubeIcon,
+  FileUp,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
@@ -33,6 +34,8 @@ interface RichTextEditorProps {
 }
 
 const MenuBar = ({ editor }: { editor: Editor | null }) => {
+  const fileInputRef = useRef<HTMLInputElement>(null)
+
   if (!editor) return null
 
   const addImage = () => {
@@ -47,6 +50,23 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
     if (url) {
       editor.commands.setYoutubeVideo({ src: url })
     }
+  }
+
+  const handlePdfUploadClick = () => fileInputRef.current?.click()
+
+  const handlePdfFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    toast({ title: 'Carregando PDF...' })
+    const publicUrl = await uploadStudyMedia(file)
+    if (publicUrl && editor) {
+      editor
+        .chain()
+        .focus()
+        .insertContent({ type: 'pdfBlock', attrs: { src: publicUrl, highlights: [] } })
+        .run()
+    }
+    if (fileInputRef.current) fileInputRef.current.value = ''
   }
 
   return (
@@ -109,6 +129,22 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
       >
         <YoutubeIcon className="h-4 w-4" />
       </Button>
+      <Button
+        variant="ghost"
+        size="sm"
+        onClick={handlePdfUploadClick}
+        title="Importar PDF"
+        className="h-8 w-8 p-0"
+      >
+        <FileUp className="h-4 w-4" />
+      </Button>
+      <input
+        type="file"
+        accept="application/pdf"
+        className="hidden"
+        ref={fileInputRef}
+        onChange={handlePdfFileChange}
+      />
     </div>
   )
 }

@@ -68,8 +68,8 @@ export function SecondBrainPanel() {
   const [newFolderName, setNewFolderName] = useState('')
 
   // Focus & Delete States
-  const [isLeftSidebarOpen, setIsLeftSidebarOpen] = useState(true)
-  const [isRightSidebarOpen, setIsRightSidebarOpen] = useState(true)
+  const [isLeftPanelOpen, setIsLeftPanelOpen] = useState(true)
+  const [isRightPanelOpen, setIsRightPanelOpen] = useState(true)
   const [noteToDelete, setNoteToDelete] = useState<string | null>(null)
   const [folderToDelete, setFolderToDelete] = useState<string | null>(null)
   const [folderDeleteMode, setFolderDeleteMode] = useState<'all' | 'keep_notes' | null>(null)
@@ -375,8 +375,8 @@ export function SecondBrainPanel() {
         {/* Folders & Tags Sidebar - Desktop */}
         <div
           className={cn(
-            'hidden md:flex border-r bg-muted/10 flex-col shrink-0 transition-all duration-300',
-            isLeftSidebarOpen ? 'w-56 lg:w-64' : 'w-0 border-r-0 overflow-hidden opacity-0',
+            'border-r bg-muted/10 flex-col shrink-0 w-56 lg:w-64',
+            isLeftPanelOpen ? 'hidden md:flex' : 'hidden',
           )}
         >
           <SecondBrainFoldersSidebar
@@ -399,8 +399,8 @@ export function SecondBrainPanel() {
         {/* Notes List Sidebar - Desktop */}
         <div
           className={cn(
-            'hidden md:flex border-r bg-muted/5 flex-col shrink-0 transition-all duration-300',
-            isLeftSidebarOpen ? 'w-56 lg:w-64' : 'w-0 border-r-0 overflow-hidden opacity-0',
+            'border-r bg-muted/5 flex-col shrink-0 w-56 lg:w-64',
+            isLeftPanelOpen ? 'hidden md:flex' : 'hidden',
           )}
         >
           <SecondBrainNotesSidebar
@@ -422,9 +422,9 @@ export function SecondBrainPanel() {
                   variant="ghost"
                   size="icon"
                   className="hidden md:flex h-8 w-8 text-muted-foreground shrink-0"
-                  onClick={() => setIsLeftSidebarOpen(!isLeftSidebarOpen)}
+                  onClick={() => setIsLeftPanelOpen(!isLeftPanelOpen)}
                 >
-                  {isLeftSidebarOpen ? (
+                  {isLeftPanelOpen ? (
                     <PanelLeftClose className="h-5 w-5" />
                   ) : (
                     <PanelLeftOpen className="h-5 w-5" />
@@ -454,9 +454,9 @@ export function SecondBrainPanel() {
                   variant="ghost"
                   size="icon"
                   className="hidden xl:flex h-8 w-8 text-muted-foreground shrink-0"
-                  onClick={() => setIsRightSidebarOpen(!isRightSidebarOpen)}
+                  onClick={() => setIsRightPanelOpen(!isRightPanelOpen)}
                 >
-                  {isRightSidebarOpen ? (
+                  {isRightPanelOpen ? (
                     <PanelRightClose className="h-5 w-5" />
                   ) : (
                     <PanelRightOpen className="h-5 w-5" />
@@ -514,8 +514,8 @@ export function SecondBrainPanel() {
         {/* Right Sidebar (Backlinks Knowledge Graph) */}
         <div
           className={cn(
-            'hidden xl:flex border-l bg-muted/10 p-4 flex-col shrink-0 transition-all duration-300',
-            isRightSidebarOpen ? 'w-64' : 'w-0 border-l-0 p-0 overflow-hidden opacity-0',
+            'border-l bg-muted/10 p-4 flex-col shrink-0 w-64',
+            isRightPanelOpen ? 'hidden xl:flex' : 'hidden',
           )}
         >
           <div className="flex items-center gap-2 mb-4 pb-2 border-b">

@@ -37,7 +37,8 @@ export function LinkClientsModal({
   professional,
   allUsers,
 }: LinkClientsModalProps) {
-  const [linkedClients, setLinkedClients] = useState<any[]>([])
+  // All hooks must be called before conditional returns
+  const [linkedClientIds, setLinkedClientIds] = useState<string[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [isLinking, setIsLinking] = useState(false)
   const [selectedClientId, setSelectedClientId] = useState<string>('')
@@ -47,8 +48,8 @@ export function LinkClientsModal({
     if (!professional?.id) return
     setIsLoading(true)
     try {
-      const data = await getProfessionalClients(professional.id)
-      setLinkedClients(data)
+      const ids = await getProfessionalClients(professional.id)
+      setLinkedClientIds(ids)
     } catch (error: any) {
       toast({
         title: 'Erro ao carregar clientes',
@@ -65,13 +66,9 @@ export function LinkClientsModal({
       fetchClients()
       setSelectedClientId('')
     } else {
-      setLinkedClients([])
+      setLinkedClientIds([])
     }
   }, [isOpen, professional?.id])
-
-  const availableClients = allUsers.filter(
-    (u) => u.role === 'client' && !linkedClients.some((lc) => lc.client_id === u.id),
-  )
 
   const handleLink = async () => {
     if (!professional?.id || !selectedClientId) return
@@ -99,8 +96,13 @@ export function LinkClientsModal({
     }
   }
 
-  // Ensure this is called after all hooks to comply with React hook rules
+  // Early return shield after all hooks have been initialized
   if (!professional) return null
+
+  const linkedClients = allUsers.filter((u) => linkedClientIds.includes(u.id))
+  const availableClients = allUsers.filter(
+    (u) => u.role === 'client' && !linkedClientIds.includes(u.id),
+  )
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
@@ -157,20 +159,20 @@ export function LinkClientsModal({
               </div>
             ) : (
               <div className="divide-y">
-                {linkedClients.map((link) => (
+                {linkedClients.map((client) => (
                   <div
-                    key={link.client_id}
+                    key={client.id}
                     className="flex items-center justify-between p-3 hover:bg-muted/30 transition-colors"
                   >
                     <div className="flex flex-col">
-                      <span className="font-medium text-sm">{link.client?.name || 'Sem nome'}</span>
-                      <span className="text-xs text-muted-foreground">{link.client?.email}</span>
+                      <span className="font-medium text-sm">{client.name || 'Sem nome'}</span>
+                      <span className="text-xs text-muted-foreground">{client.email}</span>
                     </div>
                     <Button
                       variant="ghost"
                       size="icon"
                       className="text-destructive hover:bg-destructive/10 hover:text-destructive"
-                      onClick={() => handleUnlink(link.client_id)}
+                      onClick={() => handleUnlink(client.id)}
                       title="Desvincular"
                     >
                       <Unlink className="w-4 h-4" />

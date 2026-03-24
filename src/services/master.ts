@@ -142,22 +142,19 @@ export const getAuditLogs = async (
   }
 }
 
-export const getProfessionalClients = async (professionalId: string) => {
+/**
+ * Retrieves only the IDs of clients linked to a professional
+ * to avoid Supabase auth.users relationship security blocks.
+ */
+export const getProfessionalClients = async (professionalId: string): Promise<string[]> => {
   const { data, error } = await supabase
     .from('professional_client_links')
-    .select(`
-      client_id,
-      client:profiles!professional_client_links_client_id_fkey(id, name, email)
-    `)
+    .select('client_id')
     .eq('professional_id', professionalId)
 
   if (error) throw error
 
-  // Flatten the array response from Supabase relationship
-  return (data || []).map((item: any) => ({
-    client_id: item.client_id,
-    client: Array.isArray(item.client) ? item.client[0] : item.client,
-  }))
+  return (data || []).map((item: any) => item.client_id)
 }
 
 export const linkProfessionalClient = async (professionalId: string, clientId: string) => {

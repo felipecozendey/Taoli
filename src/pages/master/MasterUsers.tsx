@@ -253,7 +253,7 @@ export default function MasterUsers() {
                           <span className="hidden md:inline">Acessar Conta</span>
                         </Button>
 
-                        {user.role === 'professional' && (
+                        {(user.role === 'professional' || user.role === 'admin') && (
                           <Button
                             variant="ghost"
                             size="sm"

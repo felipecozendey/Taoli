@@ -2,7 +2,16 @@ import { useState, useEffect } from 'react'
 import { DashboardHeader } from '@/components/shared/DashboardHeader'
 import { PageContent } from '@/components/shared/PageContent'
 import { Input } from '@/components/ui/input'
-import { Search, Shield, Settings, Apple, Dumbbell, Brain, Eye } from 'lucide-react'
+import {
+  Search,
+  Shield,
+  Settings,
+  Apple,
+  Dumbbell,
+  Brain,
+  Eye,
+  Link as LinkIcon,
+} from 'lucide-react'
 import {
   Table,
   TableBody,
@@ -34,6 +43,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { useToast } from '@/hooks/use-toast'
 import { getAllProfiles, updateUserAccess, type Profile } from '@/services/master'
 import { useAuth } from '@/contexts/AuthContext'
+import { LinkClientsModal } from '@/components/master/LinkClientsModal'
 
 const RoleBadge = ({ role }: { role: string }) => {
   switch (role) {
@@ -92,6 +102,7 @@ export default function MasterUsers() {
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedUser, setSelectedUser] = useState<Profile | null>(null)
   const [isSheetOpen, setIsSheetOpen] = useState(false)
+  const [linkingProf, setLinkingProf] = useState<Profile | null>(null)
   const [editForm, setEditForm] = useState({
     role: 'client',
     is_nutritionist: false,
@@ -241,6 +252,19 @@ export default function MasterUsers() {
                           <Eye className="w-4 h-4 md:mr-2" />
                           <span className="hidden md:inline">Acessar Conta</span>
                         </Button>
+
+                        {user.role === 'professional' && (
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => setLinkingProf(user)}
+                            title="Gerir Pacientes"
+                          >
+                            <LinkIcon className="w-4 h-4 md:mr-2" />
+                            <span className="hidden md:inline">Vínculos</span>
+                          </Button>
+                        )}
+
                         <Button variant="ghost" size="sm" onClick={() => openEditSheet(user)}>
                           <Shield className="w-4 h-4 md:mr-2" />
                           <span className="hidden md:inline">Gerir Acesso</span>
@@ -355,6 +379,13 @@ export default function MasterUsers() {
           </SheetFooter>
         </SheetContent>
       </Sheet>
+
+      <LinkClientsModal
+        isOpen={!!linkingProf}
+        onClose={() => setLinkingProf(null)}
+        professional={linkingProf}
+        allUsers={users}
+      />
     </div>
   )
 }

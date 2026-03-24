@@ -141,3 +141,40 @@ export const getAuditLogs = async (
     throw new Error(error.message || 'Failed to fetch audit logs')
   }
 }
+
+export const getProfessionalClients = async (professionalId: string) => {
+  const { data, error } = await supabase
+    .from('professional_client_links')
+    .select(`
+      client_id,
+      client:profiles!professional_client_links_client_id_fkey(id, name, email)
+    `)
+    .eq('professional_id', professionalId)
+
+  if (error) throw error
+
+  // Flatten the array response from Supabase relationship
+  return (data || []).map((item: any) => ({
+    client_id: item.client_id,
+    client: Array.isArray(item.client) ? item.client[0] : item.client,
+  }))
+}
+
+export const linkProfessionalClient = async (professionalId: string, clientId: string) => {
+  const { error } = await supabase.from('professional_client_links').insert([
+    {
+      professional_id: professionalId,
+      client_id: clientId,
+      status: 'active',
+    },
+  ])
+  if (error) throw error
+}
+
+export const unlinkProfessionalClient = async (professionalId: string, clientId: string) => {
+  const { error } = await supabase
+    .from('professional_client_links')
+    .delete()
+    .match({ professional_id: professionalId, client_id: clientId })
+  if (error) throw error
+}

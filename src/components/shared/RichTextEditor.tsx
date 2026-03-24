@@ -22,6 +22,7 @@ import type { StudyNote } from '@/services/study'
 import { uploadStudyMedia } from '@/lib/supabase/storage'
 import { ImageAnnotatorDialog } from './ImageAnnotatorDialog'
 import { toast } from '@/hooks/use-toast'
+import { PDFExtension } from './editor/PDFExtension'
 
 interface RichTextEditorProps {
   content: string
@@ -153,6 +154,7 @@ export function RichTextEditor({
           class: 'w-full aspect-video rounded-md',
         },
       }),
+      PDFExtension,
       Mention.configure({
         HTMLAttributes: {
           class:
@@ -321,6 +323,32 @@ export function RichTextEditor({
                   toast({ title: 'Erro ao carregar imagem', variant: 'destructive' })
                 }
               })
+            } else if (file.type === 'application/pdf') {
+              event.preventDefault()
+              handled = true
+              toast({ title: 'A carregar PDF...', description: file.name })
+
+              uploadStudyMedia(file).then((publicUrl) => {
+                if (publicUrl) {
+                  const coordinates = view.posAtCoords({ left: event.clientX, top: event.clientY })
+                  if (coordinates) {
+                    view.dispatch(
+                      view.state.tr.insert(
+                        coordinates.pos,
+                        view.state.schema.nodes.pdfBlock.create({ src: publicUrl, highlights: [] }),
+                      ),
+                    )
+                  } else {
+                    view.dispatch(
+                      view.state.tr.replaceSelectionWith(
+                        view.state.schema.nodes.pdfBlock.create({ src: publicUrl, highlights: [] }),
+                      ),
+                    )
+                  }
+                } else {
+                  toast({ title: 'Erro ao carregar PDF', variant: 'destructive' })
+                }
+              })
             }
           })
           if (handled) return true
@@ -350,6 +378,22 @@ export function RichTextEditor({
                   )
                 } else {
                   toast({ title: 'Erro ao carregar imagem', variant: 'destructive' })
+                }
+              })
+            } else if (file.type === 'application/pdf') {
+              event.preventDefault()
+              handled = true
+              toast({ title: 'A carregar PDF...' })
+
+              uploadStudyMedia(file).then((publicUrl) => {
+                if (publicUrl) {
+                  view.dispatch(
+                    view.state.tr.replaceSelectionWith(
+                      view.state.schema.nodes.pdfBlock.create({ src: publicUrl, highlights: [] }),
+                    ),
+                  )
+                } else {
+                  toast({ title: 'Erro ao carregar PDF', variant: 'destructive' })
                 }
               })
             }

@@ -6,6 +6,7 @@ import { Progress } from '@/components/ui/progress'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Skeleton } from '@/components/ui/skeleton'
+import { Badge } from '@/components/ui/badge'
 import {
   Droplets,
   Flame,
@@ -15,6 +16,7 @@ import {
   ChevronLeft,
   ChevronRight,
   Trash2,
+  Pill,
 } from 'lucide-react'
 import { supabase } from '@/lib/supabase/client'
 import { useToast } from '@/hooks/use-toast'
@@ -25,8 +27,12 @@ import {
   addFoodLog,
   deleteFoodLog,
   addWaterLog,
+  getClientAssessments,
+  getClientSupplements,
   type FullDietDetails,
   type MealDetails,
+  type NutritionAssessment,
+  type NutritionSupplement,
 } from '@/services/nutrition'
 import { cn } from '@/lib/utils'
 import { ExtraMealDialog } from '@/components/nutrition/ExtraMealDialog'
@@ -35,6 +41,8 @@ export default function ClientNutrition() {
   const [isLoading, setIsLoading] = useState(true)
   const [diet, setDiet] = useState<FullDietDetails | null>(null)
   const [progress, setProgress] = useState<any>(null)
+  const [assessments, setAssessments] = useState<NutritionAssessment[]>([])
+  const [supplements, setSupplements] = useState<NutritionSupplement[]>([])
   const [date, setDate] = useState(() => new Date().toISOString().split('T')[0])
 
   const { toast } = useToast()
@@ -47,12 +55,16 @@ export default function ClientNutrition() {
       } = await supabase.auth.getUser()
       if (!user) return
 
-      const [activeDietRes, progData] = await Promise.all([
+      const [activeDietRes, progData, assessmentsRes, supplementsRes] = await Promise.all([
         getClientActiveDiet(user.id),
         getDailyNutritionProgress(user.id, date),
+        getClientAssessments(user.id),
+        getClientSupplements(user.id),
       ])
 
       setProgress(progData)
+      setAssessments(assessmentsRes.data || [])
+      setSupplements(supplementsRes.data || [])
 
       if (activeDietRes.data) {
         const { data: fullDiet } = await getFullDietDetails(activeDietRes.data.id)
@@ -187,17 +199,32 @@ export default function ClientNutrition() {
         </div>
 
         <Tabs defaultValue="dashboard" className="space-y-6">
-          <TabsList className="w-full grid grid-cols-2 h-auto p-1 bg-muted/60">
+          <TabsList className="w-full grid grid-cols-3 h-auto p-1 bg-muted/60">
             <TabsTrigger value="dashboard" className="py-2.5">
               Dashboard
             </TabsTrigger>
             <TabsTrigger value="diet" className="py-2.5">
               Minha Dieta
             </TabsTrigger>
+            <TabsTrigger value="supplements" className="py-2.5">
+              Suplementação
+            </TabsTrigger>
           </TabsList>
 
           {/* DASHBOARD TAB */}
           <TabsContent value="dashboard" className="space-y-6">
+            {/* Placeholder Evolução Física */}
+            <Card className="min-h-[200px] flex flex-col shadow-sm border-border/50 bg-muted/5">
+              <CardHeader>
+                <CardTitle className="text-lg">A Minha Evolução Física</CardTitle>
+              </CardHeader>
+              <CardContent className="flex-1 flex items-center justify-center text-center p-6">
+                <p className="text-muted-foreground text-sm max-w-sm">
+                  Os gráficos de percentual de gordura, TMB e circunferências serão carregados aqui.
+                </p>
+              </CardContent>
+            </Card>
+
             {/* Calorie Summary */}
             <Card className="shadow-sm border-border/50">
               <CardContent className="p-6">
@@ -456,6 +483,67 @@ export default function ClientNutrition() {
                   <p className="font-medium text-foreground mb-1">Nenhum plano ativo</p>
                   <p className="text-sm">
                     Você não possui um plano alimentar prescrito por um profissional no momento.
+                  </p>
+                </CardContent>
+              </Card>
+            )}
+          </TabsContent>
+
+          {/* SUPPLEMENTS TAB */}
+          <TabsContent value="supplements" className="space-y-4">
+            {supplements.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {supplements.map((sup) => (
+                  <Card
+                    key={sup.id}
+                    className="shadow-sm border-border/50 hover:shadow-md transition-shadow"
+                  >
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-base flex items-center gap-2">
+                        <div className="p-1.5 bg-primary/10 rounded-md">
+                          <Pill className="h-4 w-4 text-primary" />
+                        </div>
+                        {sup.name}
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-3">
+                      <div>
+                        <Badge variant="secondary" className="font-medium">
+                          {sup.dosage}
+                        </Badge>
+                      </div>
+                      <div className="text-sm space-y-1">
+                        {sup.frequency && (
+                          <p className="flex justify-between">
+                            <span className="text-muted-foreground">Frequência:</span>
+                            <span className="font-medium">{sup.frequency}</span>
+                          </p>
+                        )}
+                        {sup.timing && (
+                          <p className="flex justify-between">
+                            <span className="text-muted-foreground">Horário:</span>
+                            <span className="font-medium">{sup.timing}</span>
+                          </p>
+                        )}
+                      </div>
+                      {sup.observations && (
+                        <p className="text-xs italic text-muted-foreground pt-3 mt-1 border-t">
+                          "{sup.observations}"
+                        </p>
+                      )}
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            ) : (
+              <Card className="border-dashed">
+                <CardContent className="py-12 flex flex-col items-center justify-center text-center text-muted-foreground">
+                  <div className="h-12 w-12 rounded-full bg-muted flex items-center justify-center mb-4">
+                    <Pill className="h-6 w-6 opacity-50" />
+                  </div>
+                  <p className="font-medium text-foreground mb-1">Nenhum suplemento prescrito</p>
+                  <p className="text-sm">
+                    Ainda não tem suplementos prescritos. Consulte o seu profissional.
                   </p>
                 </CardContent>
               </Card>

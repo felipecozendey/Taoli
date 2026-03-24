@@ -25,6 +25,40 @@ export interface WaterLog {
   created_at?: string
 }
 
+export interface NutritionAssessment {
+  id: string
+  client_id: string
+  professional_id?: string
+  date: string
+  weight?: number
+  height?: number
+  body_fat_percentage?: number
+  muscle_mass_percentage?: number
+  bmr?: number
+  tdee?: number
+  goal_weight?: number
+  status?: string
+  method?: string
+  formulas_used?: Record<string, any>
+  circumferences?: Record<string, number>
+  skinfolds?: Record<string, number>
+  observations?: string
+  created_at: string
+}
+
+export interface NutritionSupplement {
+  id: string
+  client_id: string
+  professional_id?: string
+  name: string
+  dosage: string
+  frequency?: string
+  timing?: string
+  observations?: string
+  is_active: boolean
+  created_at: string
+}
+
 export async function createDiet(clientId: string, name: string) {
   try {
     const {
@@ -419,6 +453,39 @@ export async function updateCustomFoodItem(
     return { data: result, error: null }
   } catch (error) {
     console.error('Error updating custom food item:', error)
+    return { data: null, error }
+  }
+}
+
+export async function getClientAssessments(clientId: string) {
+  try {
+    const { data, error } = await supabase
+      .from('nutrition_assessments')
+      .select('*')
+      .eq('client_id', clientId)
+      .order('date', { ascending: false })
+
+    if (error) throw error
+    return { data: data as NutritionAssessment[], error: null }
+  } catch (error) {
+    console.error('Error fetching assessments:', error)
+    return { data: null, error }
+  }
+}
+
+export async function getClientSupplements(clientId: string) {
+  try {
+    const { data, error } = await supabase
+      .from('nutrition_supplements')
+      .select('*')
+      .eq('client_id', clientId)
+      .eq('is_active', true)
+      .order('created_at', { ascending: false })
+
+    if (error) throw error
+    return { data: data as NutritionSupplement[], error: null }
+  } catch (error) {
+    console.error('Error fetching supplements:', error)
     return { data: null, error }
   }
 }

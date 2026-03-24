@@ -331,7 +331,15 @@ export default function ClientNutrition() {
           </TabsList>
 
           <TabsContent value="dashboard" className="space-y-6">
-            {assessments.length > 0 && latestAssessment ? (
+            {!latestAssessment ? (
+              <Card className="p-8 flex flex-col items-center justify-center text-center border-dashed">
+                <Activity className="h-12 w-12 text-muted-foreground mb-4 opacity-20" />
+                <h3 className="text-lg font-semibold">Sem dados físicos</h3>
+                <p className="text-sm text-muted-foreground">
+                  A sua primeira avaliação física ainda não foi registada pelo seu profissional.
+                </p>
+              </Card>
+            ) : (
               <div className="space-y-6">
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                   <Card>
@@ -565,17 +573,6 @@ export default function ClientNutrition() {
                   </Card>
                 </div>
               </div>
-            ) : (
-              <Card className="min-h-[200px] flex flex-col shadow-sm border-border/50 bg-muted/5">
-                <CardHeader>
-                  <CardTitle className="text-lg">A Minha Evolução Física</CardTitle>
-                </CardHeader>
-                <CardContent className="flex-1 flex items-center justify-center text-center p-6">
-                  <p className="text-muted-foreground text-sm max-w-sm">
-                    Ainda não tem avaliações físicas registadas. Consulte o seu profissional.
-                  </p>
-                </CardContent>
-              </Card>
             )}
 
             <Card className="shadow-sm border-border/50">

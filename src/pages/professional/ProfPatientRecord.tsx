@@ -14,7 +14,12 @@ import { supabase } from '@/lib/supabase/client'
 import { PatientNutritionMirror } from '@/components/professional/PatientNutritionMirror'
 import { NutritionAssessmentModal } from '@/components/professional/NutritionAssessmentModal'
 import { NutritionSupplementModal } from '@/components/professional/NutritionSupplementModal'
-import { getPatientSupplements, deleteSupplement } from '@/services/nutrition'
+import {
+  getPatientSupplements,
+  deleteSupplement,
+  getPatientAssessments,
+  type NutritionAssessment,
+} from '@/services/nutrition'
 
 export default function ProfPatientRecord() {
   const { id } = useParams()
@@ -45,11 +50,18 @@ export default function ProfPatientRecord() {
   const [isAssessmentModalOpen, setIsAssessmentModalOpen] = useState(false)
   const [isSupplementModalOpen, setIsSupplementModalOpen] = useState(false)
   const [supplements, setSupplements] = useState<any[]>([])
+  const [assessments, setAssessments] = useState<NutritionAssessment[]>([])
 
   const fetchSupplements = async () => {
     if (!id) return
     const { data } = await getPatientSupplements(id)
     if (data) setSupplements(data)
+  }
+
+  const fetchAssessments = async () => {
+    if (!id) return
+    const { data } = await getPatientAssessments(id)
+    if (data) setAssessments(data)
   }
 
   useEffect(() => {
@@ -79,6 +91,7 @@ export default function ProfPatientRecord() {
     }
     fetchPatient()
     fetchSupplements()
+    fetchAssessments()
   }, [id, user?.id])
 
   const handleAddNote = () => {
@@ -235,7 +248,47 @@ export default function ProfPatientRecord() {
                   </div>
                 </div>
 
-                <div className="space-y-4">
+                <div className="pt-4">
+                  <h3 className="text-lg font-semibold mb-4">Histórico de Avaliações</h3>
+                  {assessments.length === 0 ? (
+                    <p className="text-sm text-muted-foreground">Nenhuma avaliação registada.</p>
+                  ) : (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                      {assessments.map((a) => (
+                        <Card key={a.id} className="shadow-sm border-border/50">
+                          <CardHeader className="pb-2 bg-muted/20 border-b">
+                            <CardTitle className="text-sm flex items-center gap-2 font-semibold">
+                              <Activity className="h-4 w-4 text-primary" />
+                              {new Intl.DateTimeFormat('pt-BR', {
+                                dateStyle: 'medium',
+                              }).format(new Date(a.date))}
+                            </CardTitle>
+                          </CardHeader>
+                          <CardContent className="p-4 text-sm space-y-2">
+                            <div className="flex justify-between items-center">
+                              <span className="text-muted-foreground">Peso:</span>
+                              <span className="font-medium">{a.weight || '--'} kg</span>
+                            </div>
+                            <div className="flex justify-between items-center">
+                              <span className="text-muted-foreground">% Gordura:</span>
+                              <span className="font-medium">{a.body_fat_percentage || '--'} %</span>
+                            </div>
+                            <div className="flex justify-between items-center">
+                              <span className="text-muted-foreground">TMB:</span>
+                              <span className="font-medium">{a.bmr || '--'} kcal</span>
+                            </div>
+                            <div className="flex justify-between items-center">
+                              <span className="text-muted-foreground">VETA:</span>
+                              <span className="font-medium">{a.tdee || '--'} kcal</span>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                <div className="space-y-4 pt-6 border-t">
                   <h4 className="font-semibold text-sm text-muted-foreground uppercase tracking-wider flex items-center gap-2">
                     <Pill className="h-4 w-4" /> Suplementação Ativa
                   </h4>
@@ -346,6 +399,7 @@ export default function ProfPatientRecord() {
         isOpen={isAssessmentModalOpen}
         onClose={() => setIsAssessmentModalOpen(false)}
         clientId={id || ''}
+        onSuccess={fetchAssessments}
       />
       <NutritionSupplementModal
         isOpen={isSupplementModalOpen}

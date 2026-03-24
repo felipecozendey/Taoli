@@ -505,6 +505,22 @@ export async function getClientAssessments(clientId: string) {
   }
 }
 
+export async function getPatientAssessments(patientId: string) {
+  try {
+    const { data, error } = await supabase
+      .from('nutrition_assessments')
+      .select('*')
+      .eq('client_id', patientId)
+      .order('date', { ascending: false })
+
+    if (error) throw error
+    return { data: data as NutritionAssessment[], error: null }
+  } catch (error) {
+    console.error('Error fetching patient assessments:', error)
+    return { data: null, error }
+  }
+}
+
 export async function getClientSupplements(clientId: string) {
   try {
     const { data, error } = await supabase

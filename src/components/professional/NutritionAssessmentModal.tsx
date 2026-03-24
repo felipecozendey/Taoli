@@ -27,9 +27,10 @@ interface Props {
   isOpen: boolean
   onClose: () => void
   clientId: string
+  onSuccess?: () => void
 }
 
-export function NutritionAssessmentModal({ isOpen, onClose, clientId }: Props) {
+export function NutritionAssessmentModal({ isOpen, onClose, clientId, onSuccess }: Props) {
   const { toast } = useToast()
   const [loading, setLoading] = useState(false)
 
@@ -106,6 +107,7 @@ export function NutritionAssessmentModal({ isOpen, onClose, clientId }: Props) {
         description: 'A avaliação nutricional foi registrada com sucesso.',
       })
 
+      if (onSuccess) onSuccess()
       onClose()
 
       // Reset form

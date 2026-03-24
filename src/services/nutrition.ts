@@ -44,6 +44,9 @@ export interface NutritionAssessment {
   skinfolds?: Record<string, number>
   observations?: string
   created_at: string
+  front_photo_url?: string
+  side_photo_url?: string
+  back_photo_url?: string
 }
 
 export interface NutritionSupplement {
@@ -57,6 +60,35 @@ export interface NutritionSupplement {
   observations?: string
   is_active: boolean
   created_at: string
+}
+
+export async function createAssessment(assessment: Partial<NutritionAssessment>) {
+  try {
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser()
+
+    if (authError) throw authError
+    if (!user) throw new Error('Not authenticated')
+
+    const newAssessment = {
+      ...assessment,
+      professional_id: user.id,
+    }
+
+    const { data, error } = await supabase
+      .from('nutrition_assessments')
+      .insert(newAssessment as any)
+      .select()
+      .single()
+
+    if (error) throw error
+    return { data, error: null }
+  } catch (error) {
+    console.error('Error creating assessment:', error)
+    return { data: null, error }
+  }
 }
 
 export async function createDiet(clientId: string, name: string) {
@@ -409,8 +441,8 @@ export async function addCustomFoodItem(data: {
         protein_g: data.protein,
         carbs_g: data.carbs,
         fats_g: data.fat,
-        base_qty_g: 100, // Normalized to 100g as per requirements
-        source: 'Customizado', // Tagging as a custom entry
+        base_qty_g: 100,
+        source: 'Customizado',
       })
       .select()
       .single()
@@ -443,7 +475,7 @@ export async function updateCustomFoodItem(
         protein_g: data.protein,
         carbs_g: data.carbs,
         fats_g: data.fat,
-        base_qty_g: 100, // Normalized to 100g as per requirements
+        base_qty_g: 100,
       })
       .eq('id', id)
       .select()

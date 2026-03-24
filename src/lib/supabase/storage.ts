@@ -25,3 +25,31 @@ export async function uploadStudyMedia(file: File | Blob): Promise<string | null
     return null
   }
 }
+
+export async function uploadClientMedia(
+  file: File | Blob,
+  prefix: string = 'media',
+): Promise<string | null> {
+  try {
+    const fileName = `${prefix}/${uuidv4()}-${(file as File).name || 'image.png'}`
+
+    const { data, error } = await supabase.storage.from('client_media').upload(fileName, file, {
+      cacheControl: '3600',
+      upsert: false,
+    })
+
+    if (error) {
+      console.error('Error uploading client media:', error)
+      return null
+    }
+
+    const {
+      data: { publicUrl },
+    } = supabase.storage.from('client_media').getPublicUrl(data.path)
+
+    return publicUrl
+  } catch (error) {
+    console.error('Unexpected error during client media upload:', error)
+    return null
+  }
+}

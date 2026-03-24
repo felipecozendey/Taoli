@@ -8,10 +8,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Textarea } from '@/components/ui/textarea'
-import { ArrowLeft, Lock, Send } from 'lucide-react'
+import { ArrowLeft, Lock, Send, Activity } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
 import { supabase } from '@/lib/supabase/client'
 import { PatientNutritionMirror } from '@/components/professional/PatientNutritionMirror'
+import { NutritionAssessmentModal } from '@/components/professional/NutritionAssessmentModal'
 
 export default function ProfPatientRecord() {
   const { id } = useParams()
@@ -38,6 +39,8 @@ export default function ProfPatientRecord() {
       content: 'Primeira consulta de acompanhamento. Definidas metas iniciais.',
     },
   ])
+
+  const [isAssessmentModalOpen, setIsAssessmentModalOpen] = useState(false)
 
   useEffect(() => {
     if (!id || !user?.id) return
@@ -189,7 +192,15 @@ export default function ProfPatientRecord() {
             {!permissions.can_view_nutrition ? (
               <LockedContent />
             ) : (
-              <PatientNutritionMirror patientId={id || ''} />
+              <div className="space-y-6">
+                <div className="flex justify-end">
+                  <Button onClick={() => setIsAssessmentModalOpen(true)}>
+                    <Activity className="h-4 w-4 mr-2" />
+                    Nova Avaliação Física
+                  </Button>
+                </div>
+                <PatientNutritionMirror patientId={id || ''} />
+              </div>
             )}
           </TabsContent>
 
@@ -234,6 +245,11 @@ export default function ProfPatientRecord() {
           </TabsContent>
         </Tabs>
       </PageContent>
+      <NutritionAssessmentModal
+        isOpen={isAssessmentModalOpen}
+        onClose={() => setIsAssessmentModalOpen(false)}
+        clientId={id || ''}
+      />
     </div>
   )
 }

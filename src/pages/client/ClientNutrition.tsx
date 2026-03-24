@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { DashboardHeader } from '@/components/shared/DashboardHeader'
 import { PageContent } from '@/components/shared/PageContent'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -10,6 +10,29 @@ import { Badge } from '@/components/ui/badge'
 import { Switch } from '@/components/ui/switch'
 import { Label } from '@/components/ui/label'
 import {
+  ChartContainer,
+  ChartTooltipContent,
+  ChartLegendContent,
+  type ChartConfig,
+} from '@/components/ui/chart'
+import {
+  LineChart,
+  Line,
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+  RadarChart,
+  PolarGrid,
+  PolarAngleAxis,
+  PolarRadiusAxis,
+  Radar,
+} from 'recharts'
+import {
   Droplets,
   Flame,
   Utensils,
@@ -20,6 +43,11 @@ import {
   Trash2,
   Pill,
   BellRing,
+  TrendingDown,
+  Activity,
+  Info,
+  Scale,
+  Dna,
 } from 'lucide-react'
 import { supabase } from '@/lib/supabase/client'
 import { useToast } from '@/hooks/use-toast'
@@ -39,6 +67,20 @@ import {
 } from '@/services/nutrition'
 import { cn } from '@/lib/utils'
 import { ExtraMealDialog } from '@/components/nutrition/ExtraMealDialog'
+
+const weightChartConfig = {
+  peso: { label: 'Peso', color: 'hsl(var(--primary))' },
+  meta: { label: 'Meta', color: 'hsl(var(--muted-foreground))' },
+} satisfies ChartConfig
+
+const compChartConfig = {
+  gordura: { label: 'Gordura', color: 'hsl(var(--destructive))' },
+  musculo: { label: 'Músculo', color: 'hsl(var(--primary))' },
+} satisfies ChartConfig
+
+const radarConfig = {
+  valor: { label: 'Medida (cm)', color: 'hsl(var(--primary))' },
+} satisfies ChartConfig
 
 export default function ClientNutrition() {
   const [isLoading, setIsLoading] = useState(true)
@@ -91,6 +133,39 @@ export default function ClientNutrition() {
     fetchData()
   }, [date])
 
+  const latestAssessment = assessments?.[0]
+
+  const chartData = useMemo(() => {
+    if (!assessments || assessments.length === 0) return []
+    return [...assessments].reverse().map((a) => ({
+      date: new Intl.DateTimeFormat('pt-BR', { day: '2-digit', month: 'short' }).format(
+        new Date(a.date),
+      ),
+      peso: a.weight || 0,
+      meta: a.goal_weight || 0,
+      gordura: a.body_fat_percentage || 0,
+      musculo: a.muscle_mass_percentage || 0,
+    }))
+  }, [assessments])
+
+  const radarData = useMemo(() => {
+    if (!latestAssessment?.circumferences) return []
+    const dict: Record<string, string> = {
+      chest: 'Peito',
+      waist: 'Cintura',
+      arm: 'Braço',
+      leg: 'Perna',
+      hip: 'Quadril',
+      calf: 'Panturrilha',
+      thigh: 'Coxa',
+      neck: 'Pescoço',
+    }
+    return Object.entries(latestAssessment.circumferences).map(([key, value]) => ({
+      medida: dict[key] || key,
+      valor: Number(value),
+    }))
+  }, [latestAssessment])
+
   const playBeep = () => {
     try {
       const AudioContext = window.AudioContext || (window as any).webkitAudioContext
@@ -120,7 +195,7 @@ export default function ClientNutrition() {
                 icon: '/favicon.ico',
               })
             }
-          }, 60 * 1000) // 1 minuto para testes, ajustar conforme necessário
+          }, 60 * 1000)
         } else {
           setRemindersEnabled(false)
           toast({
@@ -189,7 +264,6 @@ export default function ClientNutrition() {
     fetchData()
   }
 
-  // Circular Progress Calculations
   const targetCals = progress?.targets?.calories || 2000
   const consumedCals = progress?.consumed?.calories || 0
   const diferenca = targetCals - consumedCals
@@ -200,7 +274,6 @@ export default function ClientNutrition() {
   const circumference = 2 * Math.PI * radius
   const strokeDashoffset = isExceeded ? 0 : circumference - (calPercent / 100) * circumference
 
-  // Display Date Formatting
   const displayDate = new Intl.DateTimeFormat('pt-BR', {
     weekday: 'short',
     day: '2-digit',
@@ -229,7 +302,6 @@ export default function ClientNutrition() {
     <div className="flex flex-col min-h-full">
       <DashboardHeader title="Minha Nutrição" />
       <PageContent className="max-w-3xl mx-auto w-full animate-fade-in-up space-y-6">
-        {/* Date Navigator */}
         <div className="flex items-center justify-between bg-card border rounded-lg p-2 px-4 shadow-sm">
           <Button variant="ghost" size="icon" onClick={() => changeDate(-1)}>
             <ChevronLeft className="h-5 w-5" />
@@ -258,21 +330,254 @@ export default function ClientNutrition() {
             </TabsTrigger>
           </TabsList>
 
-          {/* DASHBOARD TAB */}
           <TabsContent value="dashboard" className="space-y-6">
-            {/* Placeholder Evolução Física */}
-            <Card className="min-h-[200px] flex flex-col shadow-sm border-border/50 bg-muted/5">
-              <CardHeader>
-                <CardTitle className="text-lg">A Minha Evolução Física</CardTitle>
-              </CardHeader>
-              <CardContent className="flex-1 flex items-center justify-center text-center p-6">
-                <p className="text-muted-foreground text-sm max-w-sm">
-                  Os gráficos de percentual de gordura, TMB e circunferências serão carregados aqui.
-                </p>
-              </CardContent>
-            </Card>
+            {assessments.length > 0 && latestAssessment ? (
+              <div className="space-y-6">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  <Card>
+                    <CardContent className="p-4">
+                      <div className="flex items-center gap-2 text-muted-foreground mb-2">
+                        <Scale className="h-4 w-4" />
+                        <span className="text-sm font-medium">Peso Atual</span>
+                      </div>
+                      <div className="text-2xl font-bold">
+                        {latestAssessment.weight || '--'}{' '}
+                        <span className="text-sm font-normal text-muted-foreground">kg</span>
+                      </div>
+                      {latestAssessment.goal_weight && latestAssessment.weight && (
+                        <p className="text-xs text-muted-foreground mt-1">
+                          Faltam{' '}
+                          {Math.abs(latestAssessment.weight - latestAssessment.goal_weight).toFixed(
+                            1,
+                          )}{' '}
+                          kg para a meta
+                        </p>
+                      )}
+                    </CardContent>
+                  </Card>
+                  <Card>
+                    <CardContent className="p-4">
+                      <div className="flex items-center gap-2 text-muted-foreground mb-2">
+                        <TrendingDown className="h-4 w-4" />
+                        <span className="text-sm font-medium">% de Gordura</span>
+                      </div>
+                      <div className="text-2xl font-bold">
+                        {latestAssessment.body_fat_percentage || '--'}{' '}
+                        <span className="text-sm font-normal text-muted-foreground">%</span>
+                      </div>
+                    </CardContent>
+                  </Card>
+                  <Card>
+                    <CardContent className="p-4">
+                      <div className="flex items-center gap-2 text-muted-foreground mb-2">
+                        <Flame className="h-4 w-4 text-orange-500" />
+                        <span className="text-sm font-medium">Gasto Diário (VETA)</span>
+                      </div>
+                      <div className="text-2xl font-bold">
+                        {latestAssessment.tdee || '--'}{' '}
+                        <span className="text-sm font-normal text-muted-foreground">kcal</span>
+                      </div>
+                    </CardContent>
+                  </Card>
+                  <Card>
+                    <CardContent className="p-4">
+                      <div className="flex items-center gap-2 text-muted-foreground mb-2">
+                        <Activity className="h-4 w-4 text-blue-500" />
+                        <span className="text-sm font-medium">Estado Atual</span>
+                      </div>
+                      <div className="mt-1">
+                        <Badge variant="secondary" className="text-sm">
+                          {latestAssessment.status || 'Não definido'}
+                        </Badge>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
 
-            {/* Calorie Summary */}
+                {chartData.length > 0 && (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <Card>
+                      <CardHeader className="pb-2">
+                        <CardTitle className="text-base">Evolução de Peso</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <ChartContainer config={weightChartConfig} className="h-[250px] w-full">
+                          <LineChart
+                            data={chartData}
+                            margin={{ top: 10, right: 10, bottom: 0, left: -20 }}
+                          >
+                            <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                            <XAxis
+                              dataKey="date"
+                              tickLine={false}
+                              axisLine={false}
+                              tickMargin={8}
+                            />
+                            <YAxis
+                              tickLine={false}
+                              axisLine={false}
+                              tickMargin={8}
+                              domain={['auto', 'auto']}
+                            />
+                            <Tooltip content={<ChartTooltipContent />} />
+                            <Legend content={<ChartLegendContent />} />
+                            <Line
+                              type="monotone"
+                              name="Peso (kg)"
+                              dataKey="peso"
+                              stroke="var(--color-peso)"
+                              strokeWidth={2}
+                              dot={{ r: 4 }}
+                              activeDot={{ r: 6 }}
+                            />
+                            <Line
+                              type="monotone"
+                              name="Meta (kg)"
+                              dataKey="meta"
+                              stroke="var(--color-meta)"
+                              strokeWidth={2}
+                              strokeDasharray="5 5"
+                              dot={false}
+                            />
+                          </LineChart>
+                        </ChartContainer>
+                      </CardContent>
+                    </Card>
+
+                    <Card>
+                      <CardHeader className="pb-2">
+                        <CardTitle className="text-base flex items-center gap-2">
+                          <Dna className="h-4 w-4" /> Composição Corporal
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <ChartContainer config={compChartConfig} className="h-[250px] w-full">
+                          <AreaChart
+                            data={chartData}
+                            margin={{ top: 10, right: 10, bottom: 0, left: -20 }}
+                          >
+                            <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                            <XAxis
+                              dataKey="date"
+                              tickLine={false}
+                              axisLine={false}
+                              tickMargin={8}
+                            />
+                            <YAxis
+                              tickLine={false}
+                              axisLine={false}
+                              tickMargin={8}
+                              domain={[0, 100]}
+                            />
+                            <Tooltip content={<ChartTooltipContent />} />
+                            <Legend content={<ChartLegendContent />} />
+                            <Area
+                              type="monotone"
+                              name="Gordura (%)"
+                              dataKey="gordura"
+                              fill="var(--color-gordura)"
+                              stroke="var(--color-gordura)"
+                              fillOpacity={0.4}
+                              stackId="1"
+                            />
+                            <Area
+                              type="monotone"
+                              name="Músculo (%)"
+                              dataKey="musculo"
+                              fill="var(--color-musculo)"
+                              stroke="var(--color-musculo)"
+                              fillOpacity={0.4}
+                              stackId="2"
+                            />
+                          </AreaChart>
+                        </ChartContainer>
+                      </CardContent>
+                    </Card>
+                  </div>
+                )}
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {radarData.length > 0 && (
+                    <Card>
+                      <CardHeader className="pb-0">
+                        <CardTitle className="text-base">As Minhas Medidas</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <ChartContainer config={radarConfig} className="h-[250px] w-full mx-auto">
+                          <RadarChart
+                            data={radarData}
+                            margin={{ top: 10, right: 20, bottom: 10, left: 20 }}
+                          >
+                            <PolarGrid className="stroke-muted" />
+                            <PolarAngleAxis
+                              dataKey="medida"
+                              className="text-xs fill-muted-foreground"
+                            />
+                            <PolarRadiusAxis
+                              angle={30}
+                              domain={[0, 'auto']}
+                              className="fill-muted-foreground"
+                            />
+                            <Radar
+                              name="Medidas"
+                              dataKey="valor"
+                              stroke="var(--primary)"
+                              fill="var(--primary)"
+                              fillOpacity={0.6}
+                            />
+                            <Tooltip content={<ChartTooltipContent />} />
+                          </RadarChart>
+                        </ChartContainer>
+                      </CardContent>
+                    </Card>
+                  )}
+
+                  <Card className="bg-muted/50 border-border/50">
+                    <CardHeader>
+                      <CardTitle className="text-base flex items-center gap-2">
+                        <Info className="h-5 w-5 text-primary" /> Como calculamos as suas calorias?
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4 text-sm text-muted-foreground">
+                      <p>
+                        A sua <strong>Taxa Metabólica Basal (TMB)</strong> atual é de{' '}
+                        <strong className="text-foreground">
+                          {latestAssessment.bmr || '--'} kcal
+                        </strong>
+                        . Isto é o que o seu corpo queima apenas para se manter vivo (respirar,
+                        bater o coração).
+                      </p>
+                      <p>
+                        Multiplicando isso pelo seu nível de atividade, chegamos ao seu{' '}
+                        <strong>
+                          VETA de{' '}
+                          <span className="text-foreground">
+                            {latestAssessment.tdee || '--'} kcal
+                          </span>
+                        </strong>
+                        . A sua dieta foi calculada com base neste valor para garantir que atinge o
+                        seu objetivo de forma saudável e científica.
+                      </p>
+                      <p className="text-xs italic mt-2 text-muted-foreground/70">
+                        (Fórmula utilizada: Harris-Benedict)
+                      </p>
+                    </CardContent>
+                  </Card>
+                </div>
+              </div>
+            ) : (
+              <Card className="min-h-[200px] flex flex-col shadow-sm border-border/50 bg-muted/5">
+                <CardHeader>
+                  <CardTitle className="text-lg">A Minha Evolução Física</CardTitle>
+                </CardHeader>
+                <CardContent className="flex-1 flex items-center justify-center text-center p-6">
+                  <p className="text-muted-foreground text-sm max-w-sm">
+                    Ainda não tem avaliações físicas registadas. Consulte o seu profissional.
+                  </p>
+                </CardContent>
+              </Card>
+            )}
+
             <Card className="shadow-sm border-border/50">
               <CardContent className="p-6">
                 <div className="flex flex-col md:flex-row items-center justify-between gap-8">
@@ -382,7 +687,6 @@ export default function ClientNutrition() {
             </Card>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {/* Water Tracking */}
               <Card className="border-blue-100 bg-gradient-to-br from-blue-50 to-blue-100/50 dark:border-blue-900 dark:from-blue-950/40 dark:to-blue-900/20 shadow-sm">
                 <CardContent className="p-5 flex items-center justify-between">
                   <div className="flex items-center gap-4">
@@ -409,11 +713,9 @@ export default function ClientNutrition() {
                 </CardContent>
               </Card>
 
-              {/* Extra Meal Action */}
               <ExtraMealDialog date={date} onSuccess={fetchData} />
             </div>
 
-            {/* Daily Logs List */}
             <div className="space-y-3 pt-4 border-t">
               <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
                 Consumidos Hoje
@@ -448,7 +750,6 @@ export default function ClientNutrition() {
             </div>
           </TabsContent>
 
-          {/* DIET TAB */}
           <TabsContent value="diet" className="space-y-4">
             {diet ? (
               <div className="space-y-4">
@@ -536,7 +837,6 @@ export default function ClientNutrition() {
             )}
           </TabsContent>
 
-          {/* SUPPLEMENTS TAB */}
           <TabsContent value="supplements" className="space-y-4">
             <Card className="mb-6 bg-primary/5 border-primary/20 shadow-sm p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
               <div className="flex items-center gap-3">

@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useEditor, EditorContent, type Editor, ReactRenderer } from '@tiptap/react'
 import { StarterKit } from '@tiptap/starter-kit'
 import { Underline } from '@tiptap/extension-underline'
@@ -19,6 +19,9 @@ import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { MentionList } from './MentionList'
 import type { StudyNote } from '@/services/study'
+import { uploadStudyMedia } from '@/lib/supabase/storage'
+import { ImageAnnotatorDialog } from './ImageAnnotatorDialog'
+import { toast } from '@/hooks/use-toast'
 
 interface RichTextEditorProps {
   content: string
@@ -92,7 +95,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
         size="sm"
         onClick={addImage}
         className="h-8 w-8 p-0"
-        title="Inserir Imagem"
+        title="Inserir Imagem (Por Link)"
       >
         <ImageIcon className="h-4 w-4" />
       </Button>
@@ -119,6 +122,10 @@ export function RichTextEditor({
   const notesRef = useRef(existingNotes)
   const createNoteRef = useRef(onCreateNote)
 
+  const [annotatorOpen, setAnnotatorOpen] = useState(false)
+  const [annotatorImageUrl, setAnnotatorImageUrl] = useState('')
+  const [annotatingImagePos, setAnnotatingImagePos] = useState<number | null>(null)
+
   useEffect(() => {
     notesRef.current = existingNotes
   }, [existingNotes])
@@ -137,7 +144,7 @@ export function RichTextEditor({
         inline: true,
         allowBase64: true,
         HTMLAttributes: {
-          class: 'max-w-full rounded-md h-auto',
+          class: 'max-w-full rounded-md h-auto cursor-pointer hover:ring-2 hover:ring-primary',
         },
       }),
       Youtube.configure({
@@ -278,6 +285,88 @@ export function RichTextEditor({
         class:
           'prose prose-sm sm:prose-base dark:prose-invert focus:outline-none w-full max-w-none p-4 min-h-[100px]',
       },
+      handleDrop: (view, event, slice, moved) => {
+        if (
+          !moved &&
+          event.dataTransfer &&
+          event.dataTransfer.files &&
+          event.dataTransfer.files.length > 0
+        ) {
+          const files = Array.from(event.dataTransfer.files)
+          let handled = false
+          files.forEach((file) => {
+            if (file.type.startsWith('image/')) {
+              event.preventDefault()
+              handled = true
+              toast({ title: 'A carregar imagem...', description: file.name })
+
+              uploadStudyMedia(file).then((publicUrl) => {
+                if (publicUrl) {
+                  const coordinates = view.posAtCoords({ left: event.clientX, top: event.clientY })
+                  if (coordinates) {
+                    view.dispatch(
+                      view.state.tr.insert(
+                        coordinates.pos,
+                        view.state.schema.nodes.image.create({ src: publicUrl }),
+                      ),
+                    )
+                  } else {
+                    view.dispatch(
+                      view.state.tr.replaceSelectionWith(
+                        view.state.schema.nodes.image.create({ src: publicUrl }),
+                      ),
+                    )
+                  }
+                } else {
+                  toast({ title: 'Erro ao carregar imagem', variant: 'destructive' })
+                }
+              })
+            }
+          })
+          if (handled) return true
+        }
+        return false
+      },
+      handlePaste: (view, event, slice) => {
+        if (
+          event.clipboardData &&
+          event.clipboardData.files &&
+          event.clipboardData.files.length > 0
+        ) {
+          const files = Array.from(event.clipboardData.files)
+          let handled = false
+          files.forEach((file) => {
+            if (file.type.startsWith('image/')) {
+              event.preventDefault()
+              handled = true
+              toast({ title: 'A carregar imagem...' })
+
+              uploadStudyMedia(file).then((publicUrl) => {
+                if (publicUrl) {
+                  view.dispatch(
+                    view.state.tr.replaceSelectionWith(
+                      view.state.schema.nodes.image.create({ src: publicUrl }),
+                    ),
+                  )
+                } else {
+                  toast({ title: 'Erro ao carregar imagem', variant: 'destructive' })
+                }
+              })
+            }
+          })
+          if (handled) return true
+        }
+        return false
+      },
+      handleClick: (view, pos, event) => {
+        if (event.target instanceof HTMLImageElement && event.target.tagName === 'IMG') {
+          setAnnotatorImageUrl(event.target.src)
+          setAnnotatingImagePos(pos)
+          setAnnotatorOpen(true)
+          return true
+        }
+        return false
+      },
     },
   })
 
@@ -288,6 +377,23 @@ export function RichTextEditor({
         editor={editor}
         className="cursor-text flex-1 flex flex-col [&>div.ProseMirror]:flex-1"
         onClick={() => editor?.commands.focus()}
+      />
+      <ImageAnnotatorDialog
+        isOpen={annotatorOpen}
+        onClose={() => setAnnotatorOpen(false)}
+        imageUrl={annotatorImageUrl}
+        onSave={(newUrl) => {
+          if (annotatingImagePos !== null && editor) {
+            editor
+              .chain()
+              .focus()
+              .command(({ tr }) => {
+                tr.setNodeMarkup(annotatingImagePos, undefined, { src: newUrl })
+                return true
+              })
+              .run()
+          }
+        }}
       />
     </div>
   )

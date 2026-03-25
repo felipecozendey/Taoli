@@ -19,6 +19,7 @@ import {
 import { useToast } from '@/hooks/use-toast'
 import { uploadClientMedia } from '@/lib/supabase/storage'
 import { createAssessment } from '@/services/nutrition'
+import { useAuth } from '@/contexts/AuthContext'
 import { Loader2, User, Ruler, Activity, Zap, Camera, Save, CheckCircle2 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -31,6 +32,7 @@ interface Props {
 
 export function NutritionAssessmentModal({ isOpen, onClose, clientId, onSuccess }: Props) {
   const { toast } = useToast()
+  const { user } = useAuth()
   const [loading, setLoading] = useState(false)
   const [activeTab, setActiveTab] = useState('basic')
 
@@ -163,6 +165,7 @@ export function NutritionAssessmentModal({ isOpen, onClose, clientId, onSuccess 
 
       const assessmentData = {
         client_id: clientId,
+        professional_id: user?.id,
         weight: parseFloat(basic.weight) || 0,
         height: parseFloat(basic.height) || 0,
         body_fat_percentage: parseFloat(results.finalFat as string) || undefined,

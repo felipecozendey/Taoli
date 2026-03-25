@@ -46,7 +46,7 @@ export function DashboardHeader({ title, children }: DashboardHeaderProps) {
         {children}
 
         {!user ? (
-          <Skeleton className="h-8 w-10 md:w-32 rounded-full" />
+          <Skeleton className="h-8 w-32 rounded-full" />
         ) : (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>

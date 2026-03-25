@@ -8,17 +8,46 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Textarea } from '@/components/ui/textarea'
-import { ArrowLeft, Lock, Send, Activity, Pill, Trash2 } from 'lucide-react'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
+import {
+  ArrowLeft,
+  Lock,
+  Send,
+  Activity,
+  Pill,
+  Trash2,
+  Dumbbell,
+  Brain,
+  Target,
+  MoreHorizontal,
+  Apple,
+} from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
 import { supabase } from '@/lib/supabase/client'
 import { PatientNutritionMirror } from '@/components/professional/PatientNutritionMirror'
 import { NutritionAssessmentModal } from '@/components/professional/NutritionAssessmentModal'
 import { NutritionSupplementModal } from '@/components/professional/NutritionSupplementModal'
+import { DietPrescriptionModal } from '@/components/professional/DietPrescriptionModal'
 import {
   getPatientSupplements,
   deleteSupplement,
   getPatientAssessments,
+  deleteAssessment,
   type NutritionAssessment,
+  type NutritionSupplement,
 } from '@/services/nutrition'
 
 export default function ProfPatientRecord() {
@@ -48,8 +77,14 @@ export default function ProfPatientRecord() {
   ])
 
   const [isAssessmentModalOpen, setIsAssessmentModalOpen] = useState(false)
+  const [selectedAssessment, setSelectedAssessment] = useState<NutritionAssessment | null>(null)
+
   const [isSupplementModalOpen, setIsSupplementModalOpen] = useState(false)
-  const [supplements, setSupplements] = useState<any[]>([])
+  const [selectedSupplement, setSelectedSupplement] = useState<NutritionSupplement | null>(null)
+
+  const [isDietModalOpen, setIsDietModalOpen] = useState(false)
+
+  const [supplements, setSupplements] = useState<NutritionSupplement[]>([])
   const [assessments, setAssessments] = useState<NutritionAssessment[]>([])
 
   const fetchSupplements = async () => {
@@ -102,8 +137,23 @@ export default function ProfPatientRecord() {
   }
 
   const handleDeleteSupplement = async (supId: string) => {
-    await deleteSupplement(supId)
-    fetchSupplements()
+    if (confirm('Tem certeza que deseja excluir este suplemento?')) {
+      await deleteSupplement(supId)
+      fetchSupplements()
+    }
+  }
+
+  const handleDeleteAssessment = async (id: string) => {
+    if (confirm('Tem certeza que deseja excluir esta avaliação?')) {
+      await deleteAssessment(id)
+      fetchAssessments()
+    }
+  }
+
+  const checkPermission = (module: string) => {
+    if (user?.role === 'admin') return true
+    if (module === 'productivity') return true
+    return permissions?.[`can_view_${module}` as keyof typeof permissions] || false
   }
 
   const LockedContent = () => (
@@ -112,7 +162,7 @@ export default function ProfPatientRecord() {
         <Lock className="h-12 w-12 text-muted-foreground/30 mb-4" />
         <h3 className="text-lg font-medium text-foreground mb-2">Acesso Restrito</h3>
         <p className="text-sm text-muted-foreground max-w-sm">
-          O paciente não compartilhou estes dados consigo. Solicite a permissão na aplicação dele.
+          O paciente não partilhou estes dados consigo. Solicite a permissão na aplicação dele.
         </p>
       </CardContent>
     </Card>
@@ -121,7 +171,7 @@ export default function ProfPatientRecord() {
   return (
     <div className="flex flex-col min-h-full">
       <DashboardHeader title="Prontuário do Paciente" />
-      <PageContent className="max-w-5xl mx-auto w-full animate-fade-in-up">
+      <PageContent className="max-w-6xl mx-auto w-full animate-fade-in-up">
         <div className="mb-6 flex items-center">
           <Button variant="ghost" size="sm" onClick={() => navigate('/professional/patients')}>
             <ArrowLeft className="h-4 w-4 mr-2" />
@@ -160,25 +210,177 @@ export default function ProfPatientRecord() {
         </Card>
 
         <Tabs defaultValue="geral" className="w-full">
-          <TabsList className="mb-6 grid w-full grid-cols-2 md:grid-cols-4 h-auto p-1">
-            <TabsTrigger value="geral" className="py-2">
-              Geral / Evolução
+          <TabsList className="mb-6 flex flex-wrap w-full h-auto p-1 bg-muted/50 rounded-lg justify-start">
+            <TabsTrigger value="geral" className="py-2.5 px-4 rounded-md">
+              Geral
             </TabsTrigger>
-            <TabsTrigger value="nutricao" className="py-2">
+            <TabsTrigger value="nutricao" className="py-2.5 px-4 rounded-md">
               Nutrição
             </TabsTrigger>
-            <TabsTrigger value="treino" className="py-2">
+            <TabsTrigger value="treino" className="py-2.5 px-4 rounded-md">
               Treino
             </TabsTrigger>
-            <TabsTrigger value="mente" className="py-2">
+            <TabsTrigger value="mente" className="py-2.5 px-4 rounded-md">
               Saúde Mental
             </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="geral" className="animate-fade-in-up mt-0">
+          <TabsContent value="geral" className="animate-fade-in-up mt-0 space-y-6">
+            {/* Dashboard Resumo Multidisciplinar */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              <Card className="relative overflow-hidden">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-base font-semibold flex items-center gap-2">
+                    <Activity className="h-4 w-4 text-primary" /> Nutrição
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  {checkPermission('nutrition') ? (
+                    <div className="space-y-2">
+                      <p className="text-sm text-muted-foreground">
+                        Último peso:{' '}
+                        <span className="font-medium text-foreground">
+                          {assessments[0]?.weight || '--'} kg
+                        </span>
+                      </p>
+                      <p className="text-sm text-muted-foreground">
+                        Meta:{' '}
+                        <span className="font-medium text-foreground">
+                          {assessments[0]?.goal_weight ? `${assessments[0].goal_weight} kg` : '--'}
+                        </span>
+                      </p>
+                    </div>
+                  ) : (
+                    <>
+                      <div className="space-y-2 blur-sm opacity-50 pointer-events-none select-none">
+                        <p className="text-sm text-muted-foreground">
+                          Último peso: <span className="font-medium">80 kg</span>
+                        </p>
+                        <p className="text-sm text-muted-foreground">
+                          Meta: <span className="font-medium">Emagrecimento</span>
+                        </p>
+                      </div>
+                      <div className="absolute inset-0 flex flex-col items-center justify-center bg-background/60 backdrop-blur-[2px] z-10">
+                        <Lock className="h-5 w-5 mb-1 text-muted-foreground" />
+                        <span className="text-xs font-medium text-muted-foreground">Restrito</span>
+                      </div>
+                    </>
+                  )}
+                </CardContent>
+              </Card>
+
+              <Card className="relative overflow-hidden">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-base font-semibold flex items-center gap-2">
+                    <Dumbbell className="h-4 w-4 text-primary" /> Treino
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  {checkPermission('training') ? (
+                    <div className="space-y-2">
+                      <p className="text-sm text-muted-foreground">
+                        Plano Atual:{' '}
+                        <span className="font-medium text-foreground">Hipertrofia</span>
+                      </p>
+                      <p className="text-sm text-muted-foreground">
+                        Frequência:{' '}
+                        <span className="font-medium text-foreground">5x na semana</span>
+                      </p>
+                    </div>
+                  ) : (
+                    <>
+                      <div className="space-y-2 blur-sm opacity-50 pointer-events-none select-none">
+                        <p className="text-sm text-muted-foreground">
+                          Plano Atual: <span className="font-medium">Hipertrofia</span>
+                        </p>
+                        <p className="text-sm text-muted-foreground">
+                          Frequência: <span className="font-medium">5x na semana</span>
+                        </p>
+                      </div>
+                      <div className="absolute inset-0 flex flex-col items-center justify-center bg-background/60 backdrop-blur-[2px] z-10">
+                        <Lock className="h-5 w-5 mb-1 text-muted-foreground" />
+                        <span className="text-xs font-medium text-muted-foreground">Restrito</span>
+                      </div>
+                    </>
+                  )}
+                </CardContent>
+              </Card>
+
+              <Card className="relative overflow-hidden">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-base font-semibold flex items-center gap-2">
+                    <Brain className="h-4 w-4 text-primary" /> Saúde Mental
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  {checkPermission('mind') ? (
+                    <div className="space-y-2">
+                      <p className="text-sm text-muted-foreground">
+                        Humor Médio: <span className="font-medium text-foreground">Bom</span>
+                      </p>
+                      <p className="text-sm text-muted-foreground">
+                        Última Sessão:{' '}
+                        <span className="font-medium text-foreground">Há 3 dias</span>
+                      </p>
+                    </div>
+                  ) : (
+                    <>
+                      <div className="space-y-2 blur-sm opacity-50 pointer-events-none select-none">
+                        <p className="text-sm text-muted-foreground">
+                          Humor Médio: <span className="font-medium">Bom</span>
+                        </p>
+                        <p className="text-sm text-muted-foreground">
+                          Última Sessão: <span className="font-medium">Há 3 dias</span>
+                        </p>
+                      </div>
+                      <div className="absolute inset-0 flex flex-col items-center justify-center bg-background/60 backdrop-blur-[2px] z-10">
+                        <Lock className="h-5 w-5 mb-1 text-muted-foreground" />
+                        <span className="text-xs font-medium text-muted-foreground">Restrito</span>
+                      </div>
+                    </>
+                  )}
+                </CardContent>
+              </Card>
+
+              <Card className="relative overflow-hidden">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-base font-semibold flex items-center gap-2">
+                    <Target className="h-4 w-4 text-primary" /> Produtividade
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  {checkPermission('productivity') ? (
+                    <div className="space-y-2">
+                      <p className="text-sm text-muted-foreground">
+                        Hábitos Ativos: <span className="font-medium text-foreground">4</span>
+                      </p>
+                      <p className="text-sm text-muted-foreground">
+                        Tarefas Pendentes: <span className="font-medium text-foreground">12</span>
+                      </p>
+                    </div>
+                  ) : (
+                    <>
+                      <div className="space-y-2 blur-sm opacity-50 pointer-events-none select-none">
+                        <p className="text-sm text-muted-foreground">
+                          Hábitos Ativos: <span className="font-medium">4</span>
+                        </p>
+                        <p className="text-sm text-muted-foreground">
+                          Tarefas Pendentes: <span className="font-medium">12</span>
+                        </p>
+                      </div>
+                      <div className="absolute inset-0 flex flex-col items-center justify-center bg-background/60 backdrop-blur-[2px] z-10">
+                        <Lock className="h-5 w-5 mb-1 text-muted-foreground" />
+                        <span className="text-xs font-medium text-muted-foreground">Restrito</span>
+                      </div>
+                    </>
+                  )}
+                </CardContent>
+              </Card>
+            </div>
+
             <Card>
               <CardHeader>
-                <CardTitle>Evolução Clínica</CardTitle>
+                <CardTitle>Evolução Clínica e Notas</CardTitle>
                 <CardDescription>Anotações e acompanhamento contínuo das sessões.</CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
@@ -198,7 +400,9 @@ export default function ProfPatientRecord() {
                 </div>
 
                 <div className="space-y-4 pt-4">
-                  <h4 className="font-semibold text-sm text-muted-foreground mb-2">Histórico</h4>
+                  <h4 className="font-semibold text-sm text-muted-foreground mb-2">
+                    Histórico de Notas
+                  </h4>
                   {notes.map((note) => (
                     <div
                       key={note.id}
@@ -218,7 +422,7 @@ export default function ProfPatientRecord() {
           </TabsContent>
 
           <TabsContent value="nutricao" className="animate-fade-in-up mt-0">
-            {!permissions.can_view_nutrition ? (
+            {!checkPermission('nutrition') ? (
               <LockedContent />
             ) : (
               <div className="space-y-8">
@@ -231,15 +435,29 @@ export default function ProfPatientRecord() {
                   </div>
                   <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
                     <Button
-                      onClick={() => setIsSupplementModalOpen(true)}
+                      onClick={() => {
+                        setSelectedSupplement(null)
+                        setIsSupplementModalOpen(true)
+                      }}
                       variant="outline"
                       className="w-full sm:w-auto"
                     >
                       <Pill className="h-4 w-4 mr-2" />
-                      Prescrever Suplemento
+                      Novo Suplemento
                     </Button>
                     <Button
-                      onClick={() => setIsAssessmentModalOpen(true)}
+                      onClick={() => setIsDietModalOpen(true)}
+                      variant="secondary"
+                      className="w-full sm:w-auto"
+                    >
+                      <Apple className="h-4 w-4 mr-2" />
+                      Nova Dieta
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        setSelectedAssessment(null)
+                        setIsAssessmentModalOpen(true)
+                      }}
                       className="w-full sm:w-auto"
                     >
                       <Activity className="h-4 w-4 mr-2" />
@@ -248,101 +466,139 @@ export default function ProfPatientRecord() {
                   </div>
                 </div>
 
-                <div className="pt-4">
-                  <h3 className="text-lg font-semibold mb-4">Histórico de Avaliações</h3>
-                  {assessments.length === 0 ? (
-                    <p className="text-sm text-muted-foreground">Nenhuma avaliação registada.</p>
-                  ) : (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                      {assessments.map((a) => (
-                        <Card key={a.id} className="shadow-sm border-border/50">
-                          <CardHeader className="pb-2 bg-muted/20 border-b">
-                            <CardTitle className="text-sm flex items-center gap-2 font-semibold">
-                              <Activity className="h-4 w-4 text-primary" />
-                              {new Intl.DateTimeFormat('pt-BR', {
-                                dateStyle: 'medium',
-                              }).format(new Date(a.date))}
-                            </CardTitle>
-                          </CardHeader>
-                          <CardContent className="p-4 text-sm space-y-2">
-                            <div className="flex justify-between items-center">
-                              <span className="text-muted-foreground">Peso:</span>
-                              <span className="font-medium">{a.weight || '--'} kg</span>
-                            </div>
-                            <div className="flex justify-between items-center">
-                              <span className="text-muted-foreground">% Gordura:</span>
-                              <span className="font-medium">{a.body_fat_percentage || '--'} %</span>
-                            </div>
-                            <div className="flex justify-between items-center">
-                              <span className="text-muted-foreground">TMB:</span>
-                              <span className="font-medium">{a.bmr || '--'} kcal</span>
-                            </div>
-                            <div className="flex justify-between items-center">
-                              <span className="text-muted-foreground">VETA:</span>
-                              <span className="font-medium">{a.tdee || '--'} kcal</span>
-                            </div>
-                          </CardContent>
-                        </Card>
-                      ))}
-                    </div>
-                  )}
-                </div>
+                <Card>
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-base flex items-center gap-2">
+                      <Activity className="h-4 w-4 text-primary" /> Histórico de Avaliações
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    {assessments.length === 0 ? (
+                      <p className="text-sm text-muted-foreground text-center py-6 border rounded-md border-dashed">
+                        Nenhuma avaliação registada.
+                      </p>
+                    ) : (
+                      <Table>
+                        <TableHeader>
+                          <TableRow>
+                            <TableHead>Data</TableHead>
+                            <TableHead>Peso</TableHead>
+                            <TableHead>% Gordura</TableHead>
+                            <TableHead>TMB</TableHead>
+                            <TableHead>VETA</TableHead>
+                            <TableHead className="text-right">Ações</TableHead>
+                          </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                          {assessments.map((a) => (
+                            <TableRow key={a.id}>
+                              <TableCell className="font-medium">
+                                {new Intl.DateTimeFormat('pt-BR').format(new Date(a.date))}
+                              </TableCell>
+                              <TableCell>{a.weight ? `${a.weight} kg` : '--'}</TableCell>
+                              <TableCell>
+                                {a.body_fat_percentage ? `${a.body_fat_percentage} %` : '--'}
+                              </TableCell>
+                              <TableCell>{a.bmr ? `${a.bmr} kcal` : '--'}</TableCell>
+                              <TableCell>{a.tdee ? `${a.tdee} kcal` : '--'}</TableCell>
+                              <TableCell className="text-right">
+                                <DropdownMenu>
+                                  <DropdownMenuTrigger asChild>
+                                    <Button variant="ghost" className="h-8 w-8 p-0">
+                                      <MoreHorizontal className="h-4 w-4" />
+                                    </Button>
+                                  </DropdownMenuTrigger>
+                                  <DropdownMenuContent align="end">
+                                    <DropdownMenuItem
+                                      onClick={() => {
+                                        setSelectedAssessment(a)
+                                        setIsAssessmentModalOpen(true)
+                                      }}
+                                    >
+                                      Editar
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem
+                                      className="text-destructive focus:bg-destructive/10 focus:text-destructive"
+                                      onClick={() => handleDeleteAssessment(a.id)}
+                                    >
+                                      Excluir
+                                    </DropdownMenuItem>
+                                  </DropdownMenuContent>
+                                </DropdownMenu>
+                              </TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
+                    )}
+                  </CardContent>
+                </Card>
 
-                <div className="space-y-4 pt-6 border-t">
-                  <h4 className="font-semibold text-sm text-muted-foreground uppercase tracking-wider flex items-center gap-2">
-                    <Pill className="h-4 w-4" /> Suplementação Ativa
-                  </h4>
-                  {supplements.length > 0 ? (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                      {supplements.map((sup) => (
-                        <Card key={sup.id} className="relative group shadow-sm border-border/50">
-                          <Button
-                            variant="destructive"
-                            size="icon"
-                            className="absolute top-3 right-3 h-7 w-7 opacity-0 group-hover:opacity-100 transition-opacity"
-                            onClick={() => handleDeleteSupplement(sup.id)}
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
-                          <CardHeader className="pb-2 pr-12">
-                            <CardTitle className="text-base">{sup.name}</CardTitle>
-                          </CardHeader>
-                          <CardContent className="space-y-2">
-                            <Badge variant="secondary">{sup.dosage}</Badge>
-                            <div className="text-sm space-y-1">
-                              {sup.frequency && (
-                                <p className="flex justify-between text-muted-foreground">
-                                  <span>Frequência:</span>
-                                  <span className="font-medium text-foreground">
-                                    {sup.frequency}
-                                  </span>
-                                </p>
-                              )}
-                              {sup.timing && (
-                                <p className="flex justify-between text-muted-foreground">
-                                  <span>Horário:</span>
-                                  <span className="font-medium text-foreground">{sup.timing}</span>
-                                </p>
-                              )}
-                            </div>
-                            {sup.observations && (
-                              <p className="text-xs italic text-muted-foreground pt-2 mt-1 border-t">
-                                "{sup.observations}"
-                              </p>
-                            )}
-                          </CardContent>
-                        </Card>
-                      ))}
-                    </div>
-                  ) : (
-                    <Card className="border-dashed">
-                      <CardContent className="py-8 text-center text-muted-foreground flex flex-col items-center justify-center">
-                        <Pill className="h-8 w-8 opacity-20 mb-3" />
-                        <p>Nenhum suplemento prescrito ativamente.</p>
-                      </CardContent>
-                    </Card>
-                  )}
-                </div>
+                <Card>
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-base flex items-center gap-2">
+                      <Pill className="h-4 w-4 text-primary" /> Suplementação Ativa
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    {supplements.length === 0 ? (
+                      <p className="text-sm text-muted-foreground text-center py-6 border rounded-md border-dashed">
+                        Nenhum suplemento prescrito ativamente.
+                      </p>
+                    ) : (
+                      <Table>
+                        <TableHeader>
+                          <TableRow>
+                            <TableHead>Nome</TableHead>
+                            <TableHead>Dosagem</TableHead>
+                            <TableHead>Frequência</TableHead>
+                            <TableHead>Horário</TableHead>
+                            <TableHead className="text-right">Ações</TableHead>
+                          </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                          {supplements.map((sup) => (
+                            <TableRow key={sup.id}>
+                              <TableCell className="font-medium">{sup.name}</TableCell>
+                              <TableCell>
+                                <Badge variant="secondary" className="font-normal">
+                                  {sup.dosage}
+                                </Badge>
+                              </TableCell>
+                              <TableCell>{sup.frequency || '--'}</TableCell>
+                              <TableCell>{sup.timing || '--'}</TableCell>
+                              <TableCell className="text-right">
+                                <DropdownMenu>
+                                  <DropdownMenuTrigger asChild>
+                                    <Button variant="ghost" className="h-8 w-8 p-0">
+                                      <MoreHorizontal className="h-4 w-4" />
+                                    </Button>
+                                  </DropdownMenuTrigger>
+                                  <DropdownMenuContent align="end">
+                                    <DropdownMenuItem
+                                      onClick={() => {
+                                        setSelectedSupplement(sup)
+                                        setIsSupplementModalOpen(true)
+                                      }}
+                                    >
+                                      Editar
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem
+                                      className="text-destructive focus:bg-destructive/10 focus:text-destructive"
+                                      onClick={() => handleDeleteSupplement(sup.id)}
+                                    >
+                                      Excluir
+                                    </DropdownMenuItem>
+                                  </DropdownMenuContent>
+                                </DropdownMenu>
+                              </TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
+                    )}
+                  </CardContent>
+                </Card>
 
                 <div className="pt-6 border-t space-y-4">
                   <h4 className="font-semibold text-sm text-muted-foreground uppercase tracking-wider flex items-center gap-2">
@@ -355,7 +611,7 @@ export default function ProfPatientRecord() {
           </TabsContent>
 
           <TabsContent value="treino" className="animate-fade-in-up mt-0">
-            {!permissions.can_view_training ? (
+            {!checkPermission('training') ? (
               <LockedContent />
             ) : (
               <Card>
@@ -375,19 +631,19 @@ export default function ProfPatientRecord() {
           </TabsContent>
 
           <TabsContent value="mente" className="animate-fade-in-up mt-0">
-            {!permissions.can_view_mind ? (
+            {!checkPermission('mind') ? (
               <LockedContent />
             ) : (
               <Card>
                 <CardHeader>
                   <CardTitle>Acompanhamento Psicológico</CardTitle>
                   <CardDescription>
-                    Visualização do estado de humor e notas compartilhadas.
+                    Visualização do estado de humor e notas partilhadas.
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="p-8 text-center text-muted-foreground border rounded-lg border-dashed">
-                    Nenhum dado registrado para exibição no momento.
+                    Nenhum dado registado para exibição no momento.
                   </div>
                 </CardContent>
               </Card>
@@ -400,14 +656,17 @@ export default function ProfPatientRecord() {
         isOpen={isAssessmentModalOpen}
         onClose={() => setIsAssessmentModalOpen(false)}
         clientId={patientId || ''}
+        initialData={selectedAssessment}
         onSuccess={fetchAssessments}
       />
       <NutritionSupplementModal
         isOpen={isSupplementModalOpen}
         onClose={() => setIsSupplementModalOpen(false)}
         clientId={patientId || ''}
+        initialData={selectedSupplement}
         onSuccess={fetchSupplements}
       />
+      <DietPrescriptionModal isOpen={isDietModalOpen} onClose={() => setIsDietModalOpen(false)} />
     </div>
   )
 }

@@ -21,7 +21,7 @@ interface DashboardHeaderProps {
 }
 
 export function DashboardHeader({ title, children }: DashboardHeaderProps) {
-  const { user, logout } = useAuth()
+  const { user, isLoading, logout } = useAuth()
   const navigate = useNavigate()
 
   const handleLogout = () => {
@@ -45,7 +45,7 @@ export function DashboardHeader({ title, children }: DashboardHeaderProps) {
       <div className="flex items-center gap-4">
         {children}
 
-        {!user ? (
+        {isLoading || !user ? (
           <Skeleton className="h-8 w-32 rounded-full" />
         ) : (
           <DropdownMenu>

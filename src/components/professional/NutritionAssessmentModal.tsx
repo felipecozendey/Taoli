@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import {
   Dialog,
   DialogContent,
@@ -18,7 +18,7 @@ import {
 } from '@/components/ui/select'
 import { useToast } from '@/hooks/use-toast'
 import { uploadClientMedia } from '@/lib/supabase/storage'
-import { createAssessment } from '@/services/nutrition'
+import { createAssessment, updateAssessment, type NutritionAssessment } from '@/services/nutrition'
 import { useAuth } from '@/contexts/AuthContext'
 import { Loader2, User, Ruler, Activity, Zap, Camera, Save, CheckCircle2 } from 'lucide-react'
 import { cn } from '@/lib/utils'
@@ -28,9 +28,16 @@ interface Props {
   onClose: () => void
   clientId: string
   onSuccess?: () => void
+  initialData?: NutritionAssessment | null
 }
 
-export function NutritionAssessmentModal({ isOpen, onClose, clientId, onSuccess }: Props) {
+export function NutritionAssessmentModal({
+  isOpen,
+  onClose,
+  clientId,
+  onSuccess,
+  initialData,
+}: Props) {
   const { toast } = useToast()
   const { user } = useAuth()
   const [loading, setLoading] = useState(false)
@@ -78,6 +85,61 @@ export function NutritionAssessmentModal({ isOpen, onClose, clientId, onSuccess 
     back: null,
   })
 
+  useEffect(() => {
+    if (isOpen) {
+      if (initialData) {
+        setBasic({
+          weight: initialData.weight?.toString() || '',
+          height: initialData.height?.toString() || '',
+          age: '',
+          gender: '',
+        })
+
+        const c = initialData.circumferences || {}
+        setCircs(Object.keys(c).reduce((acc, k) => ({ ...acc, [k]: String(c[k]) }), {}))
+
+        const f = initialData.skinfolds || {}
+        setFolds(Object.keys(f).reduce((acc, k) => ({ ...acc, [k]: String(f[k]) }), {}))
+
+        const b = initialData.formulas_used?.bia || {}
+        setBia(Object.keys(b).reduce((acc, k) => ({ ...acc, [k]: String(b[k]) }), {}))
+
+        setEnergy({
+          formula: initialData.formulas_used?.energy || 'harris',
+          activityLevel: '1.2',
+        })
+      } else {
+        setBasic({ weight: '', height: '', age: '', gender: '' })
+        setCircs({
+          chest: '',
+          waist: '',
+          abdomen: '',
+          hip: '',
+          rightArm: '',
+          leftArm: '',
+          rightThigh: '',
+          leftThigh: '',
+          rightCalf: '',
+          leftCalf: '',
+        })
+        setFolds({
+          triceps: '',
+          biceps: '',
+          subscapular: '',
+          suprailiac: '',
+          chest: '',
+          abdomen: '',
+          thigh: '',
+          midaxillary: '',
+          calf: '',
+        })
+        setBia({ bodyFat: '', muscleMass: '', visceralFat: '', water: '' })
+        setEnergy({ formula: 'harris', activityLevel: '1.2' })
+      }
+      setActiveTab('basic')
+    }
+  }, [isOpen, initialData])
+
   const results = useMemo(() => {
     const w = parseFloat(basic.weight) || 0
     const h = parseFloat(basic.height) || 0
@@ -118,17 +180,20 @@ export function NutritionAssessmentModal({ isOpen, onClose, clientId, onSuccess 
       } else {
         bmr = g === 'M' ? 10 * w + 6.25 * h - 5 * a + 5 : 10 * w + 6.25 * h - 5 * a - 161
       }
+    } else if (initialData?.bmr && initialData.bmr > 0) {
+      bmr = initialData.bmr
     }
-    const tdee = bmr * (parseFloat(energy.activityLevel) || 1.2)
+
+    const tdee = bmr > 0 ? bmr * (parseFloat(energy.activityLevel) || 1.2) : initialData?.tdee || 0
 
     return {
       bmi: bmi > 0 ? bmi.toFixed(1) : '--',
       skinfoldFat: skinfoldFat > 0 ? skinfoldFat.toFixed(1) : '--',
-      finalFat: finalFat > 0 ? finalFat.toFixed(1) : '--',
+      finalFat: finalFat > 0 ? finalFat.toFixed(1) : initialData?.body_fat_percentage || '--',
       bmr: bmr > 0 ? Math.round(bmr) : '--',
       tdee: tdee > 0 ? Math.round(tdee) : '--',
     }
-  }, [basic, folds, bia, energy])
+  }, [basic, folds, bia, energy, initialData])
 
   const handleSave = async () => {
     if (!clientId) {
@@ -140,7 +205,7 @@ export function NutritionAssessmentModal({ isOpen, onClose, clientId, onSuccess 
       return
     }
 
-    if (!basic.weight || !basic.height || !basic.age || !basic.gender) {
+    if (!basic.weight || !basic.height) {
       toast({
         title: 'Campos incompletos',
         description: 'Preencha os dados básicos.',
@@ -173,20 +238,24 @@ export function NutritionAssessmentModal({ isOpen, onClose, clientId, onSuccess 
         tdee: parseFloat(results.tdee as string) || undefined,
         circumferences: parseObj(circs),
         skinfolds: parseObj(folds),
-        formulas_used: { energy: energy.formula, fat: 'jackson_pollock_7', bia },
-        date: new Date().toISOString().split('T')[0],
+        formulas_used: { energy: energy.formula, fat: 'jackson_pollock_7', bia: parseObj(bia) },
         ...urls,
       }
 
-      const { error } = await createAssessment(assessmentData)
+      if (initialData?.id) {
+        const { error } = await updateAssessment(initialData.id, assessmentData)
+        if (error) throw error
+        toast({ title: 'Avaliação atualizada!', description: 'Salva com sucesso.' })
+      } else {
+        const { error } = await createAssessment({
+          ...assessmentData,
+          date: new Date().toISOString().split('T')[0],
+        })
+        if (error) throw error
+        toast({ title: 'Avaliação salva!', description: 'Registada com sucesso.' })
+      }
 
-      if (error) throw error
-
-      toast({ title: 'Avaliação salva!', description: 'Registada com sucesso.' })
-
-      // Chamada obrigatória ANTES do fechamento do modal
       if (onSuccess) onSuccess()
-
       onClose()
     } catch (err) {
       toast({ title: 'Erro ao salvar', description: 'Ocorreu um erro.', variant: 'destructive' })
@@ -238,7 +307,9 @@ export function NutritionAssessmentModal({ isOpen, onClose, clientId, onSuccess 
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent className="max-w-[95vw] w-full h-[95vh] p-0 overflow-hidden flex flex-col sm:rounded-xl">
         <DialogHeader className="p-4 border-b bg-background z-10 shadow-sm shrink-0">
-          <DialogTitle className="text-xl">Nova Avaliação Física</DialogTitle>
+          <DialogTitle className="text-xl">
+            {initialData ? 'Editar Avaliação' : 'Nova Avaliação Física'}
+          </DialogTitle>
           <DialogDescription>
             Preencha os módulos para calcular as métricas em tempo real.
           </DialogDescription>
@@ -484,7 +555,7 @@ export function NutritionAssessmentModal({ isOpen, onClose, clientId, onSuccess 
               ) : (
                 <Save className="mr-2 h-5 w-5" />
               )}
-              Salvar Avaliação Completa
+              {initialData ? 'Salvar Alterações' : 'Salvar Avaliação'}
             </Button>
           </div>
         </div>

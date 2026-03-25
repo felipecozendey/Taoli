@@ -91,6 +91,34 @@ export async function createAssessment(assessment: Partial<NutritionAssessment>)
   }
 }
 
+export async function updateAssessment(id: string, data: Partial<NutritionAssessment>) {
+  try {
+    const { data: result, error } = await supabase
+      .from('nutrition_assessments')
+      .update(data as any)
+      .eq('id', id)
+      .select()
+      .single()
+
+    if (error) throw error
+    return { data: result, error: null }
+  } catch (error) {
+    console.error('Error updating assessment:', error)
+    return { data: null, error }
+  }
+}
+
+export async function deleteAssessment(id: string) {
+  try {
+    const { error } = await supabase.from('nutrition_assessments').delete().eq('id', id)
+    if (error) throw error
+    return { error: null }
+  } catch (error) {
+    console.error('Error deleting assessment:', error)
+    return { error }
+  }
+}
+
 export async function createDiet(clientId: string, name: string) {
   try {
     const {
@@ -577,6 +605,23 @@ export async function createSupplement(supplement: Partial<NutritionSupplement>)
     return { data, error: null }
   } catch (error) {
     console.error('Error creating supplement:', error)
+    return { data: null, error }
+  }
+}
+
+export async function updateSupplement(id: string, data: Partial<NutritionSupplement>) {
+  try {
+    const { data: result, error } = await supabase
+      .from('nutrition_supplements')
+      .update(data as any)
+      .eq('id', id)
+      .select()
+      .single()
+
+    if (error) throw error
+    return { data: result, error: null }
+  } catch (error) {
+    console.error('Error updating supplement:', error)
     return { data: null, error }
   }
 }

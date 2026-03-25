@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import {
   Dialog,
   DialogContent,
@@ -12,7 +12,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { useToast } from '@/hooks/use-toast'
-import { createSupplement } from '@/services/nutrition'
+import { createSupplement, updateSupplement, type NutritionSupplement } from '@/services/nutrition'
 import { Loader2, Pill, Clock, Calendar } from 'lucide-react'
 
 interface Props {
@@ -20,9 +20,16 @@ interface Props {
   onClose: () => void
   clientId: string
   onSuccess?: () => void
+  initialData?: NutritionSupplement | null
 }
 
-export function NutritionSupplementModal({ isOpen, onClose, clientId, onSuccess }: Props) {
+export function NutritionSupplementModal({
+  isOpen,
+  onClose,
+  clientId,
+  onSuccess,
+  initialData,
+}: Props) {
   const { toast } = useToast()
   const [loading, setLoading] = useState(false)
 
@@ -31,6 +38,24 @@ export function NutritionSupplementModal({ isOpen, onClose, clientId, onSuccess 
   const [frequency, setFrequency] = useState('Todos os dias')
   const [timing, setTiming] = useState('')
   const [observations, setObservations] = useState('')
+
+  useEffect(() => {
+    if (isOpen) {
+      if (initialData) {
+        setName(initialData.name || '')
+        setDosage(initialData.dosage || '')
+        setFrequency(initialData.frequency || 'Todos os dias')
+        setTiming(initialData.timing || '')
+        setObservations(initialData.observations || '')
+      } else {
+        setName('')
+        setDosage('')
+        setFrequency('Todos os dias')
+        setTiming('')
+        setObservations('')
+      }
+    }
+  }, [isOpen, initialData])
 
   const handleSave = async () => {
     if (!name || !dosage) {
@@ -44,7 +69,7 @@ export function NutritionSupplementModal({ isOpen, onClose, clientId, onSuccess 
 
     setLoading(true)
     try {
-      const { error } = await createSupplement({
+      const payload = {
         client_id: clientId,
         name,
         dosage,
@@ -52,28 +77,27 @@ export function NutritionSupplementModal({ isOpen, onClose, clientId, onSuccess 
         timing,
         observations,
         is_active: true,
-      })
+      }
 
-      if (error) throw error
-
-      toast({
-        title: 'Suplemento prescrito!',
-        description: 'A prescrição foi adicionada com sucesso ao plano do paciente.',
-      })
+      if (initialData?.id) {
+        const { error } = await updateSupplement(initialData.id, payload)
+        if (error) throw error
+        toast({ title: 'Suplemento atualizado!', description: 'As alterações foram salvas.' })
+      } else {
+        const { error } = await createSupplement(payload)
+        if (error) throw error
+        toast({
+          title: 'Suplemento prescrito!',
+          description: 'A prescrição foi adicionada com sucesso.',
+        })
+      }
 
       if (onSuccess) onSuccess()
-
-      setName('')
-      setDosage('')
-      setFrequency('Todos os dias')
-      setTiming('')
-      setObservations('')
-
       onClose()
     } catch (err) {
       console.error(err)
       toast({
-        title: 'Erro ao prescrever',
+        title: 'Erro ao salvar',
         description: 'Ocorreu um erro ao salvar o suplemento.',
         variant: 'destructive',
       })
@@ -86,8 +110,10 @@ export function NutritionSupplementModal({ isOpen, onClose, clientId, onSuccess 
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent className="sm:max-w-[450px]">
         <DialogHeader>
-          <DialogTitle>Prescrever Suplemento</DialogTitle>
-          <DialogDescription>Adicione um novo suplemento à rotina do paciente.</DialogDescription>
+          <DialogTitle>{initialData ? 'Editar Suplemento' : 'Prescrever Suplemento'}</DialogTitle>
+          <DialogDescription>
+            Adicione ou atualize um suplemento na rotina do paciente.
+          </DialogDescription>
         </DialogHeader>
 
         <div className="grid gap-4 py-4">
@@ -156,7 +182,7 @@ export function NutritionSupplementModal({ isOpen, onClose, clientId, onSuccess 
           </Button>
           <Button onClick={handleSave} disabled={loading}>
             {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            Prescrever
+            {initialData ? 'Salvar Alterações' : 'Prescrever'}
           </Button>
         </DialogFooter>
       </DialogContent>

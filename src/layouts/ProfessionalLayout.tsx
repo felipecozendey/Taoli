@@ -1,5 +1,5 @@
 import { Outlet, Link, useLocation } from 'react-router-dom'
-import { LayoutDashboard, Users, CalendarDays, FileText, Sparkles } from 'lucide-react'
+import { LayoutDashboard, Users, CalendarDays, Sparkles } from 'lucide-react'
 import {
   SidebarProvider,
   Sidebar,
@@ -20,7 +20,6 @@ export default function ProfessionalLayout() {
     { title: 'Painel', icon: LayoutDashboard, path: '/professional' },
     { title: 'Os Meus Pacientes', icon: Users, path: '/professional/patients' },
     { title: 'Agenda', icon: CalendarDays, path: '/professional/calendar' },
-    { title: 'Prescrições', icon: FileText, path: '/professional/prescriptions' },
   ]
 
   return (

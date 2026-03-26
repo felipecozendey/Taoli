@@ -666,7 +666,11 @@ export default function ProfPatientRecord() {
         initialData={selectedSupplement}
         onSuccess={fetchSupplements}
       />
-      <DietPrescriptionModal isOpen={isDietModalOpen} onClose={() => setIsDietModalOpen(false)} />
+      <DietPrescriptionModal
+        clientId={patientId}
+        isOpen={isDietModalOpen}
+        onClose={() => setIsDietModalOpen(false)}
+      />
     </div>
   )
 }

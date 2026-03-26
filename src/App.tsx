@@ -27,7 +27,6 @@ import MasterUsers from './pages/master/MasterUsers'
 // Professional Pages
 import ProfDashboard from './pages/professional/ProfDashboard'
 import ProfCalendar from './pages/professional/ProfCalendar'
-import ProfPrescriptions from './pages/professional/ProfPrescriptions'
 
 // Client Pages
 import ClientDashboard from './pages/client/ClientDashboard'
@@ -103,7 +102,6 @@ const App = () => (
                   }
                 />
                 <Route path="calendar" element={<ProfCalendar />} />
-                <Route path="prescriptions" element={<ProfPrescriptions />} />
               </Route>
             </Route>
 

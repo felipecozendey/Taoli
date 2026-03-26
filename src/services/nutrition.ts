@@ -442,7 +442,7 @@ export async function searchFoodItems(query: string) {
       .from('food_items')
       .select('id, name, energy_kcal, protein_g, carbs_g, fats_g, base_qty_g, source')
       .ilike('name', `%${query}%`)
-      .limit(10)
+      .limit(20)
 
     if (error) throw error
     return { data, error: null }
@@ -651,6 +651,63 @@ export async function getPatientSupplements(patientId: string) {
     return { data: data as NutritionSupplement[], error: null }
   } catch (error) {
     console.error('Error fetching patient supplements:', error)
+    return { data: null, error }
+  }
+}
+
+export async function saveDiet(
+  clientId: string,
+  professionalId: string,
+  name: string,
+  mealsData: any[],
+) {
+  try {
+    // 1. Cria a prescrição/dieta principal
+    const { data: diet, error: dietErr } = await supabase
+      .from('diets')
+      .insert({
+        client_id: clientId,
+        professional_id: professionalId,
+        name,
+        is_active: true,
+      })
+      .select()
+      .single()
+
+    if (dietErr) throw dietErr
+
+    // 2. Insere as refeições e os seus itens associados
+    for (let i = 0; i < mealsData.length; i++) {
+      const meal = mealsData[i]
+
+      const { data: mealRow, error: mealErr } = await supabase
+        .from('meals')
+        .insert({
+          diet_id: diet.id,
+          name: meal.name,
+          time: meal.time || '12:00',
+          order_index: i,
+        })
+        .select()
+        .single()
+
+      if (mealErr) continue
+
+      const itemsToInsert = meal.items.map((item: any) => ({
+        meal_id: mealRow.id,
+        food_item_id: item.food.id,
+        portion_g: item.amount_grams,
+        notes: item.notes || null,
+      }))
+
+      if (itemsToInsert.length > 0) {
+        await supabase.from('meal_items').insert(itemsToInsert)
+      }
+    }
+
+    return { data: diet, error: null }
+  } catch (error) {
+    console.error('Error saving full diet:', error)
     return { data: null, error }
   }
 }

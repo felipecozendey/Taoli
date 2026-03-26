@@ -662,7 +662,6 @@ export async function saveDiet(
   mealsData: any[],
 ) {
   try {
-    // 1. Cria a prescrição/dieta principal
     const { data: diet, error: dietErr } = await supabase
       .from('diets')
       .insert({
@@ -676,7 +675,6 @@ export async function saveDiet(
 
     if (dietErr) throw dietErr
 
-    // 2. Insere as refeições e os seus itens associados
     for (let i = 0; i < mealsData.length; i++) {
       const meal = mealsData[i]
 
@@ -708,6 +706,83 @@ export async function saveDiet(
     return { data: diet, error: null }
   } catch (error) {
     console.error('Error saving full diet:', error)
+    return { data: null, error }
+  }
+}
+
+// Templates API
+export const getDietTemplates = async (professionalId: string) => {
+  try {
+    const { data, error } = await supabase
+      .from('diet_templates')
+      .select('id, name')
+      .eq('professional_id', professionalId)
+      .order('created_at', { ascending: false })
+
+    if (error) throw error
+    return { data: data || [], error: null }
+  } catch (error) {
+    console.error('Error fetching templates:', error)
+    return { data: null, error }
+  }
+}
+
+export const getTemplateDetails = async (templateId: string) => {
+  try {
+    const { data, error } = await supabase
+      .from('diet_template_meals')
+      .select(`
+        id, 
+        name, 
+        time, 
+        items:diet_template_items(
+          id, 
+          amount_grams, 
+          food:food_items(*)
+        )
+      `)
+      .eq('template_id', templateId)
+
+    if (error) throw error
+    return { data: data || [], error: null }
+  } catch (error) {
+    console.error('Error fetching template details:', error)
+    return { data: null, error }
+  }
+}
+
+export const saveDietTemplate = async (professionalId: string, name: string, mealsData: any[]) => {
+  try {
+    const { data: tpl, error: tplErr } = await supabase
+      .from('diet_templates')
+      .insert([{ professional_id: professionalId, name }])
+      .select()
+      .single()
+
+    if (tplErr) throw tplErr
+
+    for (const meal of mealsData) {
+      const { data: mData, error: mErr } = await supabase
+        .from('diet_template_meals')
+        .insert([{ template_id: tpl.id, name: meal.name, time: meal.time }])
+        .select()
+        .single()
+
+      if (mErr) continue
+
+      const itemsToInsert = meal.items.map((item: any) => ({
+        meal_id: mData.id,
+        food_item_id: item.food.id,
+        amount_grams: item.amount_grams,
+      }))
+
+      if (itemsToInsert.length > 0) {
+        await supabase.from('diet_template_items').insert(itemsToInsert)
+      }
+    }
+    return { data: tpl, error: null }
+  } catch (error) {
+    console.error('Error saving template:', error)
     return { data: null, error }
   }
 }

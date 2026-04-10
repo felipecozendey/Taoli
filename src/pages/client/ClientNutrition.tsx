@@ -8,6 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Badge } from '@/components/ui/badge'
 import { Switch } from '@/components/ui/switch'
 import { Label } from '@/components/ui/label'
+import { Input } from '@/components/ui/input'
 import {
   ChartContainer,
   ChartTooltipContent,
@@ -24,17 +25,11 @@ import {
   CartesianGrid,
   Tooltip,
   Legend,
-  RadarChart,
-  PolarGrid,
-  PolarAngleAxis,
-  PolarRadiusAxis,
-  Radar,
 } from 'recharts'
 import {
   Droplets,
   Flame,
   Utensils,
-  Plus,
   Check,
   ChevronLeft,
   ChevronRight,
@@ -43,10 +38,10 @@ import {
   BellRing,
   TrendingDown,
   Activity,
-  Info,
   Scale,
   Dna,
   Loader2,
+  AlertTriangle,
 } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
 import { useToast } from '@/hooks/use-toast'
@@ -70,7 +65,6 @@ import { cn } from '@/lib/utils'
 import { format } from 'date-fns'
 import { ExtraMealDialog } from '@/components/nutrition/ExtraMealDialog'
 import { DateRangeDashboard } from '@/components/nutrition/DateRangeDashboard'
-import { AlertTriangle, PieChart } from 'lucide-react'
 
 const weightChartConfig = {
   peso: { label: 'Peso', color: 'hsl(var(--primary))' },
@@ -80,10 +74,6 @@ const weightChartConfig = {
 const compChartConfig = {
   gordura: { label: 'Gordura', color: 'hsl(var(--destructive))' },
   musculo: { label: 'Músculo', color: 'hsl(var(--primary))' },
-} satisfies ChartConfig
-
-const radarConfig = {
-  valor: { label: 'Medida (cm)', color: 'hsl(var(--primary))' },
 } satisfies ChartConfig
 
 export default function ClientNutrition() {
@@ -98,6 +88,7 @@ export default function ClientNutrition() {
   const [remindersEnabled, setRemindersEnabled] = useState(false)
   const [periodTracking, setPeriodTracking] = useState<any[]>([])
   const [dayTracking, setDayTracking] = useState<any>(null)
+  const [customWater, setCustomWater] = useState('')
 
   const { toast } = useToast()
 
@@ -158,24 +149,6 @@ export default function ClientNutrition() {
     }))
   }, [assessments])
 
-  const radarData = useMemo(() => {
-    if (!latestAssessment?.circumferences) return []
-    const dict: Record<string, string> = {
-      chest: 'Peito',
-      waist: 'Cintura',
-      arm: 'Braço',
-      leg: 'Perna',
-      hip: 'Quadril',
-      calf: 'Panturrilha',
-      thigh: 'Coxa',
-      neck: 'Pescoço',
-    }
-    return Object.entries(latestAssessment.circumferences).map(([key, value]) => ({
-      medida: dict[key] || key,
-      valor: Number(value),
-    }))
-  }, [latestAssessment])
-
   const playBeep = () => {
     try {
       const AudioContext = window.AudioContext || (window as any).webkitAudioContext
@@ -225,10 +198,10 @@ export default function ClientNutrition() {
     setDate(d.toISOString().split('T')[0])
   }
 
-  const handleAddWater = async () => {
-    if (!activeUser?.id) return
-    await addWaterLog(activeUser.id, date, 250)
-    toast({ title: '💧 250ml de água registrados!' })
+  const handleAddWaterAmount = async (amount: number) => {
+    if (!activeUser?.id || amount <= 0) return
+    await addWaterLog(activeUser.id, date, amount)
+    toast({ title: `💧 ${amount}ml de água registrados!` })
     fetchData()
   }
 
@@ -282,29 +255,6 @@ export default function ClientNutrition() {
     }
   }
 
-  const periodTotals = useMemo(() => {
-    if (!periodTracking || periodTracking.length === 0)
-      return { cal: 0, pro: 0, car: 0, fat: 0, days: 1 }
-    const sum = periodTracking.reduce(
-      (acc, curr) => {
-        acc.cal += curr.total_calories || 0
-        acc.pro += curr.total_protein || 0
-        acc.car += curr.total_carbs || 0
-        acc.fat += curr.total_fats || 0
-        return acc
-      },
-      { cal: 0, pro: 0, car: 0, fat: 0 },
-    )
-    const days = periodTracking.length
-    return {
-      cal: Math.round(sum.cal),
-      pro: Math.round(sum.pro),
-      car: Math.round(sum.car),
-      fat: Math.round(sum.fat),
-      days,
-    }
-  }, [periodTracking])
-
   const targetCals = progress?.targets?.calories || 2000
   const consumedCals = progress?.consumed?.calories || 0
   const diferenca = targetCals - consumedCals
@@ -327,6 +277,8 @@ export default function ClientNutrition() {
     <div className="flex flex-col min-h-full">
       <DashboardHeader title="Minha Nutrição" />
       <PageContent className="max-w-3xl mx-auto w-full animate-fade-in-up space-y-6">
+        <DateRangeDashboard onRangeChange={fetchPeriodData} />
+
         <div className="flex items-center justify-between bg-card border rounded-lg p-2 px-4 shadow-sm">
           <Button variant="ghost" size="icon" onClick={() => changeDate(-1)}>
             <ChevronLeft className="h-5 w-5" />
@@ -343,12 +295,9 @@ export default function ClientNutrition() {
         </div>
 
         <Tabs defaultValue="dashboard" className="space-y-6">
-          <TabsList className="w-full grid grid-cols-4 h-auto p-1 bg-muted/60">
+          <TabsList className="w-full grid grid-cols-3 h-auto p-1 bg-muted/60">
             <TabsTrigger value="dashboard" className="py-2.5">
               Dashboard
-            </TabsTrigger>
-            <TabsTrigger value="analytics" className="py-2.5">
-              Histórico
             </TabsTrigger>
             <TabsTrigger value="diet" className="py-2.5">
               Minha Dieta
@@ -358,493 +307,437 @@ export default function ClientNutrition() {
             </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="analytics" className="space-y-6 animate-fade-in">
-            <DateRangeDashboard onRangeChange={fetchPeriodData} />
-
-            <h3 className="text-lg font-bold flex items-center gap-2 mt-6">
-              <PieChart className="h-5 w-5 text-primary" /> Consumo no Período Selecionado
-            </h3>
-
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <Card>
-                <CardContent className="p-4">
-                  <p className="text-sm font-medium text-muted-foreground">Calorias (Total)</p>
-                  <p className="text-2xl font-bold">
-                    {periodTotals.cal}{' '}
-                    <span className="text-sm font-normal text-muted-foreground">kcal</span>
-                  </p>
-                  <p className="text-xs text-muted-foreground mt-1">
-                    Média: {Math.round(periodTotals.cal / periodTotals.days)} kcal/dia
-                  </p>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardContent className="p-4">
-                  <p className="text-sm font-medium text-muted-foreground">Proteínas</p>
-                  <p className="text-2xl font-bold">
-                    {periodTotals.pro}{' '}
-                    <span className="text-sm font-normal text-muted-foreground">g</span>
-                  </p>
-                  <p className="text-xs text-muted-foreground mt-1">
-                    Média: {Math.round(periodTotals.pro / periodTotals.days)} g/dia
-                  </p>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardContent className="p-4">
-                  <p className="text-sm font-medium text-muted-foreground">Carboidratos</p>
-                  <p className="text-2xl font-bold">
-                    {periodTotals.car}{' '}
-                    <span className="text-sm font-normal text-muted-foreground">g</span>
-                  </p>
-                  <p className="text-xs text-muted-foreground mt-1">
-                    Média: {Math.round(periodTotals.car / periodTotals.days)} g/dia
-                  </p>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardContent className="p-4">
-                  <p className="text-sm font-medium text-muted-foreground">Gorduras</p>
-                  <p className="text-2xl font-bold">
-                    {periodTotals.fat}{' '}
-                    <span className="text-sm font-normal text-muted-foreground">g</span>
-                  </p>
-                  <p className="text-xs text-muted-foreground mt-1">
-                    Média: {Math.round(periodTotals.fat / periodTotals.days)} g/dia
-                  </p>
-                </CardContent>
-              </Card>
-            </div>
-
-            {periodTracking.length === 0 && (
-              <Card className="border-dashed bg-muted/30">
-                <CardContent className="flex flex-col items-center justify-center py-12 text-center text-muted-foreground">
-                  <PieChart className="h-8 w-8 mb-4 opacity-50" />
-                  <p>Sem registos de consumo no período selecionado.</p>
-                </CardContent>
-              </Card>
-            )}
-          </TabsContent>
-
           <TabsContent value="dashboard" className="space-y-6">
             {isLoading ? (
               <Card className="p-8 flex justify-center">
                 <Loader2 className="h-8 w-8 animate-spin text-primary" />
               </Card>
-            ) : !latestAssessment ? (
-              <Card className="p-8 flex flex-col items-center justify-center text-center border-dashed">
-                <Activity className="h-12 w-12 text-muted-foreground mb-4 opacity-20" />
-                <h3 className="text-lg font-semibold">Sem dados físicos</h3>
-                <p className="text-sm text-muted-foreground">
-                  A sua primeira avaliação física ainda não foi registada pelo seu profissional.
-                </p>
-              </Card>
             ) : (
-              <div className="space-y-6">
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  <Card>
-                    <CardContent className="p-4">
-                      <div className="flex items-center gap-2 text-muted-foreground mb-2">
-                        <Scale className="h-4 w-4" />
-                        <span className="text-sm font-medium">Peso Atual</span>
+              <>
+                <Card className="shadow-sm border-border/50">
+                  <CardContent className="p-6">
+                    <h2 className="text-xl font-bold flex items-center gap-2 mb-6">
+                      <Activity className="h-5 w-5 text-primary" /> Balanço Energético e Macros
+                    </h2>
+                    <div className="flex flex-col md:flex-row items-center justify-between gap-8">
+                      <div className="relative w-36 h-36 flex items-center justify-center shrink-0 mx-auto md:mx-0">
+                        <svg className="w-full h-full transform -rotate-90">
+                          <circle
+                            cx="72"
+                            cy="72"
+                            r={radius}
+                            stroke="currentColor"
+                            strokeWidth="12"
+                            fill="transparent"
+                            className="text-muted/20"
+                          />
+                          <circle
+                            cx="72"
+                            cy="72"
+                            r={radius}
+                            stroke="currentColor"
+                            strokeWidth="12"
+                            fill="transparent"
+                            strokeDasharray={circumference}
+                            strokeDashoffset={strokeDashoffset}
+                            strokeLinecap="round"
+                            className={cn(
+                              'transition-all duration-1000 ease-out',
+                              isExceeded ? 'text-red-500' : 'text-primary',
+                            )}
+                          />
+                        </svg>
+                        <div
+                          className={cn(
+                            'absolute flex flex-col items-center justify-center text-center',
+                            isExceeded ? 'text-red-500' : '',
+                          )}
+                        >
+                          <Flame
+                            className={cn(
+                              'h-5 w-5 mb-1 opacity-80',
+                              isExceeded ? 'text-red-500' : 'text-primary',
+                            )}
+                          />
+                          <span className="text-xl font-bold leading-none">
+                            {isExceeded ? 'Excedeu' : 'Restam'}
+                          </span>
+                          <span className="text-sm font-semibold tracking-wider text-muted-foreground mt-1">
+                            {displayValue} kcal
+                          </span>
+                        </div>
                       </div>
-                      <div className="text-2xl font-bold">
-                        {latestAssessment.weight || '--'}{' '}
-                        <span className="text-sm font-normal text-muted-foreground">kg</span>
-                      </div>
-                      {latestAssessment.goal_weight && latestAssessment.weight && (
-                        <p className="text-xs text-muted-foreground mt-1">
-                          Faltam{' '}
-                          {Math.abs(latestAssessment.weight - latestAssessment.goal_weight).toFixed(
-                            1,
-                          )}{' '}
-                          kg para a meta
-                        </p>
-                      )}
-                    </CardContent>
-                  </Card>
-                  <Card>
-                    <CardContent className="p-4">
-                      <div className="flex items-center gap-2 text-muted-foreground mb-2">
-                        <TrendingDown className="h-4 w-4" />
-                        <span className="text-sm font-medium">% de Gordura</span>
-                      </div>
-                      <div className="text-2xl font-bold">
-                        {latestAssessment.body_fat_percentage || '--'}{' '}
-                        <span className="text-sm font-normal text-muted-foreground">%</span>
-                      </div>
-                    </CardContent>
-                  </Card>
-                  <Card>
-                    <CardContent className="p-4">
-                      <div className="flex items-center gap-2 text-muted-foreground mb-2">
-                        <Flame className="h-4 w-4 text-orange-500" />
-                        <span className="text-sm font-medium">Gasto Diário (VETA)</span>
-                      </div>
-                      <div className="text-2xl font-bold">
-                        {latestAssessment.tdee || '--'}{' '}
-                        <span className="text-sm font-normal text-muted-foreground">kcal</span>
-                      </div>
-                    </CardContent>
-                  </Card>
-                  <Card>
-                    <CardContent className="p-4">
-                      <div className="flex items-center gap-2 text-muted-foreground mb-2">
-                        <Activity className="h-4 w-4 text-blue-500" />
-                        <span className="text-sm font-medium">Estado Atual</span>
-                      </div>
-                      <div className="mt-1">
-                        <Badge variant="secondary" className="text-sm">
-                          {latestAssessment.status || 'Não definido'}
-                        </Badge>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </div>
 
-                {chartData.length > 0 && (
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <Card>
-                      <CardHeader className="pb-2">
-                        <CardTitle className="text-base">Evolução de Peso</CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <ChartContainer config={weightChartConfig} className="h-[250px] w-full">
-                          <LineChart
-                            data={chartData}
-                            margin={{ top: 10, right: 10, bottom: 0, left: -20 }}
-                          >
-                            <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                            <XAxis
-                              dataKey="date"
-                              tickLine={false}
-                              axisLine={false}
-                              tickMargin={8}
-                            />
-                            <YAxis
-                              tickLine={false}
-                              axisLine={false}
-                              tickMargin={8}
-                              domain={['auto', 'auto']}
-                            />
-                            <Tooltip content={<ChartTooltipContent />} />
-                            <Legend content={<ChartLegendContent />} />
-                            <Line
-                              type="monotone"
-                              name="Peso (kg)"
-                              dataKey="peso"
-                              stroke="var(--color-peso)"
-                              strokeWidth={2}
-                              dot={{ r: 4 }}
-                              activeDot={{ r: 6 }}
-                            />
-                            <Line
-                              type="monotone"
-                              name="Meta (kg)"
-                              dataKey="meta"
-                              stroke="var(--color-meta)"
-                              strokeWidth={2}
-                              strokeDasharray="5 5"
-                              dot={false}
-                            />
-                          </LineChart>
-                        </ChartContainer>
-                      </CardContent>
-                    </Card>
+                      <div className="flex-1 w-full">
+                        <Tabs defaultValue="macros" className="w-full">
+                          <TabsList className="grid w-full grid-cols-2 mb-4">
+                            <TabsTrigger value="macros">Macronutrientes</TabsTrigger>
+                            <TabsTrigger value="micronutrients">Micronutrientes</TabsTrigger>
+                          </TabsList>
 
-                    <Card>
-                      <CardHeader className="pb-2">
-                        <CardTitle className="text-base flex items-center gap-2">
-                          <Dna className="h-4 w-4" /> Composição Corporal
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <ChartContainer config={compChartConfig} className="h-[250px] w-full">
-                          <AreaChart
-                            data={chartData}
-                            margin={{ top: 10, right: 10, bottom: 0, left: -20 }}
-                          >
-                            <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                            <XAxis
-                              dataKey="date"
-                              tickLine={false}
-                              axisLine={false}
-                              tickMargin={8}
-                            />
-                            <YAxis
-                              tickLine={false}
-                              axisLine={false}
-                              tickMargin={8}
-                              domain={[0, 100]}
-                            />
-                            <Tooltip content={<ChartTooltipContent />} />
-                            <Legend content={<ChartLegendContent />} />
-                            <Area
-                              type="monotone"
-                              name="Gordura (%)"
-                              dataKey="gordura"
-                              fill="var(--color-gordura)"
-                              stroke="var(--color-gordura)"
-                              fillOpacity={0.4}
-                              stackId="1"
-                            />
-                            <Area
-                              type="monotone"
-                              name="Músculo (%)"
-                              dataKey="musculo"
-                              fill="var(--color-musculo)"
-                              stroke="var(--color-musculo)"
-                              fillOpacity={0.4}
-                              stackId="2"
-                            />
-                          </AreaChart>
-                        </ChartContainer>
-                      </CardContent>
-                    </Card>
+                          <TabsContent value="macros" className="space-y-4">
+                            <div className="space-y-1.5">
+                              <div className="flex justify-between text-xs font-medium">
+                                <span className="text-muted-foreground flex items-center gap-1">
+                                  <div className="w-2 h-2 rounded-full bg-blue-500" /> Proteínas
+                                </span>
+                                <span>
+                                  {progress?.consumed?.protein || 0}g /{' '}
+                                  {progress?.targets?.protein || 0}g
+                                </span>
+                              </div>
+                              <Progress
+                                value={
+                                  ((progress?.consumed?.protein || 0) /
+                                    (progress?.targets?.protein || 1)) *
+                                  100
+                                }
+                                className="h-2 [&>div]:bg-blue-500 bg-blue-100 dark:bg-blue-950"
+                              />
+                            </div>
+
+                            <div className="space-y-1.5">
+                              <div className="flex justify-between text-xs font-medium">
+                                <span className="text-muted-foreground flex items-center gap-1">
+                                  <div className="w-2 h-2 rounded-full bg-green-500" /> Carboidratos
+                                </span>
+                                <span>
+                                  {progress?.consumed?.carbs || 0}g /{' '}
+                                  {progress?.targets?.carbs || 0}g
+                                </span>
+                              </div>
+                              <Progress
+                                value={
+                                  ((progress?.consumed?.carbs || 0) /
+                                    (progress?.targets?.carbs || 1)) *
+                                  100
+                                }
+                                className="h-2 [&>div]:bg-green-500 bg-green-100 dark:bg-green-950"
+                              />
+                            </div>
+
+                            <div className="space-y-1.5">
+                              <div className="flex justify-between text-xs font-medium">
+                                <span className="text-muted-foreground flex items-center gap-1">
+                                  <div className="w-2 h-2 rounded-full bg-amber-500" /> Gorduras
+                                </span>
+                                <span>
+                                  {progress?.consumed?.fat || 0}g / {progress?.targets?.fat || 0}g
+                                </span>
+                              </div>
+                              <Progress
+                                value={
+                                  ((progress?.consumed?.fat || 0) / (progress?.targets?.fat || 1)) *
+                                  100
+                                }
+                                className="h-2 [&>div]:bg-amber-500 bg-amber-100 dark:bg-amber-950"
+                              />
+                            </div>
+                          </TabsContent>
+
+                          <TabsContent value="micronutrients">
+                            <div className="grid grid-cols-3 gap-3 text-center mt-2">
+                              <div className="p-3 bg-muted/30 rounded-lg border">
+                                <p className="text-[10px] text-muted-foreground mb-1 uppercase tracking-wider font-semibold">
+                                  Fibras
+                                </p>
+                                <p className="text-base font-bold">12g</p>
+                              </div>
+                              <div className="p-3 bg-muted/30 rounded-lg border">
+                                <p className="text-[10px] text-muted-foreground mb-1 uppercase tracking-wider font-semibold">
+                                  Sódio
+                                </p>
+                                <p className="text-base font-bold">1500mg</p>
+                              </div>
+                              <div className="p-3 bg-muted/30 rounded-lg border">
+                                <p className="text-[10px] text-muted-foreground mb-1 uppercase tracking-wider font-semibold">
+                                  Cálcio
+                                </p>
+                                <p className="text-base font-bold">400mg</p>
+                              </div>
+                            </div>
+                          </TabsContent>
+                        </Tabs>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {!latestAssessment ? (
+                  <Card className="p-8 flex flex-col items-center justify-center text-center border-dashed">
+                    <Activity className="h-12 w-12 text-muted-foreground mb-4 opacity-20" />
+                    <h3 className="text-lg font-semibold">Sem dados físicos</h3>
+                    <p className="text-sm text-muted-foreground">
+                      A sua primeira avaliação física ainda não foi registada pelo seu profissional.
+                    </p>
+                  </Card>
+                ) : (
+                  <div className="space-y-6">
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                      <Card>
+                        <CardContent className="p-4">
+                          <div className="flex items-center gap-2 text-muted-foreground mb-2">
+                            <Scale className="h-4 w-4" />
+                            <span className="text-sm font-medium">Peso Atual</span>
+                          </div>
+                          <div className="text-2xl font-bold">
+                            {latestAssessment.weight || '--'}{' '}
+                            <span className="text-sm font-normal text-muted-foreground">kg</span>
+                          </div>
+                          {latestAssessment.goal_weight && latestAssessment.weight && (
+                            <p className="text-xs text-muted-foreground mt-1">
+                              Faltam{' '}
+                              {Math.abs(
+                                latestAssessment.weight - latestAssessment.goal_weight,
+                              ).toFixed(1)}{' '}
+                              kg para a meta
+                            </p>
+                          )}
+                        </CardContent>
+                      </Card>
+                      <Card>
+                        <CardContent className="p-4">
+                          <div className="flex items-center gap-2 text-muted-foreground mb-2">
+                            <TrendingDown className="h-4 w-4" />
+                            <span className="text-sm font-medium">% de Gordura</span>
+                          </div>
+                          <div className="text-2xl font-bold">
+                            {latestAssessment.body_fat_percentage || '--'}{' '}
+                            <span className="text-sm font-normal text-muted-foreground">%</span>
+                          </div>
+                        </CardContent>
+                      </Card>
+                      <Card>
+                        <CardContent className="p-4">
+                          <div className="flex items-center gap-2 text-muted-foreground mb-2">
+                            <Flame className="h-4 w-4 text-orange-500" />
+                            <span className="text-sm font-medium">Gasto Diário</span>
+                          </div>
+                          <div className="text-2xl font-bold">
+                            {latestAssessment.tdee || '--'}{' '}
+                            <span className="text-sm font-normal text-muted-foreground">kcal</span>
+                          </div>
+                        </CardContent>
+                      </Card>
+                      <Card>
+                        <CardContent className="p-4">
+                          <div className="flex items-center gap-2 text-muted-foreground mb-2">
+                            <Activity className="h-4 w-4 text-blue-500" />
+                            <span className="text-sm font-medium">Estado Atual</span>
+                          </div>
+                          <div className="mt-1">
+                            <Badge variant="secondary" className="text-sm">
+                              {latestAssessment.status || 'Não definido'}
+                            </Badge>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </div>
+
+                    {chartData.length > 0 && (
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <Card>
+                          <CardHeader className="pb-2">
+                            <CardTitle className="text-base">Evolução de Peso</CardTitle>
+                          </CardHeader>
+                          <CardContent>
+                            <ChartContainer config={weightChartConfig} className="h-[250px] w-full">
+                              <LineChart
+                                data={chartData}
+                                margin={{ top: 10, right: 10, bottom: 0, left: -20 }}
+                              >
+                                <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                                <XAxis
+                                  dataKey="date"
+                                  tickLine={false}
+                                  axisLine={false}
+                                  tickMargin={8}
+                                />
+                                <YAxis
+                                  tickLine={false}
+                                  axisLine={false}
+                                  tickMargin={8}
+                                  domain={['auto', 'auto']}
+                                />
+                                <Tooltip content={<ChartTooltipContent />} />
+                                <Legend content={<ChartLegendContent />} />
+                                <Line
+                                  type="monotone"
+                                  name="Peso (kg)"
+                                  dataKey="peso"
+                                  stroke="var(--color-peso)"
+                                  strokeWidth={2}
+                                  dot={{ r: 4 }}
+                                  activeDot={{ r: 6 }}
+                                />
+                                <Line
+                                  type="monotone"
+                                  name="Meta (kg)"
+                                  dataKey="meta"
+                                  stroke="var(--color-meta)"
+                                  strokeWidth={2}
+                                  strokeDasharray="5 5"
+                                  dot={false}
+                                />
+                              </LineChart>
+                            </ChartContainer>
+                          </CardContent>
+                        </Card>
+
+                        <Card>
+                          <CardHeader className="pb-2">
+                            <CardTitle className="text-base flex items-center gap-2">
+                              <Dna className="h-4 w-4" /> Composição Corporal
+                            </CardTitle>
+                          </CardHeader>
+                          <CardContent>
+                            <ChartContainer config={compChartConfig} className="h-[250px] w-full">
+                              <AreaChart
+                                data={chartData}
+                                margin={{ top: 10, right: 10, bottom: 0, left: -20 }}
+                              >
+                                <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                                <XAxis
+                                  dataKey="date"
+                                  tickLine={false}
+                                  axisLine={false}
+                                  tickMargin={8}
+                                />
+                                <YAxis
+                                  tickLine={false}
+                                  axisLine={false}
+                                  tickMargin={8}
+                                  domain={[0, 100]}
+                                />
+                                <Tooltip content={<ChartTooltipContent />} />
+                                <Legend content={<ChartLegendContent />} />
+                                <Area
+                                  type="monotone"
+                                  name="Gordura (%)"
+                                  dataKey="gordura"
+                                  fill="var(--color-gordura)"
+                                  stroke="var(--color-gordura)"
+                                  fillOpacity={0.4}
+                                  stackId="1"
+                                />
+                                <Area
+                                  type="monotone"
+                                  name="Músculo (%)"
+                                  dataKey="musculo"
+                                  fill="var(--color-musculo)"
+                                  stroke="var(--color-musculo)"
+                                  fillOpacity={0.4}
+                                  stackId="2"
+                                />
+                              </AreaChart>
+                            </ChartContainer>
+                          </CardContent>
+                        </Card>
+                      </div>
+                    )}
                   </div>
                 )}
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {radarData.length > 0 && (
-                    <Card>
-                      <CardHeader className="pb-0">
-                        <CardTitle className="text-base">As Minhas Medidas</CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <ChartContainer config={radarConfig} className="h-[250px] w-full mx-auto">
-                          <RadarChart
-                            data={radarData}
-                            margin={{ top: 10, right: 20, bottom: 10, left: 20 }}
+                  <Card className="border-blue-100 bg-gradient-to-br from-blue-50 to-blue-100/50 dark:border-blue-900 dark:from-blue-950/40 dark:to-blue-900/20 shadow-sm">
+                    <CardContent className="p-5">
+                      <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-4">
+                        <div className="flex items-center gap-4">
+                          <div className="p-3 bg-blue-500 text-white rounded-full shadow-sm">
+                            <Droplets className="h-6 w-6" />
+                          </div>
+                          <div>
+                            <p className="text-sm font-medium text-blue-900 dark:text-blue-200">
+                              Hidratação
+                            </p>
+                            <p className="text-2xl font-bold text-blue-700 dark:text-blue-400">
+                              {progress?.consumed?.water || 0}{' '}
+                              <span className="text-sm font-normal">ml</span>
+                            </p>
+                          </div>
+                        </div>
+                        <div className="flex flex-wrap items-center gap-2">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleAddWaterAmount(250)}
+                            className="border-blue-200 text-blue-700 hover:bg-blue-200 dark:border-blue-800 dark:text-blue-300 dark:hover:bg-blue-900 bg-white/50 dark:bg-black/50 backdrop-blur-sm"
                           >
-                            <PolarGrid className="stroke-muted" />
-                            <PolarAngleAxis
-                              dataKey="medida"
-                              className="text-xs fill-muted-foreground"
+                            + 250ml
+                          </Button>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleAddWaterAmount(500)}
+                            className="border-blue-200 text-blue-700 hover:bg-blue-200 dark:border-blue-800 dark:text-blue-300 dark:hover:bg-blue-900 bg-white/50 dark:bg-black/50 backdrop-blur-sm"
+                          >
+                            + 500ml
+                          </Button>
+                          <div className="flex items-center gap-2 w-full sm:w-auto mt-2 sm:mt-0">
+                            <Input
+                              type="number"
+                              placeholder="Outro..."
+                              className="w-24 h-9 bg-white/50 dark:bg-black/50 border-blue-200 dark:border-blue-800"
+                              value={customWater}
+                              onChange={(e) => setCustomWater(e.target.value)}
                             />
-                            <PolarRadiusAxis
-                              angle={30}
-                              domain={[0, 'auto']}
-                              className="fill-muted-foreground"
-                            />
-                            <Radar
-                              name="Medidas"
-                              dataKey="valor"
-                              stroke="var(--primary)"
-                              fill="var(--primary)"
-                              fillOpacity={0.6}
-                            />
-                            <Tooltip content={<ChartTooltipContent />} />
-                          </RadarChart>
-                        </ChartContainer>
-                      </CardContent>
-                    </Card>
-                  )}
-
-                  <Card className="bg-muted/50 border-border/50">
-                    <CardHeader>
-                      <CardTitle className="text-base flex items-center gap-2">
-                        <Info className="h-5 w-5 text-primary" /> Como calculamos as suas calorias?
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-4 text-sm text-muted-foreground">
-                      <p>
-                        A sua <strong>Taxa Metabólica Basal (TMB)</strong> atual é de{' '}
-                        <strong className="text-foreground">
-                          {latestAssessment.bmr || '--'} kcal
-                        </strong>
-                        . Isto é o que o seu corpo queima apenas para se manter vivo (respirar,
-                        bater o coração).
-                      </p>
-                      <p>
-                        Multiplicando isso pelo seu nível de atividade, chegamos ao seu{' '}
-                        <strong>
-                          VETA de{' '}
-                          <span className="text-foreground">
-                            {latestAssessment.tdee || '--'} kcal
-                          </span>
-                        </strong>
-                        . A sua dieta foi calculada com base neste valor para garantir que atinge o
-                        seu objetivo de forma saudável e científica.
-                      </p>
-                      <p className="text-xs italic mt-2 text-muted-foreground/70">
-                        (Fórmula utilizada: Harris-Benedict)
-                      </p>
+                            <Button
+                              size="sm"
+                              variant="secondary"
+                              className="bg-blue-200 text-blue-800 hover:bg-blue-300 dark:bg-blue-800 dark:text-blue-100 dark:hover:bg-blue-700 whitespace-nowrap"
+                              onClick={() => {
+                                const amount = Number(customWater)
+                                if (amount > 0) {
+                                  handleAddWaterAmount(amount)
+                                  setCustomWater('')
+                                }
+                              }}
+                            >
+                              Adicionar
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
                     </CardContent>
                   </Card>
+
+                  <ExtraMealDialog date={date} onSuccess={fetchData} patientId={activeUser?.id} />
                 </div>
-              </div>
+
+                <div className="space-y-3 pt-4 border-t">
+                  <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
+                    Consumidos Hoje
+                  </h3>
+                  {!progress?.logs || progress.logs.length === 0 ? (
+                    <p className="text-sm text-muted-foreground text-center py-6">
+                      Nenhum alimento registrado.
+                    </p>
+                  ) : (
+                    progress.logs.map((l: any) => (
+                      <div
+                        key={l.id}
+                        className="flex items-center justify-between bg-card border p-3 rounded-lg shadow-sm"
+                      >
+                        <div>
+                          <p className="font-medium text-sm">{l.food_name}</p>
+                          <p className="text-xs text-muted-foreground mt-0.5">
+                            {l.calories} kcal • {l.protein}g P • {l.carbs}g C • {l.fat}g G
+                          </p>
+                        </div>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => handleDeleteLog(l.id)}
+                          className="text-muted-foreground hover:bg-destructive/10 hover:text-destructive h-8 w-8"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    ))
+                  )}
+                </div>
+              </>
             )}
-
-            <Card className="shadow-sm border-border/50">
-              <CardContent className="p-6">
-                <div className="flex flex-col md:flex-row items-center justify-between gap-8">
-                  <div className="relative w-36 h-36 flex items-center justify-center shrink-0">
-                    <svg className="w-full h-full transform -rotate-90">
-                      <circle
-                        cx="72"
-                        cy="72"
-                        r={radius}
-                        stroke="currentColor"
-                        strokeWidth="12"
-                        fill="transparent"
-                        className="text-muted/20"
-                      />
-                      <circle
-                        cx="72"
-                        cy="72"
-                        r={radius}
-                        stroke="currentColor"
-                        strokeWidth="12"
-                        fill="transparent"
-                        strokeDasharray={circumference}
-                        strokeDashoffset={strokeDashoffset}
-                        strokeLinecap="round"
-                        className={cn(
-                          'transition-all duration-1000 ease-out',
-                          isExceeded ? 'text-red-500' : 'text-primary',
-                        )}
-                      />
-                    </svg>
-                    <div
-                      className={cn(
-                        'absolute flex flex-col items-center justify-center text-center',
-                        isExceeded ? 'text-red-500' : '',
-                      )}
-                    >
-                      <Flame
-                        className={cn(
-                          'h-5 w-5 mb-1 opacity-80',
-                          isExceeded ? 'text-red-500' : 'text-primary',
-                        )}
-                      />
-                      <span className="text-xl font-bold leading-none">
-                        {isExceeded ? 'Excedeu' : 'Restam'}
-                      </span>
-                      <span className="text-sm font-semibold tracking-wider text-muted-foreground mt-1">
-                        {displayValue} kcal
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="flex-1 w-full space-y-4">
-                    <div className="space-y-1.5">
-                      <div className="flex justify-between text-xs font-medium">
-                        <span className="text-muted-foreground flex items-center gap-1">
-                          <div className="w-2 h-2 rounded-full bg-blue-500" /> Proteínas
-                        </span>
-                        <span>
-                          {progress?.consumed?.protein || 0}g / {progress?.targets?.protein || 0}g
-                        </span>
-                      </div>
-                      <Progress
-                        value={
-                          ((progress?.consumed?.protein || 0) / (progress?.targets?.protein || 1)) *
-                          100
-                        }
-                        className="h-2 [&>div]:bg-blue-500 bg-blue-100 dark:bg-blue-950"
-                      />
-                    </div>
-
-                    <div className="space-y-1.5">
-                      <div className="flex justify-between text-xs font-medium">
-                        <span className="text-muted-foreground flex items-center gap-1">
-                          <div className="w-2 h-2 rounded-full bg-green-500" /> Carboidratos
-                        </span>
-                        <span>
-                          {progress?.consumed?.carbs || 0}g / {progress?.targets?.carbs || 0}g
-                        </span>
-                      </div>
-                      <Progress
-                        value={
-                          ((progress?.consumed?.carbs || 0) / (progress?.targets?.carbs || 1)) * 100
-                        }
-                        className="h-2 [&>div]:bg-green-500 bg-green-100 dark:bg-green-950"
-                      />
-                    </div>
-
-                    <div className="space-y-1.5">
-                      <div className="flex justify-between text-xs font-medium">
-                        <span className="text-muted-foreground flex items-center gap-1">
-                          <div className="w-2 h-2 rounded-full bg-amber-500" /> Gorduras
-                        </span>
-                        <span>
-                          {progress?.consumed?.fat || 0}g / {progress?.targets?.fat || 0}g
-                        </span>
-                      </div>
-                      <Progress
-                        value={
-                          ((progress?.consumed?.fat || 0) / (progress?.targets?.fat || 1)) * 100
-                        }
-                        className="h-2 [&>div]:bg-amber-500 bg-amber-100 dark:bg-amber-950"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <Card className="border-blue-100 bg-gradient-to-br from-blue-50 to-blue-100/50 dark:border-blue-900 dark:from-blue-950/40 dark:to-blue-900/20 shadow-sm">
-                <CardContent className="p-5 flex items-center justify-between">
-                  <div className="flex items-center gap-4">
-                    <div className="p-3 bg-blue-500 text-white rounded-full shadow-sm">
-                      <Droplets className="h-6 w-6" />
-                    </div>
-                    <div>
-                      <p className="text-sm font-medium text-blue-900 dark:text-blue-200">
-                        Hidratação
-                      </p>
-                      <p className="text-2xl font-bold text-blue-700 dark:text-blue-400">
-                        {progress?.consumed?.water || 0}{' '}
-                        <span className="text-sm font-normal">ml</span>
-                      </p>
-                    </div>
-                  </div>
-                  <Button
-                    onClick={handleAddWater}
-                    variant="outline"
-                    className="border-blue-200 text-blue-700 hover:bg-blue-200 dark:border-blue-800 dark:text-blue-300 dark:hover:bg-blue-900 bg-white/50 dark:bg-black/50 backdrop-blur-sm"
-                  >
-                    <Plus className="h-4 w-4 mr-1" /> 250ml
-                  </Button>
-                </CardContent>
-              </Card>
-
-              <ExtraMealDialog date={date} onSuccess={fetchData} patientId={activeUser?.id} />
-            </div>
-
-            <div className="space-y-3 pt-4 border-t">
-              <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
-                Consumidos Hoje
-              </h3>
-              {!progress?.logs || progress.logs.length === 0 ? (
-                <p className="text-sm text-muted-foreground text-center py-6">
-                  Nenhum alimento registrado.
-                </p>
-              ) : (
-                progress.logs.map((l: any) => (
-                  <div
-                    key={l.id}
-                    className="flex items-center justify-between bg-card border p-3 rounded-lg shadow-sm"
-                  >
-                    <div>
-                      <p className="font-medium text-sm">{l.food_name}</p>
-                      <p className="text-xs text-muted-foreground mt-0.5">
-                        {l.calories} kcal • {l.protein}g P • {l.carbs}g C • {l.fat}g G
-                      </p>
-                    </div>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => handleDeleteLog(l.id)}
-                      className="text-muted-foreground hover:bg-destructive/10 hover:text-destructive h-8 w-8"
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
-                  </div>
-                ))
-              )}
-            </div>
           </TabsContent>
 
           <TabsContent value="diet" className="space-y-4">

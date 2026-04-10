@@ -59,13 +59,18 @@ import {
   addWaterLog,
   getClientAssessments,
   getClientSupplements,
+  getTrackingByPeriod,
+  getTrackingForDay,
   type FullDietDetails,
   type MealDetails,
   type NutritionAssessment,
   type NutritionSupplement,
 } from '@/services/nutrition'
 import { cn } from '@/lib/utils'
+import { format } from 'date-fns'
 import { ExtraMealDialog } from '@/components/nutrition/ExtraMealDialog'
+import { DateRangeDashboard } from '@/components/nutrition/DateRangeDashboard'
+import { AlertTriangle, PieChart } from 'lucide-react'
 
 const weightChartConfig = {
   peso: { label: 'Peso', color: 'hsl(var(--primary))' },
@@ -91,6 +96,8 @@ export default function ClientNutrition() {
   const [supplements, setSupplements] = useState<NutritionSupplement[]>([])
   const [date, setDate] = useState(() => new Date().toISOString().split('T')[0])
   const [remindersEnabled, setRemindersEnabled] = useState(false)
+  const [periodTracking, setPeriodTracking] = useState<any[]>([])
+  const [dayTracking, setDayTracking] = useState<any>(null)
 
   const { toast } = useToast()
 
@@ -99,16 +106,19 @@ export default function ClientNutrition() {
 
     setIsLoading(true)
     try {
-      const [activeDietRes, progData, assessmentsRes, supplementsRes] = await Promise.all([
-        getClientActiveDiet(activeUser.id),
-        getDailyNutritionProgress(activeUser.id, date),
-        getClientAssessments(activeUser.id),
-        getClientSupplements(activeUser.id),
-      ])
+      const [activeDietRes, progData, assessmentsRes, supplementsRes, dayTrackRes] =
+        await Promise.all([
+          getClientActiveDiet(activeUser.id),
+          getDailyNutritionProgress(activeUser.id, date),
+          getClientAssessments(activeUser.id),
+          getClientSupplements(activeUser.id),
+          getTrackingForDay(activeUser.id, date),
+        ])
 
       setProgress(progData)
       setAssessments(assessmentsRes.data || [])
       setSupplements(supplementsRes.data || [])
+      setDayTracking(dayTrackRes)
 
       if (activeDietRes.data) {
         const { data: fullDiet } = await getFullDietDetails(activeDietRes.data.id)
@@ -258,6 +268,43 @@ export default function ClientNutrition() {
     fetchData()
   }
 
+  const fetchPeriodData = async (start: Date, end: Date) => {
+    if (!activeUser?.id) return
+    try {
+      const data = await getTrackingByPeriod(
+        activeUser.id,
+        format(start, 'yyyy-MM-dd'),
+        format(end, 'yyyy-MM-dd'),
+      )
+      setPeriodTracking(data)
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
+  const periodTotals = useMemo(() => {
+    if (!periodTracking || periodTracking.length === 0)
+      return { cal: 0, pro: 0, car: 0, fat: 0, days: 1 }
+    const sum = periodTracking.reduce(
+      (acc, curr) => {
+        acc.cal += curr.total_calories || 0
+        acc.pro += curr.total_protein || 0
+        acc.car += curr.total_carbs || 0
+        acc.fat += curr.total_fats || 0
+        return acc
+      },
+      { cal: 0, pro: 0, car: 0, fat: 0 },
+    )
+    const days = periodTracking.length
+    return {
+      cal: Math.round(sum.cal),
+      pro: Math.round(sum.pro),
+      car: Math.round(sum.car),
+      fat: Math.round(sum.fat),
+      days,
+    }
+  }, [periodTracking])
+
   const targetCals = progress?.targets?.calories || 2000
   const consumedCals = progress?.consumed?.calories || 0
   const diferenca = targetCals - consumedCals
@@ -296,9 +343,12 @@ export default function ClientNutrition() {
         </div>
 
         <Tabs defaultValue="dashboard" className="space-y-6">
-          <TabsList className="w-full grid grid-cols-3 h-auto p-1 bg-muted/60">
+          <TabsList className="w-full grid grid-cols-4 h-auto p-1 bg-muted/60">
             <TabsTrigger value="dashboard" className="py-2.5">
               Dashboard
+            </TabsTrigger>
+            <TabsTrigger value="analytics" className="py-2.5">
+              Histórico
             </TabsTrigger>
             <TabsTrigger value="diet" className="py-2.5">
               Minha Dieta
@@ -307,6 +357,74 @@ export default function ClientNutrition() {
               Suplementação
             </TabsTrigger>
           </TabsList>
+
+          <TabsContent value="analytics" className="space-y-6 animate-fade-in">
+            <DateRangeDashboard onRangeChange={fetchPeriodData} />
+
+            <h3 className="text-lg font-bold flex items-center gap-2 mt-6">
+              <PieChart className="h-5 w-5 text-primary" /> Consumo no Período Selecionado
+            </h3>
+
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <Card>
+                <CardContent className="p-4">
+                  <p className="text-sm font-medium text-muted-foreground">Calorias (Total)</p>
+                  <p className="text-2xl font-bold">
+                    {periodTotals.cal}{' '}
+                    <span className="text-sm font-normal text-muted-foreground">kcal</span>
+                  </p>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Média: {Math.round(periodTotals.cal / periodTotals.days)} kcal/dia
+                  </p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardContent className="p-4">
+                  <p className="text-sm font-medium text-muted-foreground">Proteínas</p>
+                  <p className="text-2xl font-bold">
+                    {periodTotals.pro}{' '}
+                    <span className="text-sm font-normal text-muted-foreground">g</span>
+                  </p>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Média: {Math.round(periodTotals.pro / periodTotals.days)} g/dia
+                  </p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardContent className="p-4">
+                  <p className="text-sm font-medium text-muted-foreground">Carboidratos</p>
+                  <p className="text-2xl font-bold">
+                    {periodTotals.car}{' '}
+                    <span className="text-sm font-normal text-muted-foreground">g</span>
+                  </p>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Média: {Math.round(periodTotals.car / periodTotals.days)} g/dia
+                  </p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardContent className="p-4">
+                  <p className="text-sm font-medium text-muted-foreground">Gorduras</p>
+                  <p className="text-2xl font-bold">
+                    {periodTotals.fat}{' '}
+                    <span className="text-sm font-normal text-muted-foreground">g</span>
+                  </p>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Média: {Math.round(periodTotals.fat / periodTotals.days)} g/dia
+                  </p>
+                </CardContent>
+              </Card>
+            </div>
+
+            {periodTracking.length === 0 && (
+              <Card className="border-dashed bg-muted/30">
+                <CardContent className="flex flex-col items-center justify-center py-12 text-center text-muted-foreground">
+                  <PieChart className="h-8 w-8 mb-4 opacity-50" />
+                  <p>Sem registos de consumo no período selecionado.</p>
+                </CardContent>
+              </Card>
+            )}
+          </TabsContent>
 
           <TabsContent value="dashboard" className="space-y-6">
             {isLoading ? (
@@ -692,7 +810,7 @@ export default function ClientNutrition() {
                 </CardContent>
               </Card>
 
-              <ExtraMealDialog date={date} onSuccess={fetchData} />
+              <ExtraMealDialog date={date} onSuccess={fetchData} patientId={activeUser?.id} />
             </div>
 
             <div className="space-y-3 pt-4 border-t">
@@ -804,6 +922,47 @@ export default function ClientNutrition() {
                     </Card>
                   )
                 })}
+
+                {dayTracking && dayTracking.extra_meals && dayTracking.extra_meals.length > 0 && (
+                  <div className="mt-8 border-t pt-6 border-dashed border-destructive/50">
+                    <div className="flex items-center gap-2 mb-4">
+                      <AlertTriangle className="h-5 w-5 text-destructive" />
+                      <h3 className="text-lg font-bold text-destructive">
+                        Consumo Extra (Fora do Plano)
+                      </h3>
+                    </div>
+                    {dayTracking.extra_meals.map((extra: any) => (
+                      <Card key={extra.id} className="mb-3 border-destructive/30 bg-destructive/5">
+                        <div className="p-4 flex justify-between items-center">
+                          <div>
+                            <p className="font-semibold">{extra.name}</p>
+                            <p className="text-sm text-muted-foreground">{extra.amount_grams}g</p>
+                          </div>
+                          <div className="flex items-center gap-3">
+                            {(extra.calories > 0 ||
+                              extra.protein > 0 ||
+                              extra.carbs > 0 ||
+                              extra.fat > 0) && (
+                              <p className="text-xs text-muted-foreground">
+                                {extra.calories > 0 && (
+                                  <span className="mr-1">{extra.calories} kcal</span>
+                                )}
+                                {extra.protein > 0 && (
+                                  <span className="mr-1">| {extra.protein}g P</span>
+                                )}
+                                {extra.carbs > 0 && (
+                                  <span className="mr-1">| {extra.carbs}g C</span>
+                                )}
+                                {extra.fat > 0 && <span>| {extra.fat}g G</span>}
+                              </p>
+                            )}
+                            <Badge variant="destructive">Extra</Badge>
+                          </div>
+                        </div>
+                      </Card>
+                    ))}
+                  </div>
+                )}
               </div>
             ) : (
               <Card className="border-dashed">

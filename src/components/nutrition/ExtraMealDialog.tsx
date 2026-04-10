@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import {
   Dialog,
   DialogContent,
@@ -10,110 +10,71 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
-import { ScrollArea } from '@/components/ui/scroll-area'
-import { Utensils, Trash2 } from 'lucide-react'
-import { searchFoodItems, addFoodLog } from '@/services/nutrition'
+import { Utensils } from 'lucide-react'
+import { addExtraMealToDay } from '@/services/nutrition'
 import { useToast } from '@/hooks/use-toast'
-import { supabase } from '@/lib/supabase/client'
+import { useAuth } from '@/contexts/AuthContext'
 
 interface ExtraMealDialogProps {
   date: string
   onSuccess: () => void
+  patientId?: string
 }
 
-export function ExtraMealDialog({ date, onSuccess }: ExtraMealDialogProps) {
+export function ExtraMealDialog({ date, onSuccess, patientId }: ExtraMealDialogProps) {
+  const { user, impersonatedUser } = useAuth()
+  const activeUser = impersonatedUser || user
+  const targetId = patientId || activeUser?.id
   const [isOpen, setIsOpen] = useState(false)
   const [mealName, setMealName] = useState('')
-  const [searchQuery, setSearchQuery] = useState('')
-  const [searchResults, setSearchResults] = useState<any[]>([])
-  const [selectedFoods, setSelectedFoods] = useState<{ food: any; quantity: number }[]>([])
+  const [amountGrams, setAmountGrams] = useState('')
+  const [calories, setCalories] = useState('')
+  const [protein, setProtein] = useState('')
+  const [carbs, setCarbs] = useState('')
+  const [fat, setFat] = useState('')
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const { toast } = useToast()
-
-  useEffect(() => {
-    const debounce = setTimeout(async () => {
-      if (searchQuery.length > 2) {
-        const { data } = await searchFoodItems(searchQuery)
-        setSearchResults(data || [])
-      } else {
-        setSearchResults([])
-      }
-    }, 300)
-    return () => clearTimeout(debounce)
-  }, [searchQuery])
 
   const handleOpenChange = (open: boolean) => {
     setIsOpen(open)
     if (!open) {
       setMealName('')
-      setSearchQuery('')
-      setSearchResults([])
-      setSelectedFoods([])
+      setAmountGrams('')
+      setCalories('')
+      setProtein('')
+      setCarbs('')
+      setFat('')
     }
   }
-
-  const handleSelectFood = (food: any) => {
-    setSelectedFoods([...selectedFoods, { food, quantity: 100 }])
-    setSearchQuery('')
-    setSearchResults([])
-  }
-
-  const handleQuantityChange = (index: number, quantity: number) => {
-    const newFoods = [...selectedFoods]
-    newFoods[index].quantity = quantity
-    setSelectedFoods(newFoods)
-  }
-
-  const handleRemoveFood = (index: number) => {
-    const newFoods = [...selectedFoods]
-    newFoods.splice(index, 1)
-    setSelectedFoods(newFoods)
-  }
-
-  const totals = selectedFoods.reduce(
-    (acc, item) => {
-      const qty = Number(item.quantity || 0)
-      const baseQty = Number(item.food.base_qty_g || 100)
-
-      return {
-        cal: acc.cal + (Number(item.food.energy_kcal || 0) / baseQty) * qty,
-        pro: acc.pro + (Number(item.food.protein_g || 0) / baseQty) * qty,
-        car: acc.car + (Number(item.food.carbs_g || 0) / baseQty) * qty,
-        fat: acc.fat + (Number(item.food.fats_g || 0) / baseQty) * qty,
-      }
-    },
-    { cal: 0, pro: 0, car: 0, fat: 0 },
-  )
 
   const submitExtraMeal = async () => {
-    if (!mealName) {
-      toast({ title: 'Preencha o nome da refeição', variant: 'destructive' })
+    if (!mealName || !amountGrams) {
+      toast({ title: 'Preencha o nome e a quantidade', variant: 'destructive' })
       return
     }
-    if (selectedFoods.length === 0) {
-      toast({ title: 'Adicione pelo menos um alimento', variant: 'destructive' })
-      return
+    if (!targetId) return
+
+    setIsSubmitting(true)
+    try {
+      await addExtraMealToDay(targetId, date, {
+        name: mealName,
+        amount_grams: Number(amountGrams),
+        calories: Number(calories) || 0,
+        protein: Number(protein) || 0,
+        carbs: Number(carbs) || 0,
+        fat: Number(fat) || 0,
+      })
+
+      toast({ title: 'Refeição extra registrada com sucesso!' })
+      setIsOpen(false)
+      onSuccess()
+    } catch (err) {
+      console.error(err)
+      toast({ title: 'Erro ao registar refeição extra', variant: 'destructive' })
+    } finally {
+      setIsSubmitting(false)
     }
-
-    const {
-      data: { user },
-    } = await supabase.auth.getUser()
-    if (!user) return
-
-    await addFoodLog(user.id, date, {
-      food_name: mealName,
-      calories: Math.round(totals.cal),
-      protein: Math.round(totals.pro),
-      carbs: Math.round(totals.car),
-      fat: Math.round(totals.fat),
-    })
-
-    toast({ title: 'Refeição extra registrada com sucesso!' })
-    setIsOpen(false)
-    setMealName('')
-    setSelectedFoods([])
-    setSearchQuery('')
-    onSuccess()
   }
 
   return (
@@ -128,120 +89,89 @@ export function ExtraMealDialog({ date, onSuccess }: ExtraMealDialogProps) {
           </CardContent>
         </Card>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[500px]">
+      <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Registrar Refeição Extra</DialogTitle>
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <div className="grid gap-2">
-            <Label htmlFor="mealName">Nome da Refeição</Label>
+            <Label htmlFor="mealName">Nome da Refeição/Alimento</Label>
             <Input
               id="mealName"
-              placeholder="Ex: Lanche da Tarde"
+              placeholder="Ex: Pedaço de Bolo"
               value={mealName}
               onChange={(e) => setMealName(e.target.value)}
             />
           </div>
-
-          <div className="grid gap-2 relative">
-            <Label htmlFor="searchFood">Buscar Alimentos</Label>
+          <div className="grid gap-2">
+            <Label htmlFor="amountGrams">Quantidade (g)</Label>
             <Input
-              id="searchFood"
-              autoComplete="off"
-              placeholder="Pesquisar alimento..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              id="amountGrams"
+              type="number"
+              placeholder="Ex: 150"
+              value={amountGrams}
+              onChange={(e) => setAmountGrams(e.target.value)}
             />
-            {searchResults.length > 0 && (
-              <div className="absolute top-full left-0 right-0 z-50 mt-1 bg-background border rounded-md shadow-lg max-h-48 overflow-y-auto">
-                {searchResults.map((food) => (
-                  <button
-                    key={food.id}
-                    className="w-full text-left px-3 py-2 text-sm hover:bg-muted focus:bg-muted focus:outline-none transition-colors border-b last:border-b-0"
-                    onClick={() => handleSelectFood(food)}
-                  >
-                    <p className="font-medium text-foreground">{food.name}</p>
-                    <p className="text-xs text-muted-foreground mt-0.5">
-                      {food.energy_kcal} kcal / {food.base_qty_g || 100}g
-                    </p>
-                  </button>
-                ))}
-              </div>
-            )}
           </div>
 
-          {selectedFoods.length > 0 && (
-            <ScrollArea className="max-h-[250px] border rounded-md p-2">
-              <div className="space-y-2">
-                {selectedFoods.map((item, index) => {
-                  const qty = Number(item.quantity || 0)
-                  const baseQty = Number(item.food.base_qty_g || 100)
-                  const itemCals = Math.round((Number(item.food.energy_kcal || 0) / baseQty) * qty)
-
-                  return (
-                    <div
-                      key={index}
-                      className="flex items-center justify-between gap-2 p-2 bg-muted/50 rounded-md"
-                    >
-                      <div className="flex-1">
-                        <p className="text-sm font-medium leading-tight">{item.food.name}</p>
-                        <p className="text-xs text-muted-foreground">{itemCals} kcal</p>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <div className="flex items-center gap-1">
-                          <Input
-                            type="number"
-                            value={item.quantity === 0 ? '' : item.quantity}
-                            onChange={(e) =>
-                              handleQuantityChange(index, parseFloat(e.target.value) || 0)
-                            }
-                            className="w-16 h-8 px-2 text-right"
-                          />
-                          <span className="text-sm text-muted-foreground">g</span>
-                        </div>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="h-8 w-8 text-destructive hover:bg-destructive/10 hover:text-destructive"
-                          onClick={() => handleRemoveFood(index)}
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    </div>
-                  )
-                })}
+          <div className="pt-2 border-t mt-2">
+            <Label className="text-muted-foreground text-xs uppercase tracking-wider mb-3 block">
+              Calorias/Macros (Opcional)
+            </Label>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="grid gap-2">
+                <Label htmlFor="calories" className="text-xs">
+                  Calorias (kcal)
+                </Label>
+                <Input
+                  id="calories"
+                  type="number"
+                  value={calories}
+                  onChange={(e) => setCalories(e.target.value)}
+                />
               </div>
-            </ScrollArea>
-          )}
-
-          {selectedFoods.length > 0 && (
-            <div className="grid grid-cols-4 gap-2 pt-4 border-t text-center">
-              <div className="bg-muted p-2 rounded-md">
-                <p className="text-xs text-muted-foreground">Kcal</p>
-                <p className="font-bold">{Math.round(totals.cal)}</p>
+              <div className="grid gap-2">
+                <Label htmlFor="protein" className="text-xs">
+                  Proteína (g)
+                </Label>
+                <Input
+                  id="protein"
+                  type="number"
+                  value={protein}
+                  onChange={(e) => setProtein(e.target.value)}
+                />
               </div>
-              <div className="bg-muted p-2 rounded-md">
-                <p className="text-xs text-muted-foreground">Prot(g)</p>
-                <p className="font-bold">{Math.round(totals.pro)}</p>
+              <div className="grid gap-2">
+                <Label htmlFor="carbs" className="text-xs">
+                  Carboidratos (g)
+                </Label>
+                <Input
+                  id="carbs"
+                  type="number"
+                  value={carbs}
+                  onChange={(e) => setCarbs(e.target.value)}
+                />
               </div>
-              <div className="bg-muted p-2 rounded-md">
-                <p className="text-xs text-muted-foreground">Carb(g)</p>
-                <p className="font-bold">{Math.round(totals.car)}</p>
-              </div>
-              <div className="bg-muted p-2 rounded-md">
-                <p className="text-xs text-muted-foreground">Gord(g)</p>
-                <p className="font-bold">{Math.round(totals.fat)}</p>
+              <div className="grid gap-2">
+                <Label htmlFor="fat" className="text-xs">
+                  Gorduras (g)
+                </Label>
+                <Input
+                  id="fat"
+                  type="number"
+                  value={fat}
+                  onChange={(e) => setFat(e.target.value)}
+                />
               </div>
             </div>
-          )}
+          </div>
 
           <Button
             onClick={submitExtraMeal}
-            className="w-full mt-2"
-            disabled={selectedFoods.length === 0}
+            className="w-full mt-4"
+            disabled={!mealName || !amountGrams || isSubmitting}
           >
-            Gravar Refeição
+            {isSubmitting ? 'Salvando...' : 'Gravar Refeição'}
           </Button>
         </div>
       </DialogContent>

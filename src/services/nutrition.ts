@@ -343,6 +343,56 @@ export async function addWaterLog(clientId: string, date: string, amountMl: numb
   }
 }
 
+export const getTrackingByPeriod = async (clientId: string, startDate: string, endDate: string) => {
+  const { data, error } = await supabase
+    .from('food_water_tracking')
+    .select('*')
+    .eq('client_id', clientId)
+    .gte('date', startDate)
+    .lte('date', endDate)
+    .order('date', { ascending: true })
+  if (error) throw error
+  return data || []
+}
+
+export const addExtraMealToDay = async (clientId: string, date: string, extraMeal: any) => {
+  const { data: existing } = await supabase
+    .from('food_water_tracking')
+    .select('id, extra_meals')
+    .eq('client_id', clientId)
+    .eq('date', date)
+    .maybeSingle()
+
+  const currentExtras = existing?.extra_meals || []
+  const updatedExtras = [
+    ...(Array.isArray(currentExtras) ? currentExtras : []),
+    { ...extraMeal, id: crypto.randomUUID(), added_at: new Date().toISOString() },
+  ]
+
+  const { error } = await supabase.from('food_water_tracking').upsert(
+    {
+      id: existing?.id,
+      client_id: clientId,
+      date,
+      extra_meals: updatedExtras,
+    },
+    { onConflict: 'client_id, date' },
+  )
+
+  if (error) throw error
+}
+
+export const getTrackingForDay = async (clientId: string, date: string) => {
+  const { data, error } = await supabase
+    .from('food_water_tracking')
+    .select('*')
+    .eq('client_id', clientId)
+    .eq('date', date)
+    .maybeSingle()
+  if (error && error.code !== 'PGRST116') throw error
+  return data
+}
+
 export async function getDailyNutritionProgress(clientId: string, date: string) {
   try {
     const { data: activeDiet } = await getClientActiveDiet(clientId)

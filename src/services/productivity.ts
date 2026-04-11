@@ -370,3 +370,39 @@ export const deleteTask = async (taskId: string) => {
   const { error } = await supabase.from('tasks').delete().eq('id', taskId)
   if (error) throw error
 }
+
+// --- GTD Habits ---
+export const getHabits = async (clientId: string) => {
+  const { data, error } = await supabase
+    .from('habits')
+    .select('*, habit_logs(completed_date)')
+    .eq('client_id', clientId)
+    .order('created_at', { ascending: true })
+  if (error) throw error
+  return data || []
+}
+
+export const createHabit = async (clientId: string, title: string) => {
+  const { error } = await supabase.from('habits').insert([{ client_id: clientId, title }])
+  if (error) throw error
+}
+
+export const toggleHabitLog = async (habitId: string, date: string, isCompleted: boolean) => {
+  if (isCompleted) {
+    const { error } = await supabase
+      .from('habit_logs')
+      .insert([{ habit_id: habitId, completed_date: date }])
+    if (error && error.code !== '23505') throw error // Ignora erro de duplicidade
+  } else {
+    const { error } = await supabase
+      .from('habit_logs')
+      .delete()
+      .match({ habit_id: habitId, completed_date: date })
+    if (error) throw error
+  }
+}
+
+export const deleteHabit = async (habitId: string) => {
+  const { error } = await supabase.from('habits').delete().eq('id', habitId)
+  if (error) throw error
+}

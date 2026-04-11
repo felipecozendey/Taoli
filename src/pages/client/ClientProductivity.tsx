@@ -7,17 +7,68 @@ import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { Badge } from '@/components/ui/badge'
 import { useToast } from '@/hooks/use-toast'
-import { Inbox, Sun, Trash2, ChevronDown, CheckCircle2 } from 'lucide-react'
-import { getTasks, createTask, updateTask, deleteTask } from '@/services/productivity'
+import { Inbox, Sun, Trash2, ChevronDown, CheckCircle2, Flame, Plus } from 'lucide-react'
+import {
+  getTasks,
+  createTask,
+  updateTask,
+  deleteTask,
+  getHabits,
+  createHabit,
+  toggleHabitLog,
+  deleteHabit,
+} from '@/services/productivity'
 import { supabase } from '@/lib/supabase/client'
 import { cn } from '@/lib/utils'
+
+const calculateStreak = (logs: any[]) => {
+  if (!logs || logs.length === 0) return 0
+  const dates = new Set(logs.map((l: any) => l.completed_date))
+
+  const today = new Date()
+  const offset = today.getTimezoneOffset() * 60000
+  const localDate = new Date(today.getTime() - offset)
+  const todayStr = localDate.toISOString().split('T')[0]
+
+  const yesterday = new Date(localDate)
+  yesterday.setDate(yesterday.getDate() - 1)
+  const yesterdayStr = yesterday.toISOString().split('T')[0]
+
+  let streak = 0
+  let checkDate = new Date(localDate)
+
+  if (dates.has(todayStr)) {
+    // Start counting from today
+  } else if (dates.has(yesterdayStr)) {
+    // Start counting from yesterday
+    checkDate.setDate(checkDate.getDate() - 1)
+  } else {
+    return 0
+  }
+
+  while (true) {
+    const checkStr = checkDate.toISOString().split('T')[0]
+    if (dates.has(checkStr)) {
+      streak++
+      checkDate.setDate(checkDate.getDate() - 1)
+    } else {
+      break
+    }
+  }
+
+  return streak
+}
 
 export default function ClientProductivity() {
   const { toast } = useToast()
 
   const [tasks, setTasks] = useState<any[]>([])
+  const [habits, setHabits] = useState<any[]>([])
   const [newTaskTitle, setNewTaskTitle] = useState('')
+  const [newHabitTitle, setNewHabitTitle] = useState('')
   const [isCompletedOpen, setIsCompletedOpen] = useState(false)
   const [userId, setUserId] = useState<string | null>(null)
 
@@ -31,21 +82,23 @@ export default function ClientProductivity() {
     })
   }, [])
 
-  const loadTasks = async () => {
+  const loadData = async () => {
     if (!userId) return
     try {
-      const data = await getTasks(userId)
-      setTasks(data)
+      const [tasksData, habitsData] = await Promise.all([getTasks(userId), getHabits(userId)])
+      setTasks(tasksData)
+      setHabits(habitsData)
     } catch (error) {
       console.error(error)
     }
   }
 
   useEffect(() => {
-    loadTasks()
+    loadData()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId])
 
+  // --- Tasks Handlers ---
   const handleCreateTask = async (e?: React.FormEvent) => {
     if (e) e.preventDefault()
     if (!newTaskTitle.trim() || !userId) return
@@ -53,7 +106,7 @@ export default function ClientProductivity() {
     try {
       await createTask(userId, newTaskTitle, null)
       setNewTaskTitle('')
-      loadTasks()
+      loadData()
       toast({ title: 'Tarefa capturada na Caixa de Entrada!' })
     } catch (error) {
       toast({ title: 'Erro ao criar tarefa', variant: 'destructive' })
@@ -63,7 +116,7 @@ export default function ClientProductivity() {
   const handleMoveToToday = async (taskId: string) => {
     try {
       await updateTask(taskId, { target_date: today })
-      loadTasks()
+      loadData()
     } catch (error) {
       toast({ title: 'Erro ao mover tarefa', variant: 'destructive' })
     }
@@ -72,7 +125,7 @@ export default function ClientProductivity() {
   const handleCompleteTask = async (taskId: string) => {
     try {
       await updateTask(taskId, { status: 'completed' })
-      loadTasks()
+      loadData()
       toast({
         title: 'Tarefa Concluída! 🎉',
         description: 'Excelente trabalho, continue assim!',
@@ -85,9 +138,42 @@ export default function ClientProductivity() {
   const handleDeleteTask = async (taskId: string) => {
     try {
       await deleteTask(taskId)
-      loadTasks()
+      loadData()
     } catch (error) {
       toast({ title: 'Erro ao deletar tarefa', variant: 'destructive' })
+    }
+  }
+
+  // --- Habits Handlers ---
+  const handleCreateHabit = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault()
+    if (!newHabitTitle.trim() || !userId) return
+
+    try {
+      await createHabit(userId, newHabitTitle)
+      setNewHabitTitle('')
+      loadData()
+      toast({ title: 'Hábito criado com sucesso!' })
+    } catch (error) {
+      toast({ title: 'Erro ao criar hábito', variant: 'destructive' })
+    }
+  }
+
+  const handleToggleHabit = async (habitId: string, isCompleted: boolean) => {
+    try {
+      await toggleHabitLog(habitId, today, isCompleted)
+      loadData()
+    } catch (error) {
+      toast({ title: 'Erro ao atualizar hábito', variant: 'destructive' })
+    }
+  }
+
+  const handleDeleteHabit = async (habitId: string) => {
+    try {
+      await deleteHabit(habitId)
+      loadData()
+    } catch (error) {
+      toast({ title: 'Erro ao deletar hábito', variant: 'destructive' })
     }
   }
 
@@ -106,155 +192,242 @@ export default function ClientProductivity() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-6">
-          {/* Inbox Column */}
-          <Card className="flex flex-col h-[600px] shadow-sm">
-            <CardHeader className="pb-4 border-b">
-              <CardTitle className="flex items-center gap-2 text-lg">
-                <Inbox className="h-5 w-5 text-primary" />
-                Caixa de Entrada
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="p-4 flex-1 flex flex-col gap-4 overflow-hidden">
-              <form onSubmit={handleCreateTask} className="flex gap-2">
-                <Input
-                  placeholder="Nova tarefa..."
-                  value={newTaskTitle}
-                  onChange={(e) => setNewTaskTitle(e.target.value)}
-                  className="flex-1"
-                />
-                <Button type="submit" disabled={!newTaskTitle.trim()}>
-                  Adicionar
-                </Button>
-              </form>
+        <Tabs defaultValue="tasks" className="w-full">
+          <TabsList className="grid w-full max-w-md grid-cols-2 mb-6">
+            <TabsTrigger value="tasks">Tarefas</TabsTrigger>
+            <TabsTrigger value="habits">Hábitos</TabsTrigger>
+          </TabsList>
 
-              <ScrollArea className="flex-1 pr-4 -mr-4">
-                <div className="space-y-2 pb-4">
-                  {inboxTasks.length === 0 ? (
-                    <p className="text-sm text-muted-foreground text-center py-8">
-                      A caixa de entrada está vazia.
-                    </p>
-                  ) : (
-                    inboxTasks.map((task) => (
-                      <div
-                        key={task.id}
-                        className="flex items-center justify-between p-3 bg-secondary/30 rounded-lg group hover:bg-secondary/50 transition-colors"
-                      >
-                        <span className="text-sm font-medium">{task.title}</span>
-                        <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                          <Button
-                            size="sm"
-                            variant="secondary"
-                            title="Fazer Hoje"
-                            onClick={() => handleMoveToToday(task.id)}
-                          >
-                            <Sun className="h-4 w-4" />
-                          </Button>
-                          <Button
-                            size="sm"
-                            variant="ghost"
-                            className="text-destructive hover:bg-destructive/10"
-                            onClick={() => handleDeleteTask(task.id)}
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      </div>
-                    ))
-                  )}
-                </div>
-              </ScrollArea>
-            </CardContent>
-          </Card>
+          <TabsContent value="tasks" className="mt-0">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              {/* Inbox Column */}
+              <Card className="flex flex-col h-[600px] shadow-sm">
+                <CardHeader className="pb-4 border-b">
+                  <CardTitle className="flex items-center gap-2 text-lg">
+                    <Inbox className="h-5 w-5 text-primary" />
+                    Caixa de Entrada
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="p-4 flex-1 flex flex-col gap-4 overflow-hidden">
+                  <form onSubmit={handleCreateTask} className="flex gap-2">
+                    <Input
+                      placeholder="Nova tarefa..."
+                      value={newTaskTitle}
+                      onChange={(e) => setNewTaskTitle(e.target.value)}
+                      className="flex-1"
+                    />
+                    <Button type="submit" disabled={!newTaskTitle.trim()}>
+                      Adicionar
+                    </Button>
+                  </form>
 
-          {/* Today Column */}
-          <Card className="flex flex-col h-[600px] shadow-sm">
-            <CardHeader className="pb-4 border-b bg-primary/5">
-              <CardTitle className="flex items-center gap-2 text-lg text-primary">
-                <Sun className="h-5 w-5" />O Meu Dia
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="p-4 flex-1 flex flex-col gap-4 overflow-hidden">
-              <ScrollArea className="flex-1 pr-4 -mr-4">
-                <div className="space-y-4 pb-4">
-                  <div className="space-y-2">
-                    {todayTasks.length === 0 ? (
-                      <p className="text-sm text-muted-foreground text-center py-8 border border-dashed rounded-lg border-primary/20">
-                        Nenhuma tarefa planeada para hoje.
-                      </p>
-                    ) : (
-                      todayTasks.map((task) => (
-                        <div
-                          key={task.id}
-                          className="flex items-start gap-3 p-3 bg-background border rounded-lg shadow-sm group hover:border-primary/30 transition-colors"
-                        >
-                          <Checkbox
-                            id={`task-${task.id}`}
-                            className="mt-0.5 h-5 w-5 rounded-md data-[state=checked]:bg-green-500 data-[state=checked]:border-green-500"
-                            onCheckedChange={() => handleCompleteTask(task.id)}
-                          />
-                          <label
-                            htmlFor={`task-${task.id}`}
-                            className="text-sm font-medium cursor-pointer flex-1 pt-0.5 transition-all hover:text-primary"
-                          >
-                            {task.title}
-                          </label>
-                          <Button
-                            size="icon"
-                            variant="ghost"
-                            className="h-8 w-8 opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-opacity"
-                            onClick={() => handleDeleteTask(task.id)}
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      ))
-                    )}
-                  </div>
-
-                  {completedTasks.length > 0 && (
-                    <Collapsible
-                      open={isCompletedOpen}
-                      onOpenChange={setIsCompletedOpen}
-                      className="mt-6"
-                    >
-                      <CollapsibleTrigger className="flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors w-full p-2 rounded-lg hover:bg-secondary/50">
-                        <ChevronDown
-                          className={cn(
-                            'h-4 w-4 transition-transform',
-                            isCompletedOpen && 'rotate-180',
-                          )}
-                        />
-                        Concluídas Hoje ({completedTasks.length})
-                      </CollapsibleTrigger>
-                      <CollapsibleContent className="space-y-2 mt-2 pl-2">
-                        {completedTasks.map((task) => (
+                  <ScrollArea className="flex-1 pr-4 -mr-4">
+                    <div className="space-y-2 pb-4">
+                      {inboxTasks.length === 0 ? (
+                        <p className="text-sm text-muted-foreground text-center py-8">
+                          A caixa de entrada está vazia.
+                        </p>
+                      ) : (
+                        inboxTasks.map((task) => (
                           <div
                             key={task.id}
-                            className="flex items-center justify-between p-2 opacity-60 hover:opacity-100 transition-opacity group"
+                            className="flex items-center justify-between p-3 bg-secondary/30 rounded-lg group hover:bg-secondary/50 transition-colors"
                           >
-                            <div className="flex items-center gap-3">
-                              <CheckCircle2 className="h-5 w-5 text-green-500" />
-                              <span className="text-sm line-through">{task.title}</span>
+                            <span className="text-sm font-medium">{task.title}</span>
+                            <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                              <Button
+                                size="sm"
+                                variant="secondary"
+                                title="Fazer Hoje"
+                                onClick={() => handleMoveToToday(task.id)}
+                              >
+                                <Sun className="h-4 w-4" />
+                              </Button>
+                              <Button
+                                size="sm"
+                                variant="ghost"
+                                className="text-destructive hover:bg-destructive/10"
+                                onClick={() => handleDeleteTask(task.id)}
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
                             </div>
-                            <Button
-                              size="icon"
-                              variant="ghost"
-                              className="h-8 w-8 opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-destructive"
-                              onClick={() => handleDeleteTask(task.id)}
-                            >
-                              <Trash2 className="h-4 w-4" />
-                            </Button>
                           </div>
-                        ))}
-                      </CollapsibleContent>
-                    </Collapsible>
-                  )}
-                </div>
-              </ScrollArea>
-            </CardContent>
-          </Card>
-        </div>
+                        ))
+                      )}
+                    </div>
+                  </ScrollArea>
+                </CardContent>
+              </Card>
+
+              {/* Today Column */}
+              <Card className="flex flex-col h-[600px] shadow-sm">
+                <CardHeader className="pb-4 border-b bg-primary/5">
+                  <CardTitle className="flex items-center gap-2 text-lg text-primary">
+                    <Sun className="h-5 w-5" />O Meu Dia
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="p-4 flex-1 flex flex-col gap-4 overflow-hidden">
+                  <ScrollArea className="flex-1 pr-4 -mr-4">
+                    <div className="space-y-4 pb-4">
+                      <div className="space-y-2">
+                        {todayTasks.length === 0 ? (
+                          <p className="text-sm text-muted-foreground text-center py-8 border border-dashed rounded-lg border-primary/20">
+                            Nenhuma tarefa planeada para hoje.
+                          </p>
+                        ) : (
+                          todayTasks.map((task) => (
+                            <div
+                              key={task.id}
+                              className="flex items-start gap-3 p-3 bg-background border rounded-lg shadow-sm group hover:border-primary/30 transition-colors"
+                            >
+                              <Checkbox
+                                id={`task-${task.id}`}
+                                className="mt-0.5 h-5 w-5 rounded-md data-[state=checked]:bg-green-500 data-[state=checked]:border-green-500"
+                                onCheckedChange={() => handleCompleteTask(task.id)}
+                              />
+                              <label
+                                htmlFor={`task-${task.id}`}
+                                className="text-sm font-medium cursor-pointer flex-1 pt-0.5 transition-all hover:text-primary"
+                              >
+                                {task.title}
+                              </label>
+                              <Button
+                                size="icon"
+                                variant="ghost"
+                                className="h-8 w-8 opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-opacity"
+                                onClick={() => handleDeleteTask(task.id)}
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </div>
+                          ))
+                        )}
+                      </div>
+
+                      {completedTasks.length > 0 && (
+                        <Collapsible
+                          open={isCompletedOpen}
+                          onOpenChange={setIsCompletedOpen}
+                          className="mt-6"
+                        >
+                          <CollapsibleTrigger className="flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors w-full p-2 rounded-lg hover:bg-secondary/50">
+                            <ChevronDown
+                              className={cn(
+                                'h-4 w-4 transition-transform',
+                                isCompletedOpen && 'rotate-180',
+                              )}
+                            />
+                            Concluídas Hoje ({completedTasks.length})
+                          </CollapsibleTrigger>
+                          <CollapsibleContent className="space-y-2 mt-2 pl-2">
+                            {completedTasks.map((task) => (
+                              <div
+                                key={task.id}
+                                className="flex items-center justify-between p-2 opacity-60 hover:opacity-100 transition-opacity group"
+                              >
+                                <div className="flex items-center gap-3">
+                                  <CheckCircle2 className="h-5 w-5 text-green-500" />
+                                  <span className="text-sm line-through">{task.title}</span>
+                                </div>
+                                <Button
+                                  size="icon"
+                                  variant="ghost"
+                                  className="h-8 w-8 opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-destructive"
+                                  onClick={() => handleDeleteTask(task.id)}
+                                >
+                                  <Trash2 className="h-4 w-4" />
+                                </Button>
+                              </div>
+                            ))}
+                          </CollapsibleContent>
+                        </Collapsible>
+                      )}
+                    </div>
+                  </ScrollArea>
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="habits" className="mt-0 space-y-6">
+            <Card>
+              <CardContent className="p-4">
+                <form onSubmit={handleCreateHabit} className="flex gap-2">
+                  <Input
+                    placeholder="Adicionar Novo Hábito..."
+                    value={newHabitTitle}
+                    onChange={(e) => setNewHabitTitle(e.target.value)}
+                    className="flex-1"
+                  />
+                  <Button type="submit" disabled={!newHabitTitle.trim()}>
+                    <Plus className="w-4 h-4 mr-2" /> Adicionar
+                  </Button>
+                </form>
+              </CardContent>
+            </Card>
+
+            {habits.length === 0 ? (
+              <div className="text-center py-12 text-muted-foreground">
+                Nenhum hábito rastreado. Comece criando um novo hábito acima!
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {habits.map((habit) => {
+                  const streak = calculateStreak(habit.habit_logs)
+                  const isDoneToday = habit.habit_logs?.some((l: any) => l.completed_date === today)
+
+                  return (
+                    <Card
+                      key={habit.id}
+                      className="relative group overflow-hidden border-border/50 hover:border-border transition-colors"
+                    >
+                      <CardContent className="p-5 flex flex-col gap-4">
+                        <div className="flex justify-between items-start">
+                          <div>
+                            <h3 className="font-semibold text-lg">{habit.title}</h3>
+                            {habit.professional_id && (
+                              <Badge variant="secondary" className="mt-1">
+                                👨‍⚕️ Prescrito
+                              </Badge>
+                            )}
+                          </div>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-destructive transition-opacity h-8 w-8 -mt-2 -mr-2"
+                            onClick={() => handleDeleteHabit(habit.id)}
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                        </div>
+
+                        <div className="flex items-center justify-center py-4">
+                          <div className="flex items-center text-orange-500 font-bold text-4xl">
+                            <Flame className="w-8 h-8 mr-2 fill-orange-500" />
+                            {streak}{' '}
+                            <span className="text-xl ml-2 text-muted-foreground font-medium">
+                              Dias
+                            </span>
+                          </div>
+                        </div>
+
+                        <Button
+                          className="w-full font-medium"
+                          variant={isDoneToday ? 'default' : 'secondary'}
+                          onClick={() => handleToggleHabit(habit.id, !isDoneToday)}
+                          style={isDoneToday ? { backgroundColor: '#22c55e', color: 'white' } : {}}
+                        >
+                          {isDoneToday ? 'Feito Hoje! ✅' : 'Fazer Check-in'}
+                        </Button>
+                      </CardContent>
+                    </Card>
+                  )
+                })}
+              </div>
+            )}
+          </TabsContent>
+        </Tabs>
       </PageContent>
     </div>
   )

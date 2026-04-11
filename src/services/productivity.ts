@@ -387,6 +387,13 @@ export const createHabit = async (clientId: string, title: string) => {
   if (error) throw error
 }
 
+export const prescribeHabit = async (clientId: string, professionalId: string, title: string) => {
+  const { error } = await supabase
+    .from('habits')
+    .insert([{ client_id: clientId, professional_id: professionalId, title }])
+  if (error) throw error
+}
+
 export const toggleHabitLog = async (habitId: string, date: string, isCompleted: boolean) => {
   if (isCompleted) {
     const { error } = await supabase

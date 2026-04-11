@@ -35,9 +35,51 @@ import {
   MoreHorizontal,
   Apple,
   ChefHat,
+  Flame,
+  Target as TargetIcon,
 } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
 import { supabase } from '@/lib/supabase/client'
+import { useToast } from '@/hooks/use-toast'
+import { getHabits, prescribeHabit } from '@/services/productivity'
+
+const calculateStreak = (logs: any[]) => {
+  if (!logs || logs.length === 0) return 0
+  const dates = new Set(logs.map((l: any) => l.completed_date))
+
+  const today = new Date()
+  const offset = today.getTimezoneOffset() * 60000
+  const localDate = new Date(today.getTime() - offset)
+  const todayStr = localDate.toISOString().split('T')[0]
+
+  const yesterday = new Date(localDate)
+  yesterday.setDate(yesterday.getDate() - 1)
+  const yesterdayStr = yesterday.toISOString().split('T')[0]
+
+  let streak = 0
+  let checkDate = new Date(localDate)
+
+  if (dates.has(todayStr)) {
+    // Start counting from today
+  } else if (dates.has(yesterdayStr)) {
+    // Start counting from yesterday
+    checkDate.setDate(checkDate.getDate() - 1)
+  } else {
+    return 0
+  }
+
+  while (true) {
+    const checkStr = checkDate.toISOString().split('T')[0]
+    if (dates.has(checkStr)) {
+      streak++
+      checkDate.setDate(checkDate.getDate() - 1)
+    } else {
+      break
+    }
+  }
+
+  return streak
+}
 import { PatientNutritionMirror } from '@/components/professional/PatientNutritionMirror'
 import { NutritionAssessmentModal } from '@/components/professional/NutritionAssessmentModal'
 import { NutritionSupplementModal } from '@/components/professional/NutritionSupplementModal'
@@ -56,6 +98,7 @@ export default function ProfPatientRecord() {
   const { id: patientId } = useParams()
   const navigate = useNavigate()
   const { user } = useAuth()
+  const { toast } = useToast()
 
   const [patientData, setPatientData] = useState<any>(null)
   const [permissions, setPermissions] = useState({
@@ -96,6 +139,19 @@ export default function ProfPatientRecord() {
     if (data) setSupplements(data)
   }
 
+  const [patientHabits, setPatientHabits] = useState<any[]>([])
+  const [newPrescription, setNewPrescription] = useState('')
+
+  const fetchPatientHabits = async () => {
+    if (!patientId) return
+    try {
+      const data = await getHabits(patientId)
+      setPatientHabits(data)
+    } catch (e) {
+      console.error(e)
+    }
+  }
+
   const fetchAssessments = async () => {
     if (!patientId) return
     const { data } = await getPatientAssessments(patientId)
@@ -130,7 +186,22 @@ export default function ProfPatientRecord() {
     fetchPatient()
     fetchSupplements()
     fetchAssessments()
+    fetchPatientHabits()
   }, [patientId, user?.id])
+
+  const handlePrescribeHabit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!newPrescription.trim() || !patientId || !user?.id) return
+
+    try {
+      await prescribeHabit(patientId, user.id, newPrescription)
+      setNewPrescription('')
+      fetchPatientHabits()
+      toast({ title: 'Hábito prescrito com sucesso!' })
+    } catch (e) {
+      toast({ title: 'Erro ao prescrever hábito', variant: 'destructive' })
+    }
+  }
 
   const handleAddNote = () => {
     if (!newNote.trim()) return
@@ -225,6 +296,9 @@ export default function ProfPatientRecord() {
             </TabsTrigger>
             <TabsTrigger value="mente" className="py-2.5 px-4 rounded-md">
               Saúde Mental
+            </TabsTrigger>
+            <TabsTrigger value="produtividade" className="py-2.5 px-4 rounded-md">
+              Produtividade
             </TabsTrigger>
           </TabsList>
 
@@ -658,6 +732,94 @@ export default function ProfPatientRecord() {
                   </div>
                 </CardContent>
               </Card>
+            )}
+          </TabsContent>
+
+          <TabsContent value="produtividade" className="animate-fade-in-up mt-0">
+            {!checkPermission('productivity') ? (
+              <LockedContent />
+            ) : (
+              <div className="space-y-6">
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                  <div>
+                    <h3 className="text-lg font-semibold flex items-center gap-2">
+                      <TargetIcon className="h-5 w-5 text-primary" />
+                      Gestão de Rotina e Hábitos
+                    </h3>
+                    <p className="text-sm text-muted-foreground">
+                      Prescreva hábitos e acompanhe as ofensivas (streaks) do paciente.
+                    </p>
+                  </div>
+                </div>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Prescrever Novo Hábito</CardTitle>
+                    <CardDescription>
+                      Adicione um hábito que aparecerá com o selo "👨‍⚕️ Prescrito" para o paciente.
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <form onSubmit={handlePrescribeHabit} className="flex gap-2">
+                      <Input
+                        placeholder="Ex: Tomar Creatina às 10h"
+                        value={newPrescription}
+                        onChange={(e) => setNewPrescription(e.target.value)}
+                        className="flex-1"
+                      />
+                      <Button type="submit" disabled={!newPrescription.trim()}>
+                        Prescrever
+                      </Button>
+                    </form>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Hábitos do Paciente</CardTitle>
+                    <CardDescription>
+                      Acompanhe o engajamento e a consistência do paciente.
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    {patientHabits.length === 0 ? (
+                      <div className="text-center py-8 text-muted-foreground border rounded-lg border-dashed">
+                        Nenhum hábito rastreado.
+                      </div>
+                    ) : (
+                      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                        {patientHabits.map((habit) => {
+                          const streak = calculateStreak(habit.habit_logs)
+                          return (
+                            <Card
+                              key={habit.id}
+                              className="relative overflow-hidden border-border/50"
+                            >
+                              <CardContent className="p-4 flex flex-col gap-3">
+                                <div>
+                                  <h4 className="font-semibold text-base">{habit.title}</h4>
+                                  {habit.professional_id && (
+                                    <Badge variant="secondary" className="mt-1 text-xs">
+                                      👨‍⚕️ Prescrito
+                                    </Badge>
+                                  )}
+                                </div>
+                                <div className="flex items-center text-orange-500 font-bold text-2xl">
+                                  <Flame className="w-6 h-6 mr-2 fill-orange-500" />
+                                  {streak}{' '}
+                                  <span className="text-sm ml-1 text-muted-foreground font-medium">
+                                    Dias
+                                  </span>
+                                </div>
+                              </CardContent>
+                            </Card>
+                          )
+                        })}
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              </div>
             )}
           </TabsContent>
         </Tabs>

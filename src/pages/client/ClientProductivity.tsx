@@ -10,7 +10,19 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/component
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Badge } from '@/components/ui/badge'
 import { useToast } from '@/hooks/use-toast'
-import { Inbox, Sun, Trash2, ChevronDown, CheckCircle2, Flame, Plus } from 'lucide-react'
+import {
+  Inbox,
+  Sun,
+  Trash2,
+  ChevronDown,
+  CheckCircle2,
+  Flame,
+  Plus,
+  Play,
+  Square,
+  Pause,
+  Timer,
+} from 'lucide-react'
 import {
   getTasks,
   createTask,
@@ -72,7 +84,36 @@ export default function ClientProductivity() {
   const [isCompletedOpen, setIsCompletedOpen] = useState(false)
   const [userId, setUserId] = useState<string | null>(null)
 
+  const [activeFocusTask, setActiveFocusTask] = useState<any | null>(null)
+  const [timeLeft, setTimeLeft] = useState<number>(1500)
+  const [isTimerRunning, setIsTimerRunning] = useState<boolean>(false)
+
   const today = new Date().toISOString().split('T')[0]
+
+  useEffect(() => {
+    let interval: any = null
+    if (isTimerRunning && timeLeft > 0) {
+      interval = setInterval(() => {
+        setTimeLeft((prev) => prev - 1)
+      }, 1000)
+    } else if (timeLeft === 0 && isTimerRunning) {
+      setIsTimerRunning(false)
+      toast({ title: 'Pomodoro Concluído!', description: 'Sessão de foco finalizada com sucesso.' })
+      const audio = new Audio('/notification.mp3') // Optional sound
+      audio.play().catch(() => {})
+    }
+    return () => {
+      if (interval) clearInterval(interval)
+    }
+  }, [isTimerRunning, timeLeft, toast])
+
+  const formatTime = (seconds: number) => {
+    const m = Math.floor(seconds / 60)
+      .toString()
+      .padStart(2, '0')
+    const s = (seconds % 60).toString().padStart(2, '0')
+    return `${m}:${s}`
+  }
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => {
@@ -292,14 +333,29 @@ export default function ClientProductivity() {
                               >
                                 {task.title}
                               </label>
-                              <Button
-                                size="icon"
-                                variant="ghost"
-                                className="h-8 w-8 opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-opacity"
-                                onClick={() => handleDeleteTask(task.id)}
-                              >
-                                <Trash2 className="h-4 w-4" />
-                              </Button>
+                              <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                <Button
+                                  size="icon"
+                                  variant="outline"
+                                  title="Focar (Pomodoro)"
+                                  className="h-8 w-8 text-primary hover:bg-primary/10"
+                                  onClick={() => {
+                                    setActiveFocusTask(task)
+                                    setTimeLeft(1500)
+                                    setIsTimerRunning(true)
+                                  }}
+                                >
+                                  <Play className="h-4 w-4" />
+                                </Button>
+                                <Button
+                                  size="icon"
+                                  variant="ghost"
+                                  className="h-8 w-8 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+                                  onClick={() => handleDeleteTask(task.id)}
+                                >
+                                  <Trash2 className="h-4 w-4" />
+                                </Button>
+                              </div>
                             </div>
                           ))
                         )}
@@ -429,6 +485,66 @@ export default function ClientProductivity() {
           </TabsContent>
         </Tabs>
       </PageContent>
+
+      {/* Focus Mode Bottom Bar */}
+      {activeFocusTask && (
+        <div className="fixed bottom-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-xl border-t shadow-[0_-4px_20px_rgba(0,0,0,0.1)] p-4 flex flex-col md:flex-row items-center justify-between gap-4 animate-slide-up md:px-8">
+          <div className="flex items-center gap-3 w-full md:w-1/3">
+            <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+              <Timer className="h-5 w-5 text-primary" />
+            </div>
+            <div className="overflow-hidden">
+              <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider">
+                Em Foco
+              </p>
+              <p className="font-semibold truncate text-sm md:text-base">{activeFocusTask.title}</p>
+            </div>
+          </div>
+
+          <div className="flex-1 flex justify-center">
+            <span className="text-5xl md:text-6xl font-mono tabular-nums font-bold text-primary tracking-tight">
+              {formatTime(timeLeft)}
+            </span>
+          </div>
+
+          <div className="flex items-center justify-end gap-2 w-full md:w-1/3">
+            <Button
+              variant="outline"
+              size="icon"
+              className="h-10 w-10 rounded-full border-primary/20 hover:bg-primary/10"
+              onClick={() => setIsTimerRunning(!isTimerRunning)}
+            >
+              {isTimerRunning ? (
+                <Pause className="h-5 w-5 text-primary" />
+              ) : (
+                <Play className="h-5 w-5 text-primary" />
+              )}
+            </Button>
+            <Button
+              variant="default"
+              className="h-10 rounded-full px-6 shadow-md shadow-primary/20"
+              onClick={async () => {
+                await handleCompleteTask(activeFocusTask.id)
+                setActiveFocusTask(null)
+                setIsTimerRunning(false)
+              }}
+            >
+              <CheckCircle2 className="h-4 w-4 mr-2" /> Concluir
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-10 w-10 rounded-full hover:bg-destructive/10 hover:text-destructive"
+              onClick={() => {
+                setActiveFocusTask(null)
+                setIsTimerRunning(false)
+              }}
+            >
+              <Square className="h-5 w-5" />
+            </Button>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

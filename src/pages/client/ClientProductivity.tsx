@@ -34,23 +34,22 @@ import {
   deleteHabit,
 } from '@/services/productivity'
 import { supabase } from '@/lib/supabase/client'
-import { cn } from '@/lib/utils'
+import { cn, getLocalTodayDate } from '@/lib/utils'
 
 const calculateStreak = (logs: any[]) => {
   if (!logs || logs.length === 0) return 0
   const dates = new Set(logs.map((l: any) => l.completed_date))
 
-  const today = new Date()
-  const offset = today.getTimezoneOffset() * 60000
-  const localDate = new Date(today.getTime() - offset)
-  const todayStr = localDate.toISOString().split('T')[0]
+  const d = new Date()
+  d.setMinutes(d.getMinutes() - d.getTimezoneOffset())
+  const todayStr = d.toISOString().split('T')[0]
 
-  const yesterday = new Date(localDate)
+  const yesterday = new Date(d)
   yesterday.setDate(yesterday.getDate() - 1)
   const yesterdayStr = yesterday.toISOString().split('T')[0]
 
   let streak = 0
-  let checkDate = new Date(localDate)
+  let checkDate = new Date(d)
 
   if (dates.has(todayStr)) {
     // Start counting from today
@@ -88,7 +87,7 @@ export default function ClientProductivity() {
   const [timeLeft, setTimeLeft] = useState<number>(1500)
   const [isTimerRunning, setIsTimerRunning] = useState<boolean>(false)
 
-  const today = new Date().toISOString().split('T')[0]
+  const today = getLocalTodayDate()
 
   useEffect(() => {
     let interval: any = null

@@ -51,6 +51,8 @@ const ClientSettings = lazy(() => import('./pages/client/ClientSettings'))
 const ProfSettings = lazy(() => import('./pages/professional/ProfSettings'))
 const ProfClinic = lazy(() => import('./pages/professional/ProfClinic'))
 
+const PublicScheduling = lazy(() => import('./pages/public/PublicScheduling'))
+
 const LoadingFallback = () => (
   <div className="flex items-center justify-center min-h-[50vh]">
     <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
@@ -188,6 +190,16 @@ const App = () => (
                 </Route>
               </Route>
             </Route>
+
+            {/* Standalone Public Routes */}
+            <Route
+              path="/book/:profId"
+              element={
+                <Suspense fallback={<LoadingFallback />}>
+                  <PublicScheduling />
+                </Suspense>
+              }
+            />
 
             {/* Catch All */}
             <Route path="*" element={<NotFound />} />

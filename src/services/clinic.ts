@@ -71,3 +71,22 @@ export const createTransaction = async (transactionData: any) => {
   const { error } = await supabase.from('financial_transactions').insert([transactionData])
   if (error) throw error
 }
+
+// --- CONFIGURAÇÕES ---
+export const getProfessionalSettings = async (profId: string) => {
+  const { data, error } = await supabase
+    .from('professional_settings')
+    .select('*')
+    .eq('professional_id', profId)
+    .single()
+
+  if (error && error.code !== 'PGRST116') throw error
+  return data
+}
+
+export const upsertProfessionalSettings = async (profId: string, settings: any) => {
+  const { error } = await supabase
+    .from('professional_settings')
+    .upsert({ professional_id: profId, ...settings }, { onConflict: 'professional_id' })
+  if (error) throw error
+}

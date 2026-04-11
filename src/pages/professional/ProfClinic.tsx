@@ -10,6 +10,9 @@ import {
   TrendingDown,
   AlertCircle,
   MoreVertical,
+  Link,
+  QrCode,
+  Settings,
 } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
 import {
@@ -243,12 +246,48 @@ export default function ProfClinic() {
 
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">O Meu Consultório</h1>
-          <p className="text-muted-foreground mt-2">Faça a gestão da sua agenda e das finanças.</p>
+      <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold tracking-tight">O Meu Consultório</h1>
+            <p className="text-muted-foreground mt-2">
+              Faça a gestão da sua agenda e das finanças.
+            </p>
+          </div>
+          <Briefcase className="h-10 w-10 text-primary opacity-20 md:hidden ml-4" />
         </div>
-        <Briefcase className="h-10 w-10 text-primary opacity-20" />
+
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button variant="outline">
+                <Settings className="w-4 h-4 mr-2" /> Configurar Horários e PIX
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Configurações do Consultório</DialogTitle>
+              </DialogHeader>
+              <div className="py-12 text-center text-muted-foreground">
+                Funcionalidade em desenvolvimento (Em breve)
+              </div>
+            </DialogContent>
+          </Dialog>
+
+          <Button
+            onClick={() => {
+              if (user) {
+                navigator.clipboard.writeText(window.location.origin + '/book/' + user.id)
+                toast({
+                  title: 'Link Copiado!',
+                  description: 'Envie este link aos seus pacientes no Instagram/WhatsApp.',
+                })
+              }
+            }}
+          >
+            <Link className="w-4 h-4 mr-2" /> Copiar Link de Agendamento
+          </Button>
+        </div>
       </div>
 
       <Tabs defaultValue="calendar" className="w-full">
@@ -617,35 +656,56 @@ export default function ProfClinic() {
                       {overdueSubs.map((sub) => (
                         <div
                           key={sub.id}
-                          className="flex items-center justify-between bg-destructive/10 p-2 rounded-md"
+                          className="flex items-center justify-between bg-destructive/10 p-2 rounded-md gap-2 flex-wrap"
                         >
                           <span className="font-medium text-destructive-foreground">
                             {sub.client?.name || 'Cliente'}
                           </span>
-                          <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                className="h-6 w-6 p-0 text-destructive-foreground hover:bg-destructive/20"
-                              >
-                                <MoreVertical className="h-4 w-4" />
-                              </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end">
-                              <DropdownMenuItem
-                                onClick={() => handleUpdateSubscriptionStatus(sub.id, 'active')}
-                              >
-                                Marcar como Pago
-                              </DropdownMenuItem>
-                              <DropdownMenuItem
-                                onClick={() => handleUpdateSubscriptionStatus(sub.id, 'cancelled')}
-                                className="text-destructive"
-                              >
-                                Cancelar Contrato
-                              </DropdownMenuItem>
-                            </DropdownMenuContent>
-                          </DropdownMenu>
+                          <div className="flex items-center gap-2 ml-auto">
+                            <Button
+                              size="sm"
+                              variant="secondary"
+                              className="h-8 text-xs bg-background/50 hover:bg-background/80 text-destructive-foreground"
+                              onClick={() => {
+                                navigator.clipboard.writeText(
+                                  window.location.origin + '/pay/' + sub.id,
+                                )
+                                toast({
+                                  title: 'Link de cobrança copiado!',
+                                  description:
+                                    'Link de cobrança copiado para a área de transferência! Envie para o paciente.',
+                                })
+                              }}
+                            >
+                              <QrCode className="w-3 h-3 mr-2" /> Cobrar via PIX/Link
+                            </Button>
+                            <DropdownMenu>
+                              <DropdownMenuTrigger asChild>
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  className="h-6 w-6 p-0 text-destructive-foreground hover:bg-destructive/20"
+                                >
+                                  <MoreVertical className="h-4 w-4" />
+                                </Button>
+                              </DropdownMenuTrigger>
+                              <DropdownMenuContent align="end">
+                                <DropdownMenuItem
+                                  onClick={() => handleUpdateSubscriptionStatus(sub.id, 'active')}
+                                >
+                                  Marcar como Pago
+                                </DropdownMenuItem>
+                                <DropdownMenuItem
+                                  onClick={() =>
+                                    handleUpdateSubscriptionStatus(sub.id, 'cancelled')
+                                  }
+                                  className="text-destructive"
+                                >
+                                  Cancelar Contrato
+                                </DropdownMenuItem>
+                              </DropdownMenuContent>
+                            </DropdownMenu>
+                          </div>
                         </div>
                       ))}
                     </div>

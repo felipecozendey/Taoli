@@ -19,6 +19,36 @@ export const createAppointment = async (appointmentData: any) => {
   if (error) throw error
 }
 
+// --- PLANOS E ASSINATURAS ---
+export const getServicePlans = async (profId: string) => {
+  const { data, error } = await supabase
+    .from('service_plans')
+    .select('*')
+    .eq('professional_id', profId)
+  if (error) throw error
+  return data || []
+}
+
+export const createServicePlan = async (planData: any) => {
+  const { error } = await supabase.from('service_plans').insert([planData])
+  if (error) throw error
+}
+
+export const getSubscriptions = async (profId: string) => {
+  const { data, error } = await supabase
+    .from('client_subscriptions')
+    .select('*, plan:plan_id(*), client:client_id(raw_user_meta_data)')
+    .eq('professional_id', profId)
+    .order('next_billing_date', { ascending: true })
+  if (error) throw error
+  return data || []
+}
+
+export const updateSubscriptionStatus = async (subId: string, status: string) => {
+  const { error } = await supabase.from('client_subscriptions').update({ status }).eq('id', subId)
+  if (error) throw error
+}
+
 // --- FINANÇAS ---
 export const getTransactionsByMonth = async (
   profId: string,

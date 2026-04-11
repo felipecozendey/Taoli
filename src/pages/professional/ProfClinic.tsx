@@ -8,6 +8,8 @@ import {
   DollarSign,
   TrendingUp,
   TrendingDown,
+  AlertCircle,
+  MoreVertical,
 } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
 import {
@@ -15,6 +17,10 @@ import {
   createAppointment,
   getTransactionsByMonth,
   createTransaction,
+  getServicePlans,
+  createServicePlan,
+  getSubscriptions,
+  updateSubscriptionStatus,
 } from '@/services/clinic'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
@@ -45,8 +51,39 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
+import { Badge } from '@/components/ui/badge'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid } from 'recharts'
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart'
 import { useToast } from '@/hooks/use-toast'
 import { cn } from '@/lib/utils'
+
+const chartData = [
+  { name: 'Jan', income: 4000, expense: 1200 },
+  { name: 'Fev', income: 3000, expense: 1398 },
+  { name: 'Mar', income: 2000, expense: 9800 },
+  { name: 'Abr', income: 2780, expense: 3908 },
+  { name: 'Mai', income: 1890, expense: 4800 },
+  { name: 'Jun', income: 2390, expense: 3800 },
+  { name: 'Jul', income: 3490, expense: 4300 },
+]
+
+const chartConfig = {
+  income: {
+    label: 'Receitas',
+    color: 'hsl(var(--primary))',
+  },
+  expense: {
+    label: 'Despesas',
+    color: 'hsl(var(--destructive))',
+  },
+}
 
 export default function ProfClinic() {
   const { user } = useAuth()
@@ -55,8 +92,12 @@ export default function ProfClinic() {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date())
   const [appointments, setAppointments] = useState<any[]>([])
   const [transactions, setTransactions] = useState<any[]>([])
+  const [plans, setPlans] = useState<any[]>([])
+  const [subscriptions, setSubscriptions] = useState<any[]>([])
+
   const [isApptOpen, setIsApptOpen] = useState(false)
   const [isTxOpen, setIsTxOpen] = useState(false)
+  const [isPlanOpen, setIsPlanOpen] = useState(false)
 
   const loadAppointments = async () => {
     if (!user) return
@@ -91,12 +132,29 @@ export default function ProfClinic() {
     }
   }
 
+  const loadPlansAndSubs = async () => {
+    if (!user) return
+    try {
+      const plansData = await getServicePlans(user.id)
+      setPlans(plansData)
+      const subsData = await getSubscriptions(user.id)
+      setSubscriptions(subsData)
+    } catch (error: any) {
+      toast({
+        title: 'Erro ao carregar planos',
+        description: error.message,
+        variant: 'destructive',
+      })
+    }
+  }
+
   useEffect(() => {
     loadAppointments()
   }, [selectedDate, user])
 
   useEffect(() => {
     loadTransactions()
+    loadPlansAndSubs()
   }, [user])
 
   const { totalIncome, totalExpense, balance } = useMemo(() => {
@@ -150,6 +208,39 @@ export default function ProfClinic() {
     }
   }
 
+  const handleCreatePlan = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    if (!user) return
+    const formData = new FormData(e.currentTarget)
+    try {
+      await createServicePlan({
+        professional_id: user.id,
+        name: formData.get('name'),
+        price: Number(formData.get('price')),
+        billing_cycle: formData.get('billing_cycle'),
+        description: formData.get('description'),
+      })
+      toast({ title: 'Plano criado com sucesso!' })
+      setIsPlanOpen(false)
+      loadPlansAndSubs()
+    } catch (error: any) {
+      toast({ title: 'Erro', description: error.message, variant: 'destructive' })
+    }
+  }
+
+  const handleUpdateSubscriptionStatus = async (id: string, status: string) => {
+    try {
+      await updateSubscriptionStatus(id, status)
+      toast({ title: 'Status atualizado com sucesso!' })
+      loadPlansAndSubs()
+    } catch (error: any) {
+      toast({ title: 'Erro', description: error.message, variant: 'destructive' })
+    }
+  }
+
+  const overdueSubs = subscriptions.filter((s) => s.status === 'overdue')
+  const activeSubs = subscriptions.filter((s) => s.status !== 'overdue')
+
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-6">
       <div className="flex items-center justify-between">
@@ -161,9 +252,10 @@ export default function ProfClinic() {
       </div>
 
       <Tabs defaultValue="calendar" className="w-full">
-        <TabsList className="grid w-full grid-cols-2 max-w-md">
+        <TabsList className="grid w-full grid-cols-3 max-w-2xl">
           <TabsTrigger value="calendar">Agenda</TabsTrigger>
           <TabsTrigger value="finance">Financeiro</TabsTrigger>
+          <TabsTrigger value="plans">Planos e Contratos</TabsTrigger>
         </TabsList>
 
         <TabsContent value="calendar" className="mt-6">
@@ -292,6 +384,38 @@ export default function ProfClinic() {
             </Card>
           </div>
 
+          <Card className="mb-6 p-4">
+            <CardHeader className="p-0 pb-4">
+              <CardTitle className="text-lg">Fluxo de Caixa Mensal</CardTitle>
+            </CardHeader>
+            <CardContent className="p-0">
+              <ChartContainer config={chartConfig} className="h-[300px] w-full">
+                <BarChart data={chartData} margin={{ top: 20, right: 0, left: -20, bottom: 0 }}>
+                  <CartesianGrid
+                    strokeDasharray="3 3"
+                    vertical={false}
+                    stroke="hsl(var(--muted-foreground)/0.2)"
+                  />
+                  <XAxis
+                    dataKey="name"
+                    axisLine={false}
+                    tickLine={false}
+                    tick={{ fill: 'hsl(var(--muted-foreground))' }}
+                  />
+                  <YAxis
+                    axisLine={false}
+                    tickLine={false}
+                    tick={{ fill: 'hsl(var(--muted-foreground))' }}
+                    tickFormatter={(value) => `€${value}`}
+                  />
+                  <ChartTooltip content={<ChartTooltipContent />} />
+                  <Bar dataKey="income" fill="var(--color-income)" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="expense" fill="var(--color-expense)" radius={[4, 4, 0, 0]} />
+                </BarChart>
+              </ChartContainer>
+            </CardContent>
+          </Card>
+
           <div className="flex justify-between items-center">
             <h3 className="text-xl font-bold">Transações do Mês</h3>
             <Dialog open={isTxOpen} onOpenChange={setIsTxOpen}>
@@ -394,6 +518,194 @@ export default function ProfClinic() {
               </TableBody>
             </Table>
           </Card>
+        </TabsContent>
+
+        <TabsContent value="plans" className="mt-6 space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <h3 className="text-xl font-bold">Pacotes de Acompanhamento</h3>
+                <Dialog open={isPlanOpen} onOpenChange={setIsPlanOpen}>
+                  <DialogTrigger asChild>
+                    <Button size="sm">
+                      <Plus className="mr-2 h-4 w-4" /> Novo Plano
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Criar Novo Plano</DialogTitle>
+                    </DialogHeader>
+                    <form onSubmit={handleCreatePlan} className="space-y-4">
+                      <div className="space-y-2">
+                        <Label>Nome do Plano</Label>
+                        <Input name="name" required placeholder="Ex: Mensal Básico" />
+                      </div>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <Label>Preço (€)</Label>
+                          <Input
+                            name="price"
+                            type="number"
+                            step="0.01"
+                            required
+                            placeholder="0.00"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label>Ciclo de Cobrança</Label>
+                          <Select name="billing_cycle" required defaultValue="monthly">
+                            <SelectTrigger>
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="weekly">Semanal</SelectItem>
+                              <SelectItem value="monthly">Mensal</SelectItem>
+                              <SelectItem value="quarterly">Trimestral</SelectItem>
+                              <SelectItem value="yearly">Anual</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </div>
+                      <div className="space-y-2">
+                        <Label>Descrição</Label>
+                        <Input name="description" placeholder="Ex: Inclui 1 consulta e chat" />
+                      </div>
+                      <DialogFooter>
+                        <Button type="submit">Guardar</Button>
+                      </DialogFooter>
+                    </form>
+                  </DialogContent>
+                </Dialog>
+              </div>
+
+              <div className="space-y-4">
+                {plans.length === 0 ? (
+                  <p className="text-muted-foreground text-sm border rounded-lg p-8 text-center bg-card">
+                    Nenhum plano registado.
+                  </p>
+                ) : (
+                  plans.map((plan) => (
+                    <Card key={plan.id}>
+                      <CardContent className="p-4 flex items-center justify-between">
+                        <div>
+                          <h4 className="font-semibold">{plan.name}</h4>
+                          <p className="text-sm text-muted-foreground">{plan.description}</p>
+                        </div>
+                        <div className="text-right">
+                          <p className="font-bold text-lg">€ {Number(plan.price).toFixed(2)}</p>
+                          <Badge variant="secondary" className="mt-1 capitalize">
+                            {plan.billing_cycle === 'monthly' ? 'Mensal' : plan.billing_cycle}
+                          </Badge>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))
+                )}
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <h3 className="text-xl font-bold">Pacientes Ativos & Inadimplência</h3>
+
+              {overdueSubs.length > 0 && (
+                <Alert variant="destructive" className="mb-4">
+                  <AlertCircle className="h-4 w-4" />
+                  <AlertTitle>Atenção</AlertTitle>
+                  <AlertDescription>
+                    Existem {overdueSubs.length} pacientes com pagamentos em atraso!
+                    <div className="mt-2 space-y-2">
+                      {overdueSubs.map((sub) => (
+                        <div
+                          key={sub.id}
+                          className="flex items-center justify-between bg-destructive/10 p-2 rounded-md"
+                        >
+                          <span className="font-medium text-destructive-foreground">
+                            {sub.client?.name || 'Cliente'}
+                          </span>
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="h-6 w-6 p-0 text-destructive-foreground hover:bg-destructive/20"
+                              >
+                                <MoreVertical className="h-4 w-4" />
+                              </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                              <DropdownMenuItem
+                                onClick={() => handleUpdateSubscriptionStatus(sub.id, 'active')}
+                              >
+                                Marcar como Pago
+                              </DropdownMenuItem>
+                              <DropdownMenuItem
+                                onClick={() => handleUpdateSubscriptionStatus(sub.id, 'cancelled')}
+                                className="text-destructive"
+                              >
+                                Cancelar Contrato
+                              </DropdownMenuItem>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
+                        </div>
+                      ))}
+                    </div>
+                  </AlertDescription>
+                </Alert>
+              )}
+
+              <div className="space-y-4">
+                {activeSubs.length === 0 ? (
+                  <p className="text-muted-foreground text-sm border rounded-lg p-8 text-center bg-card">
+                    Nenhuma assinatura ativa.
+                  </p>
+                ) : (
+                  activeSubs.map((sub) => (
+                    <Card key={sub.id}>
+                      <CardContent className="p-4 flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center font-bold text-primary uppercase">
+                            {sub.client?.name?.charAt(0) || 'C'}
+                          </div>
+                          <div>
+                            <h4 className="font-semibold">{sub.client?.name || 'Cliente'}</h4>
+                            <p className="text-sm text-muted-foreground">{sub.plan?.name}</p>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-4">
+                          <div className="text-right">
+                            <p className="text-xs text-muted-foreground">Próxima Cobrança</p>
+                            <p className="text-sm font-medium">
+                              {format(new Date(sub.next_billing_date), 'dd/MM/yyyy')}
+                            </p>
+                          </div>
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <Button variant="ghost" size="icon">
+                                <MoreVertical className="h-4 w-4" />
+                              </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                              <DropdownMenuItem
+                                onClick={() => handleUpdateSubscriptionStatus(sub.id, 'overdue')}
+                              >
+                                Marcar como Atrasado
+                              </DropdownMenuItem>
+                              <DropdownMenuItem
+                                onClick={() => handleUpdateSubscriptionStatus(sub.id, 'cancelled')}
+                                className="text-destructive"
+                              >
+                                Cancelar Contrato
+                              </DropdownMenuItem>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))
+                )}
+              </div>
+            </div>
+          </div>
         </TabsContent>
       </Tabs>
     </div>

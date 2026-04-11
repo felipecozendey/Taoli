@@ -49,6 +49,7 @@ const ClientTeam = lazy(() => import('./pages/client/ClientTeam'))
 const ClientSettings = lazy(() => import('./pages/client/ClientSettings'))
 
 const ProfSettings = lazy(() => import('./pages/professional/ProfSettings'))
+const ProfClinic = lazy(() => import('./pages/professional/ProfClinic'))
 
 const LoadingFallback = () => (
   <div className="flex items-center justify-center min-h-[50vh]">
@@ -112,6 +113,14 @@ const App = () => (
                     element={
                       <Suspense fallback={<LoadingFallback />}>
                         <ProfSettings />
+                      </Suspense>
+                    }
+                  />
+                  <Route
+                    path="clinic"
+                    element={
+                      <Suspense fallback={<LoadingFallback />}>
+                        <ProfClinic />
                       </Suspense>
                     }
                   />

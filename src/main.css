@@ -8,35 +8,26 @@
 
 @layer base {
   :root {
-    --background: 210 40% 98%; /* Light grey background for clinical feel */
+    --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
-
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
-
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
-
-    --primary: 222.2 47.4% 11.2%; /* Slate 900 for Master */
+    --primary: 262 80% 50%; /* Roxo vibrante na marca light */
     --primary-foreground: 210 40% 98%;
-
     --secondary: 210 40% 96.1%;
     --secondary-foreground: 222.2 47.4% 11.2%;
-
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
-
     --accent: 210 40% 96.1%;
     --accent-foreground: 222.2 47.4% 11.2%;
-
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
-
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-
-    --radius: 0.75rem;
+    --ring: 262 80% 50%;
+    --radius: 0.5rem;
 
     --sidebar-background: 0 0% 100%;
     --sidebar-foreground: 222.2 84% 4.9%;
@@ -49,65 +40,73 @@
   }
 
   .dark {
-    --background: 240 10% 4%;
-    --foreground: 0 0% 98%;
-    --card: 240 10% 6%;
-    --card-foreground: 0 0% 98%;
-    --popover: 240 10% 6%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 0 0% 98%;
-    --primary-foreground: 240 5.9% 10%;
-    --secondary: 240 10% 12%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 240 10% 12%;
-    --muted-foreground: 240 5% 65%;
-    --accent: 240 10% 12%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 240 10% 12%;
-    --input: 240 10% 12%;
-    --ring: 240 5% 84%;
+    --background: 222 47% 5%; /* Fundo super escuro */
+    --foreground: 210 40% 98%; /* Texto super claro */
+    --card: 222 47% 7%; /* Card levemente descolado do fundo */
+    --card-foreground: 210 40% 98%;
+    --popover: 222 47% 7%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 210 40% 98%; /* Botões primários brancos para alto contraste */
+    --primary-foreground: 222 47% 5%; /* Texto escuro no botão branco */
+    --secondary: 217 33% 18%; /* Degrau alto para inputs e barras (18% lightness) */
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217 33% 18%; /* Degrau claro para destacar tabelas/abas */
+    --muted-foreground: 215 20% 70%; /* Cinza muito mais claro e legível */
+    --accent: 217 33% 18%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 70% 50%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217 33% 20%; /* Bordas muito visíveis */
+    --input: 217 33% 20%; /* Inputs perfeitamente visíveis */
+    --ring: 213 27% 84%;
 
-    --sidebar-background: 240 10% 6%;
-    --sidebar-foreground: 0 0% 98%;
-    --sidebar-primary: 0 0% 98%;
-    --sidebar-primary-foreground: 240 5.9% 10%;
-    --sidebar-accent: 240 10% 12%;
-    --sidebar-accent-foreground: 0 0% 98%;
-    --sidebar-border: 240 10% 12%;
-    --sidebar-ring: 240 5% 84%;
+    --sidebar-background: 222 47% 7%;
+    --sidebar-foreground: 210 40% 98%;
+    --sidebar-primary: 210 40% 98%;
+    --sidebar-primary-foreground: 222 47% 5%;
+    --sidebar-accent: 217 33% 18%;
+    --sidebar-accent-foreground: 210 40% 98%;
+    --sidebar-border: 217 33% 20%;
+    --sidebar-ring: 213 27% 84%;
   }
 
   .taoli {
-    --background: 270 50% 6%; /* Roxo super profundo */
-    --foreground: 0 0% 100%;
-    --card: 270 40% 10%;
-    --card-foreground: 0 0% 100%;
-    --popover: 270 40% 10%;
-    --popover-foreground: 0 0% 100%;
-    --primary: 270 70% 65%; /* Roxo vibrante (Marca) */
-    --primary-foreground: 0 0% 100%;
-    --secondary: 270 30% 16%;
-    --secondary-foreground: 0 0% 100%;
-    --muted: 270 30% 16%;
-    --muted-foreground: 270 20% 75%;
-    --accent: 270 30% 16%;
-    --accent-foreground: 0 0% 100%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 100%;
-    --border: 270 30% 16%;
-    --input: 270 30% 16%;
-    --ring: 270 70% 65%;
+    --background: 267 40% 5%; /* Roxo noturno profundíssimo */
+    --foreground: 260 20% 98%; /* Branco com toque de roxo */
+    --card: 267 40% 8%; /* Card destacado */
+    --card-foreground: 260 20% 98%;
+    --popover: 267 40% 8%;
+    --popover-foreground: 260 20% 98%;
+    --primary: 262 80% 65%; /* Roxo brilhante (Neon) */
+    --primary-foreground: 0 0% 100%; /* Branco absoluto */
+    --secondary: 267 30% 18%; /* Destaque forte para backgrounds secundários */
+    --secondary-foreground: 260 20% 98%;
+    --muted: 267 30% 18%;
+    --muted-foreground: 260 15% 75%; /* Cinza arroxeado claro (alta legibilidade) */
+    --accent: 267 30% 18%;
+    --accent-foreground: 260 20% 98%;
+    --destructive: 0 70% 50%;
+    --destructive-foreground: 260 20% 98%;
+    --border: 267 30% 22%; /* Bordas roxas claras visíveis */
+    --input: 267 30% 22%; /* Inputs perfeitamente desenhados */
+    --ring: 262 80% 65%;
 
-    --sidebar-background: 270 40% 10%;
-    --sidebar-foreground: 0 0% 100%;
-    --sidebar-primary: 270 70% 65%;
+    --sidebar-background: 267 40% 8%;
+    --sidebar-foreground: 260 20% 98%;
+    --sidebar-primary: 262 80% 65%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 270 30% 16%;
-    --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-border: 270 30% 16%;
-    --sidebar-ring: 270 70% 65%;
+    --sidebar-accent: 267 30% 18%;
+    --sidebar-accent-foreground: 260 20% 98%;
+    --sidebar-border: 267 30% 22%;
+    --sidebar-ring: 262 80% 65%;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
   }
 
   /* Themes */

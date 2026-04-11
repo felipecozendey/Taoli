@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { DashboardHeader } from '@/components/shared/DashboardHeader'
 import { PageContent } from '@/components/shared/PageContent'
@@ -187,7 +187,35 @@ export default function ProfPatientRecord() {
     fetchSupplements()
     fetchAssessments()
     fetchPatientHabits()
+
+    const channel = supabase
+      .channel('patient_record_changes')
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'habits', filter: `client_id=eq.${patientId}` },
+        () => fetchPatientHabits()
+      )
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'habit_logs' },
+        () => fetchPatientHabits()
+      )
+      .subscribe()
+
+    return () => {
+      supabase.removeChannel(channel)
+    }
   }, [patientId, user?.id])
+
+  const [visibleNotes, setVisibleNotes] = useState(5)
+  const [visibleAssessments, setVisibleAssessments] = useState(5)
+
+  const habitsWithStats = useMemo(() => {
+    return patientHabits.map(habit => ({
+      ...habit,
+      streak: calculateStreak(habit.habit_logs)
+    }))
+  }, [patientHabits])
 
   const handlePrescribeHabit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -480,7 +508,7 @@ export default function ProfPatientRecord() {
                   <h4 className="font-semibold text-sm text-muted-foreground mb-2">
                     Histórico de Notas
                   </h4>
-                  {notes.map((note) => (
+                  {notes.slice(0, visibleNotes).map((note) => (
                     <div
                       key={note.id}
                       className="p-4 rounded-lg border bg-card hover:bg-muted/10 transition-colors"
@@ -493,6 +521,11 @@ export default function ProfPatientRecord() {
                       <p className="text-sm leading-relaxed">{note.content}</p>
                     </div>
                   ))}
+                  {notes.length > visibleNotes && (
+                    <Button variant="outline" className="w-full mt-2" onClick={() => setVisibleNotes(prev => prev + 5)}>
+                      Carregar Mais Notas
+                    </Button>
+                  )}
                 </div>
               </CardContent>
             </Card>
@@ -575,7 +608,7 @@ export default function ProfPatientRecord() {
                           </TableRow>
                         </TableHeader>
                         <TableBody>
-                          {assessments.map((a) => (
+                          {assessments.slice(0, visibleAssessments).map((a) => (
                             <TableRow key={a.id}>
                               <TableCell className="font-medium">
                                 {new Intl.DateTimeFormat('pt-BR').format(new Date(a.date))}
@@ -615,6 +648,14 @@ export default function ProfPatientRecord() {
                           ))}
                         </TableBody>
                       </Table>
+                      {assessments.length > visibleAssessments && (
+                        <div className="mt-4 flex justify-center">
+                          <Button variant="outline" onClick={() => setVisibleAssessments(prev => prev + 5)}>
+                            Ver Mais Avaliações
+                          </Button>
+                        </div>
+                      )}
+                    </>
                     )}
                   </CardContent>
                 </Card>
@@ -788,8 +829,8 @@ export default function ProfPatientRecord() {
                       </div>
                     ) : (
                       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                        {patientHabits.map((habit) => {
-                          const streak = calculateStreak(habit.habit_logs)
+                        {habitsWithStats.map((habit) => {
+                          const streak = habit.streak
                           return (
                             <Card
                               key={habit.id}

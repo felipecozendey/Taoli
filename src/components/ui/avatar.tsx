@@ -22,7 +22,9 @@ const AvatarImage = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <AvatarPrimitive.Image
     ref={ref}
-    className={cn('aspect-square h-full w-full', className)}
+    loading="lazy"
+    decoding="async"
+    className={cn('aspect-square h-full w-full object-cover', className)}
     {...props}
   />
 ))

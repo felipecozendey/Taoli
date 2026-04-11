@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { DashboardHeader } from '@/components/shared/DashboardHeader'
 import { PageContent } from '@/components/shared/PageContent'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -135,6 +135,29 @@ export default function ClientProductivity() {
 
   useEffect(() => {
     loadData()
+
+    if (!userId) return
+
+    const channel = supabase
+      .channel('productivity_changes')
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'tasks', filter: `client_id=eq.${userId}` },
+        () => loadData(),
+      )
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'habits', filter: `client_id=eq.${userId}` },
+        () => loadData(),
+      )
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'habit_logs' }, () =>
+        loadData(),
+      )
+      .subscribe()
+
+    return () => {
+      supabase.removeChannel(channel)
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId])
 
@@ -217,9 +240,26 @@ export default function ClientProductivity() {
     }
   }
 
-  const inboxTasks = tasks.filter((t) => t.target_date === null && t.status === 'pending')
-  const todayTasks = tasks.filter((t) => t.target_date === today && t.status === 'pending')
-  const completedTasks = tasks.filter((t) => t.status === 'completed' && t.target_date === today)
+  const inboxTasks = useMemo(
+    () => tasks.filter((t) => t.target_date === null && t.status === 'pending'),
+    [tasks],
+  )
+  const todayTasks = useMemo(
+    () => tasks.filter((t) => t.target_date === today && t.status === 'pending'),
+    [tasks, today],
+  )
+  const completedTasks = useMemo(
+    () => tasks.filter((t) => t.status === 'completed' && t.target_date === today),
+    [tasks, today],
+  )
+
+  const habitsWithStats = useMemo(() => {
+    return habits.map((habit) => ({
+      ...habit,
+      streak: calculateStreak(habit.habit_logs),
+      isDoneToday: habit.habit_logs?.some((l: any) => l.completed_date === today),
+    }))
+  }, [habits, today])
 
   return (
     <div className="flex flex-col min-h-full pb-20">
@@ -428,9 +468,8 @@ export default function ClientProductivity() {
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {habits.map((habit) => {
-                  const streak = calculateStreak(habit.habit_logs)
-                  const isDoneToday = habit.habit_logs?.some((l: any) => l.completed_date === today)
+                {habitsWithStats.map((habit) => {
+                  const { streak, isDoneToday } = habit
 
                   return (
                     <Card

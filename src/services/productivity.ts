@@ -338,3 +338,35 @@ export const productivityService = {
     }
   },
 }
+
+// --- GTD Tasks ---
+export const getTasks = async (clientId: string) => {
+  const { data, error } = await supabase
+    .from('tasks')
+    .select('*')
+    .eq('client_id', clientId)
+    .order('created_at', { ascending: false })
+  if (error) throw error
+  return data || []
+}
+
+export const createTask = async (
+  clientId: string,
+  title: string,
+  targetDate: string | null = null,
+) => {
+  const { error } = await supabase
+    .from('tasks')
+    .insert([{ client_id: clientId, title, target_date: targetDate }])
+  if (error) throw error
+}
+
+export const updateTask = async (taskId: string, updates: any) => {
+  const { error } = await supabase.from('tasks').update(updates).eq('id', taskId)
+  if (error) throw error
+}
+
+export const deleteTask = async (taskId: string) => {
+  const { error } = await supabase.from('tasks').delete().eq('id', taskId)
+  if (error) throw error
+}

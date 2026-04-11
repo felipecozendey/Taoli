@@ -372,6 +372,39 @@ export default function ClientNutrition() {
                           </TabsList>
 
                           <TabsContent value="macros" className="space-y-4">
+                            <div className="space-y-1.5 mb-5 pb-5 border-b border-border/50">
+                              <div className="flex justify-between text-xs font-medium mb-1">
+                                <span className="text-muted-foreground flex items-center gap-1">
+                                  <Flame className="w-3 h-3 text-orange-500" /> Calorias (VETA)
+                                </span>
+                                <span>
+                                  {consumedCals} / {latestAssessment?.tdee || targetCals || 2000}{' '}
+                                  kcal
+                                </span>
+                              </div>
+                              <div className="relative h-2.5 w-full bg-secondary rounded-full overflow-hidden">
+                                <div
+                                  className={cn(
+                                    'h-full transition-all duration-500',
+                                    isExceeded ? 'bg-red-500' : 'bg-primary',
+                                  )}
+                                  style={{
+                                    width: `${Math.min((consumedCals / (latestAssessment?.tdee || targetCals || 2000)) * 100, 100)}%`,
+                                  }}
+                                />
+                                <div
+                                  className="absolute top-0 bottom-0 w-0.5 bg-foreground z-10 shadow-[0_0_2px_rgba(0,0,0,0.5)]"
+                                  style={{ left: '99%' }}
+                                  title="VETA"
+                                />
+                              </div>
+                              {isExceeded && (
+                                <p className="text-[10px] text-red-500 font-medium mt-1">
+                                  Meta diária ultrapassada.
+                                </p>
+                              )}
+                            </div>
+
                             <div className="space-y-1.5">
                               <div className="flex justify-between text-xs font-medium">
                                 <span className="text-muted-foreground flex items-center gap-1">
@@ -822,8 +855,16 @@ export default function ClientNutrition() {
                                 className="h-8 w-8 text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
                                 onClick={async () => {
                                   if (activeUser?.id) {
-                                    await deleteExtraMealFromDay(activeUser.id, date, extra.id)
-                                    fetchData()
+                                    try {
+                                      await deleteExtraMealFromDay(activeUser.id, date, extra.id)
+                                      toast({ title: 'Refeição extra removida!' })
+                                      fetchData()
+                                    } catch (e) {
+                                      toast({
+                                        title: 'Erro ao remover refeição',
+                                        variant: 'destructive',
+                                      })
+                                    }
                                   }
                                 }}
                               >
@@ -855,6 +896,8 @@ export default function ClientNutrition() {
                   onSuccess={fetchData}
                   patientId={activeUser?.id}
                   editMeal={mealToEdit}
+                  consumedToday={consumedCals}
+                  caloricGoal={latestAssessment?.tdee || targetCals || 2000}
                 />
               </div>
             ) : (

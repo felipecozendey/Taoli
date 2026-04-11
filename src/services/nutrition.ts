@@ -900,6 +900,27 @@ export const saveRecipe = async (professionalId: string, recipeData: any, ingred
   return recipe
 }
 
+export const getFavoriteFoods = async (clientId: string) => {
+  const { data, error } = await supabase.rpc('get_client_favorite_foods', { p_client_id: clientId })
+  if (error) throw error
+  return data || []
+}
+
+export const getCurrentCaloricGoal = async (clientId: string) => {
+  const { data, error } = await supabase
+    .from('nutrition_assessments')
+    .select('tdee')
+    .eq('client_id', clientId)
+    .order('created_at', { ascending: false })
+    .limit(1)
+    .maybeSingle()
+
+  if (error) {
+    console.error('Error fetching caloric goal:', error)
+  }
+  return data?.tdee || 2000
+}
+
 export const searchFoodAndRecipes = async (searchQuery: string, clientId: string) => {
   if (!searchQuery || searchQuery.length < 2) return []
 

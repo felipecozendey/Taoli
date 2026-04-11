@@ -4,8 +4,14 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { Search, Check, X, Flame, Droplet } from 'lucide-react'
-import { searchFoodAndRecipes, addExtraMealToDay, updateExtraMealInDay } from '@/services/nutrition'
+import { Search, Check, X, Flame, Droplet, AlertTriangle } from 'lucide-react'
+import {
+  searchFoodAndRecipes,
+  addExtraMealToDay,
+  updateExtraMealInDay,
+  getFavoriteFoods,
+} from '@/services/nutrition'
+import { Alert, AlertDescription } from '@/components/ui/alert'
 import { useToast } from '@/hooks/use-toast'
 import { useAuth } from '@/contexts/AuthContext'
 
@@ -16,6 +22,8 @@ interface ExtraMealDialogProps {
   onSuccess: () => void
   patientId?: string
   editMeal?: any
+  consumedToday?: number
+  caloricGoal?: number
 }
 
 export function ExtraMealDialog({
@@ -25,6 +33,8 @@ export function ExtraMealDialog({
   onSuccess,
   patientId,
   editMeal,
+  consumedToday = 0,
+  caloricGoal = 2000,
 }: ExtraMealDialogProps) {
   const { user, impersonatedUser } = useAuth()
   const activeUser = impersonatedUser || user
@@ -36,8 +46,17 @@ export function ExtraMealDialog({
   const [amountGrams, setAmountGrams] = useState<number | ''>(100)
   const [isSearching, setIsSearching] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [favorites, setFavorites] = useState<any[]>([])
 
   const { toast } = useToast()
+
+  useEffect(() => {
+    if (open && targetId) {
+      getFavoriteFoods(targetId)
+        .then((data) => setFavorites(data))
+        .catch(console.error)
+    }
+  }, [open, targetId])
 
   useEffect(() => {
     if (open) {
@@ -209,8 +228,42 @@ export function ExtraMealDialog({
                     Nenhum resultado.
                   </div>
                 ) : (
-                  <div className="flex h-full items-center justify-center text-sm text-muted-foreground text-center px-4">
+                  <div className="flex flex-col h-full items-center justify-center text-sm text-muted-foreground text-center px-4 py-4">
                     Digite 3 letras para pesquisar.
+                    {favorites.length > 0 && searchQuery.length === 0 && (
+                      <div className="mt-6 w-full text-left">
+                        <Label className="text-muted-foreground mb-3 block text-[10px] font-semibold uppercase tracking-wider">
+                          Utilizados Frequentemente
+                        </Label>
+                        <div className="flex flex-col gap-2">
+                          {favorites.map((fav) => (
+                            <Button
+                              key={fav.food_item_id}
+                              variant="secondary"
+                              size="sm"
+                              className="justify-start font-normal h-auto py-2 px-3"
+                              onClick={() => {
+                                setSelectedFood({
+                                  id: fav.food_item_id,
+                                  name: fav.name,
+                                  energy_kcal: fav.base_calories,
+                                  protein_g: fav.base_protein,
+                                  carbs_g: fav.base_carbs,
+                                  fats_g: fav.base_fats,
+                                  is_recipe: false,
+                                })
+                                setAmountGrams(100)
+                              }}
+                            >
+                              {fav.name}
+                              <span className="ml-auto text-xs text-muted-foreground">
+                                {Math.round(fav.base_calories || 0)} kcal
+                              </span>
+                            </Button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 )}
               </ScrollArea>
@@ -243,26 +296,44 @@ export function ExtraMealDialog({
                 />
               </div>
               {calculatedMacros && (
-                <div className="grid grid-cols-2 gap-2 mt-2">
-                  <div className="flex items-center gap-2 bg-orange-50 text-orange-700 dark:bg-orange-950/30 dark:text-orange-400 p-2 rounded-md">
-                    <Flame className="h-4 w-4" />
-                    <span className="font-semibold text-sm">{calculatedMacros.calories} kcal</span>
-                  </div>
-                  <div className="flex items-center gap-2 bg-red-50 text-red-700 dark:bg-red-950/30 dark:text-red-400 p-2 rounded-md">
-                    <div className="h-4 w-4 flex items-center justify-center font-bold text-[10px]">
-                      P
+                <div className="flex flex-col gap-3 mt-2">
+                  {(consumedToday || 0) + calculatedMacros.calories > (caloricGoal || 2000) && (
+                    <Alert
+                      variant="destructive"
+                      className="bg-destructive/10 border-destructive/20 text-destructive"
+                    >
+                      <AlertTriangle className="h-4 w-4" />
+                      <AlertDescription className="text-xs font-medium">
+                        ⚠️ Esta refeição fará com que ultrapasse a sua meta diária de {caloricGoal}{' '}
+                        kcal!
+                      </AlertDescription>
+                    </Alert>
+                  )}
+                  <div className="grid grid-cols-2 gap-2">
+                    <div className="flex items-center gap-2 bg-orange-50 text-orange-700 dark:bg-orange-950/30 dark:text-orange-400 p-2 rounded-md">
+                      <Flame className="h-4 w-4" />
+                      <span className="font-semibold text-sm">
+                        {calculatedMacros.calories} kcal
+                      </span>
                     </div>
-                    <span className="font-semibold text-sm">{calculatedMacros.protein}g Prot</span>
-                  </div>
-                  <div className="flex items-center gap-2 bg-blue-50 text-blue-700 dark:bg-blue-950/30 dark:text-blue-400 p-2 rounded-md">
-                    <Droplet className="h-4 w-4" />
-                    <span className="font-semibold text-sm">{calculatedMacros.carbs}g Carb</span>
-                  </div>
-                  <div className="flex items-center gap-2 bg-yellow-50 text-yellow-700 dark:bg-yellow-950/30 dark:text-yellow-400 p-2 rounded-md">
-                    <div className="h-4 w-4 flex items-center justify-center font-bold text-[10px]">
-                      G
+                    <div className="flex items-center gap-2 bg-red-50 text-red-700 dark:bg-red-950/30 dark:text-red-400 p-2 rounded-md">
+                      <div className="h-4 w-4 flex items-center justify-center font-bold text-[10px]">
+                        P
+                      </div>
+                      <span className="font-semibold text-sm">
+                        {calculatedMacros.protein}g Prot
+                      </span>
                     </div>
-                    <span className="font-semibold text-sm">{calculatedMacros.fats}g Gord</span>
+                    <div className="flex items-center gap-2 bg-blue-50 text-blue-700 dark:bg-blue-950/30 dark:text-blue-400 p-2 rounded-md">
+                      <Droplet className="h-4 w-4" />
+                      <span className="font-semibold text-sm">{calculatedMacros.carbs}g Carb</span>
+                    </div>
+                    <div className="flex items-center gap-2 bg-yellow-50 text-yellow-700 dark:bg-yellow-950/30 dark:text-yellow-400 p-2 rounded-md">
+                      <div className="h-4 w-4 flex items-center justify-center font-bold text-[10px]">
+                        G
+                      </div>
+                      <span className="font-semibold text-sm">{calculatedMacros.fats}g Gord</span>
+                    </div>
                   </div>
                 </div>
               )}

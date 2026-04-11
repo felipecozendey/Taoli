@@ -382,6 +382,42 @@ export const addExtraMealToDay = async (clientId: string, date: string, extraMea
   if (error) throw error
 }
 
+export const deleteExtraMealFromDay = async (clientId: string, date: string, mealId: string) => {
+  const { data: existing } = await supabase
+    .from('food_water_tracking')
+    .select('id, extra_meals')
+    .eq('client_id', clientId)
+    .eq('date', date)
+    .maybeSingle()
+  if (!existing) return
+  const updatedExtras = (Array.isArray(existing.extra_meals) ? existing.extra_meals : []).filter(
+    (m: any) => m.id !== mealId,
+  )
+  const { error } = await supabase
+    .from('food_water_tracking')
+    .update({ extra_meals: updatedExtras })
+    .eq('id', existing.id)
+  if (error) throw error
+}
+
+export const updateExtraMealInDay = async (clientId: string, date: string, updatedMeal: any) => {
+  const { data: existing } = await supabase
+    .from('food_water_tracking')
+    .select('id, extra_meals')
+    .eq('client_id', clientId)
+    .eq('date', date)
+    .maybeSingle()
+  if (!existing) return
+  const updatedExtras = (Array.isArray(existing.extra_meals) ? existing.extra_meals : []).map(
+    (m: any) => (m.id === updatedMeal.id ? updatedMeal : m),
+  )
+  const { error } = await supabase
+    .from('food_water_tracking')
+    .update({ extra_meals: updatedExtras })
+    .eq('id', existing.id)
+  if (error) throw error
+}
+
 export const getTrackingForDay = async (clientId: string, date: string) => {
   const { data, error } = await supabase
     .from('food_water_tracking')

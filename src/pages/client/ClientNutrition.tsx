@@ -31,8 +31,6 @@ import {
   Flame,
   Utensils,
   Check,
-  ChevronLeft,
-  ChevronRight,
   Trash2,
   Pill,
   BellRing,
@@ -42,6 +40,8 @@ import {
   Dna,
   Loader2,
   AlertTriangle,
+  Edit2,
+  Plus,
 } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
 import { useToast } from '@/hooks/use-toast'
@@ -56,6 +56,7 @@ import {
   getClientSupplements,
   getTrackingByPeriod,
   getTrackingForDay,
+  deleteExtraMealFromDay,
   type FullDietDetails,
   type MealDetails,
   type NutritionAssessment,
@@ -89,6 +90,9 @@ export default function ClientNutrition() {
   const [periodTracking, setPeriodTracking] = useState<any[]>([])
   const [dayTracking, setDayTracking] = useState<any>(null)
   const [customWater, setCustomWater] = useState('')
+
+  const [extraMealModalOpen, setExtraMealModalOpen] = useState(false)
+  const [mealToEdit, setMealToEdit] = useState<any>(null)
 
   const { toast } = useToast()
 
@@ -192,22 +196,16 @@ export default function ClientNutrition() {
     return () => clearInterval(interval)
   }, [remindersEnabled, supplements])
 
-  const changeDate = (days: number) => {
-    const d = new Date(date)
-    d.setDate(d.getDate() + days)
-    setDate(d.toISOString().split('T')[0])
-  }
-
   const handleAddWaterAmount = async (amount: number) => {
     if (!activeUser?.id || amount <= 0) return
     await addWaterLog(activeUser.id, date, amount)
-    toast({ title: `💧 ${amount}ml de água registrados!` })
+    toast({ title: `💧 ${amount}ml de água registados!` })
     fetchData()
   }
 
   const handleDeleteLog = async (id: string) => {
     await deleteFoodLog(id)
-    toast({ title: 'Registro removido', variant: 'destructive' })
+    toast({ title: 'Registo removido', variant: 'destructive' })
     fetchData()
   }
 
@@ -237,13 +235,14 @@ export default function ClientNutrition() {
       carbs: Math.round(car),
       fat: Math.round(fat),
     })
-    toast({ title: `✔️ Refeição "${m.name}" registrada com sucesso!` })
+    toast({ title: `✔️ Refeição "${m.name}" registada com sucesso!` })
     fetchData()
   }
 
   const fetchPeriodData = async (start: Date, end: Date) => {
     if (!activeUser?.id) return
     try {
+      setDate(format(end, 'yyyy-MM-dd'))
       const data = await getTrackingByPeriod(
         activeUser.id,
         format(start, 'yyyy-MM-dd'),
@@ -256,7 +255,27 @@ export default function ClientNutrition() {
   }
 
   const targetCals = progress?.targets?.calories || 2000
-  const consumedCals = progress?.consumed?.calories || 0
+  const baseConsumed = progress?.consumed || { calories: 0, protein: 0, carbs: 0, fat: 0, water: 0 }
+  const extraConsumed = (dayTracking?.extra_meals || []).reduce(
+    (acc: any, meal: any) => {
+      acc.calories += meal.calories || 0
+      acc.protein += meal.protein || 0
+      acc.carbs += meal.carbs || 0
+      acc.fat += meal.fats || meal.fat || 0
+      return acc
+    },
+    { calories: 0, protein: 0, carbs: 0, fat: 0 },
+  )
+
+  const totalConsumed = {
+    calories: baseConsumed.calories + extraConsumed.calories,
+    protein: baseConsumed.protein + extraConsumed.protein,
+    carbs: baseConsumed.carbs + extraConsumed.carbs,
+    fat: baseConsumed.fat + extraConsumed.fat,
+    water: baseConsumed.water,
+  }
+
+  const consumedCals = totalConsumed.calories || 0
   const diferenca = targetCals - consumedCals
   const isExceeded = diferenca < 0
   const displayValue = Math.abs(diferenca)
@@ -265,34 +284,11 @@ export default function ClientNutrition() {
   const circumference = 2 * Math.PI * radius
   const strokeDashoffset = isExceeded ? 0 : circumference - (calPercent / 100) * circumference
 
-  const displayDate = new Intl.DateTimeFormat('pt-BR', {
-    weekday: 'short',
-    day: '2-digit',
-    month: 'short',
-  })
-    .format(new Date(date + 'T12:00:00'))
-    .replace('.', '')
-
   return (
     <div className="flex flex-col min-h-full">
-      <DashboardHeader title="Minha Nutrição" />
+      <DashboardHeader title="A Minha Nutrição" />
       <PageContent className="max-w-3xl mx-auto w-full animate-fade-in-up space-y-6">
         <DateRangeDashboard onRangeChange={fetchPeriodData} />
-
-        <div className="flex items-center justify-between bg-card border rounded-lg p-2 px-4 shadow-sm">
-          <Button variant="ghost" size="icon" onClick={() => changeDate(-1)}>
-            <ChevronLeft className="h-5 w-5" />
-          </Button>
-          <span className="font-semibold capitalize text-base">{displayDate}</span>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => changeDate(1)}
-            disabled={date === new Date().toISOString().split('T')[0]}
-          >
-            <ChevronRight className="h-5 w-5" />
-          </Button>
-        </div>
 
         <Tabs defaultValue="dashboard" className="space-y-6">
           <TabsList className="w-full grid grid-cols-3 h-auto p-1 bg-muted/60">
@@ -300,7 +296,7 @@ export default function ClientNutrition() {
               Dashboard
             </TabsTrigger>
             <TabsTrigger value="diet" className="py-2.5">
-              Minha Dieta
+              A Minha Dieta
             </TabsTrigger>
             <TabsTrigger value="supplements" className="py-2.5">
               Suplementação
@@ -369,7 +365,7 @@ export default function ClientNutrition() {
                       </div>
 
                       <div className="flex-1 w-full">
-                        <Tabs defaultValue="macros" className="w-full">
+                        <Tabs defaultValue="macros" className="w-full mt-4">
                           <TabsList className="grid w-full grid-cols-2 mb-4">
                             <TabsTrigger value="macros">Macronutrientes</TabsTrigger>
                             <TabsTrigger value="micronutrients">Micronutrientes</TabsTrigger>
@@ -382,15 +378,12 @@ export default function ClientNutrition() {
                                   <div className="w-2 h-2 rounded-full bg-blue-500" /> Proteínas
                                 </span>
                                 <span>
-                                  {progress?.consumed?.protein || 0}g /{' '}
-                                  {progress?.targets?.protein || 0}g
+                                  {totalConsumed.protein}g / {progress?.targets?.protein || 0}g
                                 </span>
                               </div>
                               <Progress
                                 value={
-                                  ((progress?.consumed?.protein || 0) /
-                                    (progress?.targets?.protein || 1)) *
-                                  100
+                                  (totalConsumed.protein / (progress?.targets?.protein || 1)) * 100
                                 }
                                 className="h-2 [&>div]:bg-blue-500 bg-blue-100 dark:bg-blue-950"
                               />
@@ -402,15 +395,12 @@ export default function ClientNutrition() {
                                   <div className="w-2 h-2 rounded-full bg-green-500" /> Carboidratos
                                 </span>
                                 <span>
-                                  {progress?.consumed?.carbs || 0}g /{' '}
-                                  {progress?.targets?.carbs || 0}g
+                                  {totalConsumed.carbs}g / {progress?.targets?.carbs || 0}g
                                 </span>
                               </div>
                               <Progress
                                 value={
-                                  ((progress?.consumed?.carbs || 0) /
-                                    (progress?.targets?.carbs || 1)) *
-                                  100
+                                  (totalConsumed.carbs / (progress?.targets?.carbs || 1)) * 100
                                 }
                                 className="h-2 [&>div]:bg-green-500 bg-green-100 dark:bg-green-950"
                               />
@@ -422,14 +412,11 @@ export default function ClientNutrition() {
                                   <div className="w-2 h-2 rounded-full bg-amber-500" /> Gorduras
                                 </span>
                                 <span>
-                                  {progress?.consumed?.fat || 0}g / {progress?.targets?.fat || 0}g
+                                  {totalConsumed.fat}g / {progress?.targets?.fat || 0}g
                                 </span>
                               </div>
                               <Progress
-                                value={
-                                  ((progress?.consumed?.fat || 0) / (progress?.targets?.fat || 1)) *
-                                  100
-                                }
+                                value={(totalConsumed.fat / (progress?.targets?.fat || 1)) * 100}
                                 className="h-2 [&>div]:bg-amber-500 bg-amber-100 dark:bg-amber-950"
                               />
                             </div>
@@ -638,7 +625,7 @@ export default function ClientNutrition() {
                   </div>
                 )}
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 gap-4">
                   <Card className="border-blue-100 bg-gradient-to-br from-blue-50 to-blue-100/50 dark:border-blue-900 dark:from-blue-950/40 dark:to-blue-900/20 shadow-sm">
                     <CardContent className="p-5">
                       <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-4">
@@ -651,7 +638,7 @@ export default function ClientNutrition() {
                               Hidratação
                             </p>
                             <p className="text-2xl font-bold text-blue-700 dark:text-blue-400">
-                              {progress?.consumed?.water || 0}{' '}
+                              {totalConsumed.water || 0}{' '}
                               <span className="text-sm font-normal">ml</span>
                             </p>
                           </div>
@@ -700,41 +687,6 @@ export default function ClientNutrition() {
                       </div>
                     </CardContent>
                   </Card>
-
-                  <ExtraMealDialog date={date} onSuccess={fetchData} patientId={activeUser?.id} />
-                </div>
-
-                <div className="space-y-3 pt-4 border-t">
-                  <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
-                    Consumidos Hoje
-                  </h3>
-                  {!progress?.logs || progress.logs.length === 0 ? (
-                    <p className="text-sm text-muted-foreground text-center py-6">
-                      Nenhum alimento registrado.
-                    </p>
-                  ) : (
-                    progress.logs.map((l: any) => (
-                      <div
-                        key={l.id}
-                        className="flex items-center justify-between bg-card border p-3 rounded-lg shadow-sm"
-                      >
-                        <div>
-                          <p className="font-medium text-sm">{l.food_name}</p>
-                          <p className="text-xs text-muted-foreground mt-0.5">
-                            {l.calories} kcal • {l.protein}g P • {l.carbs}g C • {l.fat}g G
-                          </p>
-                        </div>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => handleDeleteLog(l.id)}
-                          className="text-muted-foreground hover:bg-destructive/10 hover:text-destructive h-8 w-8"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    ))
-                  )}
                 </div>
               </>
             )}
@@ -752,8 +704,7 @@ export default function ClientNutrition() {
                     <Utensils className="h-5 w-5 text-primary" /> {diet.name}
                   </h3>
                   <p className="text-sm text-muted-foreground">
-                    Marque as refeições que você já consumiu hoje para registrar os macros
-                    automaticamente.
+                    Marque as refeições que consumiu hoje para registar os macros automaticamente.
                   </p>
                 </div>
 
@@ -835,8 +786,9 @@ export default function ClientNutrition() {
                             {(extra.calories > 0 ||
                               extra.protein > 0 ||
                               extra.carbs > 0 ||
+                              extra.fats > 0 ||
                               extra.fat > 0) && (
-                              <p className="text-xs text-muted-foreground">
+                              <p className="text-xs text-muted-foreground hidden sm:block">
                                 {extra.calories > 0 && (
                                   <span className="mr-1">{extra.calories} kcal</span>
                                 )}
@@ -846,16 +798,64 @@ export default function ClientNutrition() {
                                 {extra.carbs > 0 && (
                                   <span className="mr-1">| {extra.carbs}g C</span>
                                 )}
-                                {extra.fat > 0 && <span>| {extra.fat}g G</span>}
+                                {(extra.fats > 0 || extra.fat > 0) && (
+                                  <span>| {extra.fats || extra.fat}g G</span>
+                                )}
                               </p>
                             )}
                             <Badge variant="destructive">Extra</Badge>
+                            <div className="flex items-center gap-1 ml-2">
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                className="h-8 w-8 text-muted-foreground hover:text-primary"
+                                onClick={() => {
+                                  setMealToEdit(extra)
+                                  setExtraMealModalOpen(true)
+                                }}
+                              >
+                                <Edit2 className="h-4 w-4" />
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                className="h-8 w-8 text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
+                                onClick={async () => {
+                                  if (activeUser?.id) {
+                                    await deleteExtraMealFromDay(activeUser.id, date, extra.id)
+                                    fetchData()
+                                  }
+                                }}
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </div>
                           </div>
                         </div>
                       </Card>
                     ))}
                   </div>
                 )}
+
+                <Button
+                  className="w-full mt-4"
+                  variant="outline"
+                  onClick={() => {
+                    setMealToEdit(null)
+                    setExtraMealModalOpen(true)
+                  }}
+                >
+                  <Plus className="mr-2 h-4 w-4" /> Adicionar Refeição Extra
+                </Button>
+
+                <ExtraMealDialog
+                  open={extraMealModalOpen}
+                  onOpenChange={setExtraMealModalOpen}
+                  date={date}
+                  onSuccess={fetchData}
+                  patientId={activeUser?.id}
+                  editMeal={mealToEdit}
+                />
               </div>
             ) : (
               <Card className="border-dashed">
@@ -865,7 +865,7 @@ export default function ClientNutrition() {
                   </div>
                   <p className="font-medium text-foreground mb-1">Nenhum plano ativo</p>
                   <p className="text-sm">
-                    Você não possui um plano alimentar prescrito por um profissional no momento.
+                    Não possui um plano alimentar prescrito por um profissional no momento.
                   </p>
                 </CardContent>
               </Card>
@@ -881,7 +881,7 @@ export default function ClientNutrition() {
                 <div>
                   <h4 className="font-medium">Lembretes de Suplementação</h4>
                   <p className="text-sm text-muted-foreground">
-                    Receba notificações no navegador/telemóvel para não se esquecer.
+                    Receba notificações no navegador para não se esquecer.
                   </p>
                 </div>
               </div>

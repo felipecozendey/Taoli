@@ -1,33 +1,35 @@
 import { useState, useEffect, useMemo } from 'react'
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog'
-import { Card, CardContent } from '@/components/ui/card'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { Utensils, Search, Check, X, Flame, Droplet } from 'lucide-react'
-import { searchFoodItems, addExtraMealToDay } from '@/services/nutrition'
+import { Search, Check, X, Flame, Droplet } from 'lucide-react'
+import { searchFoodItems, addExtraMealToDay, updateExtraMealInDay } from '@/services/nutrition'
 import { useToast } from '@/hooks/use-toast'
 import { useAuth } from '@/contexts/AuthContext'
 
 interface ExtraMealDialogProps {
+  open: boolean
+  onOpenChange: (open: boolean) => void
   date: string
   onSuccess: () => void
   patientId?: string
+  editMeal?: any
 }
 
-export function ExtraMealDialog({ date, onSuccess, patientId }: ExtraMealDialogProps) {
+export function ExtraMealDialog({
+  open,
+  onOpenChange,
+  date,
+  onSuccess,
+  patientId,
+  editMeal,
+}: ExtraMealDialogProps) {
   const { user, impersonatedUser } = useAuth()
   const activeUser = impersonatedUser || user
   const targetId = patientId || activeUser?.id
 
-  const [isOpen, setIsOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   const [searchResults, setSearchResults] = useState<any[]>([])
   const [selectedFood, setSelectedFood] = useState<any | null>(null)
@@ -37,15 +39,27 @@ export function ExtraMealDialog({ date, onSuccess, patientId }: ExtraMealDialogP
 
   const { toast } = useToast()
 
-  const handleOpenChange = (open: boolean) => {
-    setIsOpen(open)
-    if (!open) {
-      setSearchQuery('')
-      setSearchResults([])
-      setSelectedFood(null)
-      setAmountGrams(100)
+  useEffect(() => {
+    if (open) {
+      if (editMeal) {
+        const multiplier = editMeal.amount_grams > 0 ? editMeal.amount_grams / 100 : 1
+        setSelectedFood({
+          id: editMeal.food_item_id,
+          name: editMeal.name,
+          energy_kcal: editMeal.calories / multiplier,
+          protein_g: editMeal.protein / multiplier,
+          carbs_g: editMeal.carbs / multiplier,
+          fats_g: (editMeal.fats || editMeal.fat || 0) / multiplier,
+        })
+        setAmountGrams(editMeal.amount_grams)
+      } else {
+        setSearchQuery('')
+        setSearchResults([])
+        setSelectedFood(null)
+        setAmountGrams(100)
+      }
     }
-  }
+  }, [open, editMeal])
 
   useEffect(() => {
     const delayDebounceFn = setTimeout(async () => {
@@ -103,32 +117,34 @@ export function ExtraMealDialog({ date, onSuccess, patientId }: ExtraMealDialogP
         fats: calculatedMacros.fats,
       }
 
-      await addExtraMealToDay(targetId, date, extraMealData)
-      toast({ title: 'Refeição extra registada!' })
-      handleOpenChange(false)
+      if (editMeal) {
+        await updateExtraMealInDay(targetId, date, {
+          ...extraMealData,
+          id: editMeal.id,
+          added_at: editMeal.added_at,
+        })
+        toast({ title: 'Refeição extra atualizada!' })
+      } else {
+        await addExtraMealToDay(targetId, date, extraMealData)
+        toast({ title: 'Refeição extra registada!' })
+      }
+
+      onOpenChange(false)
       onSuccess()
     } catch (err) {
-      toast({ title: 'Erro ao registar refeição', variant: 'destructive' })
+      toast({ title: 'Erro ao guardar refeição', variant: 'destructive' })
     } finally {
       setIsSubmitting(false)
     }
   }
 
   return (
-    <Dialog open={isOpen} onOpenChange={handleOpenChange}>
-      <DialogTrigger asChild>
-        <Card className="border-dashed border-2 bg-transparent hover:bg-muted/50 transition-colors cursor-pointer shadow-sm">
-          <CardContent className="p-5 flex items-center justify-center gap-3 h-full">
-            <div className="p-2 bg-muted rounded-full">
-              <Utensils className="h-5 w-5 text-muted-foreground" />
-            </div>
-            <span className="font-medium text-muted-foreground">Refeição Extra</span>
-          </CardContent>
-        </Card>
-      </DialogTrigger>
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Registar Refeição Extra</DialogTitle>
+          <DialogTitle>
+            {editMeal ? 'Editar Refeição Extra' : 'Registar Refeição Extra'}
+          </DialogTitle>
         </DialogHeader>
         <div className="grid gap-4 py-4">
           {!selectedFood ? (
@@ -153,7 +169,7 @@ export function ExtraMealDialog({ date, onSuccess, patientId }: ExtraMealDialogP
                       <button
                         key={item.id}
                         onClick={() => setSelectedFood(item)}
-                        className="flex flex-col items-start p-2 text-left hover:bg-muted rounded-sm transition-colors"
+                        className="flex flex-col items-start p-2 text-left hover:bg-muted rounded-sm transition-colors group"
                       >
                         <span className="font-medium text-sm flex items-center gap-2">
                           <Check className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -229,7 +245,11 @@ export function ExtraMealDialog({ date, onSuccess, patientId }: ExtraMealDialogP
                 className="w-full mt-4"
                 disabled={!amountGrams || isSubmitting}
               >
-                {isSubmitting ? 'A salvar...' : 'Adicionar ao Diário'}
+                {isSubmitting
+                  ? 'A guardar...'
+                  : editMeal
+                    ? 'Guardar Alterações'
+                    : 'Adicionar ao Diário'}
               </Button>
             </div>
           )}

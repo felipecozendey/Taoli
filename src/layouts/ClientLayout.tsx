@@ -10,6 +10,7 @@ import {
   Brain,
   BookOpen,
   Users,
+  Settings,
 } from 'lucide-react'
 import {
   SidebarProvider,
@@ -37,6 +38,7 @@ export default function ClientLayout() {
     { title: 'A Minha Equipe', icon: Users, path: '/client/team' },
     { title: 'Meu Progresso', icon: TrendingUp, path: '/client/progress' },
     { title: 'Finanças', icon: Wallet, path: '/client/finances' },
+    { title: 'Configurações', icon: Settings, path: '/client/settings' },
   ]
 
   return (

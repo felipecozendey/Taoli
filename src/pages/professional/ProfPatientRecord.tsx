@@ -193,12 +193,10 @@ export default function ProfPatientRecord() {
       .on(
         'postgres_changes',
         { event: '*', schema: 'public', table: 'habits', filter: `client_id=eq.${patientId}` },
-        () => fetchPatientHabits()
+        () => fetchPatientHabits(),
       )
-      .on(
-        'postgres_changes',
-        { event: '*', schema: 'public', table: 'habit_logs' },
-        () => fetchPatientHabits()
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'habit_logs' }, () =>
+        fetchPatientHabits(),
       )
       .subscribe()
 
@@ -211,9 +209,9 @@ export default function ProfPatientRecord() {
   const [visibleAssessments, setVisibleAssessments] = useState(5)
 
   const habitsWithStats = useMemo(() => {
-    return patientHabits.map(habit => ({
+    return patientHabits.map((habit) => ({
       ...habit,
-      streak: calculateStreak(habit.habit_logs)
+      streak: calculateStreak(habit.habit_logs),
     }))
   }, [patientHabits])
 
@@ -522,7 +520,11 @@ export default function ProfPatientRecord() {
                     </div>
                   ))}
                   {notes.length > visibleNotes && (
-                    <Button variant="outline" className="w-full mt-2" onClick={() => setVisibleNotes(prev => prev + 5)}>
+                    <Button
+                      variant="outline"
+                      className="w-full mt-2"
+                      onClick={() => setVisibleNotes((prev) => prev + 5)}
+                    >
                       Carregar Mais Notas
                     </Button>
                   )}
@@ -596,66 +598,70 @@ export default function ProfPatientRecord() {
                         Nenhuma avaliação registada.
                       </p>
                     ) : (
-                      <Table>
-                        <TableHeader>
-                          <TableRow>
-                            <TableHead>Data</TableHead>
-                            <TableHead>Peso</TableHead>
-                            <TableHead>% Gordura</TableHead>
-                            <TableHead>TMB</TableHead>
-                            <TableHead>VETA</TableHead>
-                            <TableHead className="text-right">Ações</TableHead>
-                          </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                          {assessments.slice(0, visibleAssessments).map((a) => (
-                            <TableRow key={a.id}>
-                              <TableCell className="font-medium">
-                                {new Intl.DateTimeFormat('pt-BR').format(new Date(a.date))}
-                              </TableCell>
-                              <TableCell>{a.weight ? `${a.weight} kg` : '--'}</TableCell>
-                              <TableCell>
-                                {a.body_fat_percentage ? `${a.body_fat_percentage} %` : '--'}
-                              </TableCell>
-                              <TableCell>{a.bmr ? `${a.bmr} kcal` : '--'}</TableCell>
-                              <TableCell>{a.tdee ? `${a.tdee} kcal` : '--'}</TableCell>
-                              <TableCell className="text-right">
-                                <DropdownMenu>
-                                  <DropdownMenuTrigger asChild>
-                                    <Button variant="ghost" className="h-8 w-8 p-0">
-                                      <MoreHorizontal className="h-4 w-4" />
-                                    </Button>
-                                  </DropdownMenuTrigger>
-                                  <DropdownMenuContent align="end">
-                                    <DropdownMenuItem
-                                      onClick={() => {
-                                        setSelectedAssessment(a)
-                                        setIsAssessmentModalOpen(true)
-                                      }}
-                                    >
-                                      Editar
-                                    </DropdownMenuItem>
-                                    <DropdownMenuItem
-                                      className="text-destructive focus:bg-destructive/10 focus:text-destructive"
-                                      onClick={() => handleDeleteAssessment(a.id)}
-                                    >
-                                      Excluir
-                                    </DropdownMenuItem>
-                                  </DropdownMenuContent>
-                                </DropdownMenu>
-                              </TableCell>
+                      <>
+                        <Table>
+                          <TableHeader>
+                            <TableRow>
+                              <TableHead>Data</TableHead>
+                              <TableHead>Peso</TableHead>
+                              <TableHead>% Gordura</TableHead>
+                              <TableHead>TMB</TableHead>
+                              <TableHead>VETA</TableHead>
+                              <TableHead className="text-right">Ações</TableHead>
                             </TableRow>
-                          ))}
-                        </TableBody>
-                      </Table>
-                      {assessments.length > visibleAssessments && (
-                        <div className="mt-4 flex justify-center">
-                          <Button variant="outline" onClick={() => setVisibleAssessments(prev => prev + 5)}>
-                            Ver Mais Avaliações
-                          </Button>
-                        </div>
-                      )}
-                    </>
+                          </TableHeader>
+                          <TableBody>
+                            {assessments.slice(0, visibleAssessments).map((a) => (
+                              <TableRow key={a.id}>
+                                <TableCell className="font-medium">
+                                  {new Intl.DateTimeFormat('pt-BR').format(new Date(a.date))}
+                                </TableCell>
+                                <TableCell>{a.weight ? `${a.weight} kg` : '--'}</TableCell>
+                                <TableCell>
+                                  {a.body_fat_percentage ? `${a.body_fat_percentage} %` : '--'}
+                                </TableCell>
+                                <TableCell>{a.bmr ? `${a.bmr} kcal` : '--'}</TableCell>
+                                <TableCell>{a.tdee ? `${a.tdee} kcal` : '--'}</TableCell>
+                                <TableCell className="text-right">
+                                  <DropdownMenu>
+                                    <DropdownMenuTrigger asChild>
+                                      <Button variant="ghost" className="h-8 w-8 p-0">
+                                        <MoreHorizontal className="h-4 w-4" />
+                                      </Button>
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent align="end">
+                                      <DropdownMenuItem
+                                        onClick={() => {
+                                          setSelectedAssessment(a)
+                                          setIsAssessmentModalOpen(true)
+                                        }}
+                                      >
+                                        Editar
+                                      </DropdownMenuItem>
+                                      <DropdownMenuItem
+                                        className="text-destructive focus:bg-destructive/10 focus:text-destructive"
+                                        onClick={() => handleDeleteAssessment(a.id)}
+                                      >
+                                        Excluir
+                                      </DropdownMenuItem>
+                                    </DropdownMenuContent>
+                                  </DropdownMenu>
+                                </TableCell>
+                              </TableRow>
+                            ))}
+                          </TableBody>
+                        </Table>
+                        {assessments.length > visibleAssessments && (
+                          <div className="mt-4 flex justify-center">
+                            <Button
+                              variant="outline"
+                              onClick={() => setVisibleAssessments((prev) => prev + 5)}
+                            >
+                              Ver Mais Avaliações
+                            </Button>
+                          </div>
+                        )}
+                      </>
                     )}
                   </CardContent>
                 </Card>

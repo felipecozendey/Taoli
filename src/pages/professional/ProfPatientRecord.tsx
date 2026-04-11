@@ -8,6 +8,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Textarea } from '@/components/ui/textarea'
+import { Input } from '@/components/ui/input'
+import { Skeleton } from '@/components/ui/skeleton'
 import {
   Table,
   TableBody,
@@ -42,6 +44,21 @@ import { useAuth } from '@/contexts/AuthContext'
 import { supabase } from '@/lib/supabase/client'
 import { useToast } from '@/hooks/use-toast'
 import { getHabits, prescribeHabit } from '@/services/productivity'
+import { getPatientById } from '@/services/patients'
+import { PatientNutritionMirror } from '@/components/professional/PatientNutritionMirror'
+import { NutritionAssessmentModal } from '@/components/professional/NutritionAssessmentModal'
+import { NutritionSupplementModal } from '@/components/professional/NutritionSupplementModal'
+import { DietPrescriptionModal } from '@/components/professional/DietPrescriptionModal'
+import { RecipeBuilderModal } from '@/components/professional/RecipeBuilderModal'
+import {
+  getPatientSupplements,
+  deleteSupplement,
+  getPatientAssessments,
+  deleteAssessment,
+  getTrackingByPeriod,
+  type NutritionAssessment,
+  type NutritionSupplement,
+} from '@/services/nutrition'
 
 const calculateStreak = (logs: any[]) => {
   if (!logs || logs.length === 0) return 0
@@ -80,19 +97,6 @@ const calculateStreak = (logs: any[]) => {
 
   return streak
 }
-import { PatientNutritionMirror } from '@/components/professional/PatientNutritionMirror'
-import { NutritionAssessmentModal } from '@/components/professional/NutritionAssessmentModal'
-import { NutritionSupplementModal } from '@/components/professional/NutritionSupplementModal'
-import { DietPrescriptionModal } from '@/components/professional/DietPrescriptionModal'
-import { RecipeBuilderModal } from '@/components/professional/RecipeBuilderModal'
-import {
-  getPatientSupplements,
-  deleteSupplement,
-  getPatientAssessments,
-  deleteAssessment,
-  type NutritionAssessment,
-  type NutritionSupplement,
-} from '@/services/nutrition'
 
 export default function ProfPatientRecord() {
   const { id: patientId } = useParams()
@@ -100,7 +104,9 @@ export default function ProfPatientRecord() {
   const { user } = useAuth()
   const { toast } = useToast()
 
+  const [loading, setLoading] = useState(true)
   const [patientData, setPatientData] = useState<any>(null)
+  const [todayTracking, setTodayTracking] = useState<any>(null)
   const [permissions, setPermissions] = useState({
     can_view_nutrition: false,
     can_view_training: false,
@@ -123,24 +129,23 @@ export default function ProfPatientRecord() {
 
   const [isAssessmentModalOpen, setIsAssessmentModalOpen] = useState(false)
   const [selectedAssessment, setSelectedAssessment] = useState<NutritionAssessment | null>(null)
-
   const [isSupplementModalOpen, setIsSupplementModalOpen] = useState(false)
   const [selectedSupplement, setSelectedSupplement] = useState<NutritionSupplement | null>(null)
-
   const [isDietModalOpen, setIsDietModalOpen] = useState(false)
   const [isRecipeModalOpen, setIsRecipeModalOpen] = useState(false)
 
   const [supplements, setSupplements] = useState<NutritionSupplement[]>([])
   const [assessments, setAssessments] = useState<NutritionAssessment[]>([])
+  const [patientHabits, setPatientHabits] = useState<any[]>([])
+  const [newPrescription, setNewPrescription] = useState('')
+  const [visibleNotes, setVisibleNotes] = useState(5)
+  const [visibleAssessments, setVisibleAssessments] = useState(5)
 
   const fetchSupplements = async () => {
     if (!patientId) return
     const { data } = await getPatientSupplements(patientId)
     if (data) setSupplements(data)
   }
-
-  const [patientHabits, setPatientHabits] = useState<any[]>([])
-  const [newPrescription, setNewPrescription] = useState('')
 
   const fetchPatientHabits = async () => {
     if (!patientId) return
@@ -158,35 +163,59 @@ export default function ProfPatientRecord() {
     if (data) setAssessments(data)
   }
 
+  const fetchTodayTracking = async () => {
+    if (!patientId) return
+    const today = new Date().toISOString().split('T')[0]
+    try {
+      const data = await getTrackingByPeriod(patientId, today, today)
+      if (data && data.length > 0) {
+        setTodayTracking(data[0])
+      }
+    } catch (e) {
+      console.error(e)
+    }
+  }
+
   useEffect(() => {
     if (!patientId || !user?.id) return
-    const fetchPatient = async () => {
-      try {
-        const { data } = await supabase
-          .from('professional_client_links')
-          .select('*, client:profiles!professional_client_links_client_id_fkey(*)')
-          .eq('client_id', patientId)
-          .eq('professional_id', user.id)
-          .single()
 
-        if (data) {
-          setPatientData(Array.isArray(data.client) ? data.client[0] : data.client)
+    let isMounted = true
+
+    const fetchAllData = async () => {
+      try {
+        setLoading(true)
+        const patientLink = await getPatientById(patientId)
+
+        if (!isMounted) return
+
+        if (patientLink) {
+          setPatientData(
+            Array.isArray(patientLink.client) ? patientLink.client[0] : patientLink.client,
+          )
           setPermissions({
-            can_view_nutrition: data.can_view_nutrition,
-            can_view_training: data.can_view_training,
-            can_view_mind: data.can_view_mind,
+            can_view_nutrition: patientLink.can_view_nutrition,
+            can_view_training: patientLink.can_view_training,
+            can_view_mind: patientLink.can_view_mind,
           })
         } else {
           setPatientData({ name: 'Paciente Não Encontrado' })
         }
+
+        await Promise.all([
+          fetchSupplements(),
+          fetchAssessments(),
+          fetchPatientHabits(),
+          fetchTodayTracking(),
+        ])
       } catch (e) {
-        console.error(e)
+        console.error('Error fetching patient data:', e)
+        if (isMounted) toast({ title: 'Erro ao carregar dados', variant: 'destructive' })
+      } finally {
+        if (isMounted) setLoading(false)
       }
     }
-    fetchPatient()
-    fetchSupplements()
-    fetchAssessments()
-    fetchPatientHabits()
+
+    fetchAllData()
 
     const channel = supabase
       .channel('patient_record_changes')
@@ -201,12 +230,10 @@ export default function ProfPatientRecord() {
       .subscribe()
 
     return () => {
+      isMounted = false
       supabase.removeChannel(channel)
     }
   }, [patientId, user?.id])
-
-  const [visibleNotes, setVisibleNotes] = useState(5)
-  const [visibleAssessments, setVisibleAssessments] = useState(5)
 
   const habitsWithStats = useMemo(() => {
     return patientHabits.map((habit) => ({
@@ -251,9 +278,11 @@ export default function ProfPatientRecord() {
   }
 
   const checkPermission = (module: string) => {
-    if (user?.role === 'admin') return true
-    if (module === 'productivity') return true
-    return permissions?.[`can_view_${module}` as keyof typeof permissions] || false
+    const rawMeta = (user as any)?.user_metadata || (user as any)?.raw_user_meta_data || {}
+    const role = rawMeta.role || (user as any)?.role
+    const specialties = rawMeta.specialties || []
+    if (role === 'master' || role === 'admin') return true
+    return specialties.includes(module)
   }
 
   const LockedContent = () => (
@@ -261,12 +290,38 @@ export default function ProfPatientRecord() {
       <CardContent className="flex flex-col items-center justify-center py-16 text-center">
         <Lock className="h-12 w-12 text-muted-foreground/30 mb-4" />
         <h3 className="text-lg font-medium text-foreground mb-2">Acesso Restrito</h3>
-        <p className="text-sm text-muted-foreground max-w-sm">
-          O paciente não partilhou estes dados consigo. Solicite a permissão na aplicação dele.
+        <p className="text-sm text-muted-foreground max-w-sm mb-6">
+          O paciente não partilhou estes dados consigo ou você não possui esta especialidade.
         </p>
+        <Button variant="outline">Solicitar Acesso à Especialidade</Button>
       </CardContent>
     </Card>
   )
+
+  if (loading) {
+    return (
+      <div className="flex flex-col min-h-full">
+        <DashboardHeader title="Prontuário do Paciente" />
+        <PageContent className="max-w-6xl mx-auto w-full animate-pulse">
+          <div className="mb-6">
+            <Skeleton className="h-9 w-40" />
+          </div>
+          <Card className="mb-8">
+            <CardContent className="p-6">
+              <Skeleton className="h-20 w-full" />
+            </CardContent>
+          </Card>
+          <Skeleton className="h-12 w-full mb-6 rounded-md" />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <Skeleton className="h-32 w-full rounded-xl" />
+            <Skeleton className="h-32 w-full rounded-xl" />
+            <Skeleton className="h-32 w-full rounded-xl" />
+          </div>
+          <Skeleton className="h-64 w-full rounded-xl" />
+        </PageContent>
+      </div>
+    )
+  }
 
   return (
     <div className="flex flex-col min-h-full">
@@ -329,6 +384,93 @@ export default function ProfPatientRecord() {
           </TabsList>
 
           <TabsContent value="geral" className="animate-fade-in-up mt-0 space-y-6">
+            {/* Dashboard Visão de Helicóptero */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-2">
+              <Card className="border-border/50 shadow-sm">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm font-semibold flex items-center gap-2 text-muted-foreground">
+                    <Activity className="h-4 w-4 text-primary" /> Consumo de Hoje
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    <div className="flex justify-between items-end">
+                      <span className="text-2xl font-bold text-foreground">
+                        {todayTracking?.total_calories || 0}
+                      </span>
+                      <span className="text-sm text-muted-foreground mb-1 font-medium">kcal</span>
+                    </div>
+                    <div className="flex justify-between items-end border-t border-border/50 pt-2">
+                      <span className="text-lg font-semibold text-blue-500">
+                        {todayTracking?.water_ml || 0}
+                      </span>
+                      <span className="text-sm text-muted-foreground font-medium">ml água</span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="border-border/50 shadow-sm">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm font-semibold flex items-center gap-2 text-muted-foreground">
+                    <Activity className="h-4 w-4 text-primary" /> Peso Atual
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    <div className="flex justify-between items-end">
+                      <span className="text-2xl font-bold text-foreground">
+                        {assessments[0]?.weight ? assessments[0].weight : '--'}
+                      </span>
+                      <span className="text-sm text-muted-foreground mb-1 font-medium">kg</span>
+                    </div>
+                    <div className="border-t border-border/50 pt-2">
+                      <p className="text-xs text-muted-foreground font-medium">
+                        Último registo:{' '}
+                        {assessments[0]
+                          ? new Intl.DateTimeFormat('pt-BR').format(new Date(assessments[0].date))
+                          : '--'}
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="border-border/50 shadow-sm">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm font-semibold flex items-center gap-2 text-muted-foreground">
+                    <Flame className="h-4 w-4 text-orange-500" /> Refeições Extras Hoje
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  {!todayTracking?.extra_meals || todayTracking.extra_meals.length === 0 ? (
+                    <div className="flex flex-col items-center justify-center h-[3.25rem] text-center">
+                      <p className="text-sm text-muted-foreground font-medium">
+                        Nenhum desvio registado
+                      </p>
+                    </div>
+                  ) : (
+                    <ul className="space-y-2">
+                      {todayTracking.extra_meals.slice(0, 3).map((meal: any, i: number) => (
+                        <li
+                          key={i}
+                          className="text-sm flex justify-between items-center bg-muted/30 p-1.5 rounded"
+                        >
+                          <span className="truncate mr-2 font-medium">{meal.name || 'Extra'}</span>
+                          <Badge
+                            variant="secondary"
+                            className="text-orange-600 bg-orange-100/50 hover:bg-orange-100/50 whitespace-nowrap"
+                          >
+                            +{meal.calories || 0} kcal
+                          </Badge>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </CardContent>
+              </Card>
+            </div>
+
             {/* Dashboard Resumo Multidisciplinar */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               <Card className="relative overflow-hidden">
@@ -455,7 +597,8 @@ export default function ProfPatientRecord() {
                   {checkPermission('productivity') ? (
                     <div className="space-y-2">
                       <p className="text-sm text-muted-foreground">
-                        Hábitos Ativos: <span className="font-medium text-foreground">4</span>
+                        Hábitos Ativos:{' '}
+                        <span className="font-medium text-foreground">{patientHabits.length}</span>
                       </p>
                       <p className="text-sm text-muted-foreground">
                         Tarefas Pendentes: <span className="font-medium text-foreground">12</span>

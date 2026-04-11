@@ -34,6 +34,7 @@ import {
   Target,
   MoreHorizontal,
   Apple,
+  ChefHat,
 } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
 import { supabase } from '@/lib/supabase/client'
@@ -41,6 +42,7 @@ import { PatientNutritionMirror } from '@/components/professional/PatientNutriti
 import { NutritionAssessmentModal } from '@/components/professional/NutritionAssessmentModal'
 import { NutritionSupplementModal } from '@/components/professional/NutritionSupplementModal'
 import { DietPrescriptionModal } from '@/components/professional/DietPrescriptionModal'
+import { RecipeBuilderModal } from '@/components/professional/RecipeBuilderModal'
 import {
   getPatientSupplements,
   deleteSupplement,
@@ -83,6 +85,7 @@ export default function ProfPatientRecord() {
   const [selectedSupplement, setSelectedSupplement] = useState<NutritionSupplement | null>(null)
 
   const [isDietModalOpen, setIsDietModalOpen] = useState(false)
+  const [isRecipeModalOpen, setIsRecipeModalOpen] = useState(false)
 
   const [supplements, setSupplements] = useState<NutritionSupplement[]>([])
   const [assessments, setAssessments] = useState<NutritionAssessment[]>([])
@@ -454,6 +457,14 @@ export default function ProfPatientRecord() {
                       Nova Dieta
                     </Button>
                     <Button
+                      onClick={() => setIsRecipeModalOpen(true)}
+                      variant="outline"
+                      className="w-full sm:w-auto"
+                    >
+                      <ChefHat className="h-4 w-4 mr-2" />
+                      Nova Receita
+                    </Button>
+                    <Button
                       onClick={() => {
                         setSelectedAssessment(null)
                         setIsAssessmentModalOpen(true)
@@ -670,6 +681,11 @@ export default function ProfPatientRecord() {
         clientId={patientId}
         isOpen={isDietModalOpen}
         onClose={() => setIsDietModalOpen(false)}
+      />
+      <RecipeBuilderModal
+        isOpen={isRecipeModalOpen}
+        onClose={() => setIsRecipeModalOpen(false)}
+        professionalId={user?.id || ''}
       />
     </div>
   )

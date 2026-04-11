@@ -872,3 +872,69 @@ export const saveDietTemplate = async (professionalId: string, name: string, mea
     return { data: null, error }
   }
 }
+
+export const saveRecipe = async (professionalId: string, recipeData: any, ingredients: any[]) => {
+  const { data: recipe, error } = await supabase
+    .from('recipes')
+    .insert([
+      {
+        professional_id: professionalId,
+        name: recipeData.name,
+        instructions: recipeData.instructions,
+        total_calories: recipeData.calories,
+        total_protein: recipeData.protein,
+        total_carbs: recipeData.carbs,
+        total_fats: recipeData.fats,
+      },
+    ])
+    .select()
+    .single()
+  if (error) throw error
+
+  const items = ingredients.map((ing) => ({
+    recipe_id: recipe.id,
+    food_item_id: ing.food.id,
+    amount_grams: ing.amount_grams,
+  }))
+  if (items.length > 0) await supabase.from('recipe_ingredients').insert(items)
+  return recipe
+}
+
+export const searchFoodAndRecipes = async (searchQuery: string, clientId: string) => {
+  if (!searchQuery || searchQuery.length < 2) return []
+
+  const { data: foods } = await supabase
+    .from('food_items')
+    .select('*')
+    .ilike('name', `%${searchQuery}%`)
+    .limit(15)
+
+  const { data: link } = await supabase
+    .from('professional_client_links')
+    .select('professional_id')
+    .eq('client_id', clientId)
+    .maybeSingle()
+
+  let recipes: any[] = []
+  if (link?.professional_id) {
+    const { data: profRecipes } = await supabase
+      .from('recipes')
+      .select('*')
+      .eq('professional_id', link.professional_id)
+      .ilike('name', `%${searchQuery}%`)
+      .limit(5)
+    recipes = profRecipes || []
+  }
+
+  const formattedRecipes = recipes.map((r) => ({
+    id: r.id,
+    name: `⭐ Receita: ${r.name}`,
+    energy_kcal: r.total_calories,
+    protein_g: r.total_protein,
+    carbs_g: r.total_carbs,
+    fats_g: r.total_fats,
+    is_recipe: true,
+  }))
+
+  return [...formattedRecipes, ...(foods || [])]
+}

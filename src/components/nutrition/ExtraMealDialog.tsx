@@ -5,7 +5,7 @@ import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Search, Check, X, Flame, Droplet } from 'lucide-react'
-import { searchFoodItems, addExtraMealToDay, updateExtraMealInDay } from '@/services/nutrition'
+import { searchFoodAndRecipes, addExtraMealToDay, updateExtraMealInDay } from '@/services/nutrition'
 import { useToast } from '@/hooks/use-toast'
 import { useAuth } from '@/contexts/AuthContext'
 
@@ -42,7 +42,15 @@ export function ExtraMealDialog({
   useEffect(() => {
     if (open) {
       if (editMeal) {
-        const multiplier = editMeal.amount_grams > 0 ? editMeal.amount_grams / 100 : 1
+        const isRecipe = editMeal.is_recipe || false
+        const multiplier = isRecipe
+          ? editMeal.amount_grams > 0
+            ? editMeal.amount_grams
+            : 1
+          : editMeal.amount_grams > 0
+            ? editMeal.amount_grams / 100
+            : 1
+
         setSelectedFood({
           id: editMeal.food_item_id,
           name: editMeal.name,
@@ -50,6 +58,7 @@ export function ExtraMealDialog({
           protein_g: editMeal.protein / multiplier,
           carbs_g: editMeal.carbs / multiplier,
           fats_g: (editMeal.fats || editMeal.fat || 0) / multiplier,
+          is_recipe: isRecipe,
         })
         setAmountGrams(editMeal.amount_grams)
       } else {
@@ -66,7 +75,7 @@ export function ExtraMealDialog({
       if (searchQuery.length > 2) {
         setIsSearching(true)
         try {
-          const results = await searchFoodItems(searchQuery)
+          const results = await searchFoodAndRecipes(searchQuery, targetId || '')
           setSearchResults(results || [])
         } catch (error) {
           console.error(error)
@@ -79,7 +88,7 @@ export function ExtraMealDialog({
       }
     }, 500)
     return () => clearTimeout(delayDebounceFn)
-  }, [searchQuery])
+  }, [searchQuery, targetId])
 
   const calculatedMacros = useMemo(() => {
     if (!selectedFood || !amountGrams) return null
@@ -90,6 +99,15 @@ export function ExtraMealDialog({
     const prot = Number(selectedFood.protein_g || selectedFood.base_protein) || 0
     const carb = Number(selectedFood.carbs_g || selectedFood.base_carbs) || 0
     const fat = Number(selectedFood.fats_g || selectedFood.base_fats) || 0
+
+    if (selectedFood.is_recipe) {
+      return {
+        calories: Math.round(cal * numAmount),
+        protein: Math.round(prot * numAmount),
+        carbs: Math.round(carb * numAmount),
+        fats: Math.round(fat * numAmount),
+      }
+    }
 
     const multiplier = numAmount / 100
 
@@ -115,6 +133,7 @@ export function ExtraMealDialog({
         protein: calculatedMacros.protein,
         carbs: calculatedMacros.carbs,
         fats: calculatedMacros.fats,
+        is_recipe: selectedFood.is_recipe || false,
       }
 
       if (editMeal) {
@@ -168,7 +187,10 @@ export function ExtraMealDialog({
                     {searchResults.map((item) => (
                       <button
                         key={item.id}
-                        onClick={() => setSelectedFood(item)}
+                        onClick={() => {
+                          setSelectedFood(item)
+                          setAmountGrams(item.is_recipe ? 1 : 100)
+                        }}
                         className="flex flex-col items-start p-2 text-left hover:bg-muted rounded-sm transition-colors group"
                       >
                         <span className="font-medium text-sm flex items-center gap-2">
@@ -176,7 +198,8 @@ export function ExtraMealDialog({
                           {item.name}
                         </span>
                         <span className="text-xs text-muted-foreground pl-5">
-                          {item.energy_kcal || item.base_calories || 0} kcal / 100g
+                          {item.energy_kcal || item.base_calories || 0} kcal{' '}
+                          {item.is_recipe ? '/ porção' : '/ 100g'}
                         </span>
                       </button>
                     ))}
@@ -206,11 +229,14 @@ export function ExtraMealDialog({
                 </Button>
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="amountGrams">Quantidade (g)</Label>
+                <Label htmlFor="amountGrams">
+                  {selectedFood.is_recipe ? 'Porções da Receita' : 'Quantidade (g)'}
+                </Label>
                 <Input
                   id="amountGrams"
                   type="number"
-                  placeholder="150"
+                  step={selectedFood.is_recipe ? '0.1' : '1'}
+                  placeholder={selectedFood.is_recipe ? '1' : '150'}
                   value={amountGrams}
                   onChange={(e) => setAmountGrams(e.target.value ? Number(e.target.value) : '')}
                   className="text-lg"

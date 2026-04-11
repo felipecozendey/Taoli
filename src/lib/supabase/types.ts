@@ -1,14 +1,59 @@
 // AVOID UPDATING THIS FILE DIRECTLY. It is automatically generated.
-export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[]
+export type Json =
+  | string
+  | number
+  | boolean
+  | null
+  | { [key: string]: Json | undefined }
+  | Json[]
 
 export type Database = {
   // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: '14.4'
+    PostgrestVersion: "14.4"
   }
   public: {
     Tables: {
+      appointments: {
+        Row: {
+          appointment_type: string | null
+          client_id: string | null
+          created_at: string | null
+          end_time: string
+          id: string
+          notes: string | null
+          professional_id: string
+          start_time: string
+          status: string | null
+          title: string
+        }
+        Insert: {
+          appointment_type?: string | null
+          client_id?: string | null
+          created_at?: string | null
+          end_time: string
+          id?: string
+          notes?: string | null
+          professional_id: string
+          start_time: string
+          status?: string | null
+          title: string
+        }
+        Update: {
+          appointment_type?: string | null
+          client_id?: string | null
+          created_at?: string | null
+          end_time?: string
+          id?: string
+          notes?: string | null
+          professional_id?: string
+          start_time?: string
+          status?: string | null
+          title?: string
+        }
+        Relationships: []
+      }
       audit_logs: {
         Row: {
           action: string
@@ -36,18 +81,18 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'audit_logs_admin_id_fkey'
-            columns: ['admin_id']
+            foreignKeyName: "audit_logs_admin_id_fkey"
+            columns: ["admin_id"]
             isOneToOne: false
-            referencedRelation: 'profiles'
-            referencedColumns: ['id']
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'audit_logs_target_user_id_fkey'
-            columns: ['target_user_id']
+            foreignKeyName: "audit_logs_target_user_id_fkey"
+            columns: ["target_user_id"]
             isOneToOne: false
-            referencedRelation: 'profiles'
-            referencedColumns: ['id']
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -72,18 +117,18 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'diet_template_items_food_item_id_fkey'
-            columns: ['food_item_id']
+            foreignKeyName: "diet_template_items_food_item_id_fkey"
+            columns: ["food_item_id"]
             isOneToOne: false
-            referencedRelation: 'food_items'
-            referencedColumns: ['id']
+            referencedRelation: "food_items"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'diet_template_items_meal_id_fkey'
-            columns: ['meal_id']
+            foreignKeyName: "diet_template_items_meal_id_fkey"
+            columns: ["meal_id"]
             isOneToOne: false
-            referencedRelation: 'diet_template_meals'
-            referencedColumns: ['id']
+            referencedRelation: "diet_template_meals"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -108,11 +153,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'diet_template_meals_template_id_fkey'
-            columns: ['template_id']
+            foreignKeyName: "diet_template_meals_template_id_fkey"
+            columns: ["template_id"]
             isOneToOne: false
-            referencedRelation: 'diet_templates'
-            referencedColumns: ['id']
+            referencedRelation: "diet_templates"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -167,18 +212,18 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'diets_client_id_fkey'
-            columns: ['client_id']
+            foreignKeyName: "diets_client_id_fkey"
+            columns: ["client_id"]
             isOneToOne: false
-            referencedRelation: 'profiles'
-            referencedColumns: ['id']
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'diets_professional_id_fkey'
-            columns: ['professional_id']
+            foreignKeyName: "diets_professional_id_fkey"
+            columns: ["professional_id"]
             isOneToOne: false
-            referencedRelation: 'profiles'
-            referencedColumns: ['id']
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -224,18 +269,18 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'exercise_plan_items_exercise_id_fkey'
-            columns: ['exercise_id']
+            foreignKeyName: "exercise_plan_items_exercise_id_fkey"
+            columns: ["exercise_id"]
             isOneToOne: false
-            referencedRelation: 'exercises'
-            referencedColumns: ['id']
+            referencedRelation: "exercises"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'exercise_plan_items_plan_id_fkey'
-            columns: ['plan_id']
+            foreignKeyName: "exercise_plan_items_plan_id_fkey"
+            columns: ["plan_id"]
             isOneToOne: false
-            referencedRelation: 'exercise_plans'
-            referencedColumns: ['id']
+            referencedRelation: "exercise_plans"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -272,18 +317,18 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'exercise_plans_client_id_fkey'
-            columns: ['client_id']
+            foreignKeyName: "exercise_plans_client_id_fkey"
+            columns: ["client_id"]
             isOneToOne: false
-            referencedRelation: 'profiles'
-            referencedColumns: ['id']
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'exercise_plans_professional_id_fkey'
-            columns: ['professional_id']
+            foreignKeyName: "exercise_plans_professional_id_fkey"
+            columns: ["professional_id"]
             isOneToOne: false
-            referencedRelation: 'profiles'
-            referencedColumns: ['id']
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -311,6 +356,42 @@ export type Database = {
           muscle_group?: string
           name?: string
           video_url?: string | null
+        }
+        Relationships: []
+      }
+      financial_transactions: {
+        Row: {
+          amount: number
+          category: string | null
+          created_at: string | null
+          description: string
+          id: string
+          professional_id: string
+          status: string | null
+          transaction_date: string
+          type: string
+        }
+        Insert: {
+          amount: number
+          category?: string | null
+          created_at?: string | null
+          description: string
+          id?: string
+          professional_id: string
+          status?: string | null
+          transaction_date: string
+          type: string
+        }
+        Update: {
+          amount?: number
+          category?: string | null
+          created_at?: string | null
+          description?: string
+          id?: string
+          professional_id?: string
+          status?: string | null
+          transaction_date?: string
+          type?: string
         }
         Relationships: []
       }
@@ -350,11 +431,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'food_consumption_logs_client_id_fkey'
-            columns: ['client_id']
+            foreignKeyName: "food_consumption_logs_client_id_fkey"
+            columns: ["client_id"]
             isOneToOne: false
-            referencedRelation: 'profiles'
-            referencedColumns: ['id']
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -460,11 +541,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'habit_logs_habit_id_fkey'
-            columns: ['habit_id']
+            foreignKeyName: "habit_logs_habit_id_fkey"
+            columns: ["habit_id"]
             isOneToOne: false
-            referencedRelation: 'habits'
-            referencedColumns: ['id']
+            referencedRelation: "habits"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -516,18 +597,18 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'meal_items_food_item_id_fkey'
-            columns: ['food_item_id']
+            foreignKeyName: "meal_items_food_item_id_fkey"
+            columns: ["food_item_id"]
             isOneToOne: false
-            referencedRelation: 'food_items'
-            referencedColumns: ['id']
+            referencedRelation: "food_items"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'meal_items_meal_id_fkey'
-            columns: ['meal_id']
+            foreignKeyName: "meal_items_meal_id_fkey"
+            columns: ["meal_id"]
             isOneToOne: false
-            referencedRelation: 'meals'
-            referencedColumns: ['id']
+            referencedRelation: "meals"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -555,11 +636,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'meals_diet_id_fkey'
-            columns: ['diet_id']
+            foreignKeyName: "meals_diet_id_fkey"
+            columns: ["diet_id"]
             isOneToOne: false
-            referencedRelation: 'diets'
-            referencedColumns: ['id']
+            referencedRelation: "diets"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -581,18 +662,18 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'note_links_source_note_id_fkey'
-            columns: ['source_note_id']
+            foreignKeyName: "note_links_source_note_id_fkey"
+            columns: ["source_note_id"]
             isOneToOne: false
-            referencedRelation: 'study_notes'
-            referencedColumns: ['id']
+            referencedRelation: "study_notes"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'note_links_target_note_id_fkey'
-            columns: ['target_note_id']
+            foreignKeyName: "note_links_target_note_id_fkey"
+            columns: ["target_note_id"]
             isOneToOne: false
-            referencedRelation: 'study_notes'
-            referencedColumns: ['id']
+            referencedRelation: "study_notes"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -755,11 +836,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'productivity_habit_logs_habit_id_fkey'
-            columns: ['habit_id']
+            foreignKeyName: "productivity_habit_logs_habit_id_fkey"
+            columns: ["habit_id"]
             isOneToOne: false
-            referencedRelation: 'productivity_habits'
-            referencedColumns: ['id']
+            referencedRelation: "productivity_habits"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -880,18 +961,18 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'professional_client_links_client_id_fkey'
-            columns: ['client_id']
+            foreignKeyName: "professional_client_links_client_id_fkey"
+            columns: ["client_id"]
             isOneToOne: false
-            referencedRelation: 'profiles'
-            referencedColumns: ['id']
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'professional_client_links_professional_id_fkey'
-            columns: ['professional_id']
+            foreignKeyName: "professional_client_links_professional_id_fkey"
+            columns: ["professional_id"]
             isOneToOne: false
-            referencedRelation: 'profiles'
-            referencedColumns: ['id']
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -952,18 +1033,18 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'recipe_ingredients_food_item_id_fkey'
-            columns: ['food_item_id']
+            foreignKeyName: "recipe_ingredients_food_item_id_fkey"
+            columns: ["food_item_id"]
             isOneToOne: false
-            referencedRelation: 'food_items'
-            referencedColumns: ['id']
+            referencedRelation: "food_items"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'recipe_ingredients_recipe_id_fkey'
-            columns: ['recipe_id']
+            foreignKeyName: "recipe_ingredients_recipe_id_fkey"
+            columns: ["recipe_id"]
             isOneToOne: false
-            referencedRelation: 'recipes'
-            referencedColumns: ['id']
+            referencedRelation: "recipes"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -1075,11 +1156,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'study_flashcards_deck_id_fkey'
-            columns: ['deck_id']
+            foreignKeyName: "study_flashcards_deck_id_fkey"
+            columns: ["deck_id"]
             isOneToOne: false
-            referencedRelation: 'study_decks'
-            referencedColumns: ['id']
+            referencedRelation: "study_decks"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -1107,11 +1188,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'study_folders_parent_id_fkey'
-            columns: ['parent_id']
+            foreignKeyName: "study_folders_parent_id_fkey"
+            columns: ["parent_id"]
             isOneToOne: false
-            referencedRelation: 'study_folders'
-            referencedColumns: ['id']
+            referencedRelation: "study_folders"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -1148,11 +1229,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'study_notes_folder_id_fkey'
-            columns: ['folder_id']
+            foreignKeyName: "study_notes_folder_id_fkey"
+            columns: ["folder_id"]
             isOneToOne: false
-            referencedRelation: 'study_folders'
-            referencedColumns: ['id']
+            referencedRelation: "study_folders"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -1213,11 +1294,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'water_consumption_logs_client_id_fkey'
-            columns: ['client_id']
+            foreignKeyName: "water_consumption_logs_client_id_fkey"
+            columns: ["client_id"]
             isOneToOne: false
-            referencedRelation: 'profiles'
-            referencedColumns: ['id']
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -1249,31 +1330,33 @@ export type Database = {
   }
 }
 
-type DatabaseWithoutInternals = Omit<Database, '__InternalSupabase'>
+type DatabaseWithoutInternals = Omit<Database, "__InternalSupabase">
 
-type DefaultSchema = DatabaseWithoutInternals[Extract<keyof Database, 'public'>]
+type DefaultSchema = DatabaseWithoutInternals[Extract<keyof Database, "public">]
 
 export type Tables<
   DefaultSchemaTableNameOrOptions extends
-    | keyof (DefaultSchema['Tables'] & DefaultSchema['Views'])
+    | keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
     | { schema: keyof DatabaseWithoutInternals },
   TableName extends DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
-    ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables'] &
-        DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Views'])
+    ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+        DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
     : never = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
-  ? (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables'] &
-      DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Views'])[TableName] extends {
+  ? (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+      DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])[TableName] extends {
       Row: infer R
     }
     ? R
     : never
-  : DefaultSchemaTableNameOrOptions extends keyof (DefaultSchema['Tables'] & DefaultSchema['Views'])
-    ? (DefaultSchema['Tables'] & DefaultSchema['Views'])[DefaultSchemaTableNameOrOptions] extends {
+  : DefaultSchemaTableNameOrOptions extends keyof (DefaultSchema["Tables"] &
+        DefaultSchema["Views"])
+    ? (DefaultSchema["Tables"] &
+        DefaultSchema["Views"])[DefaultSchemaTableNameOrOptions] extends {
         Row: infer R
       }
       ? R
@@ -1282,23 +1365,23 @@ export type Tables<
 
 export type TablesInsert<
   DefaultSchemaTableNameOrOptions extends
-    | keyof DefaultSchema['Tables']
+    | keyof DefaultSchema["Tables"]
     | { schema: keyof DatabaseWithoutInternals },
   TableName extends DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
-    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables']
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
     : never = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
-  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables'][TableName] extends {
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
       Insert: infer I
     }
     ? I
     : never
-  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema['Tables']
-    ? DefaultSchema['Tables'][DefaultSchemaTableNameOrOptions] extends {
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
+    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
         Insert: infer I
       }
       ? I
@@ -1307,23 +1390,23 @@ export type TablesInsert<
 
 export type TablesUpdate<
   DefaultSchemaTableNameOrOptions extends
-    | keyof DefaultSchema['Tables']
+    | keyof DefaultSchema["Tables"]
     | { schema: keyof DatabaseWithoutInternals },
   TableName extends DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
-    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables']
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
     : never = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
-  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables'][TableName] extends {
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
       Update: infer U
     }
     ? U
     : never
-  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema['Tables']
-    ? DefaultSchema['Tables'][DefaultSchemaTableNameOrOptions] extends {
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
+    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
         Update: infer U
       }
       ? U
@@ -1332,36 +1415,36 @@ export type TablesUpdate<
 
 export type Enums<
   DefaultSchemaEnumNameOrOptions extends
-    | keyof DefaultSchema['Enums']
+    | keyof DefaultSchema["Enums"]
     | { schema: keyof DatabaseWithoutInternals },
   EnumName extends DefaultSchemaEnumNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
-    ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions['schema']]['Enums']
+    ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
     : never = never,
 > = DefaultSchemaEnumNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
-  ? DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions['schema']]['Enums'][EnumName]
-  : DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema['Enums']
-    ? DefaultSchema['Enums'][DefaultSchemaEnumNameOrOptions]
+  ? DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"][EnumName]
+  : DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema["Enums"]
+    ? DefaultSchema["Enums"][DefaultSchemaEnumNameOrOptions]
     : never
 
 export type CompositeTypes<
   PublicCompositeTypeNameOrOptions extends
-    | keyof DefaultSchema['CompositeTypes']
+    | keyof DefaultSchema["CompositeTypes"]
     | { schema: keyof DatabaseWithoutInternals },
   CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
-    ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions['schema']]['CompositeTypes']
+    ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
     : never = never,
 > = PublicCompositeTypeNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
-  ? DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions['schema']]['CompositeTypes'][CompositeTypeName]
-  : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema['CompositeTypes']
-    ? DefaultSchema['CompositeTypes'][PublicCompositeTypeNameOrOptions]
+  ? DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
+  : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema["CompositeTypes"]
+    ? DefaultSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
     : never
 
 export const Constants = {
@@ -1369,6 +1452,7 @@ export const Constants = {
     Enums: {},
   },
 } as const
+
 
 // ====== DATABASE EXTENDED CONTEXT (auto-generated) ======
 // This section contains actual PostgreSQL column types, constraints, RLS policies,
@@ -1380,6 +1464,17 @@ export const Constants = {
 // --- COLUMN TYPES (actual PostgreSQL types) ---
 // Use this to know the real database type when writing migrations.
 // "string" in TypeScript types above may be uuid, text, varchar, timestamptz, etc.
+// Table: appointments
+//   id: uuid (not null, default: gen_random_uuid())
+//   professional_id: uuid (not null)
+//   client_id: uuid (nullable)
+//   title: text (not null)
+//   start_time: timestamp with time zone (not null)
+//   end_time: timestamp with time zone (not null)
+//   status: text (nullable, default: 'scheduled'::text)
+//   appointment_type: text (nullable, default: 'consultation'::text)
+//   notes: text (nullable)
+//   created_at: timestamp with time zone (nullable, default: now())
 // Table: audit_logs
 //   id: uuid (not null, default: gen_random_uuid())
 //   admin_id: uuid (not null)
@@ -1438,6 +1533,16 @@ export const Constants = {
 //   muscle_group: text (not null)
 //   video_url: text (nullable)
 //   created_at: timestamp with time zone (not null, default: now())
+// Table: financial_transactions
+//   id: uuid (not null, default: gen_random_uuid())
+//   professional_id: uuid (not null)
+//   type: text (not null)
+//   amount: numeric (not null)
+//   description: text (not null)
+//   transaction_date: date (not null)
+//   category: text (nullable, default: 'general'::text)
+//   status: text (nullable, default: 'paid'::text)
+//   created_at: timestamp with time zone (nullable, default: now())
 // Table: food_consumption_logs
 //   id: uuid (not null, default: gen_random_uuid())
 //   client_id: uuid (not null)
@@ -1653,6 +1758,10 @@ export const Constants = {
 //   created_at: timestamp with time zone (not null, default: now())
 
 // --- CONSTRAINTS ---
+// Table: appointments
+//   FOREIGN KEY appointments_client_id_fkey: FOREIGN KEY (client_id) REFERENCES auth.users(id) ON DELETE SET NULL
+//   PRIMARY KEY appointments_pkey: PRIMARY KEY (id)
+//   FOREIGN KEY appointments_professional_id_fkey: FOREIGN KEY (professional_id) REFERENCES auth.users(id) ON DELETE CASCADE
 // Table: audit_logs
 //   FOREIGN KEY audit_logs_admin_id_fkey: FOREIGN KEY (admin_id) REFERENCES profiles(id) ON DELETE CASCADE
 //   PRIMARY KEY audit_logs_pkey: PRIMARY KEY (id)
@@ -1682,6 +1791,9 @@ export const Constants = {
 //   FOREIGN KEY exercise_plans_professional_id_fkey: FOREIGN KEY (professional_id) REFERENCES profiles(id)
 // Table: exercises
 //   PRIMARY KEY exercises_pkey: PRIMARY KEY (id)
+// Table: financial_transactions
+//   PRIMARY KEY financial_transactions_pkey: PRIMARY KEY (id)
+//   FOREIGN KEY financial_transactions_professional_id_fkey: FOREIGN KEY (professional_id) REFERENCES auth.users(id) ON DELETE CASCADE
 // Table: food_consumption_logs
 //   FOREIGN KEY food_consumption_logs_client_id_fkey: FOREIGN KEY (client_id) REFERENCES profiles(id) ON DELETE CASCADE
 //   PRIMARY KEY food_consumption_logs_pkey: PRIMARY KEY (id)
@@ -1771,6 +1883,13 @@ export const Constants = {
 //   PRIMARY KEY water_consumption_logs_pkey: PRIMARY KEY (id)
 
 // --- ROW LEVEL SECURITY POLICIES ---
+// Table: appointments
+//   Policy "Clients view own appointments" (SELECT, PERMISSIVE) roles={public}
+//     USING: (auth.uid() = client_id)
+//   Policy "Master views all appointments" (ALL, PERMISSIVE) roles={public}
+//     USING: (((auth.jwt() -> 'user_metadata'::text) ->> 'role'::text) = 'master'::text)
+//   Policy "Profs manage own appointments" (ALL, PERMISSIVE) roles={public}
+//     USING: (auth.uid() = professional_id)
 // Table: audit_logs
 //   Policy "Masters can insert logs" (INSERT, PERMISSIVE) roles={authenticated}
 //     WITH CHECK: is_admin_user()
@@ -1808,6 +1927,11 @@ export const Constants = {
 //   Policy "Masters can manage exercises" (ALL, PERMISSIVE) roles={authenticated}
 //     USING: (EXISTS ( SELECT 1    FROM profiles   WHERE ((profiles.id = auth.uid()) AND (profiles.role = 'master'::text))))
 //     WITH CHECK: (EXISTS ( SELECT 1    FROM profiles   WHERE ((profiles.id = auth.uid()) AND (profiles.role = 'master'::text))))
+// Table: financial_transactions
+//   Policy "Master views all finances" (ALL, PERMISSIVE) roles={public}
+//     USING: (((auth.jwt() -> 'user_metadata'::text) ->> 'role'::text) = 'master'::text)
+//   Policy "Profs manage own finances" (ALL, PERMISSIVE) roles={public}
+//     USING: (auth.uid() = professional_id)
 // Table: food_consumption_logs
 //   Policy "Admins can view all food logs" (SELECT, PERMISSIVE) roles={authenticated}
 //     USING: is_admin_user()
@@ -1988,7 +2112,7 @@ export const Constants = {
 //       WHERE client_id = p_client_id
 //       AND date > (now() - interval '30 days')
 //     )
-//     SELECT
+//     SELECT 
 //       (meal->>'food_item_id')::UUID as food_id,
 //       meal->>'name' as food_name,
 //       (meal->>'calories')::DECIMAL as cal,
@@ -2003,7 +2127,7 @@ export const Constants = {
 //     LIMIT 5;
 //   END;
 //   $function$
-//
+//   
 // FUNCTION handle_updated_at()
 //   CREATE OR REPLACE FUNCTION public.handle_updated_at()
 //    RETURNS trigger
@@ -2014,7 +2138,7 @@ export const Constants = {
 //     RETURN NEW;
 //   END;
 //   $function$
-//
+//   
 // FUNCTION is_admin_user()
 //   CREATE OR REPLACE FUNCTION public.is_admin_user()
 //    RETURNS boolean
@@ -2026,7 +2150,7 @@ export const Constants = {
 //       SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'admin'
 //     );
 //   $function$
-//
+//   
 // FUNCTION rls_auto_enable()
 //   CREATE OR REPLACE FUNCTION public.rls_auto_enable()
 //    RETURNS event_trigger
@@ -2057,7 +2181,7 @@ export const Constants = {
 //     END LOOP;
 //   END;
 //   $function$
-//
+//   
 // FUNCTION update_diets_updated_at()
 //   CREATE OR REPLACE FUNCTION public.update_diets_updated_at()
 //    RETURNS trigger
@@ -2068,7 +2192,7 @@ export const Constants = {
 //       RETURN NEW;
 //   END;
 //   $function$
-//
+//   
 
 // --- TRIGGERS ---
 // Table: diets
@@ -2092,3 +2216,4 @@ export const Constants = {
 // Table: professional_client_links
 //   CREATE UNIQUE INDEX professional_client_links_invite_code_key ON public.professional_client_links USING btree (invite_code)
 //   CREATE UNIQUE INDEX professional_client_links_unique_connection ON public.professional_client_links USING btree (professional_id, client_id)
+

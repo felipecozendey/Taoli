@@ -30,6 +30,7 @@ import { cn } from '@/lib/utils'
 import { useAuth } from '@/contexts/AuthContext'
 import {
   searchFoodItems,
+  searchFoodAndRecipes,
   saveDiet,
   getDietTemplates,
   getTemplateDetails,
@@ -105,8 +106,18 @@ export function DietPrescriptionModal({ isOpen, onClose, clientId }: DietPrescri
       if (searchQuery.length >= 2) {
         setIsSearching(true)
         try {
-          const { data } = await searchFoodItems(searchQuery)
-          if (data) setSearchResults(data as FoodItem[])
+          let results: any[] = []
+          if (clientId) {
+            results = await searchFoodAndRecipes(searchQuery, clientId)
+          } else {
+            const { data } = await searchFoodItems(searchQuery)
+            results = data || []
+          }
+          const normalized = results.map((r) => ({
+            ...r,
+            base_qty_g: r.base_qty_g || (r.is_recipe ? 1 : 100),
+          }))
+          setSearchResults(normalized as FoodItem[])
         } catch (error) {
           console.error('Erro na busca:', error)
         } finally {
@@ -141,13 +152,16 @@ export function DietPrescriptionModal({ isOpen, onClose, clientId }: DietPrescri
   const activeMeal = meals.find((m) => m.id === activeMealId)
 
   // Actions
-  const handleAddFood = (food: FoodItem) => {
+  const handleAddFood = (food: FoodItem & { is_recipe?: boolean }) => {
     setMeals((prev) =>
       prev.map((m) => {
         if (m.id === activeMealId) {
           return {
             ...m,
-            items: [...m.items, { id: crypto.randomUUID(), food, amount_grams: 100 }],
+            items: [
+              ...m.items,
+              { id: crypto.randomUUID(), food, amount_grams: food.is_recipe ? 1 : 100 },
+            ],
           }
         }
         return m
@@ -446,9 +460,10 @@ export function DietPrescriptionModal({ isOpen, onClose, clientId }: DietPrescri
                                 }
                                 className="w-20 h-9 text-right font-medium"
                                 min="0"
+                                step={(item.food as any).is_recipe ? '0.1' : '1'}
                               />
-                              <span className="text-sm font-medium text-muted-foreground w-4">
-                                g
+                              <span className="text-sm font-medium text-muted-foreground min-w-4">
+                                {(item.food as any).is_recipe ? 'porção' : 'g'}
                               </span>
                             </div>
 

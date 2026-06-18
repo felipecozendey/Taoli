@@ -921,6 +921,28 @@ export const getCurrentCaloricGoal = async (clientId: string) => {
   return data?.tdee || 2000
 }
 
+export async function getFoodItems(page = 1, limit = 20, search = '') {
+  let query = supabase.from('food_items').select('*', { count: 'exact' })
+  if (search) {
+    query = query.ilike('name', `%${search}%`)
+  }
+  const from = (page - 1) * limit
+  const to = from + limit - 1
+  const { data, error, count } = await query.order('name', { ascending: true }).range(from, to)
+  if (error) throw error
+  return { data, count }
+}
+
+export async function getProfessionalRecipes(professionalId: string) {
+  const { data, error } = await supabase
+    .from('recipes')
+    .select('*')
+    .eq('professional_id', professionalId)
+    .order('name', { ascending: true })
+  if (error) throw error
+  return data
+}
+
 export const searchFoodAndRecipes = async (searchQuery: string, clientId: string) => {
   if (!searchQuery || searchQuery.length < 2) return []
 

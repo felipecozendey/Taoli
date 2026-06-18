@@ -47,6 +47,7 @@ const ClientSettings = lazy(() => import('@/pages/client/ClientSettings'))
 
 const ProfSettings = lazy(() => import('@/pages/professional/ProfSettings'))
 const ProfClinic = lazy(() => import('@/pages/professional/ProfClinic'))
+const ProfDatabases = lazy(() => import('@/pages/professional/ProfDatabases'))
 
 const PublicScheduling = lazy(() => import('@/pages/public/PublicScheduling'))
 
@@ -106,6 +107,14 @@ export function AppRoutes() {
               element={
                 <Suspense fallback={<LoadingFallback />}>
                   <ProfSettings />
+                </Suspense>
+              }
+            />
+            <Route
+              path="databases"
+              element={
+                <Suspense fallback={<LoadingFallback />}>
+                  <ProfDatabases />
                 </Suspense>
               }
             />

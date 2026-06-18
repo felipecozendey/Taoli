@@ -13,9 +13,15 @@ interface RecipeBuilderModalProps {
   isOpen: boolean
   onClose: () => void
   professionalId: string
+  onSuccess?: () => void
 }
 
-export function RecipeBuilderModal({ isOpen, onClose, professionalId }: RecipeBuilderModalProps) {
+export function RecipeBuilderModal({
+  isOpen,
+  onClose,
+  professionalId,
+  onSuccess,
+}: RecipeBuilderModalProps) {
   const [name, setName] = useState('')
   const [instructions, setInstructions] = useState('')
   const [ingredients, setIngredients] = useState<any[]>([])
@@ -76,7 +82,8 @@ export function RecipeBuilderModal({ isOpen, onClose, professionalId }: RecipeBu
   const totals = useMemo(() => {
     return ingredients.reduce(
       (acc, ing) => {
-        const multiplier = (ing.amount_grams || 0) / 100
+        const baseQty = Number(ing.food.base_qty_g) || 100
+        const multiplier = (ing.amount_grams || 0) / baseQty
         acc.calories += Number(ing.food.energy_kcal || 0) * multiplier
         acc.protein += Number(ing.food.protein_g || 0) * multiplier
         acc.carbs += Number(ing.food.carbs_g || 0) * multiplier
@@ -105,6 +112,7 @@ export function RecipeBuilderModal({ isOpen, onClose, professionalId }: RecipeBu
       )
 
       toast({ title: 'Receita guardada com sucesso!' })
+      if (onSuccess) onSuccess()
       onClose()
     } catch (error) {
       toast({ title: 'Erro ao guardar receita', variant: 'destructive' })

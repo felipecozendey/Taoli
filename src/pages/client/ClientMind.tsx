@@ -6,8 +6,9 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Label } from '@/components/ui/label'
-import { Frown, Meh, Smile, Laugh, Plus, Heart } from 'lucide-react'
+import { Frown, Meh, Smile, Laugh, Plus, Heart, Lightbulb } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
+import { Alert, AlertDescription } from '@/components/ui/alert'
 import { getHabits, createHabit, toggleHabitLog } from '@/services/productivity'
 import { AuthorshipBadge } from '@/components/shared/AuthorshipBadge'
 import {
@@ -193,32 +194,44 @@ export default function ClientMind() {
                   return (
                     <div
                       key={habit.id}
-                      className={`flex items-start sm:items-center space-x-3 p-4 hover:bg-muted/50 transition-colors ${!isLast ? 'border-b' : ''}`}
+                      className={`flex flex-col sm:flex-row flex-wrap items-start sm:items-center p-4 hover:bg-muted/50 transition-colors gap-y-2 ${!isLast ? 'border-b' : ''}`}
                     >
-                      <Checkbox
-                        id={habit.id}
-                        checked={isCompleted}
-                        onCheckedChange={(checked) => handleToggle(habit.id, !!checked)}
-                        className="h-5 w-5 mt-0.5 sm:mt-0"
-                      />
-                      <div className="flex-1 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                        <Label
-                          htmlFor={habit.id}
-                          className="cursor-pointer text-sm font-medium flex flex-wrap items-center gap-2"
-                        >
-                          {habit.title}
-                          {habit.is_approved && (
-                            <span
-                              className="flex items-center text-rose-500 bg-rose-50 px-1.5 py-0.5 rounded text-[10px] font-semibold border border-rose-100"
-                              title="Apoiado pelo Profissional"
-                            >
-                              <Heart className="w-3 h-3 mr-1 fill-current" />
-                              Apoiado
-                            </span>
-                          )}
-                        </Label>
-                        <AuthorshipBadge createdBy={habit.created_by} patientId={user?.id} />
+                      <div className="flex items-center space-x-3 w-full">
+                        <Checkbox
+                          id={habit.id}
+                          checked={isCompleted}
+                          onCheckedChange={(checked) => handleToggle(habit.id, !!checked)}
+                          className="h-5 w-5 shrink-0"
+                        />
+                        <div className="flex-1 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                          <Label
+                            htmlFor={habit.id}
+                            className="cursor-pointer text-sm font-medium flex flex-wrap items-center gap-2"
+                          >
+                            {habit.title}
+                            {habit.is_approved && (
+                              <span
+                                className="flex items-center text-rose-500 bg-rose-50 px-1.5 py-0.5 rounded text-[10px] font-semibold border border-rose-100"
+                                title="Apoiado pelo Profissional"
+                              >
+                                <Heart className="w-3 h-3 mr-1 fill-current" />
+                                Apoiado
+                              </span>
+                            )}
+                          </Label>
+                          <AuthorshipBadge createdBy={habit.created_by} patientId={user?.id} />
+                        </div>
                       </div>
+
+                      {habit.professional_feedback && (
+                        <Alert className="mt-3 bg-purple-50/50 border-purple-200 dark:bg-purple-950/30 dark:border-purple-900 py-2.5 sm:col-span-2 w-full">
+                          <Lightbulb className="h-4 w-4 text-purple-600 dark:text-purple-400" />
+                          <AlertDescription className="text-purple-800 dark:text-purple-200 text-xs ml-2">
+                            <span className="font-semibold mr-1">Dica do seu profissional:</span>
+                            {habit.professional_feedback}
+                          </AlertDescription>
+                        </Alert>
+                      )}
                     </div>
                   )
                 })

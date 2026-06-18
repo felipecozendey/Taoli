@@ -1012,6 +1012,14 @@ export async function getProfessionalRecipes(professionalId: string) {
   return data
 }
 
+export const updateDietFeedback = async (dietId: string, feedback: string) => {
+  const { error } = await supabase
+    .from('diets')
+    .update({ professional_feedback: feedback })
+    .eq('id', dietId)
+  if (error) throw error
+}
+
 export const searchFoodAndRecipes = async (searchQuery: string, clientId: string) => {
   if (!searchQuery || searchQuery.length < 2) return []
 

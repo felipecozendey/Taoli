@@ -43,8 +43,10 @@ import {
   Edit2,
   Plus,
   Sparkles,
+  Lightbulb,
 } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
+import { Alert, AlertDescription } from '@/components/ui/alert'
 import { useToast } from '@/hooks/use-toast'
 import {
   getClientActiveDiet,
@@ -959,6 +961,16 @@ export default function ClientNutrition() {
                     <Plus className="h-4 w-4 mr-2" /> Criar Minha Dieta
                   </Button>
                 </div>
+
+                {diet.professional_feedback && (
+                  <Alert className="mb-6 bg-amber-50/50 border-amber-200 dark:bg-amber-950/30 dark:border-amber-900">
+                    <Lightbulb className="h-4 w-4 text-amber-600 dark:text-amber-400" />
+                    <AlertDescription className="text-amber-800 dark:text-amber-200 text-sm">
+                      <span className="font-semibold mr-1">Dica do seu profissional:</span>
+                      {diet.professional_feedback}
+                    </AlertDescription>
+                  </Alert>
+                )}
 
                 {diet.meals.map((m) => {
                   const isConsumed = progress?.logs?.some((l: any) => l.food_name === m.name)

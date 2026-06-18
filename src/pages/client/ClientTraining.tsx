@@ -23,8 +23,10 @@ import {
   HeartPulse,
   Edit2,
   Plus,
+  Lightbulb,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { Alert, AlertDescription } from '@/components/ui/alert'
 import { useAuth } from '@/contexts/AuthContext'
 import { getClientActivePlans, getFullPlanDetails } from '@/services/training'
 import { TrainingBuilderModal } from '@/components/training/TrainingBuilderModal'
@@ -56,6 +58,7 @@ type PlanListType = {
   professional_id: string
   is_active: boolean
   created_by?: string | null
+  professional_feedback?: string | null
 }
 
 type FullPlanDetailsType = PlanListType & {
@@ -311,6 +314,16 @@ export default function ClientTraining() {
               </div>
             ) : (
               <>
+                {activePlan.professional_feedback && (
+                  <Alert className="mb-6 bg-blue-50/50 border-blue-200 dark:bg-blue-950/30 dark:border-blue-900">
+                    <Lightbulb className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                    <AlertDescription className="text-blue-800 dark:text-blue-200 text-sm">
+                      <span className="font-semibold mr-1">Dica do seu profissional:</span>
+                      {activePlan.professional_feedback}
+                    </AlertDescription>
+                  </Alert>
+                )}
+
                 <div
                   className={cn(
                     'border p-4 rounded-xl flex items-center justify-between mb-6',

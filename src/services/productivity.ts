@@ -421,3 +421,11 @@ export const toggleHabitApproval = async (habitId: string, isApproved: boolean) 
     .eq('id', habitId)
   if (error) throw error
 }
+
+export const updateHabitFeedback = async (habitId: string, feedback: string) => {
+  const { error } = await supabase
+    .from('habits')
+    .update({ professional_feedback: feedback })
+    .eq('id', habitId)
+  if (error) throw error
+}

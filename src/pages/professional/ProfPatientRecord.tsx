@@ -40,11 +40,18 @@ import {
   Flame,
   Target as TargetIcon,
   Heart,
+  MessageSquare,
+  Lightbulb,
 } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
 import { supabase } from '@/lib/supabase/client'
 import { useToast } from '@/hooks/use-toast'
-import { getHabits, prescribeHabit, toggleHabitApproval } from '@/services/productivity'
+import {
+  getHabits,
+  prescribeHabit,
+  toggleHabitApproval,
+  updateHabitFeedback,
+} from '@/services/productivity'
 import { getPatientById } from '@/services/patients'
 import { PatientNutritionMirror } from '@/components/professional/PatientNutritionMirror'
 import { NutritionAssessmentModal } from '@/components/professional/NutritionAssessmentModal'
@@ -61,6 +68,8 @@ import {
   getPatientAssessments,
   deleteAssessment,
   getTrackingByPeriod,
+  getClientActiveDiet,
+  updateDietFeedback,
   type NutritionAssessment,
   type NutritionSupplement,
 } from '@/services/nutrition'
@@ -89,7 +98,12 @@ import {
   createTransaction,
   updateSubscriptionStatus,
 } from '@/services/clinic'
-import { getClientPlans, getFullPlanDetails, deletePlan } from '@/services/training'
+import {
+  getClientPlans,
+  getFullPlanDetails,
+  deletePlan,
+  updatePlanFeedback,
+} from '@/services/training'
 import { TrainingBuilderModal } from '@/components/training/TrainingBuilderModal'
 import { AuthorshipBadge } from '@/components/shared/AuthorshipBadge'
 import { cn } from '@/lib/utils'
@@ -140,6 +154,13 @@ export default function ProfPatientRecord() {
 
   const [loading, setLoading] = useState(true)
   const [patientData, setPatientData] = useState<any>(null)
+  const [patientActiveDiet, setPatientActiveDiet] = useState<any>(null)
+  const [feedbackModal, setFeedbackModal] = useState<{
+    type: 'diet' | 'training' | 'habit'
+    id: string
+    name: string
+    currentFeedback: string
+  } | null>(null)
   const [todayTracking, setTodayTracking] = useState<any>(null)
   const [permissions, setPermissions] = useState({
     can_view_nutrition: false,
@@ -222,6 +243,16 @@ export default function ProfPatientRecord() {
     if (data) setAssessments(data)
   }
 
+  const fetchActiveDiet = async () => {
+    if (!patientId) return
+    try {
+      const { data } = await getClientActiveDiet(patientId)
+      setPatientActiveDiet(data)
+    } catch (e) {
+      console.error(e)
+    }
+  }
+
   const fetchTrainingPlans = async () => {
     if (!patientId) return
     try {
@@ -277,6 +308,7 @@ export default function ProfPatientRecord() {
           fetchTodayTracking(),
           fetchFinancials(),
           fetchTrainingPlans(),
+          fetchActiveDiet(),
         ])
       } catch (e) {
         console.error('Error fetching patient data:', e)
@@ -551,6 +583,51 @@ export default function ProfPatientRecord() {
               Financeiro
             </TabsTrigger>
           </TabsList>
+
+          <Dialog open={!!feedbackModal} onOpenChange={(open) => !open && setFeedbackModal(null)}>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Adicionar feedback ao paciente</DialogTitle>
+              </DialogHeader>
+              <div className="space-y-4 pt-4">
+                <p className="text-sm font-medium text-muted-foreground flex items-center gap-2">
+                  <Lightbulb className="w-4 h-4 text-amber-500" />
+                  Item: <span className="font-bold text-foreground">{feedbackModal?.name}</span>
+                </p>
+                <Textarea
+                  placeholder="Escreva sua dica ou orientação para o paciente..."
+                  defaultValue={feedbackModal?.currentFeedback || ''}
+                  id="feedback-text"
+                  className="min-h-[120px]"
+                />
+                <Button
+                  className="w-full"
+                  onClick={async () => {
+                    const text = (document.getElementById('feedback-text') as HTMLTextAreaElement)
+                      .value
+                    try {
+                      if (feedbackModal?.type === 'diet') {
+                        await updateDietFeedback(feedbackModal.id, text)
+                        fetchActiveDiet()
+                      } else if (feedbackModal?.type === 'training') {
+                        await updatePlanFeedback(feedbackModal.id, text)
+                        fetchTrainingPlans()
+                      } else if (feedbackModal?.type === 'habit') {
+                        await updateHabitFeedback(feedbackModal.id, text)
+                        fetchPatientHabits()
+                      }
+                      setFeedbackModal(null)
+                      toast({ title: 'Feedback salvo com sucesso!' })
+                    } catch (e) {
+                      toast({ title: 'Erro ao salvar feedback', variant: 'destructive' })
+                    }
+                  }}
+                >
+                  Salvar Feedback
+                </Button>
+              </div>
+            </DialogContent>
+          </Dialog>
 
           <TabsContent value="avaliacao" className="animate-fade-in-up mt-0 space-y-6">
             <PhysicalAssessmentEvolution
@@ -916,6 +993,54 @@ export default function ProfPatientRecord() {
                 </div>
 
                 <Card>
+                  <CardHeader className="pb-3 flex flex-row items-center justify-between">
+                    <CardTitle className="text-base flex items-center gap-2">
+                      <Apple className="h-4 w-4 text-primary" /> Dieta Atual
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    {patientActiveDiet ? (
+                      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border border-border/50 bg-muted/20 p-4 rounded-lg">
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <h4 className="font-semibold text-lg">{patientActiveDiet.name}</h4>
+                            <AuthorshipBadge
+                              createdBy={patientActiveDiet.created_by}
+                              patientId={patientId}
+                            />
+                          </div>
+                          {patientActiveDiet.professional_feedback && (
+                            <p className="text-sm text-muted-foreground mt-2 border-l-2 pl-2 border-primary/50 italic">
+                              "{patientActiveDiet.professional_feedback}"
+                            </p>
+                          )}
+                        </div>
+                        {patientActiveDiet.created_by === patientId && (
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() =>
+                              setFeedbackModal({
+                                type: 'diet',
+                                id: patientActiveDiet.id,
+                                name: patientActiveDiet.name,
+                                currentFeedback: patientActiveDiet.professional_feedback || '',
+                              })
+                            }
+                          >
+                            <MessageSquare className="h-4 w-4 mr-2" /> Avaliar / Dica
+                          </Button>
+                        )}
+                      </div>
+                    ) : (
+                      <p className="text-sm text-muted-foreground text-center py-6 border rounded-md border-dashed">
+                        Nenhuma dieta ativa no momento.
+                      </p>
+                    )}
+                  </CardContent>
+                </Card>
+
+                <Card>
                   <CardHeader className="pb-3">
                     <CardTitle className="text-base flex items-center gap-2">
                       <Pill className="h-4 w-4 text-primary" /> Suplementação Ativa
@@ -1062,6 +1187,21 @@ export default function ProfPatientRecord() {
                                       </Button>
                                     </DropdownMenuTrigger>
                                     <DropdownMenuContent align="end">
+                                      {isPatientCreated && (
+                                        <DropdownMenuItem
+                                          onClick={() =>
+                                            setFeedbackModal({
+                                              type: 'training',
+                                              id: plan.id,
+                                              name: plan.name,
+                                              currentFeedback: plan.professional_feedback || '',
+                                            })
+                                          }
+                                        >
+                                          <MessageSquare className="h-4 w-4 mr-2 text-primary" />{' '}
+                                          Dar Feedback
+                                        </DropdownMenuItem>
+                                      )}
                                       {isPatientCreated ? (
                                         <DropdownMenuItem
                                           onClick={() => handleDuplicateTraining(plan)}
@@ -1364,38 +1504,64 @@ export default function ProfPatientRecord() {
                                       patientId={patientId}
                                     />
                                   </div>
-                                  {habit.created_by === patientId && (
-                                    <Button
-                                      variant="ghost"
-                                      size="icon"
-                                      className={cn(
-                                        'h-8 w-8 shrink-0',
-                                        habit.is_approved
-                                          ? 'text-rose-500 hover:text-rose-600 hover:bg-rose-50'
-                                          : 'text-muted-foreground hover:text-rose-500 hover:bg-rose-50',
-                                      )}
-                                      onClick={async () => {
-                                        try {
-                                          await toggleHabitApproval(habit.id, !habit.is_approved)
-                                          fetchPatientHabits()
-                                        } catch (e) {
-                                          toast({
-                                            title: 'Erro ao atualizar hábito',
-                                            variant: 'destructive',
+                                  <div className="flex gap-1 flex-col">
+                                    {habit.created_by === patientId && (
+                                      <Button
+                                        variant="ghost"
+                                        size="icon"
+                                        className={cn(
+                                          'h-8 w-8 shrink-0',
+                                          habit.is_approved
+                                            ? 'text-rose-500 hover:text-rose-600 hover:bg-rose-50'
+                                            : 'text-muted-foreground hover:text-rose-500 hover:bg-rose-50',
+                                        )}
+                                        title="Apoiar este hábito"
+                                        onClick={async () => {
+                                          try {
+                                            await toggleHabitApproval(habit.id, !habit.is_approved)
+                                            fetchPatientHabits()
+                                          } catch (e) {
+                                            toast({
+                                              title: 'Erro ao atualizar hábito',
+                                              variant: 'destructive',
+                                            })
+                                          }
+                                        }}
+                                      >
+                                        <Heart
+                                          className={cn(
+                                            'h-5 w-5',
+                                            habit.is_approved ? 'fill-current' : '',
+                                          )}
+                                        />
+                                      </Button>
+                                    )}
+                                    {habit.created_by === patientId && (
+                                      <Button
+                                        variant="ghost"
+                                        size="icon"
+                                        className="h-8 w-8 shrink-0 text-blue-500 hover:bg-blue-50"
+                                        title="Adicionar feedback"
+                                        onClick={() =>
+                                          setFeedbackModal({
+                                            type: 'habit',
+                                            id: habit.id,
+                                            name: habit.title,
+                                            currentFeedback: habit.professional_feedback || '',
                                           })
                                         }
-                                      }}
-                                    >
-                                      <Heart
-                                        className={cn(
-                                          'h-5 w-5',
-                                          habit.is_approved ? 'fill-current' : '',
-                                        )}
-                                      />
-                                    </Button>
-                                  )}
+                                      >
+                                        <MessageSquare className="h-4 w-4" />
+                                      </Button>
+                                    )}
+                                  </div>
                                 </div>
-                                <div className="flex items-center text-orange-500 font-bold text-2xl">
+                                {habit.professional_feedback && (
+                                  <p className="text-xs text-muted-foreground mt-1 border-l-2 pl-2 border-blue-500 italic">
+                                    "{habit.professional_feedback}"
+                                  </p>
+                                )}
+                                <div className="flex items-center text-orange-500 font-bold text-2xl mt-1">
                                   <Flame className="w-6 h-6 mr-2 fill-orange-500" />
                                   {streak}{' '}
                                   <span className="text-sm ml-1 text-muted-foreground font-medium">

@@ -157,6 +157,14 @@ export const addPlanItem = async (planId: string, exerciseId: string, details: P
   }
 }
 
+export const updatePlanFeedback = async (planId: string, feedback: string) => {
+  const { error } = await supabase
+    .from('exercise_plans')
+    .update({ professional_feedback: feedback })
+    .eq('id', planId)
+  if (error) throw error
+}
+
 export const getFullPlanDetails = async (planId: string) => {
   try {
     const { data, error } = await supabase

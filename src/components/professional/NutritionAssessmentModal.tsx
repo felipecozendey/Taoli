@@ -78,7 +78,11 @@ export function NutritionAssessmentModal({
     visceralFat: '',
     water: '',
   })
-  const [energy, setEnergy] = useState({ formula: 'harris', activityLevel: '1.2' })
+  const [energy, setEnergy] = useState({
+    formula: 'harris',
+    activityLevel: '1.2',
+    fatFormula: 'pollock7',
+  })
   const [photos, setPhotos] = useState<Record<string, File | null>>({
     front: null,
     side: null,
@@ -107,6 +111,7 @@ export function NutritionAssessmentModal({
         setEnergy({
           formula: initialData.formulas_used?.energy || 'harris',
           activityLevel: '1.2',
+          fatFormula: initialData.formulas_used?.fat || 'pollock7',
         })
       } else {
         setBasic({ weight: '', height: '', age: '', gender: '' })
@@ -134,7 +139,7 @@ export function NutritionAssessmentModal({
           calf: '',
         })
         setBia({ bodyFat: '', muscleMass: '', visceralFat: '', water: '' })
-        setEnergy({ formula: 'harris', activityLevel: '1.2' })
+        setEnergy({ formula: 'harris', activityLevel: '1.2', fatFormula: 'pollock7' })
       }
       setActiveTab('basic')
     }
@@ -148,23 +153,41 @@ export function NutritionAssessmentModal({
 
     const bmi = w > 0 && h > 0 ? w / Math.pow(h / 100, 2) : 0
 
-    const sum7 = [
-      'chest',
-      'midaxillary',
-      'triceps',
-      'subscapular',
-      'abdomen',
-      'suprailiac',
-      'thigh',
-    ].reduce((sum, k) => sum + (parseFloat(folds[k]) || 0), 0)
-
     let skinfoldFat = 0
-    if (sum7 > 0 && a > 0 && g) {
-      const d =
-        g === 'M'
-          ? 1.112 - 0.00043499 * sum7 + 0.00000055 * sum7 * sum7 - 0.00028826 * a
-          : 1.097 - 0.00046971 * sum7 + 0.00000056 * sum7 * sum7 - 0.00012828 * a
-      if (d > 0) skinfoldFat = 495 / d - 450
+    if (a > 0 && g) {
+      if (energy.fatFormula === 'pollock3') {
+        let sum3 = 0
+        if (g === 'M') {
+          sum3 =
+            (parseFloat(folds.chest) || 0) +
+            (parseFloat(folds.abdomen) || 0) +
+            (parseFloat(folds.thigh) || 0)
+          const d = 1.10938 - 0.0008267 * sum3 + 0.0000016 * sum3 * sum3 - 0.0002574 * a
+          if (d > 0) skinfoldFat = 495 / d - 450
+        } else {
+          sum3 =
+            (parseFloat(folds.triceps) || 0) +
+            (parseFloat(folds.suprailiac) || 0) +
+            (parseFloat(folds.thigh) || 0)
+          const d = 1.0994921 - 0.0009929 * sum3 + 0.0000023 * sum3 * sum3 - 0.0001392 * a
+          if (d > 0) skinfoldFat = 495 / d - 450
+        }
+      } else {
+        const sum7 = [
+          'chest',
+          'midaxillary',
+          'triceps',
+          'subscapular',
+          'abdomen',
+          'suprailiac',
+          'thigh',
+        ].reduce((sum, k) => sum + (parseFloat(folds[k]) || 0), 0)
+        const d =
+          g === 'M'
+            ? 1.112 - 0.00043499 * sum7 + 0.00000055 * sum7 * sum7 - 0.00028826 * a
+            : 1.097 - 0.00046971 * sum7 + 0.00000056 * sum7 * sum7 - 0.00012828 * a
+        if (d > 0) skinfoldFat = 495 / d - 450
+      }
     }
 
     const biaFat = parseFloat(bia.bodyFat) || 0
@@ -238,7 +261,11 @@ export function NutritionAssessmentModal({
         tdee: parseFloat(results.tdee as string) || undefined,
         circumferences: parseObj(circs),
         skinfolds: parseObj(folds),
-        formulas_used: { energy: energy.formula, fat: 'jackson_pollock_7', bia: parseObj(bia) },
+        formulas_used: {
+          energy: energy.formula,
+          fat: energy.fatFormula || 'pollock7',
+          bia: parseObj(bia),
+        },
         ...urls,
       }
 
@@ -450,6 +477,21 @@ export function NutritionAssessmentModal({
               <div className="space-y-6 max-w-xl">
                 <h3 className="text-lg font-semibold">Metabolismo e Gasto</h3>
                 <div className="space-y-4">
+                  <div className="space-y-2">
+                    <Label>Fórmula de % Gordura (Pregas)</Label>
+                    <Select
+                      value={energy.fatFormula}
+                      onValueChange={(v) => setEnergy({ ...energy, fatFormula: v })}
+                    >
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="pollock3">Pollock 3 Dobras</SelectItem>
+                        <SelectItem value="pollock7">Pollock 7 Dobras</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
                   <div className="space-y-2">
                     <Label>Fórmula de TMB</Label>
                     <Select

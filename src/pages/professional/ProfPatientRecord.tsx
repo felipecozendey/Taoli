@@ -50,6 +50,10 @@ import { NutritionAssessmentModal } from '@/components/professional/NutritionAss
 import { NutritionSupplementModal } from '@/components/professional/NutritionSupplementModal'
 import { DietPrescriptionModal } from '@/components/professional/DietPrescriptionModal'
 import { RecipeBuilderModal } from '@/components/professional/RecipeBuilderModal'
+import { LabExamsTab } from '@/components/professional/emr/LabExamsTab'
+import { AnamnesisTab } from '@/components/professional/emr/AnamnesisTab'
+import { StrengthTestTab } from '@/components/professional/emr/StrengthTestTab'
+import { PhysicalAssessmentEvolution } from '@/components/professional/emr/PhysicalAssessmentEvolution'
 import {
   getPatientSupplements,
   deleteSupplement,
@@ -372,6 +376,18 @@ export default function ProfPatientRecord() {
             <TabsTrigger value="nutricao" className="py-2.5 px-4 rounded-md">
               Nutrição
             </TabsTrigger>
+            <TabsTrigger value="avaliacao" className="py-2.5 px-4 rounded-md">
+              Avaliação Física
+            </TabsTrigger>
+            <TabsTrigger value="forca" className="py-2.5 px-4 rounded-md">
+              Testes de Força
+            </TabsTrigger>
+            <TabsTrigger value="exames" className="py-2.5 px-4 rounded-md">
+              Exames Lab
+            </TabsTrigger>
+            <TabsTrigger value="anamnese" className="py-2.5 px-4 rounded-md">
+              Anamnese
+            </TabsTrigger>
             <TabsTrigger value="treino" className="py-2.5 px-4 rounded-md">
               Treino
             </TabsTrigger>
@@ -382,6 +398,33 @@ export default function ProfPatientRecord() {
               Produtividade
             </TabsTrigger>
           </TabsList>
+
+          <TabsContent value="avaliacao" className="animate-fade-in-up mt-0 space-y-6">
+            <PhysicalAssessmentEvolution
+              assessments={assessments}
+              onNewAssessment={() => {
+                setSelectedAssessment(null)
+                setIsAssessmentModalOpen(true)
+              }}
+              onEditAssessment={(a) => {
+                setSelectedAssessment(a)
+                setIsAssessmentModalOpen(true)
+              }}
+              onDeleteAssessment={handleDeleteAssessment}
+            />
+          </TabsContent>
+
+          <TabsContent value="forca" className="animate-fade-in-up mt-0 space-y-6">
+            <StrengthTestTab clientId={patientId || ''} />
+          </TabsContent>
+
+          <TabsContent value="exames" className="animate-fade-in-up mt-0 space-y-6">
+            <LabExamsTab clientId={patientId || ''} />
+          </TabsContent>
+
+          <TabsContent value="anamnese" className="animate-fade-in-up mt-0 space-y-6">
+            <AnamnesisTab clientId={patientId || ''} professionalId={user?.id || ''} />
+          </TabsContent>
 
           <TabsContent value="geral" className="animate-fade-in-up mt-0 space-y-6">
             {/* Dashboard Visão de Helicóptero */}
@@ -716,98 +759,8 @@ export default function ProfPatientRecord() {
                       <ChefHat className="h-4 w-4 mr-2" />
                       Nova Receita
                     </Button>
-                    <Button
-                      onClick={() => {
-                        setSelectedAssessment(null)
-                        setIsAssessmentModalOpen(true)
-                      }}
-                      className="w-full sm:w-auto"
-                    >
-                      <Activity className="h-4 w-4 mr-2" />
-                      Nova Avaliação Física
-                    </Button>
                   </div>
                 </div>
-
-                <Card>
-                  <CardHeader className="pb-3">
-                    <CardTitle className="text-base flex items-center gap-2">
-                      <Activity className="h-4 w-4 text-primary" /> Histórico de Avaliações
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    {assessments.length === 0 ? (
-                      <p className="text-sm text-muted-foreground text-center py-6 border rounded-md border-dashed">
-                        Nenhuma avaliação registada.
-                      </p>
-                    ) : (
-                      <>
-                        <Table>
-                          <TableHeader>
-                            <TableRow>
-                              <TableHead>Data</TableHead>
-                              <TableHead>Peso</TableHead>
-                              <TableHead>% Gordura</TableHead>
-                              <TableHead>TMB</TableHead>
-                              <TableHead>VETA</TableHead>
-                              <TableHead className="text-right">Ações</TableHead>
-                            </TableRow>
-                          </TableHeader>
-                          <TableBody>
-                            {assessments.slice(0, visibleAssessments).map((a) => (
-                              <TableRow key={a.id}>
-                                <TableCell className="font-medium">
-                                  {new Intl.DateTimeFormat('pt-BR').format(new Date(a.date))}
-                                </TableCell>
-                                <TableCell>{a.weight ? `${a.weight} kg` : '--'}</TableCell>
-                                <TableCell>
-                                  {a.body_fat_percentage ? `${a.body_fat_percentage} %` : '--'}
-                                </TableCell>
-                                <TableCell>{a.bmr ? `${a.bmr} kcal` : '--'}</TableCell>
-                                <TableCell>{a.tdee ? `${a.tdee} kcal` : '--'}</TableCell>
-                                <TableCell className="text-right">
-                                  <DropdownMenu>
-                                    <DropdownMenuTrigger asChild>
-                                      <Button variant="ghost" className="h-8 w-8 p-0">
-                                        <MoreHorizontal className="h-4 w-4" />
-                                      </Button>
-                                    </DropdownMenuTrigger>
-                                    <DropdownMenuContent align="end">
-                                      <DropdownMenuItem
-                                        onClick={() => {
-                                          setSelectedAssessment(a)
-                                          setIsAssessmentModalOpen(true)
-                                        }}
-                                      >
-                                        Editar
-                                      </DropdownMenuItem>
-                                      <DropdownMenuItem
-                                        className="text-destructive focus:bg-destructive/10 focus:text-destructive"
-                                        onClick={() => handleDeleteAssessment(a.id)}
-                                      >
-                                        Excluir
-                                      </DropdownMenuItem>
-                                    </DropdownMenuContent>
-                                  </DropdownMenu>
-                                </TableCell>
-                              </TableRow>
-                            ))}
-                          </TableBody>
-                        </Table>
-                        {assessments.length > visibleAssessments && (
-                          <div className="mt-4 flex justify-center">
-                            <Button
-                              variant="outline"
-                              onClick={() => setVisibleAssessments((prev) => prev + 5)}
-                            >
-                              Ver Mais Avaliações
-                            </Button>
-                          </div>
-                        )}
-                      </>
-                    )}
-                  </CardContent>
-                </Card>
 
                 <Card>
                   <CardHeader className="pb-3">

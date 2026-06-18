@@ -2,6 +2,7 @@ import { Outlet } from 'react-router-dom'
 import { ImpersonationBanner } from '@/components/shared/ImpersonationBanner'
 import { useAuth } from '@/contexts/AuthContext'
 import { cn } from '@/lib/utils'
+import { InstallPrompt } from '@/components/pwa/InstallPrompt'
 
 export default function Layout() {
   const { isImpersonating } = useAuth()
@@ -12,6 +13,7 @@ export default function Layout() {
       <main className={cn('flex flex-col flex-1', isImpersonating && 'mt-12')}>
         <Outlet />
       </main>
+      <InstallPrompt />
     </div>
   )
 }

@@ -13,10 +13,30 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion'
-import { Dumbbell, Timer, Activity, CheckCircle2, Check, Target, HeartPulse } from 'lucide-react'
+import {
+  Dumbbell,
+  Timer,
+  Activity,
+  CheckCircle2,
+  Check,
+  Target,
+  HeartPulse,
+  Edit2,
+} from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useAuth } from '@/contexts/AuthContext'
 import { getClientActivePlans, getFullPlanDetails } from '@/services/training'
+import {
+  ResponsiveModal,
+  ResponsiveModalTrigger,
+  ResponsiveModalContent,
+  ResponsiveModalHeader,
+  ResponsiveModalTitle,
+  ResponsiveModalDescription,
+  ResponsiveModalFooter,
+  ResponsiveModalClose,
+} from '@/components/ui/responsive-modal'
+import { Label } from '@/components/ui/label'
 
 // Keep evolution mock as it's not part of the current AC scope to replace
 const LOAD_EVOLUTION = [
@@ -59,6 +79,12 @@ export default function ClientTraining() {
   const [isLoading, setIsLoading] = useState(true)
   const [allPlans, setAllPlans] = useState<PlanListType[]>([])
   const [activePlan, setActivePlan] = useState<FullPlanDetailsType | null>(null)
+
+  // State for the responsive modal
+  const [selectedExerciseId, setSelectedExerciseId] = useState<string | null>(null)
+  const [executionData, setExecutionData] = useState<
+    Record<string, { load: string; reps: string }>
+  >({})
 
   useEffect(() => {
     let isMounted = true
@@ -276,29 +302,84 @@ export default function ClientTraining() {
                             </Button>
                           </div>
 
-                          <div className="grid grid-cols-2 gap-3 pt-3 border-t border-dashed mt-2">
-                            <div className="space-y-1.5">
-                              <label className="text-xs font-medium text-muted-foreground">
-                                Carga Real (kg)
-                              </label>
-                              <Input
-                                type="number"
-                                placeholder="Ex: 20"
-                                className="h-10 bg-background text-sm"
-                                disabled={isCompleted}
-                              />
-                            </div>
-                            <div className="space-y-1.5">
-                              <label className="text-xs font-medium text-muted-foreground">
-                                Repetições Reais
-                              </label>
-                              <Input
-                                type="number"
-                                placeholder="Ex: 12"
-                                className="h-10 bg-background text-sm"
-                                disabled={isCompleted}
-                              />
-                            </div>
+                          <div className="flex gap-2 pt-3 border-t border-dashed mt-3">
+                            <ResponsiveModal>
+                              <ResponsiveModalTrigger asChild>
+                                <Button
+                                  variant="secondary"
+                                  className="w-full h-12 text-sm sm:h-10 font-medium"
+                                  disabled={isCompleted}
+                                >
+                                  <Edit2 className="w-4 h-4 mr-2" />
+                                  Registrar Carga/Reps
+                                </Button>
+                              </ResponsiveModalTrigger>
+                              <ResponsiveModalContent className="sm:max-w-[425px]">
+                                <ResponsiveModalHeader>
+                                  <ResponsiveModalTitle>Registrar Desempenho</ResponsiveModalTitle>
+                                  <ResponsiveModalDescription>
+                                    {item.exercise?.name}
+                                  </ResponsiveModalDescription>
+                                </ResponsiveModalHeader>
+                                <div className="grid grid-cols-2 gap-4 py-4 px-4 sm:px-0">
+                                  <div className="space-y-2">
+                                    <Label
+                                      htmlFor={`load-${item.id}`}
+                                      className="text-base sm:text-sm"
+                                    >
+                                      Carga Real (kg)
+                                    </Label>
+                                    <Input
+                                      id={`load-${item.id}`}
+                                      type="number"
+                                      placeholder="Ex: 20"
+                                      className="h-12 sm:h-10 text-base sm:text-sm"
+                                      value={executionData[item.id]?.load || ''}
+                                      onChange={(e) =>
+                                        setExecutionData((prev) => ({
+                                          ...prev,
+                                          [item.id]: { ...prev[item.id], load: e.target.value },
+                                        }))
+                                      }
+                                    />
+                                  </div>
+                                  <div className="space-y-2">
+                                    <Label
+                                      htmlFor={`reps-${item.id}`}
+                                      className="text-base sm:text-sm"
+                                    >
+                                      Repetições
+                                    </Label>
+                                    <Input
+                                      id={`reps-${item.id}`}
+                                      type="number"
+                                      placeholder="Ex: 12"
+                                      className="h-12 sm:h-10 text-base sm:text-sm"
+                                      value={executionData[item.id]?.reps || ''}
+                                      onChange={(e) =>
+                                        setExecutionData((prev) => ({
+                                          ...prev,
+                                          [item.id]: { ...prev[item.id], reps: e.target.value },
+                                        }))
+                                      }
+                                    />
+                                  </div>
+                                </div>
+                                <ResponsiveModalFooter className="px-4 sm:px-0 pb-4 sm:pb-0">
+                                  <ResponsiveModalClose asChild>
+                                    <Button
+                                      type="button"
+                                      className="h-12 sm:h-10 w-full sm:w-auto"
+                                      onClick={() =>
+                                        setCompleted((p) => ({ ...p, [item.id]: true }))
+                                      }
+                                    >
+                                      Salvar e Concluir
+                                    </Button>
+                                  </ResponsiveModalClose>
+                                </ResponsiveModalFooter>
+                              </ResponsiveModalContent>
+                            </ResponsiveModal>
                           </div>
                         </CardContent>
                       </Card>

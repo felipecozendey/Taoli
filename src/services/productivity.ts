@@ -413,3 +413,11 @@ export const deleteHabit = async (habitId: string) => {
   const { error } = await supabase.from('habits').delete().eq('id', habitId)
   if (error) throw error
 }
+
+export const toggleHabitApproval = async (habitId: string, isApproved: boolean) => {
+  const { error } = await supabase
+    .from('habits')
+    .update({ is_approved: isApproved })
+    .eq('id', habitId)
+  if (error) throw error
+}

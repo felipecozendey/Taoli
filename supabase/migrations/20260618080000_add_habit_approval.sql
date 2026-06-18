@@ -1,0 +1,1 @@
+ALTER TABLE public.habits ADD COLUMN IF NOT EXISTS is_approved BOOLEAN NOT NULL DEFAULT false;

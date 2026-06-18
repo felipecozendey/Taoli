@@ -39,11 +39,12 @@ import {
   ChefHat,
   Flame,
   Target as TargetIcon,
+  Heart,
 } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
 import { supabase } from '@/lib/supabase/client'
 import { useToast } from '@/hooks/use-toast'
-import { getHabits, prescribeHabit } from '@/services/productivity'
+import { getHabits, prescribeHabit, toggleHabitApproval } from '@/services/productivity'
 import { getPatientById } from '@/services/patients'
 import { PatientNutritionMirror } from '@/components/professional/PatientNutritionMirror'
 import { NutritionAssessmentModal } from '@/components/professional/NutritionAssessmentModal'
@@ -91,6 +92,7 @@ import {
 import { getClientPlans, getFullPlanDetails, deletePlan } from '@/services/training'
 import { TrainingBuilderModal } from '@/components/training/TrainingBuilderModal'
 import { AuthorshipBadge } from '@/components/shared/AuthorshipBadge'
+import { cn } from '@/lib/utils'
 
 const calculateStreak = (logs: any[]) => {
   if (!logs || logs.length === 0) return 0
@@ -1354,12 +1356,43 @@ export default function ProfPatientRecord() {
                               className="relative overflow-hidden border-border/50"
                             >
                               <CardContent className="p-4 flex flex-col gap-3">
-                                <div>
-                                  <h4 className="font-semibold text-base">{habit.title}</h4>
-                                  {habit.professional_id && (
-                                    <Badge variant="secondary" className="mt-1 text-xs">
-                                      👨‍⚕️ Prescrito
-                                    </Badge>
+                                <div className="flex justify-between items-start gap-2">
+                                  <div>
+                                    <h4 className="font-semibold text-base mb-2">{habit.title}</h4>
+                                    <AuthorshipBadge
+                                      createdBy={habit.created_by}
+                                      patientId={patientId}
+                                    />
+                                  </div>
+                                  {habit.created_by === patientId && (
+                                    <Button
+                                      variant="ghost"
+                                      size="icon"
+                                      className={cn(
+                                        'h-8 w-8 shrink-0',
+                                        habit.is_approved
+                                          ? 'text-rose-500 hover:text-rose-600 hover:bg-rose-50'
+                                          : 'text-muted-foreground hover:text-rose-500 hover:bg-rose-50',
+                                      )}
+                                      onClick={async () => {
+                                        try {
+                                          await toggleHabitApproval(habit.id, !habit.is_approved)
+                                          fetchPatientHabits()
+                                        } catch (e) {
+                                          toast({
+                                            title: 'Erro ao atualizar hábito',
+                                            variant: 'destructive',
+                                          })
+                                        }
+                                      }}
+                                    >
+                                      <Heart
+                                        className={cn(
+                                          'h-5 w-5',
+                                          habit.is_approved ? 'fill-current' : '',
+                                        )}
+                                      />
+                                    </Button>
                                   )}
                                 </div>
                                 <div className="flex items-center text-orange-500 font-bold text-2xl">

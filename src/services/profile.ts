@@ -2,7 +2,8 @@ import { supabase } from '@/lib/supabase/client'
 
 export const uploadAvatar = async (userId: string, file: File) => {
   const fileExt = file.name.split('.').pop()
-  const fileName = `${userId}-${Math.random().toString(36).substring(7)}.${fileExt}`
+  const uuid = crypto.randomUUID()
+  const fileName = `${userId}-${uuid}.${fileExt}`
   const filePath = `${fileName}`
 
   const { error: uploadError } = await supabase.storage.from('avatars').upload(filePath, file)

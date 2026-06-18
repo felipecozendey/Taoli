@@ -5,6 +5,7 @@ import { Toaster as Sonner } from '@/components/ui/sonner'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import { AuthProvider } from './contexts/AuthContext'
 import { ProtectedRoute } from './components/auth/ProtectedRoute'
+import { PublicRoute } from './components/auth/PublicRoute'
 import { ThemeProvider } from '@/components/ThemeProvider'
 
 // Global Layout
@@ -68,9 +69,8 @@ const App = () => (
           <Sonner />
           <Routes>
             <Route element={<Layout />}>
-              {/* Public Routes */}
+              {/* Landing Page */}
               <Route path="/" element={<Index />} />
-              <Route path="/login" element={<Login />} />
 
               {/* Master Admin Routes */}
               <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
@@ -192,6 +192,10 @@ const App = () => (
             </Route>
 
             {/* Standalone Public Routes */}
+            <Route element={<PublicRoute />}>
+              <Route path="/login" element={<Login />} />
+            </Route>
+
             <Route
               path="/book/:profId"
               element={

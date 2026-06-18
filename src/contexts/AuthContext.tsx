@@ -117,6 +117,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setRealHighestRole(null)
       setImpersonatedUser(null)
       localStorage.removeItem('activeRole')
+      navigate('/login', { replace: true })
     }
   }
 

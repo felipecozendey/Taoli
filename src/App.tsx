@@ -1,4 +1,3 @@
-import { BrowserRouter } from 'react-router-dom'
 import { Toaster } from '@/components/ui/toaster'
 import { Toaster as Sonner } from '@/components/ui/sonner'
 import { TooltipProvider } from '@/components/ui/tooltip'
@@ -18,18 +17,16 @@ const App = () => {
   }, [])
 
   return (
-    <BrowserRouter future={{ v7_startTransition: false, v7_relativeSplatPath: false }}>
-      <AuthProvider>
-        <ThemeProvider defaultTheme="system" storageKey="taoli-ui-theme">
-          <TooltipProvider>
-            <Toaster />
-            <Sonner />
-            <AppRoutes />
-            <InstallPrompt />
-          </TooltipProvider>
-        </ThemeProvider>
-      </AuthProvider>
-    </BrowserRouter>
+    <AuthProvider>
+      <ThemeProvider defaultTheme="system" storageKey="taoli-ui-theme">
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <AppRoutes />
+          <InstallPrompt />
+        </TooltipProvider>
+      </ThemeProvider>
+    </AuthProvider>
   )
 }
 

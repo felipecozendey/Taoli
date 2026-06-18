@@ -22,6 +22,7 @@ export const createPlan = async (
   clientId: string,
   name: string,
   planType: 'workout' | 'rehabilitation',
+  professionalId?: string | null,
 ) => {
   try {
     const {
@@ -33,7 +34,7 @@ export const createPlan = async (
     const { data, error } = await supabase
       .from('exercise_plans')
       .insert({
-        professional_id: user.id,
+        professional_id: professionalId || null,
         client_id: clientId,
         name,
         plan_type: planType,
@@ -70,6 +71,34 @@ export const getProfessionalPlans = async () => {
     return data
   } catch (error) {
     console.error('Error in getProfessionalPlans:', error)
+    throw error
+  }
+}
+
+export const getClientPlans = async (clientId: string) => {
+  try {
+    const { data, error } = await supabase
+      .from('exercise_plans')
+      .select('*')
+      .eq('client_id', clientId)
+      .order('created_at', { ascending: false })
+
+    if (error) throw error
+    return data
+  } catch (error) {
+    console.error('Error in getClientPlans:', error)
+    throw error
+  }
+}
+
+export const deletePlan = async (planId: string) => {
+  try {
+    const { error } = await supabase.from('exercise_plans').delete().eq('id', planId)
+
+    if (error) throw error
+    return true
+  } catch (error) {
+    console.error('Error in deletePlan:', error)
     throw error
   }
 }

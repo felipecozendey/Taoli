@@ -22,10 +22,12 @@ import {
   Target,
   HeartPulse,
   Edit2,
+  Plus,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useAuth } from '@/contexts/AuthContext'
 import { getClientActivePlans, getFullPlanDetails } from '@/services/training'
+import { TrainingBuilderModal } from '@/components/training/TrainingBuilderModal'
 import {
   ResponsiveModal,
   ResponsiveModalTrigger,
@@ -82,6 +84,8 @@ export default function ClientTraining() {
   const [allPlans, setAllPlans] = useState<PlanListType[]>([])
   const [activePlan, setActivePlan] = useState<FullPlanDetailsType | null>(null)
 
+  const [isBuilderOpen, setIsBuilderOpen] = useState(false)
+
   // State for the responsive modal
   const [selectedExerciseId, setSelectedExerciseId] = useState<string | null>(null)
   const [executionData, setExecutionData] = useState<
@@ -94,38 +98,30 @@ export default function ClientTraining() {
   const [currentSet, setCurrentSet] = useState(1)
   const [isSetActive, setIsSetActive] = useState(false)
 
-  useEffect(() => {
-    let isMounted = true
+  const loadData = async () => {
+    if (!user?.id) return
 
-    const loadData = async () => {
-      if (!user?.id) return
+    try {
+      setIsLoading(true)
+      const plans = await getClientActivePlans(user.id)
 
-      try {
-        setIsLoading(true)
-        const plans = await getClientActivePlans(user.id)
-
-        if (!isMounted) return
-
-        if (plans && plans.length > 0) {
-          setAllPlans(plans as PlanListType[])
-          const fullDetails = await getFullPlanDetails(plans[0].id)
-          if (isMounted) setActivePlan(fullDetails as unknown as FullPlanDetailsType)
-        } else {
-          setAllPlans([])
-          setActivePlan(null)
-        }
-      } catch (error) {
-        console.error('Error fetching plans:', error)
-      } finally {
-        if (isMounted) setIsLoading(false)
+      if (plans && plans.length > 0) {
+        setAllPlans(plans as PlanListType[])
+        const fullDetails = await getFullPlanDetails(plans[0].id)
+        setActivePlan(fullDetails as unknown as FullPlanDetailsType)
+      } else {
+        setAllPlans([])
+        setActivePlan(null)
       }
+    } catch (error) {
+      console.error('Error fetching plans:', error)
+    } finally {
+      setIsLoading(false)
     }
+  }
 
+  useEffect(() => {
     loadData()
-
-    return () => {
-      isMounted = false
-    }
   }, [user?.id])
 
   const toggleComplete = (id: string) => setCompleted((p) => ({ ...p, [id]: !p[id] }))
@@ -256,12 +252,25 @@ export default function ClientTraining() {
   return (
     <div className="flex flex-col min-h-full pb-20 md:pb-0">
       <DashboardHeader title="Os Meus Treinos">
-        <Badge variant="secondary" className="hidden sm:inline-flex bg-muted">
-          Área de Exercício
-        </Badge>
+        <div className="flex items-center gap-2">
+          <Badge variant="secondary" className="hidden sm:inline-flex bg-muted">
+            Área de Exercício
+          </Badge>
+          <Button onClick={() => setIsBuilderOpen(true)} size="sm" className="hidden sm:flex">
+            <Plus className="w-4 h-4 mr-2" /> Montar Meu Treino
+          </Button>
+        </div>
       </DashboardHeader>
 
       <PageContent className="max-w-3xl mx-auto w-full animate-fade-in-up px-4 py-4 md:p-6">
+        <div className="mb-6 sm:hidden">
+          <Button
+            onClick={() => setIsBuilderOpen(true)}
+            className="w-full h-12 text-md font-medium"
+          >
+            <Plus className="w-5 h-5 mr-2" /> Montar Meu Treino
+          </Button>
+        </div>
         <Tabs defaultValue="today" className="w-full">
           <TabsList className="grid w-full grid-cols-3 mb-6 h-auto p-1 bg-muted/60">
             <TabsTrigger
@@ -638,6 +647,15 @@ export default function ClientTraining() {
           </TabsContent>
         </Tabs>
       </PageContent>
+
+      {user && (
+        <TrainingBuilderModal
+          isOpen={isBuilderOpen}
+          onClose={() => setIsBuilderOpen(false)}
+          clientId={user.id}
+          onSuccess={loadData}
+        />
+      )}
     </div>
   )
 }

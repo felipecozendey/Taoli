@@ -88,6 +88,9 @@ import {
   createTransaction,
   updateSubscriptionStatus,
 } from '@/services/clinic'
+import { getClientPlans, getFullPlanDetails, deletePlan } from '@/services/training'
+import { TrainingBuilderModal } from '@/components/training/TrainingBuilderModal'
+import { AuthorshipBadge } from '@/components/shared/AuthorshipBadge'
 
 const calculateStreak = (logs: any[]) => {
   if (!logs || logs.length === 0) return 0
@@ -177,6 +180,10 @@ export default function ProfPatientRecord() {
   const [isLinkPlanOpen, setIsLinkPlanOpen] = useState(false)
   const [isPaymentOpen, setIsPaymentOpen] = useState(false)
 
+  const [trainingPlans, setTrainingPlans] = useState<any[]>([])
+  const [isTrainingModalOpen, setIsTrainingModalOpen] = useState(false)
+  const [selectedTrainingPlan, setSelectedTrainingPlan] = useState<any>(null)
+
   const fetchFinancials = async () => {
     if (!patientId || !user?.id) return
     try {
@@ -211,6 +218,16 @@ export default function ProfPatientRecord() {
     if (!patientId) return
     const { data } = await getPatientAssessments(patientId)
     if (data) setAssessments(data)
+  }
+
+  const fetchTrainingPlans = async () => {
+    if (!patientId) return
+    try {
+      const data = await getClientPlans(patientId)
+      if (data) setTrainingPlans(data)
+    } catch (e) {
+      console.error(e)
+    }
   }
 
   const fetchTodayTracking = async () => {
@@ -257,6 +274,7 @@ export default function ProfPatientRecord() {
           fetchPatientHabits(),
           fetchTodayTracking(),
           fetchFinancials(),
+          fetchTrainingPlans(),
         ])
       } catch (e) {
         console.error('Error fetching patient data:', e)
@@ -386,6 +404,36 @@ export default function ProfPatientRecord() {
       fetchFinancials()
     } catch (e: any) {
       toast({ title: 'Erro ao cancelar', variant: 'destructive' })
+    }
+  }
+
+  const handleDuplicateTraining = async (plan: any) => {
+    try {
+      const fullDetails = await getFullPlanDetails(plan.id)
+      const mappedItems = fullDetails.items.map((item: any) => ({
+        ...item,
+        tempId: Math.random().toString(36).substr(2, 9),
+      }))
+      setSelectedTrainingPlan({
+        name: `${plan.name} (Cópia)`,
+        plan_type: plan.plan_type,
+        items: mappedItems,
+      })
+      setIsTrainingModalOpen(true)
+    } catch (e) {
+      toast({ title: 'Erro ao carregar detalhes do plano', variant: 'destructive' })
+    }
+  }
+
+  const handleDeleteTrainingPlan = async (planId: string) => {
+    if (confirm('Tem certeza que deseja excluir este plano?')) {
+      try {
+        await deletePlan(planId)
+        fetchTrainingPlans()
+        toast({ title: 'Plano excluído com sucesso.' })
+      } catch (e) {
+        toast({ title: 'Erro ao excluir plano', variant: 'destructive' })
+      }
     }
   }
 
@@ -945,19 +993,104 @@ export default function ProfPatientRecord() {
             {!checkPermission('training') ? (
               <LockedContent />
             ) : (
-              <Card>
-                <CardHeader>
-                  <CardTitle>Módulo de Treino</CardTitle>
-                  <CardDescription>
-                    Acompanhamento físico e prescrição de exercícios.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="p-8 text-center text-muted-foreground border rounded-lg border-dashed">
-                    Nenhum treino prescrito ativamente.
+              <div className="space-y-6">
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                  <div>
+                    <h3 className="text-lg font-semibold flex items-center gap-2">
+                      <Dumbbell className="h-5 w-5 text-primary" />
+                      Módulo de Treino
+                    </h3>
+                    <p className="text-sm text-muted-foreground">
+                      Acompanhamento físico e prescrição de exercícios.
+                    </p>
                   </div>
-                </CardContent>
-              </Card>
+                  <Button
+                    onClick={() => {
+                      setSelectedTrainingPlan(null)
+                      setIsTrainingModalOpen(true)
+                    }}
+                  >
+                    <Plus className="w-4 h-4 mr-2" />
+                    Novo Treino
+                  </Button>
+                </div>
+
+                <Card>
+                  <CardContent className="p-0">
+                    {trainingPlans.length === 0 ? (
+                      <div className="p-8 text-center text-muted-foreground border-b border-dashed">
+                        Nenhum treino prescrito ou criado.
+                      </div>
+                    ) : (
+                      <Table>
+                        <TableHeader>
+                          <TableRow>
+                            <TableHead>Nome do Plano</TableHead>
+                            <TableHead>Tipo</TableHead>
+                            <TableHead>Status</TableHead>
+                            <TableHead>Autoria</TableHead>
+                            <TableHead className="text-right">Ações</TableHead>
+                          </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                          {trainingPlans.map((plan) => {
+                            const isPatientCreated = plan.created_by === patientId
+                            return (
+                              <TableRow key={plan.id}>
+                                <TableCell className="font-medium">{plan.name}</TableCell>
+                                <TableCell>
+                                  {plan.plan_type === 'workout' ? 'Força' : 'Reabilitação'}
+                                </TableCell>
+                                <TableCell>
+                                  <Badge variant={plan.is_active ? 'default' : 'secondary'}>
+                                    {plan.is_active ? 'Ativo' : 'Inativo'}
+                                  </Badge>
+                                </TableCell>
+                                <TableCell>
+                                  <AuthorshipBadge
+                                    createdBy={plan.created_by}
+                                    patientId={plan.client_id}
+                                  />
+                                </TableCell>
+                                <TableCell className="text-right">
+                                  <DropdownMenu>
+                                    <DropdownMenuTrigger asChild>
+                                      <Button variant="ghost" className="h-8 w-8 p-0">
+                                        <MoreHorizontal className="h-4 w-4" />
+                                      </Button>
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent align="end">
+                                      {isPatientCreated ? (
+                                        <DropdownMenuItem
+                                          onClick={() => handleDuplicateTraining(plan)}
+                                        >
+                                          Duplicar e Ajustar
+                                        </DropdownMenuItem>
+                                      ) : (
+                                        <DropdownMenuItem
+                                          onClick={() => handleDuplicateTraining(plan)}
+                                        >
+                                          Duplicar Plano
+                                        </DropdownMenuItem>
+                                      )}
+                                      <DropdownMenuItem
+                                        className="text-destructive focus:bg-destructive/10 focus:text-destructive"
+                                        onClick={() => handleDeleteTrainingPlan(plan.id)}
+                                      >
+                                        Excluir
+                                      </DropdownMenuItem>
+                                    </DropdownMenuContent>
+                                  </DropdownMenu>
+                                </TableCell>
+                              </TableRow>
+                            )
+                          })}
+                        </TableBody>
+                      </Table>
+                    )}
+                  </CardContent>
+                </Card>
+              </div>
             )}
           </TabsContent>
 
@@ -1274,6 +1407,16 @@ export default function ProfPatientRecord() {
         onClose={() => setIsRecipeModalOpen(false)}
         professionalId={user?.id || ''}
       />
+      {user && patientId && (
+        <TrainingBuilderModal
+          isOpen={isTrainingModalOpen}
+          onClose={() => setIsTrainingModalOpen(false)}
+          clientId={patientId}
+          professionalId={user.id}
+          initialData={selectedTrainingPlan}
+          onSuccess={fetchTrainingPlans}
+        />
+      )}
     </div>
   )
 }

@@ -19,6 +19,21 @@ export const createAppointment = async (appointmentData: any) => {
   if (error) throw error
 }
 
+export const createAppointments = async (appointmentsData: any[]) => {
+  const { error } = await supabase.from('appointments').insert(appointmentsData)
+  if (error) throw error
+}
+
+export const updateAppointment = async (id: string, appointmentData: any) => {
+  const { error } = await supabase.from('appointments').update(appointmentData).eq('id', id)
+  if (error) throw error
+}
+
+export const deleteAppointment = async (id: string) => {
+  const { error } = await supabase.from('appointments').delete().eq('id', id)
+  if (error) throw error
+}
+
 // --- PLANOS E ASSINATURAS ---
 export const getServicePlans = async (profId: string) => {
   const { data, error } = await supabase

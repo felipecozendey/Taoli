@@ -8,7 +8,7 @@ RETURNS VOID
 LANGUAGE plpgsql
 SECURITY DEFINER
 SET search_path = public
-AS $func$
+AS $$
 BEGIN
     -- Ensure the user is an admin
     IF NOT public.is_admin_user() THEN
@@ -18,7 +18,7 @@ BEGIN
     INSERT INTO public.audit_logs (admin_id, target_user_id, action, details)
     VALUES (auth.uid(), p_target_user_id, p_action, p_details);
 END;
-$func$;
+$$;
 
 -- Helper function to identify professional users securely without causing infinite recursion
 CREATE OR REPLACE FUNCTION public.is_professional_user()
@@ -26,28 +26,25 @@ RETURNS boolean
 LANGUAGE sql
 SECURITY DEFINER
 SET search_path = public
-AS $func$
+AS $$
   SELECT EXISTS (
     SELECT 1 FROM public.profiles 
     WHERE id = auth.uid() 
     AND (is_nutritionist = true OR is_trainer = true OR is_psychologist = true)
   );
-$func$;
+$$;
 
-DO $do$
-BEGIN
-    -- 2. Restrict direct client INSERTs to audit_logs
-    DROP POLICY IF EXISTS "Masters can insert logs" ON public.audit_logs;
+-- 2. Restrict direct client INSERTs to audit_logs
+DROP POLICY IF EXISTS "Masters can insert logs" ON public.audit_logs;
 
-    -- 3. Profiles RLS Hardening
-    -- Drop the permissive public profiles policy
-    DROP POLICY IF EXISTS "Public profiles are viewable by everyone." ON public.profiles;
+-- 3. Profiles RLS Hardening
+-- Drop the permissive public profiles policy at the very top, before any new policies
+DROP POLICY IF EXISTS "Public profiles are viewable by everyone." ON public.profiles;
 
-    -- Drop existing restrictive policies to recreate them idempotently
-    DROP POLICY IF EXISTS "Users can select own profile" ON public.profiles;
-    DROP POLICY IF EXISTS "Masters can select all profiles" ON public.profiles;
-    DROP POLICY IF EXISTS "Professionals can select linked client profiles" ON public.profiles;
-END $do$;
+-- Drop existing restrictive policies to recreate them idempotently
+DROP POLICY IF EXISTS "Users can select own profile" ON public.profiles;
+DROP POLICY IF EXISTS "Masters can select all profiles" ON public.profiles;
+DROP POLICY IF EXISTS "Professionals can select linked client profiles" ON public.profiles;
 
 -- Create restrictive policies based on the Acceptance Criteria
 CREATE POLICY "Users can select own profile"
@@ -75,41 +72,29 @@ CREATE POLICY "Professionals can select linked client profiles"
 
 -- 4. Support for Secure Admin Impersonation
 -- Ensure master role RLS policies are added to tables missing them so impersonation does not return 403/empty
-DO $do$
-BEGIN
-  -- productivity_tasks
-  DROP POLICY IF EXISTS "Masters can manage all productivity_tasks" ON public.productivity_tasks;
-  CREATE POLICY "Masters can manage all productivity_tasks" ON public.productivity_tasks FOR ALL TO authenticated USING (public.is_admin_user()) WITH CHECK (public.is_admin_user());
+DROP POLICY IF EXISTS "Masters can manage all productivity_tasks" ON public.productivity_tasks;
+CREATE POLICY "Masters can manage all productivity_tasks" ON public.productivity_tasks FOR ALL TO authenticated USING (public.is_admin_user()) WITH CHECK (public.is_admin_user());
 
-  -- productivity_habits
-  DROP POLICY IF EXISTS "Masters can manage all productivity_habits" ON public.productivity_habits;
-  CREATE POLICY "Masters can manage all productivity_habits" ON public.productivity_habits FOR ALL TO authenticated USING (public.is_admin_user()) WITH CHECK (public.is_admin_user());
+DROP POLICY IF EXISTS "Masters can manage all productivity_habits" ON public.productivity_habits;
+CREATE POLICY "Masters can manage all productivity_habits" ON public.productivity_habits FOR ALL TO authenticated USING (public.is_admin_user()) WITH CHECK (public.is_admin_user());
 
-  -- productivity_habit_logs
-  DROP POLICY IF EXISTS "Masters can manage all productivity_habit_logs" ON public.productivity_habit_logs;
-  CREATE POLICY "Masters can manage all productivity_habit_logs" ON public.productivity_habit_logs FOR ALL TO authenticated USING (public.is_admin_user()) WITH CHECK (public.is_admin_user());
+DROP POLICY IF EXISTS "Masters can manage all productivity_habit_logs" ON public.productivity_habit_logs;
+CREATE POLICY "Masters can manage all productivity_habit_logs" ON public.productivity_habit_logs FOR ALL TO authenticated USING (public.is_admin_user()) WITH CHECK (public.is_admin_user());
 
-  -- productivity_focus_settings
-  DROP POLICY IF EXISTS "Masters can manage all productivity_focus_settings" ON public.productivity_focus_settings;
-  CREATE POLICY "Masters can manage all productivity_focus_settings" ON public.productivity_focus_settings FOR ALL TO authenticated USING (public.is_admin_user()) WITH CHECK (public.is_admin_user());
+DROP POLICY IF EXISTS "Masters can manage all productivity_focus_settings" ON public.productivity_focus_settings;
+CREATE POLICY "Masters can manage all productivity_focus_settings" ON public.productivity_focus_settings FOR ALL TO authenticated USING (public.is_admin_user()) WITH CHECK (public.is_admin_user());
 
-  -- study_decks
-  DROP POLICY IF EXISTS "Masters can manage all study_decks" ON public.study_decks;
-  CREATE POLICY "Masters can manage all study_decks" ON public.study_decks FOR ALL TO authenticated USING (public.is_admin_user()) WITH CHECK (public.is_admin_user());
+DROP POLICY IF EXISTS "Masters can manage all study_decks" ON public.study_decks;
+CREATE POLICY "Masters can manage all study_decks" ON public.study_decks FOR ALL TO authenticated USING (public.is_admin_user()) WITH CHECK (public.is_admin_user());
 
-  -- study_flashcards
-  DROP POLICY IF EXISTS "Masters can manage all study_flashcards" ON public.study_flashcards;
-  CREATE POLICY "Masters can manage all study_flashcards" ON public.study_flashcards FOR ALL TO authenticated USING (public.is_admin_user()) WITH CHECK (public.is_admin_user());
+DROP POLICY IF EXISTS "Masters can manage all study_flashcards" ON public.study_flashcards;
+CREATE POLICY "Masters can manage all study_flashcards" ON public.study_flashcards FOR ALL TO authenticated USING (public.is_admin_user()) WITH CHECK (public.is_admin_user());
 
-  -- study_folders
-  DROP POLICY IF EXISTS "Masters can manage all study_folders" ON public.study_folders;
-  CREATE POLICY "Masters can manage all study_folders" ON public.study_folders FOR ALL TO authenticated USING (public.is_admin_user()) WITH CHECK (public.is_admin_user());
+DROP POLICY IF EXISTS "Masters can manage all study_folders" ON public.study_folders;
+CREATE POLICY "Masters can manage all study_folders" ON public.study_folders FOR ALL TO authenticated USING (public.is_admin_user()) WITH CHECK (public.is_admin_user());
 
-  -- study_notes
-  DROP POLICY IF EXISTS "Masters can manage all study_notes" ON public.study_notes;
-  CREATE POLICY "Masters can manage all study_notes" ON public.study_notes FOR ALL TO authenticated USING (public.is_admin_user()) WITH CHECK (public.is_admin_user());
+DROP POLICY IF EXISTS "Masters can manage all study_notes" ON public.study_notes;
+CREATE POLICY "Masters can manage all study_notes" ON public.study_notes FOR ALL TO authenticated USING (public.is_admin_user()) WITH CHECK (public.is_admin_user());
 
-  -- note_links
-  DROP POLICY IF EXISTS "Masters can manage all note_links" ON public.note_links;
-  CREATE POLICY "Masters can manage all note_links" ON public.note_links FOR ALL TO authenticated USING (public.is_admin_user()) WITH CHECK (public.is_admin_user());
-END $do$;
+DROP POLICY IF EXISTS "Masters can manage all note_links" ON public.note_links;
+CREATE POLICY "Masters can manage all note_links" ON public.note_links FOR ALL TO authenticated USING (public.is_admin_user()) WITH CHECK (public.is_admin_user());

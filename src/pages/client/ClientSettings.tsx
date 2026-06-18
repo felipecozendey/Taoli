@@ -17,10 +17,14 @@ export default function ClientSettings() {
   const { user } = useAuth()
   const { toast } = useToast()
 
-  const [name, setName] = useState(user?.user_metadata?.name || '')
-  const [phone, setPhone] = useState(user?.user_metadata?.phone || '')
-  const [targetWeight, setTargetWeight] = useState(user?.user_metadata?.target_weight || '')
-  const [avatarUrl, setAvatarUrl] = useState(user?.user_metadata?.avatar_url || '')
+  const [name, setName] = useState(user?.name || (user as any)?.user_metadata?.name || '')
+  const [phone, setPhone] = useState((user as any)?.user_metadata?.phone || '')
+  const [targetWeight, setTargetWeight] = useState(
+    (user as any)?.user_metadata?.target_weight || '',
+  )
+  const [avatarUrl, setAvatarUrl] = useState(
+    user?.avatarUrl || (user as any)?.user_metadata?.avatar_url || '',
+  )
   const [isSaving, setIsSaving] = useState(false)
   const [isUploading, setIsUploading] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)

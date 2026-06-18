@@ -16,12 +16,20 @@ import {
   AlertCircle,
   AlertTriangle,
   TrendingUp,
+  HeartPulse,
+  Droplets,
+  Dumbbell,
+  Check,
+  Utensils,
+  Plus,
 } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
 import { supabase } from '@/lib/supabase/client'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Line, LineChart } from 'recharts'
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart'
+import { cn } from '@/lib/utils'
+import { ExtraMealDialog } from '@/components/nutrition/ExtraMealDialog'
 
 interface AppointmentWithPatient {
   id: string
@@ -61,6 +69,13 @@ export default function ProfDashboard() {
   const [financeChartData, setFinanceChartData] = useState<ChartDataPoint[]>([])
   const [isLoading, setIsLoading] = useState(true)
 
+  // Prof Health Tracking State
+  const [waterConsumed, setWaterConsumed] = useState(0)
+  const [workoutHabit, setWorkoutHabit] = useState<any>(null)
+  const [workoutCompleted, setWorkoutCompleted] = useState(false)
+  const [isExtraMealOpen, setIsExtraMealOpen] = useState(false)
+  const [dateStr, setDateStr] = useState(() => new Date().toISOString().split('T')[0])
+
   useEffect(() => {
     async function fetchDashboardData() {
       if (!user) return
@@ -70,6 +85,49 @@ export default function ProfDashboard() {
         startOfDay.setHours(0, 0, 0, 0)
         const endOfDay = new Date()
         endOfDay.setHours(23, 59, 59, 999)
+
+        const dStr = startOfDay.toISOString().split('T')[0]
+        setDateStr(dStr)
+
+        // Fetch Water
+        const { data: waterLogs } = await supabase
+          .from('water_consumption_logs')
+          .select('amount_ml')
+          .eq('client_id', user.id)
+          .eq('consumed_on', dStr)
+
+        const totalWater = waterLogs?.reduce((acc, log) => acc + (log.amount_ml || 0), 0) || 0
+        setWaterConsumed(totalWater)
+
+        // Fetch Workout Habit
+        let { data: habitData } = await supabase
+          .from('habits')
+          .select('id')
+          .eq('client_id', user.id)
+          .ilike('title', '%treino%')
+          .limit(1)
+          .maybeSingle()
+
+        if (!habitData) {
+          const { data: newHabit } = await supabase
+            .from('habits')
+            .insert({ client_id: user.id, title: 'Treino do Dia' })
+            .select('id')
+            .single()
+          habitData = newHabit
+        }
+
+        if (habitData) {
+          setWorkoutHabit(habitData)
+          const { data: habitLog } = await supabase
+            .from('habit_logs')
+            .select('id')
+            .eq('habit_id', habitData.id)
+            .eq('completed_date', dStr)
+            .maybeSingle()
+
+          setWorkoutCompleted(!!habitLog)
+        }
 
         // Fetch today's appointments
         const { data: apptsData } = await supabase
@@ -269,6 +327,31 @@ export default function ProfDashboard() {
   const headerTitle = `${greeting}, ${firstName}!`
   const headerSubtitle = `Você tem ${appointments.length} consultas hoje e ${unreadCount} mensagens não lidas.`
 
+  const toggleWorkout = async () => {
+    if (!workoutHabit || !user) return
+    const dStr = new Date().toISOString().split('T')[0]
+
+    if (workoutCompleted) {
+      await supabase
+        .from('habit_logs')
+        .delete()
+        .match({ habit_id: workoutHabit.id, completed_date: dStr })
+      setWorkoutCompleted(false)
+    } else {
+      await supabase.from('habit_logs').insert({ habit_id: workoutHabit.id, completed_date: dStr })
+      setWorkoutCompleted(true)
+    }
+  }
+
+  const addWater = async (amount: number) => {
+    if (!user) return
+    const dStr = new Date().toISOString().split('T')[0]
+    await supabase
+      .from('water_consumption_logs')
+      .insert({ client_id: user.id, consumed_on: dStr, amount_ml: amount })
+    setWaterConsumed((prev) => prev + amount)
+  }
+
   return (
     <div className="flex flex-col min-h-full">
       <DashboardHeader title={headerTitle}>
@@ -285,6 +368,132 @@ export default function ProfDashboard() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-8">
+          {/* Minha Saúde Hoje - Professional Self-care */}
+          <Card className="md:col-span-3 lg:col-span-4 rounded-xl shadow-sm border-primary/20 bg-gradient-to-br from-primary/5 to-primary/10 overflow-hidden relative">
+            <div className="absolute top-0 right-0 -mt-10 -mr-10 h-40 w-40 bg-primary/10 rounded-full blur-3xl pointer-events-none" />
+            <CardHeader className="pb-3 relative z-10">
+              <CardTitle className="text-lg flex items-center">
+                <HeartPulse className="w-5 h-5 mr-2 text-primary" />
+                Minha Saúde Hoje
+              </CardTitle>
+              <CardDescription>
+                Acompanhe seu bem-estar enquanto cuida dos seus pacientes
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-6">
+              {/* Water */}
+              <div className="flex items-center gap-4 bg-background/60 backdrop-blur-sm p-4 rounded-lg border border-primary/10">
+                <div className="relative w-16 h-16 shrink-0 flex items-center justify-center">
+                  <svg className="w-full h-full transform -rotate-90">
+                    <circle
+                      cx="32"
+                      cy="32"
+                      r="28"
+                      stroke="currentColor"
+                      strokeWidth="6"
+                      fill="transparent"
+                      className="text-muted/20"
+                    />
+                    <circle
+                      cx="32"
+                      cy="32"
+                      r="28"
+                      stroke="currentColor"
+                      strokeWidth="6"
+                      fill="transparent"
+                      strokeDasharray={176}
+                      strokeDashoffset={176 - Math.min(waterConsumed / 2000, 1) * 176}
+                      strokeLinecap="round"
+                      className="text-blue-500 transition-all duration-1000 ease-out"
+                    />
+                  </svg>
+                  <Droplets className="absolute h-5 w-5 text-blue-500" />
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm font-medium">Hidratação</p>
+                  <p className="text-lg font-bold text-blue-600">
+                    {waterConsumed}{' '}
+                    <span className="text-xs font-normal text-muted-foreground">/ 2000ml</span>
+                  </p>
+                  <div className="flex gap-2 mt-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="h-7 text-xs px-2"
+                      onClick={() => addWater(250)}
+                    >
+                      +250ml
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="h-7 text-xs px-2"
+                      onClick={() => addWater(500)}
+                    >
+                      +500ml
+                    </Button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Workout Checklist */}
+              <div className="flex items-center gap-4 bg-background/60 backdrop-blur-sm p-4 rounded-lg border border-primary/10">
+                <div
+                  className={cn(
+                    'p-4 rounded-full shrink-0 transition-colors',
+                    workoutCompleted
+                      ? 'bg-emerald-100 text-emerald-600'
+                      : 'bg-muted text-muted-foreground',
+                  )}
+                >
+                  <Dumbbell className="h-6 w-6" />
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm font-medium">Treino do Dia</p>
+                  <p className="text-xs text-muted-foreground mb-2">
+                    {workoutCompleted ? 'Concluído! Ótimo trabalho.' : 'Pendente para hoje'}
+                  </p>
+                  <Button
+                    variant={workoutCompleted ? 'secondary' : 'default'}
+                    size="sm"
+                    className={cn(
+                      'w-full',
+                      workoutCompleted && 'bg-emerald-100 text-emerald-700 hover:bg-emerald-200',
+                    )}
+                    onClick={toggleWorkout}
+                  >
+                    {workoutCompleted ? (
+                      <>
+                        <Check className="w-4 h-4 mr-1" /> Feito
+                      </>
+                    ) : (
+                      'Marcar como Feito'
+                    )}
+                  </Button>
+                </div>
+              </div>
+
+              {/* Meal Shortcut */}
+              <div className="flex items-center gap-4 bg-background/60 backdrop-blur-sm p-4 rounded-lg border border-primary/10">
+                <div className="p-4 rounded-full bg-orange-100 text-orange-600 shrink-0">
+                  <Utensils className="h-6 w-6" />
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm font-medium">Alimentação</p>
+                  <p className="text-xs text-muted-foreground mb-2">Mantenha sua dieta em dia</p>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="w-full border-orange-200 text-orange-700 hover:bg-orange-50"
+                    onClick={() => setIsExtraMealOpen(true)}
+                  >
+                    <Plus className="w-4 h-4 mr-1" /> Registrar Refeição
+                  </Button>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
           {/* Ações do Dia */}
           <Card className="md:col-span-2 lg:col-span-2 rounded-xl shadow-sm flex flex-col">
             <CardHeader className="pb-3">
@@ -461,6 +670,15 @@ export default function ProfDashboard() {
           </Card>
         </div>
       </PageContent>
+
+      <ExtraMealDialog
+        open={isExtraMealOpen}
+        onOpenChange={setIsExtraMealOpen}
+        date={dateStr}
+        patientId={user?.id}
+        onSuccess={() => setIsExtraMealOpen(false)}
+        caloricGoal={2000}
+      />
     </div>
   )
 }

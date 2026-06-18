@@ -86,6 +86,12 @@ export default function ClientTraining() {
     Record<string, { load: string; reps: string }>
   >({})
 
+  // Execution Mode State
+  const [isExecutionMode, setIsExecutionMode] = useState(false)
+  const [currentExerciseIndex, setCurrentExerciseIndex] = useState(0)
+  const [currentSet, setCurrentSet] = useState(1)
+  const [isSetActive, setIsSetActive] = useState(false)
+
   useEffect(() => {
     let isMounted = true
 
@@ -121,6 +127,129 @@ export default function ClientTraining() {
   }, [user?.id])
 
   const toggleComplete = (id: string) => setCompleted((p) => ({ ...p, [id]: !p[id] }))
+
+  if (isExecutionMode && activePlan) {
+    const exercise = activePlan.items[currentExerciseIndex]
+    const isLastSet = currentSet === exercise.sets
+    const isLastExercise = currentExerciseIndex === activePlan.items.length - 1
+
+    const handleAction = () => {
+      if (!isSetActive) {
+        setIsSetActive(true)
+      } else {
+        setIsSetActive(false)
+        if (isLastSet) {
+          if (isLastExercise) {
+            setIsExecutionMode(false)
+            // mark all as completed
+            const allIds = activePlan.items.reduce((acc, item) => ({ ...acc, [item.id]: true }), {})
+            setCompleted(allIds)
+          } else {
+            setCurrentExerciseIndex((i) => i + 1)
+            setCurrentSet(1)
+          }
+        } else {
+          setCurrentSet((s) => s + 1)
+        }
+      }
+    }
+
+    return (
+      <div className="fixed inset-0 z-[100] bg-black text-white flex flex-col font-sans overflow-hidden">
+        {/* Header */}
+        <div className="px-6 pt-12 pb-6 flex items-center justify-between border-b border-gray-800 shrink-0">
+          <div className="flex flex-col">
+            <span className="text-gray-400 text-lg uppercase tracking-wider font-bold mb-1">
+              Exercício {currentExerciseIndex + 1} de {activePlan.items.length}
+            </span>
+            <h2 className="text-4xl sm:text-5xl font-black text-white leading-tight line-clamp-2">
+              {exercise.exercise?.name || 'Exercício'}
+            </h2>
+          </div>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="text-gray-400 hover:text-white hover:bg-gray-800 rounded-full h-12 w-12 shrink-0 ml-4"
+            onClick={() => setIsExecutionMode(false)}
+          >
+            <Activity className="h-6 w-6" />
+          </Button>
+        </div>
+
+        {/* Content */}
+        <div className="flex-1 flex flex-col items-center justify-center p-6 space-y-8 overflow-y-auto">
+          <div className="grid grid-cols-2 gap-6 w-full max-w-lg">
+            <div className="flex flex-col items-center justify-center bg-gray-900 rounded-3xl p-6 border border-gray-800">
+              <span className="text-gray-400 text-xl sm:text-2xl font-medium mb-2 uppercase tracking-widest">
+                Série
+              </span>
+              <div className="text-6xl sm:text-8xl font-black text-emerald-400 whitespace-nowrap">
+                {currentSet}
+                <span className="text-3xl sm:text-5xl text-gray-600">/{exercise.sets}</span>
+              </div>
+            </div>
+
+            <div className="flex flex-col items-center justify-center bg-gray-900 rounded-3xl p-6 border border-gray-800">
+              <span className="text-gray-400 text-xl sm:text-2xl font-medium mb-2 uppercase tracking-widest">
+                Reps
+              </span>
+              <div className="text-6xl sm:text-8xl font-black text-blue-400">{exercise.reps}</div>
+            </div>
+          </div>
+
+          {(exercise.target_load_kg || exercise.rest_seconds) && (
+            <div className="flex gap-4 w-full max-w-lg">
+              {exercise.target_load_kg && (
+                <div className="flex-1 flex flex-col items-center justify-center bg-gray-900/50 rounded-2xl p-4 border border-gray-800/50">
+                  <span className="text-gray-500 text-base sm:text-lg font-medium mb-1 uppercase tracking-wider">
+                    Carga
+                  </span>
+                  <span className="text-4xl sm:text-5xl font-bold text-white">
+                    {exercise.target_load_kg}
+                    <span className="text-xl sm:text-2xl text-gray-500 ml-1">kg</span>
+                  </span>
+                </div>
+              )}
+              {exercise.rest_seconds && (
+                <div className="flex-1 flex flex-col items-center justify-center bg-gray-900/50 rounded-2xl p-4 border border-gray-800/50">
+                  <span className="text-gray-500 text-base sm:text-lg font-medium mb-1 uppercase tracking-wider">
+                    Descanso
+                  </span>
+                  <span className="text-4xl sm:text-5xl font-bold text-white">
+                    {exercise.rest_seconds}
+                    <span className="text-xl sm:text-2xl text-gray-500 ml-1">s</span>
+                  </span>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* Footer Actions */}
+        <div className="p-6 bg-black border-t border-gray-900 pb-8 sm:pb-6 shrink-0">
+          <Button
+            className={cn(
+              'w-full h-24 text-2xl sm:text-3xl font-black rounded-2xl transition-all duration-300 uppercase tracking-wide',
+              !isSetActive
+                ? 'bg-blue-600 hover:bg-blue-500 text-white shadow-[0_0_30px_rgba(37,99,235,0.3)]'
+                : isLastSet && isLastExercise
+                  ? 'bg-emerald-500 hover:bg-emerald-400 text-black shadow-[0_0_30px_rgba(16,185,129,0.3)]'
+                  : 'bg-amber-500 hover:bg-amber-400 text-black shadow-[0_0_30px_rgba(245,158,11,0.3)]',
+            )}
+            onClick={handleAction}
+          >
+            {!isSetActive
+              ? `Iniciar Série ${currentSet}`
+              : isLastSet && isLastExercise
+                ? 'Concluir Treino'
+                : isLastSet
+                  ? 'Próximo Exercício'
+                  : 'Concluir Série'}
+          </Button>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="flex flex-col min-h-full pb-20 md:pb-0">
@@ -196,6 +325,20 @@ export default function ClientTraining() {
                     <HeartPulse className="w-10 h-10 opacity-30" />
                   )}
                 </div>
+
+                {activePlan.plan_type === 'workout' && activePlan.items?.length > 0 && (
+                  <Button
+                    className="w-full h-16 text-xl font-bold bg-primary text-primary-foreground mb-6 rounded-xl shadow-lg"
+                    onClick={() => {
+                      setCurrentExerciseIndex(0)
+                      setCurrentSet(1)
+                      setIsSetActive(false)
+                      setIsExecutionMode(true)
+                    }}
+                  >
+                    <Activity className="w-6 h-6 mr-3" /> Modo Execução
+                  </Button>
+                )}
 
                 <div className="space-y-4">
                   {activePlan.items?.map((item, idx) => {

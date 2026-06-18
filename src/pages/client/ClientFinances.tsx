@@ -1,5 +1,7 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { DashboardHeader } from '@/components/shared/DashboardHeader'
+import { supabase } from '@/lib/supabase/client'
+import { useAuth } from '@/contexts/AuthContext'
 import { PageContent } from '@/components/shared/PageContent'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
@@ -27,7 +29,8 @@ import {
 } from '@/components/ui/responsive-modal'
 
 export default function ClientFinances() {
-  const [transactions, setTransactions] = useState([
+  const { user } = useAuth()
+  const [transactions, setTransactions] = useState<any[]>([
     {
       id: 1,
       description: 'Salário',
@@ -54,12 +57,39 @@ export default function ClientFinances() {
     },
   ])
 
+  useEffect(() => {
+    const fetchTransactions = async () => {
+      if (!user?.id) return
+      const { data, error } = await supabase
+        .from('financial_transactions')
+        .select('*')
+        .eq('professional_id', user.id)
+        .order('transaction_date', { ascending: false })
+
+      if (data && data.length > 0) {
+        setTransactions(
+          data.map((d) => ({
+            id: d.id,
+            description: d.description,
+            type: d.type,
+            amount: Number(d.amount),
+            date: d.transaction_date,
+            category: d.category || 'Outros',
+          })),
+        )
+      }
+    }
+    fetchTransactions()
+  }, [user?.id])
+
   const [accounts] = useState([
     { id: 1, name: 'Conta Corrente', balance: 5000 },
     { id: 2, name: 'Investimentos', balance: 15000 },
   ])
 
-  const [settings, setSettings] = useState({ hideFinancialValues: false })
+  const [settings, setSettings] = useState({
+    hideFinancialValues: localStorage.getItem('financialPrivacy') === 'true',
+  })
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [newTx, setNewTx] = useState({ description: '', type: 'Despesa', amount: '', category: '' })
 
@@ -77,12 +107,16 @@ export default function ClientFinances() {
     monthlyExpenses > 0 ? (totalBalance / monthlyExpenses).toFixed(1) : '∞'
 
   const formatCurrency = (value: number) => {
-    if (settings.hideFinancialValues) return 'R$ *****'
+    if (settings.hideFinancialValues) return '••••••'
     return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value)
   }
 
   const togglePrivacy = () => {
-    setSettings((s) => ({ ...s, hideFinancialValues: !s.hideFinancialValues }))
+    setSettings((s) => {
+      const newVal = !s.hideFinancialValues
+      localStorage.setItem('financialPrivacy', String(newVal))
+      return { ...s, hideFinancialValues: newVal }
+    })
   }
 
   const handleAddTransaction = (e: React.FormEvent) => {
@@ -234,7 +268,7 @@ export default function ClientFinances() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">
-                {settings.hideFinancialValues ? '*****' : `${emergencyFundMonths} meses`}
+                {settings.hideFinancialValues ? '••••••' : `${emergencyFundMonths} meses`}
               </div>
             </CardContent>
           </Card>

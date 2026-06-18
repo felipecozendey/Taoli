@@ -2,7 +2,12 @@ import { useState, useEffect, useRef } from 'react'
 import { useAuth } from '@/contexts/AuthContext'
 import { supabase } from '@/lib/supabase/client'
 import { getMyPatients } from '@/services/patients'
-import { getMessages, sendMessage, markMessagesAsRead } from '@/services/messages'
+import {
+  getMessages,
+  sendMessage,
+  markMessagesAsRead,
+  subscribeToMessages,
+} from '@/services/messages'
 import { getProfessionalTips } from '@/services/tips'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
@@ -39,28 +44,23 @@ export function PatientChat() {
     getMessages(user.id, activePatient.id).then(setMessages)
     markMessagesAsRead(activePatient.id, user.id)
 
-    const channel = supabase
-      .channel('messages')
-      .on(
-        'postgres_changes',
-        { event: 'INSERT', schema: 'public', table: 'messages' },
-        (payload) => {
-          const msg = payload.new
-          if (
-            (msg.sender_id === user.id && msg.receiver_id === activePatient.id) ||
-            (msg.sender_id === activePatient.id && msg.receiver_id === user.id)
-          ) {
-            setMessages((prev) => [...prev, msg])
-            if (msg.sender_id === activePatient.id) {
-              markMessagesAsRead(activePatient.id, user.id)
-            }
-          }
-        },
-      )
-      .subscribe()
+    const unsubscribe = subscribeToMessages(user.id, (msg) => {
+      if (
+        (msg.sender_id === user.id && msg.receiver_id === activePatient.id) ||
+        (msg.sender_id === activePatient.id && msg.receiver_id === user.id)
+      ) {
+        setMessages((prev) => {
+          if (prev.some((m) => m.id === msg.id)) return prev
+          return [...prev, msg]
+        })
+        if (msg.sender_id === activePatient.id) {
+          markMessagesAsRead(activePatient.id, user.id)
+        }
+      }
+    })
 
     return () => {
-      supabase.removeChannel(channel)
+      unsubscribe()
     }
   }, [user, activePatient])
 

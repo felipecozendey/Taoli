@@ -34,3 +34,16 @@ export const markMessagesAsRead = async (sender_id: string, receiver_id: string)
 
   if (error) throw error
 }
+
+export const subscribeToMessages = (userId: string, onNewMessage: (msg: any) => void) => {
+  const channel = supabase
+    .channel(`messages_${userId}`)
+    .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, (payload) => {
+      onNewMessage(payload.new)
+    })
+    .subscribe()
+
+  return () => {
+    supabase.removeChannel(channel)
+  }
+}

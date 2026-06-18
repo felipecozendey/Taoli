@@ -90,6 +90,7 @@ export function DietPrescriptionModal({ isOpen, onClose, clientId }: DietPrescri
   ])
 
   const [activeMealId, setActiveMealId] = useState('1')
+  const [dietName, setDietName] = useState('Plano Alimentar')
 
   // Fetch templates when modal opens
   useEffect(() => {
@@ -266,10 +267,10 @@ export function DietPrescriptionModal({ isOpen, onClose, clientId }: DietPrescri
     }
     setIsSaving(true)
     try {
-      const { error } = await saveDiet(clientId, user.id, 'Prescrição Personalizada', meals)
+      const { error } = await saveDiet(clientId, user.id, dietName, meals)
       if (error) throw error
 
-      toast({ title: 'Sucesso', description: 'Dieta salva e aplicada ao paciente!' })
+      toast({ title: 'Sucesso', description: 'Dieta salva e aplicada com sucesso!' })
       onClose()
     } catch (error) {
       toast({
@@ -282,20 +283,32 @@ export function DietPrescriptionModal({ isOpen, onClose, clientId }: DietPrescri
     }
   }
 
+  const isSelfManaged = clientId === user?.id
+
   return (
     <>
       <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
         <DialogContent className="max-w-[95vw] w-full h-[95vh] p-0 overflow-hidden flex flex-col sm:rounded-xl">
           <DialogHeader className="p-4 border-b bg-background z-10 shadow-sm shrink-0 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-            <div>
+            <div className="flex flex-col gap-1 w-full sm:w-auto">
               <DialogTitle className="text-xl flex items-center gap-2">
                 <Apple className="h-5 w-5 text-primary" />
-                Prescrição Dietética
+                {isSelfManaged ? 'Criar Minha Dieta' : 'Prescrição Dietética'}
               </DialogTitle>
-              <DialogDescription>Monte o plano alimentar ou selecione um modelo.</DialogDescription>
+              <DialogDescription>
+                {isSelfManaged
+                  ? 'Monte o seu próprio plano alimentar.'
+                  : 'Monte o plano alimentar ou selecione um modelo.'}
+              </DialogDescription>
             </div>
 
-            <div className="flex items-center gap-2 w-full sm:w-auto">
+            <div className="flex items-center gap-2 w-full sm:w-auto overflow-x-auto pb-1 sm:pb-0">
+              <Input
+                placeholder="Nome da Dieta"
+                value={dietName}
+                onChange={(e) => setDietName(e.target.value)}
+                className="w-[180px] h-9"
+              />
               {templates.length > 0 && (
                 <Select onValueChange={handleLoadTemplate}>
                   <SelectTrigger className="w-[180px] h-9">
@@ -310,15 +323,17 @@ export function DietPrescriptionModal({ isOpen, onClose, clientId }: DietPrescri
                   </SelectContent>
                 </Select>
               )}
-              <Button
-                variant="outline"
-                size="sm"
-                className="h-9"
-                onClick={() => setIsSavingTemplate(true)}
-              >
-                <SaveAll className="mr-2 h-4 w-4" />
-                Salvar como Modelo
-              </Button>
+              {!isSelfManaged && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="h-9"
+                  onClick={() => setIsSavingTemplate(true)}
+                >
+                  <SaveAll className="mr-2 h-4 w-4" />
+                  Salvar como Modelo
+                </Button>
+              )}
             </div>
           </DialogHeader>
 

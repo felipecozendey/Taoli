@@ -68,6 +68,8 @@ import { cn } from '@/lib/utils'
 import { format } from 'date-fns'
 import { ExtraMealDialog } from '@/components/nutrition/ExtraMealDialog'
 import { DateRangeDashboard } from '@/components/nutrition/DateRangeDashboard'
+import { DietPrescriptionModal } from '@/components/professional/DietPrescriptionModal'
+import { AuthorshipBadge } from '@/components/shared/AuthorshipBadge'
 
 const weightChartConfig = {
   peso: { label: 'Peso', color: 'hsl(var(--primary))' },
@@ -95,6 +97,7 @@ export default function ClientNutrition() {
 
   const [extraMealModalOpen, setExtraMealModalOpen] = useState(false)
   const [mealToEdit, setMealToEdit] = useState<any>(null)
+  const [isDietModalOpen, setIsDietModalOpen] = useState(false)
 
   const [nlpInput, setNlpInput] = useState('')
   const [isProcessing, setIsProcessing] = useState(false)
@@ -935,13 +938,26 @@ export default function ClientNutrition() {
               </Card>
             ) : diet ? (
               <div className="space-y-4">
-                <div className="mb-6">
-                  <h3 className="text-xl font-bold flex items-center gap-2">
-                    <Utensils className="h-5 w-5 text-primary" /> {diet.name}
-                  </h3>
-                  <p className="text-sm text-muted-foreground">
-                    Marque as refeições que consumiu hoje para registar os macros automaticamente.
-                  </p>
+                <div className="mb-6 flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+                  <div>
+                    <div className="flex items-center gap-3 mb-1">
+                      <h3 className="text-xl font-bold flex items-center gap-2">
+                        <Utensils className="h-5 w-5 text-primary" /> {diet.name}
+                      </h3>
+                      <AuthorshipBadge createdBy={diet.created_by} patientId={activeUser?.id} />
+                    </div>
+                    <p className="text-sm text-muted-foreground">
+                      Marque as refeições que consumiu hoje para registar os macros automaticamente.
+                    </p>
+                  </div>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setIsDietModalOpen(true)}
+                    className="shrink-0"
+                  >
+                    <Plus className="h-4 w-4 mr-2" /> Criar Minha Dieta
+                  </Button>
                 </div>
 
                 {diet.meals.map((m) => {
@@ -1110,12 +1126,24 @@ export default function ClientNutrition() {
                     <Utensils className="h-6 w-6 opacity-50" />
                   </div>
                   <p className="font-medium text-foreground mb-1">Nenhum plano ativo</p>
-                  <p className="text-sm">
-                    Não possui um plano alimentar prescrito por um profissional no momento.
+                  <p className="text-sm mb-4">
+                    Não possui um plano alimentar prescrito no momento.
                   </p>
+                  <Button onClick={() => setIsDietModalOpen(true)}>
+                    <Plus className="h-4 w-4 mr-2" /> Criar Minha Dieta
+                  </Button>
                 </CardContent>
               </Card>
             )}
+
+            <DietPrescriptionModal
+              isOpen={isDietModalOpen}
+              onClose={() => {
+                setIsDietModalOpen(false)
+                fetchData()
+              }}
+              clientId={activeUser?.id}
+            />
           </TabsContent>
 
           <TabsContent value="supplements" className="space-y-4">

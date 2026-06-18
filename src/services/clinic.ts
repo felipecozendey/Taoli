@@ -108,6 +108,17 @@ export const getTransactionsByMonth = async (
   return data || []
 }
 
+export const getTransactions = async (profId: string) => {
+  const { data, error } = await supabase
+    .from('financial_transactions')
+    .select('*, client:client_id(name)')
+    .eq('professional_id', profId)
+    .order('transaction_date', { ascending: false })
+
+  if (error) throw error
+  return data || []
+}
+
 export const getClientTransactions = async (profId: string, clientId: string) => {
   const { data, error } = await supabase
     .from('financial_transactions')
@@ -121,6 +132,11 @@ export const getClientTransactions = async (profId: string, clientId: string) =>
 
 export const createTransaction = async (transactionData: any) => {
   const { error } = await supabase.from('financial_transactions').insert([transactionData])
+  if (error) throw error
+}
+
+export const updateTransactionStatus = async (txId: string, status: string) => {
+  const { error } = await supabase.from('financial_transactions').update({ status }).eq('id', txId)
   if (error) throw error
 }
 
@@ -164,13 +180,23 @@ export const getDashboardMetrics = async (profId: string) => {
     .eq('professional_id', profId)
     .in('status', ['active', 'overdue'])
 
+  const { count: activePatientsCount } = await supabase
+    .from('professional_client_links')
+    .select('*', { count: 'exact', head: true })
+    .eq('professional_id', profId)
+    .eq('status', 'active')
+
+  const safeIncomeTx = incomeTx ?? []
+  const safePendingTx = pendingTx ?? []
+  const safeSubs = subs ?? []
+
   const monthlyRevenue =
-    (incomeTx?.reduce((acc, tx) => acc + Math.round(Number(tx.amount) * 100), 0) || 0) / 100
+    safeIncomeTx.reduce((acc, tx) => acc + Math.round(Number(tx.amount) * 100), 0) / 100
   const delinquency =
-    (pendingTx?.reduce((acc, tx) => acc + Math.round(Number(tx.amount) * 100), 0) || 0) / 100
+    safePendingTx.reduce((acc, tx) => acc + Math.round(Number(tx.amount) * 100), 0) / 100
 
   let mrrCents = 0
-  subs?.forEach((sub) => {
+  safeSubs.forEach((sub) => {
     if (sub.plan && !Array.isArray(sub.plan)) {
       const priceCents = Math.round(Number(sub.plan.price) * 100) || 0
       const cycle = sub.plan.billing_cycle
@@ -195,7 +221,8 @@ export const getDashboardMetrics = async (profId: string) => {
     consultationsCount: consultationsCount || 0,
     delinquency,
     mrr,
-    chartTx: chartTx || [],
+    activePatientsCount: activePatientsCount || 0,
+    chartTx: chartTx ?? [],
   }
 }
 

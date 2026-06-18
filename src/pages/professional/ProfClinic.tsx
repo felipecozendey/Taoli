@@ -1,37 +1,31 @@
 import { useState, useEffect, useMemo } from 'react'
-import { format, startOfDay, endOfDay, startOfMonth, endOfMonth, subMonths } from 'date-fns'
+import { format, subMonths } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import {
   Briefcase,
   Plus,
-  Calendar as CalendarIcon,
-  DollarSign,
   TrendingUp,
-  TrendingDown,
   AlertCircle,
   MoreVertical,
-  Link,
-  QrCode,
+  Link as LinkIcon,
   Settings,
-  Activity,
+  UserCheck,
+  MessageCircle,
+  Calendar as CalendarIcon,
 } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
 import {
-  getAppointmentsByDate,
-  createAppointment,
-  getTransactionsByMonth,
-  createTransaction,
   getServicePlans,
   createServicePlan,
   deleteServicePlan,
-  getSubscriptions,
-  updateSubscriptionStatus,
   getDashboardMetrics,
+  getTransactions,
+  createTransaction,
+  updateTransactionStatus,
 } from '@/services/clinic'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Button } from '@/components/ui/button'
-import { Calendar } from '@/components/ui/calendar'
 import {
   Dialog,
   DialogContent,
@@ -57,7 +51,6 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Badge } from '@/components/ui/badge'
 import {
   DropdownMenu,
@@ -68,16 +61,11 @@ import {
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid } from 'recharts'
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart'
 import { useToast } from '@/hooks/use-toast'
-import { cn } from '@/lib/utils'
 
 const chartConfig = {
   income: {
     label: 'Receitas',
     color: 'hsl(var(--primary))',
-  },
-  expense: {
-    label: 'Despesas',
-    color: 'hsl(var(--destructive))',
   },
 }
 
@@ -85,82 +73,45 @@ export default function ProfClinic() {
   const { user } = useAuth()
   const { toast } = useToast()
 
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date())
-  const [appointments, setAppointments] = useState<any[]>([])
+  const [isLoading, setIsLoading] = useState(true)
   const [transactions, setTransactions] = useState<any[]>([])
   const [plans, setPlans] = useState<any[]>([])
-  const [subscriptions, setSubscriptions] = useState<any[]>([])
   const [metrics, setMetrics] = useState({
     monthlyRevenue: 0,
-    consultationsCount: 0,
+    activePatientsCount: 0,
     delinquency: 0,
     mrr: 0,
     chartTx: [] as any[],
   })
 
-  const [isApptOpen, setIsApptOpen] = useState(false)
-  const [isTxOpen, setIsTxOpen] = useState(false)
   const [isPlanOpen, setIsPlanOpen] = useState(false)
+  const [isTxOpen, setIsTxOpen] = useState(false)
 
-  const loadAppointments = async () => {
+  const loadData = async () => {
     if (!user) return
+    setIsLoading(true)
     try {
-      const start = startOfDay(selectedDate).toISOString()
-      const end = endOfDay(selectedDate).toISOString()
-      const data = await getAppointmentsByDate(user.id, start, end)
-      setAppointments(data)
-    } catch (error: any) {
-      toast({
-        title: 'Erro ao carregar agenda',
-        description: error.message,
-        variant: 'destructive',
-      })
-    }
-  }
-
-  const loadTransactions = async () => {
-    if (!user) return
-    try {
-      const now = new Date()
-      const start = format(startOfMonth(now), 'yyyy-MM-dd')
-      const end = format(endOfMonth(now), 'yyyy-MM-dd')
-      const data = await getTransactionsByMonth(user.id, start, end)
-      setTransactions(data)
-
-      const dashMetrics = await getDashboardMetrics(user.id)
+      const [dashMetrics, txData, plansData] = await Promise.all([
+        getDashboardMetrics(user.id),
+        getTransactions(user.id),
+        getServicePlans(user.id),
+      ])
       setMetrics(dashMetrics)
+      setTransactions(txData ?? [])
+      setPlans(plansData ?? [])
     } catch (error: any) {
       toast({
-        title: 'Erro ao carregar finanças',
+        title: 'Erro ao carregar dados',
         description: error.message,
         variant: 'destructive',
       })
-    }
-  }
-
-  const loadPlansAndSubs = async () => {
-    if (!user) return
-    try {
-      const plansData = await getServicePlans(user.id)
-      setPlans(plansData)
-      const subsData = await getSubscriptions(user.id)
-      setSubscriptions(subsData)
-    } catch (error: any) {
-      toast({
-        title: 'Erro ao carregar planos',
-        description: error.message,
-        variant: 'destructive',
-      })
+    } finally {
+      setIsLoading(false)
     }
   }
 
   useEffect(() => {
-    loadAppointments()
-  }, [selectedDate, user])
-
-  useEffect(() => {
-    loadTransactions()
-    loadPlansAndSubs()
+    loadData()
   }, [user])
 
   const chartData = useMemo(() => {
@@ -170,7 +121,8 @@ export default function ProfClinic() {
       const label = format(m, 'MMM', { locale: ptBR })
       dataMap[label] = 0
     }
-    metrics.chartTx.forEach((tx) => {
+    const safeChartTx = metrics.chartTx ?? []
+    safeChartTx.forEach((tx) => {
       const d = new Date(tx.transaction_date)
       const offset = d.getTimezoneOffset() * 60000
       const localD = new Date(d.getTime() + offset)
@@ -183,71 +135,19 @@ export default function ProfClinic() {
     return Object.keys(dataMap).map((key) => ({ name: key, income: dataMap[key] }))
   }, [metrics.chartTx])
 
-  const { totalIncome, totalExpense, balance } = useMemo(() => {
-    let inc = 0,
-      exp = 0
-    transactions.forEach((t) => {
-      const amtCents = Math.round(Number(t.amount) * 100)
-      if (t.type === 'income') inc += amtCents
-      if (t.type === 'expense') exp += amtCents
-    })
-    return { totalIncome: inc / 100, totalExpense: exp / 100, balance: (inc - exp) / 100 }
-  }, [transactions])
-
-  const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat('pt-PT', { style: 'currency', currency: 'EUR' }).format(value)
+  const formatCurrencyBRL = (value: number) => {
+    return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value)
   }
 
   const handleDeletePlan = async (id: string) => {
-    if (confirm('Tem certeza que deseja excluir este plano?')) {
+    if (confirm('Tem certeza que deseja excluir este pacote?')) {
       try {
         await deleteServicePlan(id)
-        toast({ title: 'Plano excluído.' })
-        loadPlansAndSubs()
+        toast({ title: 'Pacote excluído.' })
+        loadData()
       } catch (e: any) {
-        toast({ title: 'Erro', description: 'O plano pode estar em uso.', variant: 'destructive' })
+        toast({ title: 'Erro', description: 'O pacote pode estar em uso.', variant: 'destructive' })
       }
-    }
-  }
-
-  const handleCreateAppointment = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    if (!user) return
-    const formData = new FormData(e.currentTarget)
-    try {
-      await createAppointment({
-        professional_id: user.id,
-        title: formData.get('title'),
-        start_time: new Date(formData.get('start_time') as string).toISOString(),
-        end_time: new Date(formData.get('end_time') as string).toISOString(),
-        status: 'scheduled',
-      })
-      toast({ title: 'Consulta agendada com sucesso!' })
-      setIsApptOpen(false)
-      loadAppointments()
-    } catch (error: any) {
-      toast({ title: 'Erro', description: error.message, variant: 'destructive' })
-    }
-  }
-
-  const handleCreateTransaction = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    if (!user) return
-    const formData = new FormData(e.currentTarget)
-    try {
-      await createTransaction({
-        professional_id: user.id,
-        type: formData.get('type'),
-        amount: Number(formData.get('amount')),
-        description: formData.get('description'),
-        transaction_date: formData.get('date'),
-        status: 'paid',
-      })
-      toast({ title: 'Transação registada!' })
-      setIsTxOpen(false)
-      loadTransactions()
-    } catch (error: any) {
-      toast({ title: 'Erro', description: error.message, variant: 'destructive' })
     }
   }
 
@@ -263,35 +163,72 @@ export default function ProfClinic() {
         billing_cycle: formData.get('billing_cycle'),
         description: formData.get('description'),
       })
-      toast({ title: 'Plano criado com sucesso!' })
+      toast({ title: 'Pacote criado com sucesso!' })
       setIsPlanOpen(false)
-      loadPlansAndSubs()
+      loadData()
     } catch (error: any) {
       toast({ title: 'Erro', description: error.message, variant: 'destructive' })
     }
   }
 
-  const handleUpdateSubscriptionStatus = async (id: string, status: string) => {
+  const handleCreateTransaction = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    if (!user) return
+    const formData = new FormData(e.currentTarget)
     try {
-      await updateSubscriptionStatus(id, status)
-      toast({ title: 'Status atualizado com sucesso!' })
-      loadPlansAndSubs()
+      await createTransaction({
+        professional_id: user.id,
+        type: 'income',
+        amount: Number(formData.get('amount')),
+        description: formData.get('description'),
+        transaction_date: formData.get('date'),
+        status: formData.get('status'),
+      })
+      toast({ title: 'Recebimento registrado!' })
+      setIsTxOpen(false)
+      loadData()
     } catch (error: any) {
       toast({ title: 'Erro', description: error.message, variant: 'destructive' })
     }
   }
 
-  const overdueSubs = subscriptions.filter((s) => s.status === 'overdue')
-  const activeSubs = subscriptions.filter((s) => s.status !== 'overdue')
+  const handleUpdateTxStatus = async (id: string, status: string) => {
+    try {
+      await updateTransactionStatus(id, status)
+      toast({ title: 'Status atualizado com sucesso!' })
+      loadData()
+    } catch (error: any) {
+      toast({ title: 'Erro', description: error.message, variant: 'destructive' })
+    }
+  }
+
+  const handleWhatsAppReminder = (patientName: string, amount: number, description: string) => {
+    const text = `Olá${patientName ? ` ${patientName}` : ''}, tudo bem? Estou passando para lembrar sobre o pagamento pendente do plano "${description}" no valor de ${formatCurrencyBRL(amount)}. Qualquer dúvida, estou à disposição!`
+    const url = `https://wa.me/?text=${encodeURIComponent(text)}`
+    window.open(url, '_blank')
+  }
+
+  const getStatusBadge = (status: string) => {
+    switch (status) {
+      case 'paid':
+        return <Badge className="bg-green-500 hover:bg-green-600">Pago</Badge>
+      case 'pending':
+        return <Badge className="bg-yellow-500 hover:bg-yellow-600 text-yellow-950">Pendente</Badge>
+      case 'overdue':
+        return <Badge variant="destructive">Atrasado</Badge>
+      default:
+        return <Badge variant="secondary">Desconhecido</Badge>
+    }
+  }
 
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-6">
       <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">O Meu Consultório</h1>
+            <h1 className="text-3xl font-bold tracking-tight">CRM Financeiro</h1>
             <p className="text-muted-foreground mt-2">
-              Faça a gestão da sua agenda e das finanças.
+              Gestão financeira, pacotes e controle de recebimentos.
             </p>
           </div>
           <Briefcase className="h-10 w-10 text-primary opacity-20 md:hidden ml-4" />
@@ -301,12 +238,12 @@ export default function ProfClinic() {
           <Dialog>
             <DialogTrigger asChild>
               <Button variant="outline">
-                <Settings className="w-4 h-4 mr-2" /> Configurar Horários e PIX
+                <Settings className="w-4 h-4 mr-2" /> Configurações
               </Button>
             </DialogTrigger>
             <DialogContent>
               <DialogHeader>
-                <DialogTitle>Configurações do Consultório</DialogTitle>
+                <DialogTitle>Configurações Financeiras</DialogTitle>
               </DialogHeader>
               <div className="py-12 text-center text-muted-foreground">
                 Funcionalidade em desenvolvimento (Em breve)
@@ -325,165 +262,76 @@ export default function ProfClinic() {
               }
             }}
           >
-            <Link className="w-4 h-4 mr-2" /> Copiar Link de Agendamento
+            <LinkIcon className="w-4 h-4 mr-2" /> Link de Agendamento
           </Button>
         </div>
       </div>
 
-      <Tabs defaultValue="calendar" className="w-full">
-        <TabsList className="grid w-full grid-cols-3 max-w-2xl">
-          <TabsTrigger value="calendar">Agenda</TabsTrigger>
-          <TabsTrigger value="finance">Financeiro</TabsTrigger>
-          <TabsTrigger value="plans">Planos e Contratos</TabsTrigger>
+      <Tabs defaultValue="overview" className="w-full">
+        <TabsList className="grid w-full grid-cols-3 max-w-3xl">
+          <TabsTrigger value="overview">Visão Geral</TabsTrigger>
+          <TabsTrigger value="packages">Serviços e Pacotes</TabsTrigger>
+          <TabsTrigger value="receivables">Controle de Recebimentos</TabsTrigger>
         </TabsList>
 
-        <TabsContent value="calendar" className="mt-6">
-          <div className="grid grid-cols-1 lg:grid-cols-[320px_1fr] gap-6">
-            <div className="space-y-4">
-              <Calendar
-                mode="single"
-                selected={selectedDate}
-                onSelect={(date) => date && setSelectedDate(date)}
-                className="rounded-md border bg-card"
-                locale={ptBR}
-              />
-              <Dialog open={isApptOpen} onOpenChange={setIsApptOpen}>
-                <DialogTrigger asChild>
-                  <Button className="w-full">
-                    <Plus className="mr-2 h-4 w-4" /> Nova Consulta
-                  </Button>
-                </DialogTrigger>
-                <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle>Agendar Consulta</DialogTitle>
-                  </DialogHeader>
-                  <form onSubmit={handleCreateAppointment} className="space-y-4">
-                    <div className="space-y-2">
-                      <Label>Título / Paciente</Label>
-                      <Input name="title" required placeholder="Ex: Consulta - Carlos" />
-                    </div>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label>Início</Label>
-                        <Input name="start_time" type="datetime-local" required />
-                      </div>
-                      <div className="space-y-2">
-                        <Label>Fim</Label>
-                        <Input name="end_time" type="datetime-local" required />
-                      </div>
-                    </div>
-                    <DialogFooter>
-                      <Button type="submit">Guardar</Button>
-                    </DialogFooter>
-                  </form>
-                </DialogContent>
-              </Dialog>
+        <TabsContent value="overview" className="mt-6 space-y-6">
+          {isLoading ? (
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              {[1, 2, 3].map((i) => (
+                <Card key={i} className="animate-pulse">
+                  <CardContent className="h-24" />
+                </Card>
+              ))}
             </div>
-
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <CalendarIcon className="h-5 w-5" />
-                  Consultas de {format(selectedDate, "dd 'de' MMMM", { locale: ptBR })}
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                {appointments.length === 0 ? (
-                  <p className="text-muted-foreground text-center py-8">
-                    Nenhuma consulta agendada para este dia.
-                  </p>
-                ) : (
-                  appointments.map((apt) => (
-                    <div
-                      key={apt.id}
-                      className="flex items-center gap-4 p-4 rounded-lg border bg-card hover:bg-accent/50 transition-colors"
-                    >
-                      <div className="flex flex-col items-center justify-center border-r pr-4 min-w-[80px]">
-                        <span className="font-bold text-lg">
-                          {format(new Date(apt.start_time), 'HH:mm')}
-                        </span>
-                        <span className="text-xs text-muted-foreground">
-                          {format(new Date(apt.end_time), 'HH:mm')}
-                        </span>
-                      </div>
-                      <div className="flex-1">
-                        <h4 className="font-semibold">{apt.title}</h4>
-                        <p className="text-sm text-muted-foreground capitalize">
-                          Status: {apt.status === 'confirmed' ? 'Confirmado' : 'Agendado'}
-                        </p>
-                      </div>
-                      <div
-                        className={cn(
-                          'h-3 w-3 rounded-full shrink-0',
-                          apt.status === 'confirmed' ? 'bg-green-500' : 'bg-yellow-500',
-                        )}
-                      />
-                    </div>
-                  ))
-                )}
-              </CardContent>
-            </Card>
-          </div>
-        </TabsContent>
-
-        <TabsContent value="finance" className="mt-6 space-y-6">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <Card>
-              <CardContent className="p-6 flex items-center gap-4">
-                <div className="p-3 bg-green-500/10 rounded-full">
-                  <TrendingUp className="h-6 w-6 text-green-600" />
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-muted-foreground">Faturamento Mensal</p>
-                  <h3 className="text-2xl font-bold">{formatCurrency(metrics.monthlyRevenue)}</h3>
-                </div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardContent className="p-6 flex items-center gap-4">
-                <div className="p-3 bg-blue-500/10 rounded-full">
-                  <CalendarIcon className="h-6 w-6 text-blue-600" />
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-muted-foreground">Consultas Mês</p>
-                  <h3 className="text-2xl font-bold">{metrics.consultationsCount}</h3>
-                </div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardContent className="p-6 flex items-center gap-4">
-                <div className="p-3 bg-yellow-500/10 rounded-full">
-                  <AlertCircle className="h-6 w-6 text-yellow-600" />
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-muted-foreground">Inadimplência</p>
-                  <h3 className="text-2xl font-bold text-yellow-600">
-                    {formatCurrency(metrics.delinquency)}
-                  </h3>
-                </div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardContent className="p-6 flex items-center gap-4">
-                <div className="p-3 bg-purple-500/10 rounded-full">
-                  <Activity className="h-6 w-6 text-purple-600" />
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-muted-foreground">MRR Estimado</p>
-                  <h3 className="text-2xl font-bold text-purple-600">
-                    {formatCurrency(metrics.mrr)}
-                  </h3>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <Card>
+                <CardContent className="p-6 flex items-center gap-4">
+                  <div className="p-3 bg-green-500/10 rounded-full">
+                    <TrendingUp className="h-6 w-6 text-green-600" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-muted-foreground">Faturamento Mensal</p>
+                    <h3 className="text-2xl font-bold">
+                      {formatCurrencyBRL(metrics.monthlyRevenue)}
+                    </h3>
+                  </div>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardContent className="p-6 flex items-center gap-4">
+                  <div className="p-3 bg-yellow-500/10 rounded-full">
+                    <AlertCircle className="h-6 w-6 text-yellow-600" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-muted-foreground">
+                      Inadimplência (A Receber)
+                    </p>
+                    <h3 className="text-2xl font-bold text-yellow-600">
+                      {formatCurrencyBRL(metrics.delinquency)}
+                    </h3>
+                  </div>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardContent className="p-6 flex items-center gap-4">
+                  <div className="p-3 bg-blue-500/10 rounded-full">
+                    <UserCheck className="h-6 w-6 text-blue-600" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-muted-foreground">Pacientes Ativos</p>
+                    <h3 className="text-2xl font-bold text-blue-600">
+                      {metrics.activePatientsCount}
+                    </h3>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          )}
 
           <Card className="mb-6 p-4">
             <CardHeader className="p-0 pb-4 flex flex-row items-center justify-between">
-              <CardTitle className="text-lg">Receitas (Últimos 6 Meses)</CardTitle>
-              <div className="text-sm font-medium text-muted-foreground">
-                Saldo Mês: {formatCurrency(balance)}
-              </div>
+              <CardTitle className="text-lg">Fluxo de Caixa (Últimos 6 Meses)</CardTitle>
             </CardHeader>
             <CardContent className="p-0">
               <ChartContainer config={chartConfig} className="h-[300px] w-full">
@@ -504,9 +352,9 @@ export default function ProfClinic() {
                     tickLine={false}
                     tick={{ fill: 'hsl(var(--muted-foreground))' }}
                     tickFormatter={(value) =>
-                      value.toLocaleString('pt-PT', {
+                      value.toLocaleString('pt-BR', {
                         style: 'currency',
-                        currency: 'EUR',
+                        currency: 'BRL',
                         maximumFractionDigits: 0,
                       })
                     }
@@ -517,35 +365,162 @@ export default function ProfClinic() {
               </ChartContainer>
             </CardContent>
           </Card>
+        </TabsContent>
 
-          <div className="flex justify-between items-center">
-            <h3 className="text-xl font-bold">Transações do Mês</h3>
-            <Dialog open={isTxOpen} onOpenChange={setIsTxOpen}>
+        <TabsContent value="packages" className="mt-6 space-y-6">
+          <div className="flex items-center justify-between">
+            <h3 className="text-xl font-bold">Gerenciar Serviços</h3>
+            <Dialog open={isPlanOpen} onOpenChange={setIsPlanOpen}>
               <DialogTrigger asChild>
                 <Button>
-                  <Plus className="mr-2 h-4 w-4" /> Nova Transação
+                  <Plus className="mr-2 h-4 w-4" /> Novo Pacote
                 </Button>
               </DialogTrigger>
               <DialogContent>
                 <DialogHeader>
-                  <DialogTitle>Registar Transação</DialogTitle>
+                  <DialogTitle>Criar Novo Pacote de Serviço</DialogTitle>
                 </DialogHeader>
-                <form onSubmit={handleCreateTransaction} className="space-y-4">
+                <form onSubmit={handleCreatePlan} className="space-y-4">
+                  <div className="space-y-2">
+                    <Label>Nome do Pacote</Label>
+                    <Input name="name" required placeholder="Ex: Mensal Básico" />
+                  </div>
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label>Tipo</Label>
-                      <Select name="type" required defaultValue="income">
+                      <Label>Preço (R$)</Label>
+                      <Input name="price" type="number" step="0.01" required placeholder="0.00" />
+                    </div>
+                    <div className="space-y-2">
+                      <Label>Ciclo de Cobrança</Label>
+                      <Select name="billing_cycle" required defaultValue="monthly">
                         <SelectTrigger>
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="income">Receita</SelectItem>
-                          <SelectItem value="expense">Despesa</SelectItem>
+                          <SelectItem value="one-off">Consulta Única</SelectItem>
+                          <SelectItem value="weekly">Semanal</SelectItem>
+                          <SelectItem value="monthly">Mensal</SelectItem>
+                          <SelectItem value="quarterly">Trimestral</SelectItem>
+                          <SelectItem value="yearly">Anual</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Descrição</Label>
+                    <Input
+                      name="description"
+                      placeholder="Ex: Inclui 1 consulta e acompanhamento"
+                    />
+                  </div>
+                  <DialogFooter>
+                    <Button type="submit">Salvar</Button>
+                  </DialogFooter>
+                </form>
+              </DialogContent>
+            </Dialog>
+          </div>
+
+          {isLoading ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {[1, 2, 3].map((i) => (
+                <Card key={i} className="h-32 animate-pulse" />
+              ))}
+            </div>
+          ) : plans.length === 0 ? (
+            <div className="text-center p-12 border rounded-lg bg-card text-muted-foreground flex flex-col items-center">
+              <Briefcase className="h-10 w-10 mb-4 opacity-20" />
+              <p>Nenhum pacote de serviço cadastrado.</p>
+              <p className="text-sm mt-1">Crie seu primeiro pacote para oferecer aos pacientes.</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {plans.map((plan) => (
+                <Card key={plan.id} className="relative overflow-hidden group">
+                  <div className="absolute top-0 left-0 w-1 h-full bg-primary/80" />
+                  <CardContent className="p-6">
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <h4 className="font-semibold text-lg">{plan.name}</h4>
+                        <p className="text-sm text-muted-foreground mt-1 min-h-[40px]">
+                          {plan.description || 'Sem descrição'}
+                        </p>
+                      </div>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="-mr-3 -mt-3 text-muted-foreground hover:text-foreground"
+                          >
+                            <MoreVertical className="h-4 w-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuItem
+                            className="text-destructive"
+                            onClick={() => handleDeletePlan(plan.id)}
+                          >
+                            Excluir Pacote
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </div>
+                    <div className="mt-4 flex items-center justify-between border-t pt-4">
+                      <p className="font-bold text-xl text-primary">
+                        {formatCurrencyBRL(Number(plan.price))}
+                      </p>
+                      <Badge variant="secondary" className="capitalize font-normal">
+                        {plan.billing_cycle === 'monthly'
+                          ? 'Mensal'
+                          : plan.billing_cycle === 'quarterly'
+                            ? 'Trimestral'
+                            : plan.billing_cycle === 'yearly'
+                              ? 'Anual'
+                              : plan.billing_cycle === 'one-off'
+                                ? 'Avulso'
+                                : plan.billing_cycle}
+                      </Badge>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          )}
+        </TabsContent>
+
+        <TabsContent value="receivables" className="mt-6 space-y-6">
+          <div className="flex justify-between items-center">
+            <h3 className="text-xl font-bold">Lançamentos Financeiros</h3>
+            <Dialog open={isTxOpen} onOpenChange={setIsTxOpen}>
+              <DialogTrigger asChild>
+                <Button>
+                  <Plus className="mr-2 h-4 w-4" /> Novo Recebimento
+                </Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Registrar Recebimento</DialogTitle>
+                </DialogHeader>
+                <form onSubmit={handleCreateTransaction} className="space-y-4">
+                  <div className="space-y-2">
+                    <Label>Descrição / Referência</Label>
+                    <Input name="description" required placeholder="Ex: Mensalidade - João" />
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label>Data</Label>
+                      <Label>Valor (R$)</Label>
+                      <Input
+                        name="amount"
+                        type="number"
+                        step="0.01"
+                        min="0"
+                        required
+                        placeholder="0.00"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label>Vencimento</Label>
                       <Input
                         name="date"
                         type="date"
@@ -555,22 +530,20 @@ export default function ProfClinic() {
                     </div>
                   </div>
                   <div className="space-y-2">
-                    <Label>Descrição</Label>
-                    <Input name="description" required placeholder="Ex: Consulta João" />
-                  </div>
-                  <div className="space-y-2">
-                    <Label>Valor (€)</Label>
-                    <Input
-                      name="amount"
-                      type="number"
-                      step="0.01"
-                      min="0"
-                      required
-                      placeholder="0.00"
-                    />
+                    <Label>Status</Label>
+                    <Select name="status" required defaultValue="paid">
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="paid">Pago</SelectItem>
+                        <SelectItem value="pending">Pendente</SelectItem>
+                        <SelectItem value="overdue">Atrasado</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
                   <DialogFooter>
-                    <Button type="submit">Guardar</Button>
+                    <Button type="submit">Salvar</Button>
                   </DialogFooter>
                 </form>
               </DialogContent>
@@ -581,136 +554,61 @@ export default function ProfClinic() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Data</TableHead>
-                  <TableHead>Descrição</TableHead>
-                  <TableHead>Tipo</TableHead>
+                  <TableHead>Paciente</TableHead>
+                  <TableHead>Descrição / Pacote</TableHead>
+                  <TableHead>Vencimento</TableHead>
                   <TableHead className="text-right">Valor</TableHead>
+                  <TableHead className="text-center">Status</TableHead>
+                  <TableHead className="text-right">Ações</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {transactions.length === 0 ? (
+                {isLoading ? (
                   <TableRow>
-                    <TableCell colSpan={4} className="text-center py-8 text-muted-foreground">
-                      Nenhuma transação encontrada neste mês.
+                    <TableCell colSpan={6} className="text-center py-8">
+                      Carregando transações...
+                    </TableCell>
+                  </TableRow>
+                ) : transactions.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={6} className="text-center py-12 text-muted-foreground">
+                      <CalendarIcon className="h-10 w-10 mx-auto mb-4 opacity-20" />
+                      Nenhum recebimento cadastrado.
                     </TableCell>
                   </TableRow>
                 ) : (
                   transactions.map((tx) => (
                     <TableRow key={tx.id}>
+                      <TableCell className="font-medium text-muted-foreground">
+                        {tx.client?.name || 'Cliente Avulso'}
+                      </TableCell>
+                      <TableCell>{tx.description}</TableCell>
                       <TableCell>{format(new Date(tx.transaction_date), 'dd/MM/yyyy')}</TableCell>
-                      <TableCell className="font-medium">{tx.description}</TableCell>
-                      <TableCell>
-                        <span
-                          className={cn(
-                            'px-2 py-1 rounded-full text-xs font-medium',
-                            tx.type === 'income'
-                              ? 'bg-green-500/10 text-green-500'
-                              : 'bg-red-500/10 text-red-500',
-                          )}
-                        >
-                          {tx.type === 'income' ? 'Receita' : 'Despesa'}
-                        </span>
-                      </TableCell>
                       <TableCell className="text-right font-medium">
-                        {formatCurrency(Number(tx.amount))}
+                        {formatCurrencyBRL(Number(tx.amount))}
                       </TableCell>
-                    </TableRow>
-                  ))
-                )}
-              </TableBody>
-            </Table>
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="plans" className="mt-6 space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <h3 className="text-xl font-bold">Pacotes de Acompanhamento</h3>
-                <Dialog open={isPlanOpen} onOpenChange={setIsPlanOpen}>
-                  <DialogTrigger asChild>
-                    <Button size="sm">
-                      <Plus className="mr-2 h-4 w-4" /> Novo Plano
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent>
-                    <DialogHeader>
-                      <DialogTitle>Criar Novo Plano</DialogTitle>
-                    </DialogHeader>
-                    <form onSubmit={handleCreatePlan} className="space-y-4">
-                      <div className="space-y-2">
-                        <Label>Nome do Plano</Label>
-                        <Input name="name" required placeholder="Ex: Mensal Básico" />
-                      </div>
-                      <div className="grid grid-cols-2 gap-4">
-                        <div className="space-y-2">
-                          <Label>Preço (€)</Label>
-                          <Input
-                            name="price"
-                            type="number"
-                            step="0.01"
-                            required
-                            placeholder="0.00"
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <Label>Ciclo de Cobrança</Label>
-                          <Select name="billing_cycle" required defaultValue="monthly">
-                            <SelectTrigger>
-                              <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="one-off">Avulso (Única)</SelectItem>
-                              <SelectItem value="weekly">Semanal</SelectItem>
-                              <SelectItem value="monthly">Mensal</SelectItem>
-                              <SelectItem value="quarterly">Trimestral</SelectItem>
-                              <SelectItem value="yearly">Anual</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </div>
-                      </div>
-                      <div className="space-y-2">
-                        <Label>Descrição</Label>
-                        <Input name="description" placeholder="Ex: Inclui 1 consulta e chat" />
-                      </div>
-                      <DialogFooter>
-                        <Button type="submit">Guardar</Button>
-                      </DialogFooter>
-                    </form>
-                  </DialogContent>
-                </Dialog>
-              </div>
-
-              <div className="space-y-4">
-                {plans.length === 0 ? (
-                  <p className="text-muted-foreground text-sm border rounded-lg p-8 text-center bg-card">
-                    Nenhum plano registado.
-                  </p>
-                ) : (
-                  plans.map((plan) => (
-                    <Card key={plan.id}>
-                      <CardContent className="p-4 flex items-center justify-between">
-                        <div>
-                          <h4 className="font-semibold">{plan.name}</h4>
-                          <p className="text-sm text-muted-foreground">{plan.description}</p>
-                        </div>
-                        <div className="flex items-center gap-4">
-                          <div className="text-right">
-                            <p className="font-bold text-lg">
-                              {formatCurrency(Number(plan.price))}
-                            </p>
-                            <Badge variant="secondary" className="mt-1 capitalize">
-                              {plan.billing_cycle === 'monthly'
-                                ? 'Mensal'
-                                : plan.billing_cycle === 'quarterly'
-                                  ? 'Trimestral'
-                                  : plan.billing_cycle === 'yearly'
-                                    ? 'Anual'
-                                    : plan.billing_cycle === 'one-off'
-                                      ? 'Avulso'
-                                      : plan.billing_cycle}
-                            </Badge>
-                          </div>
+                      <TableCell className="text-center">
+                        {getStatusBadge(tx.status || 'unknown')}
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <div className="flex items-center justify-end gap-2">
+                          {tx.status === 'overdue' && (
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="h-8 border-green-200 text-green-700 hover:bg-green-50"
+                              onClick={() =>
+                                handleWhatsAppReminder(
+                                  tx.client?.name || '',
+                                  Number(tx.amount),
+                                  tx.description,
+                                )
+                              }
+                              title="Lembrar via WhatsApp"
+                            >
+                              <MessageCircle className="h-4 w-4 mr-1" /> Lembrar
+                            </Button>
+                          )}
                           <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                               <Button variant="ghost" size="icon" className="h-8 w-8">
@@ -718,145 +616,29 @@ export default function ProfClinic() {
                               </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end">
-                              <DropdownMenuItem
-                                className="text-destructive"
-                                onClick={() => handleDeletePlan(plan.id)}
-                              >
-                                Excluir
+                              <DropdownMenuItem onClick={() => handleUpdateTxStatus(tx.id, 'paid')}>
+                                Marcar como Pago
                               </DropdownMenuItem>
-                            </DropdownMenuContent>
-                          </DropdownMenu>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))
-                )}
-              </div>
-            </div>
-
-            <div className="space-y-4">
-              <h3 className="text-xl font-bold">Pacientes Ativos & Inadimplência</h3>
-
-              {overdueSubs.length > 0 && (
-                <Alert variant="destructive" className="mb-4">
-                  <AlertCircle className="h-4 w-4" />
-                  <AlertTitle>Atenção</AlertTitle>
-                  <AlertDescription>
-                    Existem {overdueSubs.length} pacientes com pagamentos em atraso!
-                    <div className="mt-2 space-y-2">
-                      {overdueSubs.map((sub) => (
-                        <div
-                          key={sub.id}
-                          className="flex items-center justify-between bg-destructive/10 p-2 rounded-md gap-2 flex-wrap"
-                        >
-                          <span className="font-medium text-destructive-foreground">
-                            {sub.client?.name || 'Cliente'}
-                          </span>
-                          <div className="flex items-center gap-2 ml-auto">
-                            <Button
-                              size="sm"
-                              variant="secondary"
-                              className="h-8 text-xs bg-background/50 hover:bg-background/80 text-destructive-foreground"
-                              onClick={() => {
-                                navigator.clipboard.writeText(
-                                  window.location.origin + '/pay/' + sub.id,
-                                )
-                                toast({
-                                  title: 'Link de cobrança copiado!',
-                                  description:
-                                    'Link de cobrança copiado para a área de transferência! Envie para o paciente.',
-                                })
-                              }}
-                            >
-                              <QrCode className="w-3 h-3 mr-2" /> Cobrar via PIX/Link
-                            </Button>
-                            <DropdownMenu>
-                              <DropdownMenuTrigger asChild>
-                                <Button
-                                  variant="ghost"
-                                  size="sm"
-                                  className="h-6 w-6 p-0 text-destructive-foreground hover:bg-destructive/20"
-                                >
-                                  <MoreVertical className="h-4 w-4" />
-                                </Button>
-                              </DropdownMenuTrigger>
-                              <DropdownMenuContent align="end">
-                                <DropdownMenuItem
-                                  onClick={() => handleUpdateSubscriptionStatus(sub.id, 'active')}
-                                >
-                                  Marcar como Pago
-                                </DropdownMenuItem>
-                                <DropdownMenuItem
-                                  onClick={() =>
-                                    handleUpdateSubscriptionStatus(sub.id, 'cancelled')
-                                  }
-                                  className="text-destructive"
-                                >
-                                  Cancelar Contrato
-                                </DropdownMenuItem>
-                              </DropdownMenuContent>
-                            </DropdownMenu>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </AlertDescription>
-                </Alert>
-              )}
-
-              <div className="space-y-4">
-                {activeSubs.length === 0 ? (
-                  <p className="text-muted-foreground text-sm border rounded-lg p-8 text-center bg-card">
-                    Nenhuma assinatura ativa.
-                  </p>
-                ) : (
-                  activeSubs.map((sub) => (
-                    <Card key={sub.id}>
-                      <CardContent className="p-4 flex items-center justify-between">
-                        <div className="flex items-center gap-3">
-                          <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center font-bold text-primary uppercase">
-                            {sub.client?.name?.charAt(0) || 'C'}
-                          </div>
-                          <div>
-                            <h4 className="font-semibold">{sub.client?.name || 'Cliente'}</h4>
-                            <p className="text-sm text-muted-foreground">{sub.plan?.name}</p>
-                          </div>
-                        </div>
-                        <div className="flex items-center gap-4">
-                          <div className="text-right">
-                            <p className="text-xs text-muted-foreground">Próxima Cobrança</p>
-                            <p className="text-sm font-medium">
-                              {format(new Date(sub.next_billing_date), 'dd/MM/yyyy')}
-                            </p>
-                          </div>
-                          <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                              <Button variant="ghost" size="icon">
-                                <MoreVertical className="h-4 w-4" />
-                              </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end">
                               <DropdownMenuItem
-                                onClick={() => handleUpdateSubscriptionStatus(sub.id, 'overdue')}
+                                onClick={() => handleUpdateTxStatus(tx.id, 'pending')}
+                              >
+                                Marcar como Pendente
+                              </DropdownMenuItem>
+                              <DropdownMenuItem
+                                onClick={() => handleUpdateTxStatus(tx.id, 'overdue')}
                               >
                                 Marcar como Atrasado
                               </DropdownMenuItem>
-                              <DropdownMenuItem
-                                onClick={() => handleUpdateSubscriptionStatus(sub.id, 'cancelled')}
-                                className="text-destructive"
-                              >
-                                Cancelar Contrato
-                              </DropdownMenuItem>
                             </DropdownMenuContent>
                           </DropdownMenu>
                         </div>
-                      </CardContent>
-                    </Card>
+                      </TableCell>
+                    </TableRow>
                   ))
                 )}
-              </div>
-            </div>
-          </div>
+              </TableBody>
+            </Table>
+          </Card>
         </TabsContent>
       </Tabs>
     </div>

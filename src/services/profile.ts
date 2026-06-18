@@ -1,6 +1,8 @@
 import { supabase } from '@/lib/supabase/client'
+import type { TablesUpdate } from '@/lib/supabase/types'
+import type { User } from '@supabase/supabase-js'
 
-export const uploadAvatar = async (userId: string, file: File) => {
+export const uploadAvatar = async (userId: string, file: File): Promise<string> => {
   const fileExt = file.name.split('.').pop()
   const uuid = crypto.randomUUID()
   const fileName = `${userId}-${uuid}.${fileExt}`
@@ -13,7 +15,9 @@ export const uploadAvatar = async (userId: string, file: File) => {
   return data.publicUrl
 }
 
-export const updateUserProfile = async (metadata: any) => {
+export const updateUserProfile = async (
+  metadata: TablesUpdate<'profiles'>,
+): Promise<{ user: User | null }> => {
   const { data, error } = await supabase.auth.updateUser({ data: metadata })
   if (error) throw error
 

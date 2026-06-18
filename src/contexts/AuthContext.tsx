@@ -2,6 +2,7 @@ import { createContext, useContext, useState, ReactNode, useEffect } from 'react
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '@/lib/supabase/client'
 import { Session } from '@supabase/supabase-js'
+import type { Tables } from '@/lib/supabase/types'
 
 export type Role = 'admin' | 'professional' | 'client'
 
@@ -22,7 +23,7 @@ interface AuthContextType {
   highestRole: Role | null
   logout: () => Promise<void>
   switchRole: (newRole: Role) => void
-  startImpersonation: (targetUser: any) => Promise<void>
+  startImpersonation: (targetUser: Tables<'profiles'>) => Promise<void>
   stopImpersonation: () => void
   isImpersonating: boolean
 }
@@ -40,8 +41,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const navigate = useNavigate()
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session)
+    supabase.auth.getUser().then(({ data: { user }, error }) => {
+      if (!error && user) {
+        supabase.auth.getSession().then(({ data: { session } }) => {
+          setSession(session)
+        })
+      } else {
+        setSession(null)
+      }
     })
 
     const {
@@ -107,10 +114,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [session])
 
   const logout = async () => {
-    const { error } = await supabase.auth.signOut()
-    if (error) {
+    try {
+      await supabase.auth.signOut()
+    } catch (error) {
       console.error('Logout error:', error)
-    } else {
+    } finally {
       setRealUser(null)
       setSession(null)
       setRealActiveRole(null)
@@ -140,13 +148,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     navigate(routes[newRole])
   }
 
-  const startImpersonation = async (targetUser: any) => {
+  const startImpersonation = async (targetUser: Tables<'profiles'>) => {
     if (!realUser || realHighestRole !== 'admin') return
 
     const targetRole = targetUser.role || 'client'
 
     try {
-      const { error } = await supabase.rpc('register_audit_log' as any, {
+      const { error } = await supabase.rpc('register_audit_log', {
         p_action: 'IMPERSONATE_START',
         p_target_user_id: targetUser.id,
         p_details: { targetRole },

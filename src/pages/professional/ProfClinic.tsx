@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react'
-import { format, startOfDay, endOfDay, startOfMonth, endOfMonth } from 'date-fns'
+import { format, startOfDay, endOfDay, startOfMonth, endOfMonth, subMonths } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import {
   Briefcase,
@@ -13,6 +13,7 @@ import {
   Link,
   QrCode,
   Settings,
+  Activity,
 } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
 import {
@@ -22,8 +23,10 @@ import {
   createTransaction,
   getServicePlans,
   createServicePlan,
+  deleteServicePlan,
   getSubscriptions,
   updateSubscriptionStatus,
+  getDashboardMetrics,
 } from '@/services/clinic'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
@@ -67,16 +70,6 @@ import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/
 import { useToast } from '@/hooks/use-toast'
 import { cn } from '@/lib/utils'
 
-const chartData = [
-  { name: 'Jan', income: 4000, expense: 1200 },
-  { name: 'Fev', income: 3000, expense: 1398 },
-  { name: 'Mar', income: 2000, expense: 9800 },
-  { name: 'Abr', income: 2780, expense: 3908 },
-  { name: 'Mai', income: 1890, expense: 4800 },
-  { name: 'Jun', income: 2390, expense: 3800 },
-  { name: 'Jul', income: 3490, expense: 4300 },
-]
-
 const chartConfig = {
   income: {
     label: 'Receitas',
@@ -97,6 +90,13 @@ export default function ProfClinic() {
   const [transactions, setTransactions] = useState<any[]>([])
   const [plans, setPlans] = useState<any[]>([])
   const [subscriptions, setSubscriptions] = useState<any[]>([])
+  const [metrics, setMetrics] = useState({
+    monthlyRevenue: 0,
+    consultationsCount: 0,
+    delinquency: 0,
+    mrr: 0,
+    chartTx: [] as any[],
+  })
 
   const [isApptOpen, setIsApptOpen] = useState(false)
   const [isTxOpen, setIsTxOpen] = useState(false)
@@ -126,9 +126,12 @@ export default function ProfClinic() {
       const end = format(endOfMonth(now), 'yyyy-MM-dd')
       const data = await getTransactionsByMonth(user.id, start, end)
       setTransactions(data)
+
+      const dashMetrics = await getDashboardMetrics(user.id)
+      setMetrics(dashMetrics)
     } catch (error: any) {
       toast({
-        title: 'Erro ao carregar transações',
+        title: 'Erro ao carregar finanças',
         description: error.message,
         variant: 'destructive',
       })
@@ -160,6 +163,25 @@ export default function ProfClinic() {
     loadPlansAndSubs()
   }, [user])
 
+  const chartData = useMemo(() => {
+    const dataMap: Record<string, number> = {}
+    for (let i = 5; i >= 0; i--) {
+      const m = subMonths(new Date(), i)
+      const label = format(m, 'MMM', { locale: ptBR })
+      dataMap[label] = 0
+    }
+    metrics.chartTx.forEach((tx) => {
+      const d = new Date(tx.transaction_date)
+      const offset = d.getTimezoneOffset() * 60000
+      const localD = new Date(d.getTime() + offset)
+      const label = format(localD, 'MMM', { locale: ptBR })
+      if (dataMap[label] !== undefined) {
+        dataMap[label] += Number(tx.amount)
+      }
+    })
+    return Object.keys(dataMap).map((key) => ({ name: key, income: dataMap[key] }))
+  }, [metrics.chartTx])
+
   const { totalIncome, totalExpense, balance } = useMemo(() => {
     let inc = 0,
       exp = 0
@@ -169,6 +191,18 @@ export default function ProfClinic() {
     })
     return { totalIncome: inc, totalExpense: exp, balance: inc - exp }
   }, [transactions])
+
+  const handleDeletePlan = async (id: string) => {
+    if (confirm('Tem certeza que deseja excluir este plano?')) {
+      try {
+        await deleteServicePlan(id)
+        toast({ title: 'Plano excluído.' })
+        loadPlansAndSubs()
+      } catch (e: any) {
+        toast({ title: 'Erro', description: 'O plano pode estar em uso.', variant: 'destructive' })
+      }
+    }
+  }
 
   const handleCreateAppointment = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -387,45 +421,61 @@ export default function ProfClinic() {
         </TabsContent>
 
         <TabsContent value="finance" className="mt-6 space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <Card>
               <CardContent className="p-6 flex items-center gap-4">
                 <div className="p-3 bg-green-500/10 rounded-full">
-                  <TrendingUp className="h-6 w-6 text-green-500" />
+                  <TrendingUp className="h-6 w-6 text-green-600" />
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-muted-foreground">Receitas</p>
-                  <h3 className="text-2xl font-bold">€ {totalIncome.toFixed(2)}</h3>
+                  <p className="text-sm font-medium text-muted-foreground">Faturamento Mensal</p>
+                  <h3 className="text-2xl font-bold">€ {metrics.monthlyRevenue.toFixed(2)}</h3>
                 </div>
               </CardContent>
             </Card>
             <Card>
               <CardContent className="p-6 flex items-center gap-4">
-                <div className="p-3 bg-red-500/10 rounded-full">
-                  <TrendingDown className="h-6 w-6 text-red-500" />
+                <div className="p-3 bg-blue-500/10 rounded-full">
+                  <CalendarIcon className="h-6 w-6 text-blue-600" />
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-muted-foreground">Despesas</p>
-                  <h3 className="text-2xl font-bold">€ {totalExpense.toFixed(2)}</h3>
+                  <p className="text-sm font-medium text-muted-foreground">Consultas Mês</p>
+                  <h3 className="text-2xl font-bold">{metrics.consultationsCount}</h3>
                 </div>
               </CardContent>
             </Card>
             <Card>
               <CardContent className="p-6 flex items-center gap-4">
-                <div className="p-3 bg-primary/10 rounded-full">
-                  <DollarSign className="h-6 w-6 text-primary" />
+                <div className="p-3 bg-yellow-500/10 rounded-full">
+                  <AlertCircle className="h-6 w-6 text-yellow-600" />
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-muted-foreground">Saldo Atual</p>
-                  <h3 className="text-2xl font-bold">€ {balance.toFixed(2)}</h3>
+                  <p className="text-sm font-medium text-muted-foreground">Inadimplência</p>
+                  <h3 className="text-2xl font-bold text-yellow-600">
+                    € {metrics.delinquency.toFixed(2)}
+                  </h3>
+                </div>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardContent className="p-6 flex items-center gap-4">
+                <div className="p-3 bg-purple-500/10 rounded-full">
+                  <Activity className="h-6 w-6 text-purple-600" />
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-muted-foreground">MRR Estimado</p>
+                  <h3 className="text-2xl font-bold text-purple-600">€ {metrics.mrr.toFixed(2)}</h3>
                 </div>
               </CardContent>
             </Card>
           </div>
 
           <Card className="mb-6 p-4">
-            <CardHeader className="p-0 pb-4">
-              <CardTitle className="text-lg">Fluxo de Caixa Mensal</CardTitle>
+            <CardHeader className="p-0 pb-4 flex flex-row items-center justify-between">
+              <CardTitle className="text-lg">Receitas (Últimos 6 Meses)</CardTitle>
+              <div className="text-sm font-medium text-muted-foreground">
+                Saldo Mês: € {balance.toFixed(2)}
+              </div>
             </CardHeader>
             <CardContent className="p-0">
               <ChartContainer config={chartConfig} className="h-[300px] w-full">
@@ -449,7 +499,6 @@ export default function ProfClinic() {
                   />
                   <ChartTooltip content={<ChartTooltipContent />} />
                   <Bar dataKey="income" fill="var(--color-income)" radius={[4, 4, 0, 0]} />
-                  <Bar dataKey="expense" fill="var(--color-expense)" radius={[4, 4, 0, 0]} />
                 </BarChart>
               </ChartContainer>
             </CardContent>
@@ -597,6 +646,7 @@ export default function ProfClinic() {
                               <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
+                              <SelectItem value="one-off">Avulso (Única)</SelectItem>
                               <SelectItem value="weekly">Semanal</SelectItem>
                               <SelectItem value="monthly">Mensal</SelectItem>
                               <SelectItem value="quarterly">Trimestral</SelectItem>
@@ -630,11 +680,36 @@ export default function ProfClinic() {
                           <h4 className="font-semibold">{plan.name}</h4>
                           <p className="text-sm text-muted-foreground">{plan.description}</p>
                         </div>
-                        <div className="text-right">
-                          <p className="font-bold text-lg">€ {Number(plan.price).toFixed(2)}</p>
-                          <Badge variant="secondary" className="mt-1 capitalize">
-                            {plan.billing_cycle === 'monthly' ? 'Mensal' : plan.billing_cycle}
-                          </Badge>
+                        <div className="flex items-center gap-4">
+                          <div className="text-right">
+                            <p className="font-bold text-lg">€ {Number(plan.price).toFixed(2)}</p>
+                            <Badge variant="secondary" className="mt-1 capitalize">
+                              {plan.billing_cycle === 'monthly'
+                                ? 'Mensal'
+                                : plan.billing_cycle === 'quarterly'
+                                  ? 'Trimestral'
+                                  : plan.billing_cycle === 'yearly'
+                                    ? 'Anual'
+                                    : plan.billing_cycle === 'one-off'
+                                      ? 'Avulso'
+                                      : plan.billing_cycle}
+                            </Badge>
+                          </div>
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <Button variant="ghost" size="icon" className="h-8 w-8">
+                                <MoreVertical className="h-4 w-4" />
+                              </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                              <DropdownMenuItem
+                                className="text-destructive"
+                                onClick={() => handleDeletePlan(plan.id)}
+                              >
+                                Excluir
+                              </DropdownMenuItem>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
                         </div>
                       </CardContent>
                     </Card>

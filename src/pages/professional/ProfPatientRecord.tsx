@@ -63,6 +63,31 @@ import {
   type NutritionAssessment,
   type NutritionSupplement,
 } from '@/services/nutrition'
+import { format } from 'date-fns'
+import { DollarSign, Plus } from 'lucide-react'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog'
+import { Label } from '@/components/ui/label'
+import {
+  getClientSubscriptions,
+  getClientTransactions,
+  getServicePlans,
+  createClientSubscription,
+  createTransaction,
+  updateSubscriptionStatus,
+} from '@/services/clinic'
 
 const calculateStreak = (logs: any[]) => {
   if (!logs || logs.length === 0) return 0
@@ -145,6 +170,27 @@ export default function ProfPatientRecord() {
   const [visibleNotes, setVisibleNotes] = useState(5)
   const [visibleAssessments, setVisibleAssessments] = useState(5)
 
+  const [patientPlans, setPatientPlans] = useState<any[]>([])
+  const [patientTransactions, setPatientTransactions] = useState<any[]>([])
+  const [availablePlans, setAvailablePlans] = useState<any[]>([])
+
+  const [isLinkPlanOpen, setIsLinkPlanOpen] = useState(false)
+  const [isPaymentOpen, setIsPaymentOpen] = useState(false)
+
+  const fetchFinancials = async () => {
+    if (!patientId || !user?.id) return
+    try {
+      const subs = await getClientSubscriptions(user.id, patientId)
+      setPatientPlans(subs)
+      const txs = await getClientTransactions(user.id, patientId)
+      setPatientTransactions(txs)
+      const plans = await getServicePlans(user.id)
+      setAvailablePlans(plans)
+    } catch (e) {
+      console.error(e)
+    }
+  }
+
   const fetchSupplements = async () => {
     if (!patientId) return
     const { data } = await getPatientSupplements(patientId)
@@ -210,6 +256,7 @@ export default function ProfPatientRecord() {
           fetchAssessments(),
           fetchPatientHabits(),
           fetchTodayTracking(),
+          fetchFinancials(),
         ])
       } catch (e) {
         console.error('Error fetching patient data:', e)
@@ -287,6 +334,59 @@ export default function ProfPatientRecord() {
     const specialties = rawMeta.specialties || []
     if (role === 'master' || role === 'admin') return true
     return specialties.includes(module)
+  }
+
+  const handleLinkPlan = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    if (!user || !patientId) return
+    const formData = new FormData(e.currentTarget)
+    try {
+      await createClientSubscription({
+        professional_id: user.id,
+        client_id: patientId,
+        plan_id: formData.get('plan_id'),
+        next_billing_date: formData.get('next_billing_date'),
+        status: 'active',
+      })
+      toast({ title: 'Plano vinculado com sucesso!' })
+      fetchFinancials()
+      setIsLinkPlanOpen(false)
+    } catch (e: any) {
+      toast({ title: 'Erro', description: e.message, variant: 'destructive' })
+    }
+  }
+
+  const handleRegisterPayment = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    if (!user || !patientId) return
+    const formData = new FormData(e.currentTarget)
+    try {
+      await createTransaction({
+        professional_id: user.id,
+        client_id: patientId,
+        type: 'income',
+        amount: Number(formData.get('amount')),
+        description: formData.get('description'),
+        transaction_date: formData.get('transaction_date'),
+        status: 'paid',
+        category: 'general',
+      })
+      toast({ title: 'Pagamento registrado!' })
+      fetchFinancials()
+      setIsPaymentOpen(false)
+    } catch (e: any) {
+      toast({ title: 'Erro', description: e.message, variant: 'destructive' })
+    }
+  }
+
+  const handleCancelSub = async (subId: string) => {
+    try {
+      await updateSubscriptionStatus(subId, 'cancelled')
+      toast({ title: 'Assinatura cancelada.' })
+      fetchFinancials()
+    } catch (e: any) {
+      toast({ title: 'Erro ao cancelar', variant: 'destructive' })
+    }
   }
 
   const LockedContent = () => (
@@ -396,6 +496,9 @@ export default function ProfPatientRecord() {
             </TabsTrigger>
             <TabsTrigger value="produtividade" className="py-2.5 px-4 rounded-md">
               Produtividade
+            </TabsTrigger>
+            <TabsTrigger value="financeiro" className="py-2.5 px-4 rounded-md">
+              Financeiro
             </TabsTrigger>
           </TabsList>
 
@@ -876,6 +979,185 @@ export default function ProfPatientRecord() {
                 </CardContent>
               </Card>
             )}
+          </TabsContent>
+
+          <TabsContent value="financeiro" className="animate-fade-in-up mt-0 space-y-6">
+            <div className="flex justify-between items-center">
+              <div>
+                <h3 className="text-lg font-semibold">Assinaturas e Planos</h3>
+                <p className="text-sm text-muted-foreground">
+                  Contratos e pacotes ativos deste paciente.
+                </p>
+              </div>
+              <Dialog open={isLinkPlanOpen} onOpenChange={setIsLinkPlanOpen}>
+                <DialogTrigger asChild>
+                  <Button size="sm">
+                    <Plus className="w-4 h-4 mr-2" /> Vincular Plano
+                  </Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Vincular Plano ao Paciente</DialogTitle>
+                  </DialogHeader>
+                  <form onSubmit={handleLinkPlan} className="space-y-4">
+                    <div className="space-y-2">
+                      <Label>Selecionar Plano</Label>
+                      <Select name="plan_id" required>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Escolha um plano..." />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {availablePlans.map((p) => (
+                            <SelectItem key={p.id} value={p.id}>
+                              {p.name} - €{p.price}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="space-y-2">
+                      <Label>Data da Primeira Cobrança</Label>
+                      <Input
+                        type="date"
+                        name="next_billing_date"
+                        required
+                        defaultValue={new Date().toISOString().split('T')[0]}
+                      />
+                    </div>
+                    <Button type="submit" className="w-full">
+                      Vincular
+                    </Button>
+                  </form>
+                </DialogContent>
+              </Dialog>
+            </div>
+
+            <Card>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Plano</TableHead>
+                    <TableHead>Valor</TableHead>
+                    <TableHead>Ciclo</TableHead>
+                    <TableHead>Próx. Cobrança</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead className="text-right">Ações</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {patientPlans.map((sub) => (
+                    <TableRow key={sub.id}>
+                      <TableCell className="font-medium">{sub.plan?.name}</TableCell>
+                      <TableCell>€ {sub.plan?.price}</TableCell>
+                      <TableCell className="capitalize">{sub.plan?.billing_cycle}</TableCell>
+                      <TableCell>{format(new Date(sub.next_billing_date), 'dd/MM/yyyy')}</TableCell>
+                      <TableCell>
+                        <Badge
+                          variant="outline"
+                          className={cn(
+                            sub.status === 'active'
+                              ? 'bg-green-50 text-green-700 border-green-200'
+                              : 'bg-red-50 text-red-700 border-red-200',
+                          )}
+                        >
+                          {sub.status === 'active' ? 'Ativo' : sub.status}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <Button variant="ghost" size="sm" onClick={() => handleCancelSub(sub.id)}>
+                          Cancelar
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                  {patientPlans.length === 0 && (
+                    <TableRow>
+                      <TableCell colSpan={6} className="text-center text-muted-foreground py-6">
+                        Nenhum plano vinculado.
+                      </TableCell>
+                    </TableRow>
+                  )}
+                </TableBody>
+              </Table>
+            </Card>
+
+            <div className="flex justify-between items-center pt-4">
+              <h3 className="text-lg font-semibold">Histórico de Pagamentos</h3>
+              <Dialog open={isPaymentOpen} onOpenChange={setIsPaymentOpen}>
+                <DialogTrigger asChild>
+                  <Button size="sm" variant="secondary">
+                    <DollarSign className="w-4 h-4 mr-2" /> Registrar Pagamento
+                  </Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Registrar Pagamento Recebido</DialogTitle>
+                  </DialogHeader>
+                  <form onSubmit={handleRegisterPayment} className="space-y-4">
+                    <div className="space-y-2">
+                      <Label>Valor (€)</Label>
+                      <Input type="number" step="0.01" name="amount" required />
+                    </div>
+                    <div className="space-y-2">
+                      <Label>Data do Pagamento</Label>
+                      <Input
+                        type="date"
+                        name="transaction_date"
+                        required
+                        defaultValue={new Date().toISOString().split('T')[0]}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label>Descrição</Label>
+                      <Input name="description" required placeholder="Ex: Mensalidade Maio" />
+                    </div>
+                    <Button type="submit" className="w-full">
+                      Salvar Pagamento
+                    </Button>
+                  </form>
+                </DialogContent>
+              </Dialog>
+            </div>
+
+            <Card>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Data</TableHead>
+                    <TableHead>Descrição</TableHead>
+                    <TableHead>Valor</TableHead>
+                    <TableHead>Status</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {patientTransactions.map((tx) => (
+                    <TableRow key={tx.id}>
+                      <TableCell>{format(new Date(tx.transaction_date), 'dd/MM/yyyy')}</TableCell>
+                      <TableCell>{tx.description}</TableCell>
+                      <TableCell className="font-medium">€ {tx.amount}</TableCell>
+                      <TableCell>
+                        <Badge
+                          className={cn(
+                            tx.status === 'paid'
+                              ? 'bg-green-100 text-green-700 hover:bg-green-100'
+                              : 'bg-yellow-100 text-yellow-700 hover:bg-yellow-100',
+                          )}
+                        >
+                          {tx.status === 'paid' ? 'Pago' : 'Pendente'}
+                        </Badge>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                  {patientTransactions.length === 0 && (
+                    <TableRow>
+                      <TableCell colSpan={4} className="text-center text-muted-foreground py-6">
+                        Nenhum pagamento registrado.
+                      </TableCell>
+                    </TableRow>
+                  )}
+                </TableBody>
+              </Table>
+            </Card>
           </TabsContent>
 
           <TabsContent value="produtividade" className="animate-fade-in-up mt-0">

@@ -1,4 +1,5 @@
 import { supabase } from '@/lib/supabase/client'
+import { format, startOfMonth, endOfMonth, subMonths } from 'date-fns'
 
 // --- AGENDA ---
 export const getAppointmentsByDate = async (profId: string, startDate: string, endDate: string) => {
@@ -49,6 +50,16 @@ export const createServicePlan = async (planData: any) => {
   if (error) throw error
 }
 
+export const updateServicePlan = async (id: string, planData: any) => {
+  const { error } = await supabase.from('service_plans').update(planData).eq('id', id)
+  if (error) throw error
+}
+
+export const deleteServicePlan = async (id: string) => {
+  const { error } = await supabase.from('service_plans').delete().eq('id', id)
+  if (error) throw error
+}
+
 export const getSubscriptions = async (profId: string) => {
   const { data, error } = await supabase
     .from('client_subscriptions')
@@ -59,6 +70,21 @@ export const getSubscriptions = async (profId: string) => {
   return data || []
 }
 
+export const getClientSubscriptions = async (profId: string, clientId: string) => {
+  const { data, error } = await supabase
+    .from('client_subscriptions')
+    .select('*, plan:plan_id(*)')
+    .eq('professional_id', profId)
+    .eq('client_id', clientId)
+  if (error) throw error
+  return data || []
+}
+
+export const createClientSubscription = async (data: any) => {
+  const { error } = await supabase.from('client_subscriptions').insert([data])
+  if (error) throw error
+}
+
 export const updateSubscriptionStatus = async (subId: string, status: string) => {
   const { error } = await supabase.from('client_subscriptions').update({ status }).eq('id', subId)
   if (error) throw error
@@ -67,17 +93,28 @@ export const updateSubscriptionStatus = async (subId: string, status: string) =>
 // --- FINANÇAS ---
 export const getTransactionsByMonth = async (
   profId: string,
-  startOfMonth: string,
-  endOfMonth: string,
+  startOfMonthStr: string,
+  endOfMonthStr: string,
 ) => {
   const { data, error } = await supabase
     .from('financial_transactions')
     .select('*')
     .eq('professional_id', profId)
-    .gte('transaction_date', startOfMonth)
-    .lte('transaction_date', endOfMonth)
+    .gte('transaction_date', startOfMonthStr)
+    .lte('transaction_date', endOfMonthStr)
     .order('transaction_date', { ascending: false })
 
+  if (error) throw error
+  return data || []
+}
+
+export const getClientTransactions = async (profId: string, clientId: string) => {
+  const { data, error } = await supabase
+    .from('financial_transactions')
+    .select('*')
+    .eq('professional_id', profId)
+    .eq('client_id', clientId)
+    .order('transaction_date', { ascending: false })
   if (error) throw error
   return data || []
 }
@@ -85,6 +122,78 @@ export const getTransactionsByMonth = async (
 export const createTransaction = async (transactionData: any) => {
   const { error } = await supabase.from('financial_transactions').insert([transactionData])
   if (error) throw error
+}
+
+// --- DASHBOARD ---
+export const getDashboardMetrics = async (profId: string) => {
+  const now = new Date()
+  const startMonthStr = format(startOfMonth(now), 'yyyy-MM-dd')
+  const endMonthStr = format(endOfMonth(now), 'yyyy-MM-dd')
+  const today = format(now, 'yyyy-MM-dd')
+
+  const { data: incomeTx } = await supabase
+    .from('financial_transactions')
+    .select('amount')
+    .eq('professional_id', profId)
+    .eq('type', 'income')
+    .eq('status', 'paid')
+    .gte('transaction_date', startMonthStr)
+    .lte('transaction_date', endMonthStr)
+
+  const startMonthIso = startOfMonth(now).toISOString()
+  const endMonthIso = endOfMonth(now).toISOString()
+  const { count: consultationsCount } = await supabase
+    .from('appointments')
+    .select('*', { count: 'exact', head: true })
+    .eq('professional_id', profId)
+    .in('status', ['confirmed', 'realizado', 'done'])
+    .gte('start_time', startMonthIso)
+    .lte('start_time', endMonthIso)
+
+  const { data: pendingTx } = await supabase
+    .from('financial_transactions')
+    .select('amount')
+    .eq('professional_id', profId)
+    .eq('type', 'income')
+    .in('status', ['pending', 'overdue'])
+    .lt('transaction_date', today)
+
+  const { data: subs } = await supabase
+    .from('client_subscriptions')
+    .select('status, plan:plan_id(price, billing_cycle)')
+    .eq('professional_id', profId)
+    .in('status', ['active', 'overdue'])
+
+  const monthlyRevenue = incomeTx?.reduce((acc, tx) => acc + Number(tx.amount), 0) || 0
+  const delinquency = pendingTx?.reduce((acc, tx) => acc + Number(tx.amount), 0) || 0
+
+  let mrr = 0
+  subs?.forEach((sub) => {
+    if (sub.plan && !Array.isArray(sub.plan)) {
+      const price = Number(sub.plan.price) || 0
+      const cycle = sub.plan.billing_cycle
+      if (cycle === 'monthly') mrr += price
+      else if (cycle === 'quarterly') mrr += price / 3
+      else if (cycle === 'yearly') mrr += price / 12
+    }
+  })
+
+  const sixMonthsAgo = format(startOfMonth(subMonths(now, 5)), 'yyyy-MM-dd')
+  const { data: chartTx } = await supabase
+    .from('financial_transactions')
+    .select('amount, transaction_date')
+    .eq('professional_id', profId)
+    .eq('type', 'income')
+    .eq('status', 'paid')
+    .gte('transaction_date', sixMonthsAgo)
+
+  return {
+    monthlyRevenue,
+    consultationsCount: consultationsCount || 0,
+    delinquency,
+    mrr,
+    chartTx: chartTx || [],
+  }
 }
 
 // --- CONFIGURAÇÕES ---

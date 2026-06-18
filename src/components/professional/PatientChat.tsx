@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { useAuth } from '@/hooks/use-auth'
+import { useAuth } from '@/contexts/AuthContext'
 import { supabase } from '@/lib/supabase/client'
 import { getMyPatients } from '@/services/patients'
 import { getMessages, sendMessage, markMessagesAsRead } from '@/services/messages'
@@ -16,7 +16,7 @@ import {
   CommandGroup,
   CommandItem,
 } from '@/components/ui/command'
-import { Send, BookOpen, User } from 'lucide-react'
+import { Send, BookOpen, User, MessageSquare } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 export function PatientChat() {

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useAuth } from '@/hooks/use-auth'
+import { useAuth } from '@/contexts/AuthContext'
 import { getAppointmentsByDate } from '@/services/clinic'
 import {
   startOfMonth,

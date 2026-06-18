@@ -3,6 +3,7 @@ import { ImpersonationBanner } from '@/components/shared/ImpersonationBanner'
 import { useAuth } from '@/contexts/AuthContext'
 import { cn } from '@/lib/utils'
 import { InstallPrompt } from '@/components/pwa/InstallPrompt'
+import { GlobalCommandBar } from '@/components/shared/GlobalCommandBar'
 
 export default function Layout() {
   const { isImpersonating } = useAuth()
@@ -14,6 +15,7 @@ export default function Layout() {
         <Outlet />
       </main>
       <InstallPrompt />
+      <GlobalCommandBar />
     </div>
   )
 }

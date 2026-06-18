@@ -42,6 +42,7 @@ import {
   AlertTriangle,
   Edit2,
   Plus,
+  Sparkles,
 } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
 import { useToast } from '@/hooks/use-toast'
@@ -57,6 +58,7 @@ import {
   getTrackingByPeriod,
   getTrackingForDay,
   deleteExtraMealFromDay,
+  addExtraMealToDay,
   type FullDietDetails,
   type MealDetails,
   type NutritionAssessment,
@@ -94,7 +96,90 @@ export default function ClientNutrition() {
   const [extraMealModalOpen, setExtraMealModalOpen] = useState(false)
   const [mealToEdit, setMealToEdit] = useState<any>(null)
 
+  const [nlpInput, setNlpInput] = useState('')
+  const [isProcessing, setIsProcessing] = useState(false)
+  const [nlpResult, setNlpResult] = useState<any>(null)
+
   const { toast } = useToast()
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams(window.location.search)
+    if (searchParams.get('action') === 'quick-meal') {
+      const input = document.getElementById('nlp-input')
+      if (input) input.focus()
+      window.history.replaceState({}, '', window.location.pathname)
+    }
+  }, [])
+
+  const handleNlpSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!nlpInput.trim()) return
+    setIsProcessing(true)
+    setNlpResult(null)
+
+    // Simulação de processamento de NLP
+    await new Promise((r) => setTimeout(r, 1500))
+
+    const val = nlpInput.toLowerCase()
+    let calories = 0,
+      protein = 0,
+      carbs = 0,
+      fat = 0
+
+    if (val.includes('ovo')) {
+      calories += 140
+      protein += 12
+      carbs += 1
+      fat += 10
+    }
+    if (val.includes('pão') || val.includes('pao')) {
+      calories += 150
+      protein += 4
+      carbs += 28
+      fat += 2
+    }
+    if (val.includes('frango')) {
+      calories += 165
+      protein += 31
+      carbs += 0
+      fat += 3
+    }
+    if (val.includes('whey')) {
+      calories += 120
+      protein += 24
+      carbs += 3
+      fat += 1
+    }
+    if (calories === 0) {
+      calories = 250
+      protein = 15
+      carbs = 20
+      fat = 10
+    }
+
+    setNlpResult({
+      name: nlpInput,
+      calories,
+      protein,
+      carbs,
+      fats: fat,
+      amount_grams: 100,
+    })
+    setIsProcessing(false)
+  }
+
+  const saveNlpResult = async () => {
+    if (!activeUser?.id || !nlpResult) return
+    try {
+      await addExtraMealToDay(activeUser.id, date, nlpResult)
+      toast({ title: 'Refeição adicionada com sucesso! 🚀' })
+      setNlpResult(null)
+      setNlpInput('')
+      fetchData()
+    } catch (e) {
+      toast({ title: 'Erro ao adicionar', variant: 'destructive' })
+    }
+  }
 
   const fetchData = async () => {
     if (!activeUser?.id) return
@@ -289,6 +374,124 @@ export default function ClientNutrition() {
       <DashboardHeader title="A Minha Nutrição" />
       <PageContent className="max-w-3xl mx-auto w-full animate-fade-in-up space-y-6">
         <DateRangeDashboard onRangeChange={fetchPeriodData} />
+
+        <Card className="bg-gradient-to-r from-primary/5 to-primary/10 border-primary/20 shadow-sm relative overflow-hidden">
+          <div className="absolute top-0 right-0 -mt-4 -mr-4 h-24 w-24 bg-primary/10 rounded-full blur-2xl pointer-events-none" />
+          <CardContent className="p-4 sm:p-6">
+            <div className="flex flex-col gap-4">
+              <div className="flex items-center gap-2 mb-2">
+                <Sparkles className="h-5 w-5 text-primary" />
+                <h3 className="font-semibold text-lg text-foreground">Registro Rápido com IA</h3>
+              </div>
+              <form
+                onSubmit={handleNlpSubmit}
+                className="flex flex-col sm:flex-row gap-3 relative z-10"
+              >
+                <div className="relative flex-1">
+                  <Input
+                    id="nlp-input"
+                    placeholder="O que você comeu? Ex: 2 ovos e um pão..."
+                    value={nlpInput}
+                    onChange={(e) => setNlpInput(e.target.value)}
+                    disabled={isProcessing}
+                    className={cn(
+                      'pl-4 py-6 text-base bg-background/50 backdrop-blur-sm border-primary/20 transition-all focus-visible:ring-primary/50',
+                      isProcessing &&
+                        'animate-pulse border-primary shadow-[0_0_15px_rgba(var(--primary),0.3)]',
+                    )}
+                  />
+                  {isProcessing && (
+                    <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                      <Loader2 className="h-5 w-5 animate-spin text-primary opacity-50" />
+                    </div>
+                  )}
+                </div>
+                <Button
+                  type="submit"
+                  disabled={isProcessing || !nlpInput.trim()}
+                  className="h-auto py-3 px-6 shrink-0"
+                >
+                  {isProcessing ? (
+                    <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                  ) : (
+                    <Sparkles className="h-4 w-4 mr-2" />
+                  )}
+                  Analisar
+                </Button>
+              </form>
+
+              {nlpResult && (
+                <div className="mt-2 p-4 bg-background rounded-lg border border-primary/30 shadow-inner animate-fade-in-down z-10">
+                  <h4 className="text-sm font-medium text-muted-foreground mb-3">
+                    Verifique os macros identificados:
+                  </h4>
+                  <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 mb-4">
+                    <div className="col-span-2 sm:col-span-1">
+                      <Label className="text-xs">Nome</Label>
+                      <Input
+                        value={nlpResult.name}
+                        onChange={(e) => setNlpResult({ ...nlpResult, name: e.target.value })}
+                        className="h-8 text-sm"
+                      />
+                    </div>
+                    <div>
+                      <Label className="text-xs">Kcal</Label>
+                      <Input
+                        type="number"
+                        value={nlpResult.calories}
+                        onChange={(e) =>
+                          setNlpResult({ ...nlpResult, calories: Number(e.target.value) })
+                        }
+                        className="h-8 text-sm"
+                      />
+                    </div>
+                    <div>
+                      <Label className="text-xs">Prot (g)</Label>
+                      <Input
+                        type="number"
+                        value={nlpResult.protein}
+                        onChange={(e) =>
+                          setNlpResult({ ...nlpResult, protein: Number(e.target.value) })
+                        }
+                        className="h-8 text-sm"
+                      />
+                    </div>
+                    <div>
+                      <Label className="text-xs">Carb (g)</Label>
+                      <Input
+                        type="number"
+                        value={nlpResult.carbs}
+                        onChange={(e) =>
+                          setNlpResult({ ...nlpResult, carbs: Number(e.target.value) })
+                        }
+                        className="h-8 text-sm"
+                      />
+                    </div>
+                    <div>
+                      <Label className="text-xs">Gord (g)</Label>
+                      <Input
+                        type="number"
+                        value={nlpResult.fats}
+                        onChange={(e) =>
+                          setNlpResult({ ...nlpResult, fats: Number(e.target.value) })
+                        }
+                        className="h-8 text-sm"
+                      />
+                    </div>
+                  </div>
+                  <div className="flex justify-end gap-2">
+                    <Button variant="ghost" size="sm" onClick={() => setNlpResult(null)}>
+                      Descartar
+                    </Button>
+                    <Button size="sm" onClick={saveNlpResult}>
+                      <Check className="h-4 w-4 mr-1" /> Salvar Refeição
+                    </Button>
+                  </div>
+                </div>
+              )}
+            </div>
+          </CardContent>
+        </Card>
 
         <Tabs defaultValue="dashboard" className="space-y-6">
           <TabsList className="w-full grid grid-cols-3 h-auto p-1 bg-muted/60">

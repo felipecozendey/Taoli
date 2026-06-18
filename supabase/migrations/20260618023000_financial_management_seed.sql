@@ -30,22 +30,22 @@ BEGIN
   -- Seed standard service plans
   IF NOT EXISTS (SELECT 1 FROM public.service_plans WHERE professional_id = v_user_id AND name = 'Consulta Avulsa') THEN
     INSERT INTO public.service_plans (professional_id, name, description, price, billing_cycle) VALUES
-    (v_user_id, 'Consulta Avulsa', 'Consulta nutricional única', 200.00, 'one-off'),
-    (v_user_id, 'Plano Mensal', 'Acompanhamento nutricional mensal', 150.00, 'monthly'),
-    (v_user_id, 'Plano Trimestral', 'Acompanhamento nutricional trimestral', 400.00, 'quarterly'),
-    (v_user_id, 'Consultoria Online', 'Treino + Nutrição (Anual)', 1200.00, 'yearly');
+    (v_user_id, 'Consulta Avulsa', 'Consulta nutricional única', 200.00::NUMERIC(10,2), 'one-off'),
+    (v_user_id, 'Plano Mensal', 'Acompanhamento nutricional mensal', 150.00::NUMERIC(10,2), 'monthly'),
+    (v_user_id, 'Plano Trimestral', 'Acompanhamento nutricional trimestral', 400.00::NUMERIC(10,2), 'quarterly'),
+    (v_user_id, 'Consultoria Online', 'Treino + Nutrição (Anual)', 1200.00::NUMERIC(10,2), 'yearly');
   END IF;
 
   -- Seed sample financial transactions for chart
   IF NOT EXISTS (SELECT 1 FROM public.financial_transactions WHERE professional_id = v_user_id AND description = 'Mensalidades Janeiro') THEN
     INSERT INTO public.financial_transactions (professional_id, type, amount, description, transaction_date, category, status) VALUES
-    (v_user_id, 'income', 1500, 'Mensalidades Janeiro', (CURRENT_DATE - INTERVAL '5 months')::date, 'general', 'paid'),
-    (v_user_id, 'income', 1800, 'Mensalidades Fevereiro', (CURRENT_DATE - INTERVAL '4 months')::date, 'general', 'paid'),
-    (v_user_id, 'income', 1600, 'Mensalidades Março', (CURRENT_DATE - INTERVAL '3 months')::date, 'general', 'paid'),
-    (v_user_id, 'income', 2100, 'Mensalidades Abril', (CURRENT_DATE - INTERVAL '2 months')::date, 'general', 'paid'),
-    (v_user_id, 'income', 2500, 'Mensalidades Maio', (CURRENT_DATE - INTERVAL '1 month')::date, 'general', 'paid'),
-    (v_user_id, 'income', 2200, 'Mensalidades Junho', CURRENT_DATE, 'general', 'paid'),
-    (v_user_id, 'income', 200, 'Consulta João', CURRENT_DATE, 'general', 'pending');
+    (v_user_id, 'income', 1500.00::NUMERIC(10,2), 'Mensalidades Janeiro', (CURRENT_DATE - INTERVAL '5 months')::date, 'general', 'paid'),
+    (v_user_id, 'income', 1800.00::NUMERIC(10,2), 'Mensalidades Fevereiro', (CURRENT_DATE - INTERVAL '4 months')::date, 'general', 'paid'),
+    (v_user_id, 'income', 1600.00::NUMERIC(10,2), 'Mensalidades Março', (CURRENT_DATE - INTERVAL '3 months')::date, 'general', 'paid'),
+    (v_user_id, 'income', 2100.00::NUMERIC(10,2), 'Mensalidades Abril', (CURRENT_DATE - INTERVAL '2 months')::date, 'general', 'paid'),
+    (v_user_id, 'income', 2500.00::NUMERIC(10,2), 'Mensalidades Maio', (CURRENT_DATE - INTERVAL '1 month')::date, 'general', 'paid'),
+    (v_user_id, 'income', 2200.00::NUMERIC(10,2), 'Mensalidades Junho', CURRENT_DATE, 'general', 'paid'),
+    (v_user_id, 'income', 200.00::NUMERIC(10,2), 'Consulta João', CURRENT_DATE, 'general', 'pending');
   END IF;
 
 END $$;

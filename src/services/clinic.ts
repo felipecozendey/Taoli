@@ -164,19 +164,22 @@ export const getDashboardMetrics = async (profId: string) => {
     .eq('professional_id', profId)
     .in('status', ['active', 'overdue'])
 
-  const monthlyRevenue = incomeTx?.reduce((acc, tx) => acc + Number(tx.amount), 0) || 0
-  const delinquency = pendingTx?.reduce((acc, tx) => acc + Number(tx.amount), 0) || 0
+  const monthlyRevenue =
+    (incomeTx?.reduce((acc, tx) => acc + Math.round(Number(tx.amount) * 100), 0) || 0) / 100
+  const delinquency =
+    (pendingTx?.reduce((acc, tx) => acc + Math.round(Number(tx.amount) * 100), 0) || 0) / 100
 
-  let mrr = 0
+  let mrrCents = 0
   subs?.forEach((sub) => {
     if (sub.plan && !Array.isArray(sub.plan)) {
-      const price = Number(sub.plan.price) || 0
+      const priceCents = Math.round(Number(sub.plan.price) * 100) || 0
       const cycle = sub.plan.billing_cycle
-      if (cycle === 'monthly') mrr += price
-      else if (cycle === 'quarterly') mrr += price / 3
-      else if (cycle === 'yearly') mrr += price / 12
+      if (cycle === 'monthly') mrrCents += priceCents
+      else if (cycle === 'quarterly') mrrCents += Math.round(priceCents / 3)
+      else if (cycle === 'yearly') mrrCents += Math.round(priceCents / 12)
     }
   })
+  const mrr = mrrCents / 100
 
   const sixMonthsAgo = format(startOfMonth(subMonths(now, 5)), 'yyyy-MM-dd')
   const { data: chartTx } = await supabase

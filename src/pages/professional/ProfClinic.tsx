@@ -176,7 +176,8 @@ export default function ProfClinic() {
       const localD = new Date(d.getTime() + offset)
       const label = format(localD, 'MMM', { locale: ptBR })
       if (dataMap[label] !== undefined) {
-        dataMap[label] += Number(tx.amount)
+        dataMap[label] =
+          (Math.round(dataMap[label] * 100) + Math.round(Number(tx.amount) * 100)) / 100
       }
     })
     return Object.keys(dataMap).map((key) => ({ name: key, income: dataMap[key] }))
@@ -186,11 +187,16 @@ export default function ProfClinic() {
     let inc = 0,
       exp = 0
     transactions.forEach((t) => {
-      if (t.type === 'income') inc += Number(t.amount)
-      if (t.type === 'expense') exp += Number(t.amount)
+      const amtCents = Math.round(Number(t.amount) * 100)
+      if (t.type === 'income') inc += amtCents
+      if (t.type === 'expense') exp += amtCents
     })
-    return { totalIncome: inc, totalExpense: exp, balance: inc - exp }
+    return { totalIncome: inc / 100, totalExpense: exp / 100, balance: (inc - exp) / 100 }
   }, [transactions])
+
+  const formatCurrency = (value: number) => {
+    return new Intl.NumberFormat('pt-PT', { style: 'currency', currency: 'EUR' }).format(value)
+  }
 
   const handleDeletePlan = async (id: string) => {
     if (confirm('Tem certeza que deseja excluir este plano?')) {
@@ -429,7 +435,7 @@ export default function ProfClinic() {
                 </div>
                 <div>
                   <p className="text-sm font-medium text-muted-foreground">Faturamento Mensal</p>
-                  <h3 className="text-2xl font-bold">€ {metrics.monthlyRevenue.toFixed(2)}</h3>
+                  <h3 className="text-2xl font-bold">{formatCurrency(metrics.monthlyRevenue)}</h3>
                 </div>
               </CardContent>
             </Card>
@@ -452,7 +458,7 @@ export default function ProfClinic() {
                 <div>
                   <p className="text-sm font-medium text-muted-foreground">Inadimplência</p>
                   <h3 className="text-2xl font-bold text-yellow-600">
-                    € {metrics.delinquency.toFixed(2)}
+                    {formatCurrency(metrics.delinquency)}
                   </h3>
                 </div>
               </CardContent>
@@ -464,7 +470,9 @@ export default function ProfClinic() {
                 </div>
                 <div>
                   <p className="text-sm font-medium text-muted-foreground">MRR Estimado</p>
-                  <h3 className="text-2xl font-bold text-purple-600">€ {metrics.mrr.toFixed(2)}</h3>
+                  <h3 className="text-2xl font-bold text-purple-600">
+                    {formatCurrency(metrics.mrr)}
+                  </h3>
                 </div>
               </CardContent>
             </Card>
@@ -474,7 +482,7 @@ export default function ProfClinic() {
             <CardHeader className="p-0 pb-4 flex flex-row items-center justify-between">
               <CardTitle className="text-lg">Receitas (Últimos 6 Meses)</CardTitle>
               <div className="text-sm font-medium text-muted-foreground">
-                Saldo Mês: € {balance.toFixed(2)}
+                Saldo Mês: {formatCurrency(balance)}
               </div>
             </CardHeader>
             <CardContent className="p-0">
@@ -495,7 +503,13 @@ export default function ProfClinic() {
                     axisLine={false}
                     tickLine={false}
                     tick={{ fill: 'hsl(var(--muted-foreground))' }}
-                    tickFormatter={(value) => `€${value}`}
+                    tickFormatter={(value) =>
+                      value.toLocaleString('pt-PT', {
+                        style: 'currency',
+                        currency: 'EUR',
+                        maximumFractionDigits: 0,
+                      })
+                    }
                   />
                   <ChartTooltip content={<ChartTooltipContent />} />
                   <Bar dataKey="income" fill="var(--color-income)" radius={[4, 4, 0, 0]} />
@@ -598,7 +612,7 @@ export default function ProfClinic() {
                         </span>
                       </TableCell>
                       <TableCell className="text-right font-medium">
-                        € {Number(tx.amount).toFixed(2)}
+                        {formatCurrency(Number(tx.amount))}
                       </TableCell>
                     </TableRow>
                   ))
@@ -682,7 +696,9 @@ export default function ProfClinic() {
                         </div>
                         <div className="flex items-center gap-4">
                           <div className="text-right">
-                            <p className="font-bold text-lg">€ {Number(plan.price).toFixed(2)}</p>
+                            <p className="font-bold text-lg">
+                              {formatCurrency(Number(plan.price))}
+                            </p>
                             <Badge variant="secondary" className="mt-1 capitalize">
                               {plan.billing_cycle === 'monthly'
                                 ? 'Mensal'

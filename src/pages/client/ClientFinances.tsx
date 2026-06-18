@@ -93,15 +93,17 @@ export default function ClientFinances() {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [newTx, setNewTx] = useState({ description: '', type: 'Despesa', amount: '', category: '' })
 
-  const totalBalance = accounts.reduce((acc, curr) => acc + curr.balance, 0)
-  const totalIncome = transactions
-    .filter((t) => t.type === 'Receita')
-    .reduce((acc, curr) => acc + curr.amount, 0)
-  const totalExpense = transactions
-    .filter((t) => t.type === 'Despesa')
-    .reduce((acc, curr) => acc + curr.amount, 0)
+  const totalBalance = accounts.reduce((acc, curr) => acc + Math.round(curr.balance * 100), 0) / 100
+  const totalIncome =
+    transactions
+      .filter((t) => t.type === 'Receita')
+      .reduce((acc, curr) => acc + Math.round(curr.amount * 100), 0) / 100
+  const totalExpense =
+    transactions
+      .filter((t) => t.type === 'Despesa')
+      .reduce((acc, curr) => acc + Math.round(curr.amount * 100), 0) / 100
 
-  const netResult = totalIncome - totalExpense
+  const netResult = (Math.round(totalIncome * 100) - Math.round(totalExpense * 100)) / 100
   const monthlyExpenses = totalExpense
   const emergencyFundMonths =
     monthlyExpenses > 0 ? (totalBalance / monthlyExpenses).toFixed(1) : '∞'

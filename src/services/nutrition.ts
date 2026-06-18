@@ -170,6 +170,75 @@ export async function getProfessionalDiets() {
   }
 }
 
+export async function getPatientDiets(clientId: string) {
+  try {
+    const { data, error } = await supabase
+      .from('diets')
+      .select('*')
+      .eq('client_id', clientId)
+      .order('created_at', { ascending: false })
+
+    if (error) throw error
+    return { data, error: null }
+  } catch (error) {
+    console.error('Error fetching patient diets:', error)
+    return { data: null, error }
+  }
+}
+
+export async function updateDiet(dietId: string, name: string, mealsData: any[]) {
+  try {
+    const { data: diet, error: dietErr } = await supabase
+      .from('diets')
+      .update({ name })
+      .eq('id', dietId)
+      .select()
+      .single()
+
+    if (dietErr) throw dietErr
+
+    const { data: existingMeals } = await supabase.from('meals').select('id').eq('diet_id', dietId)
+    if (existingMeals && existingMeals.length > 0) {
+      const mealIds = existingMeals.map((m) => m.id)
+      await supabase.from('meal_items').delete().in('meal_id', mealIds)
+      await supabase.from('meals').delete().in('id', mealIds)
+    }
+
+    for (let i = 0; i < mealsData.length; i++) {
+      const meal = mealsData[i]
+
+      const { data: mealRow, error: mealErr } = await supabase
+        .from('meals')
+        .insert({
+          diet_id: dietId,
+          name: meal.name,
+          time: meal.time || '12:00',
+          order_index: i,
+        })
+        .select()
+        .single()
+
+      if (mealErr) continue
+
+      const itemsToInsert = meal.items.map((item: any) => ({
+        meal_id: mealRow.id,
+        food_item_id: item.food.id,
+        portion_g: item.amount_grams,
+        notes: item.notes || null,
+      }))
+
+      if (itemsToInsert.length > 0) {
+        await supabase.from('meal_items').insert(itemsToInsert)
+      }
+    }
+
+    return { data: diet, error: null }
+  } catch (error) {
+    console.error('Error updating full diet:', error)
+    return { data: null, error }
+  }
+}
+
 export async function getClientActiveDiet(clientId: string) {
   try {
     const { data, error } = await supabase

@@ -8,11 +8,23 @@ import { Calendar } from '@/components/ui/calendar'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { DateRangeDashboard } from '@/components/nutrition/DateRangeDashboard'
 import { useMemo } from 'react'
-import { getTrackingByPeriod, getTrackingForDay } from '@/services/nutrition'
+import { getTrackingByPeriod, getTrackingForDay, getPatientDiets } from '@/services/nutrition'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Badge } from '@/components/ui/badge'
 import { getDailyNutritionProgress } from '@/services/nutrition'
 import { cn } from '@/lib/utils'
+import { AuthorshipBadge } from '@/components/shared/AuthorshipBadge'
+import { DietPrescriptionModal } from './DietPrescriptionModal'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog'
 
 interface PatientNutritionMirrorProps {
   patientId: string
@@ -25,6 +37,13 @@ export function PatientNutritionMirror({ patientId }: PatientNutritionMirrorProp
   const [data, setData] = useState<any>(null)
   const [dayTracking, setDayTracking] = useState<any>(null)
   const [periodTracking, setPeriodTracking] = useState<any[]>([])
+
+  const [diets, setDiets] = useState<any[]>([])
+  const [isDietModalOpen, setIsDietModalOpen] = useState(false)
+  const [dietToEdit, setDietToEdit] = useState<string | null>(null)
+  const [dietToClone, setDietToClone] = useState<string | null>(null)
+  const [isCloneAlertOpen, setIsCloneAlertOpen] = useState(false)
+  const [selectedPatientDiet, setSelectedPatientDiet] = useState<string | null>(null)
 
   const fetchPeriodData = async (start: Date, end: Date) => {
     if (!patientId) return
@@ -69,17 +88,21 @@ export function PatientNutritionMirror({ patientId }: PatientNutritionMirrorProp
     const fetchData = async () => {
       setLoading(true)
       const formattedDate = format(date, 'yyyy-MM-dd')
-      const [result, trackData] = await Promise.all([
+      const [result, trackData, dietsData] = await Promise.all([
         getDailyNutritionProgress(patientId, formattedDate),
         getTrackingForDay(patientId, formattedDate),
+        getPatientDiets(patientId),
       ])
       setData(result)
       setDayTracking(trackData)
+      if (dietsData?.data) {
+        setDiets(dietsData.data)
+      }
       setLoading(false)
     }
 
     fetchData()
-  }, [patientId, date])
+  }, [patientId, date, isDietModalOpen])
 
   const renderMacro = (label: string, consumed: number, target: number, colorClass: string) => {
     const pct = target > 0 ? Math.min(100, Math.round((consumed / target) * 100)) : 0
@@ -114,7 +137,77 @@ export function PatientNutritionMirror({ patientId }: PatientNutritionMirrorProp
       <TabsList className="mb-4">
         <TabsTrigger value="daily">Diário</TabsTrigger>
         <TabsTrigger value="history">Histórico no Período</TabsTrigger>
+        <TabsTrigger value="diets">Planos Alimentares</TabsTrigger>
       </TabsList>
+
+      <TabsContent value="diets" className="space-y-6 animate-fade-in">
+        <div className="flex items-center justify-between">
+          <div>
+            <h3 className="text-lg font-bold">Planos Alimentares</h3>
+            <p className="text-sm text-muted-foreground">
+              Visualize e gerencie as dietas do paciente
+            </p>
+          </div>
+          <Button
+            onClick={() => {
+              setDietToEdit(null)
+              setDietToClone(null)
+              setIsDietModalOpen(true)
+            }}
+          >
+            <PlusCircle className="mr-2 h-4 w-4" /> Nova Dieta
+          </Button>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+          {diets.length === 0 ? (
+            <div className="col-span-full py-12 text-center text-muted-foreground bg-muted/20 border border-dashed rounded-lg">
+              Nenhuma dieta encontrada para este paciente.
+            </div>
+          ) : (
+            diets.map((diet) => (
+              <Card key={diet.id} className={cn(!diet.is_active && 'opacity-70', 'flex flex-col')}>
+                <CardHeader className="pb-3 flex-1">
+                  <div className="flex justify-between items-start">
+                    <CardTitle className="text-base line-clamp-2">{diet.name}</CardTitle>
+                    {diet.is_active && (
+                      <Badge
+                        variant="default"
+                        className="bg-green-500 hover:bg-green-600 ml-2 shrink-0"
+                      >
+                        Ativa
+                      </Badge>
+                    )}
+                  </div>
+                  <CardDescription>
+                    Criada em {format(new Date(diet.created_at), 'dd/MM/yyyy')}
+                  </CardDescription>
+                  <div className="mt-3">
+                    <AuthorshipBadge createdBy={diet.created_by} patientId={diet.client_id} />
+                  </div>
+                </CardHeader>
+                <CardContent className="flex justify-end gap-2 pt-0 mt-auto">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      if (diet.created_by === diet.client_id) {
+                        setSelectedPatientDiet(diet.id)
+                        setIsCloneAlertOpen(true)
+                      } else {
+                        setDietToEdit(diet.id)
+                        setIsDietModalOpen(true)
+                      }
+                    }}
+                  >
+                    Editar
+                  </Button>
+                </CardContent>
+              </Card>
+            ))
+          )}
+        </div>
+      </TabsContent>
 
       <TabsContent value="history" className="space-y-6 animate-fade-in">
         <DateRangeDashboard onRangeChange={fetchPeriodData} />
@@ -204,7 +297,11 @@ export function PatientNutritionMirror({ patientId }: PatientNutritionMirrorProp
             </Card>
             <Button
               className="w-full"
-              onClick={() => navigate(`/professional/prescriptions?patientId=${patientId}`)}
+              onClick={() => {
+                setDietToEdit(null)
+                setDietToClone(null)
+                setIsDietModalOpen(true)
+              }}
             >
               <PlusCircle className="mr-2 h-4 w-4" /> Nova Prescrição
             </Button>
@@ -393,6 +490,46 @@ export function PatientNutritionMirror({ patientId }: PatientNutritionMirrorProp
           </div>
         </div>
       </TabsContent>
+
+      {isDietModalOpen && (
+        <DietPrescriptionModal
+          isOpen={isDietModalOpen}
+          onClose={() => {
+            setIsDietModalOpen(false)
+            setDietToEdit(null)
+            setDietToClone(null)
+          }}
+          clientId={patientId}
+          editDietId={dietToEdit}
+          cloneDietId={dietToClone}
+        />
+      )}
+
+      <AlertDialog open={isCloneAlertOpen} onOpenChange={setIsCloneAlertOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Clonar Dieta do Paciente</AlertDialogTitle>
+            <AlertDialogDescription>
+              Esta dieta foi criada pelo paciente. Deseja cloná-la e prescrever uma versão oficial
+              ajustada?
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={() => setSelectedPatientDiet(null)}>
+              Cancelar
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => {
+                setDietToClone(selectedPatientDiet)
+                setSelectedPatientDiet(null)
+                setIsDietModalOpen(true)
+              }}
+            >
+              Clonar e Prescrever
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </Tabs>
   )
 }

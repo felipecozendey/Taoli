@@ -32,9 +32,11 @@ import {
   searchFoodItems,
   searchFoodAndRecipes,
   saveDiet,
+  updateDiet,
   getDietTemplates,
   getTemplateDetails,
   saveDietTemplate,
+  getFullDietDetails,
 } from '@/services/nutrition'
 import { useToast } from '@/hooks/use-toast'
 
@@ -67,9 +69,17 @@ interface DietPrescriptionModalProps {
   isOpen: boolean
   onClose: () => void
   clientId?: string
+  editDietId?: string | null
+  cloneDietId?: string | null
 }
 
-export function DietPrescriptionModal({ isOpen, onClose, clientId }: DietPrescriptionModalProps) {
+export function DietPrescriptionModal({
+  isOpen,
+  onClose,
+  clientId,
+  editDietId,
+  cloneDietId,
+}: DietPrescriptionModalProps) {
   const { user } = useAuth()
   const { toast } = useToast()
 
@@ -92,14 +102,60 @@ export function DietPrescriptionModal({ isOpen, onClose, clientId }: DietPrescri
   const [activeMealId, setActiveMealId] = useState('1')
   const [dietName, setDietName] = useState('Plano Alimentar')
 
-  // Fetch templates when modal opens
+  // Fetch initial data when modal opens
   useEffect(() => {
-    if (isOpen && user?.id) {
-      getDietTemplates(user.id).then(({ data }) => {
-        if (data) setTemplates(data)
-      })
+    if (isOpen) {
+      if (editDietId || cloneDietId) {
+        const idToFetch = editDietId || cloneDietId
+        getFullDietDetails(idToFetch!).then(({ data }) => {
+          if (data && data.meals) {
+            setDietName(cloneDietId ? `${data.name} (Clone)` : data.name)
+
+            // Reconstruct meals from database structure
+            const loadedMeals = data.meals.map((meal: any) => ({
+              id: crypto.randomUUID(),
+              name: meal.name,
+              time: meal.time || '12:00',
+              items:
+                meal.meal_items?.map((item: any) => ({
+                  id: crypto.randomUUID(),
+                  amount_grams: item.portion_g,
+                  food: item.food_items,
+                  notes: item.notes || '',
+                })) || [],
+            }))
+
+            // Sort by order_index
+            loadedMeals.sort((a, b) => {
+              const orderA = data.meals.find((m: any) => m.name === a.name)?.order_index || 0
+              const orderB = data.meals.find((m: any) => m.name === b.name)?.order_index || 0
+              return orderA - orderB
+            })
+
+            setMeals(loadedMeals)
+            if (loadedMeals.length > 0) setActiveMealId(loadedMeals[0].id)
+          }
+        })
+      } else {
+        // Reset to default empty state
+        setDietName('Plano Alimentar')
+        const defaultMeals = [
+          { id: '1', name: 'Café da Manhã', time: '08:00', items: [] },
+          { id: '2', name: 'Almoço', time: '12:00', items: [] },
+          { id: '3', name: 'Lanche da Tarde', time: '16:00', items: [] },
+          { id: '4', name: 'Jantar', time: '20:00', items: [] },
+        ]
+        setMeals(defaultMeals)
+        setActiveMealId('1')
+      }
+
+      if (user?.id) {
+        getDietTemplates(user.id).then(({ data }) => {
+          if (data) setTemplates(data)
+        })
+      }
     }
-  }, [isOpen, user?.id])
+  }, [isOpen, editDietId, cloneDietId, user?.id])
 
   // Debounced Search Effect (500ms for safety and DDOS prevention)
   useEffect(() => {
@@ -267,10 +323,15 @@ export function DietPrescriptionModal({ isOpen, onClose, clientId }: DietPrescri
     }
     setIsSaving(true)
     try {
-      const { error } = await saveDiet(clientId, user.id, dietName, meals)
-      if (error) throw error
-
-      toast({ title: 'Sucesso', description: 'Dieta salva e aplicada com sucesso!' })
+      if (editDietId) {
+        const { error } = await updateDiet(editDietId, dietName, meals)
+        if (error) throw error
+        toast({ title: 'Sucesso', description: 'Dieta atualizada com sucesso!' })
+      } else {
+        const { error } = await saveDiet(clientId, user.id, dietName, meals)
+        if (error) throw error
+        toast({ title: 'Sucesso', description: 'Dieta salva e aplicada com sucesso!' })
+      }
       onClose()
     } catch (error) {
       toast({
@@ -293,12 +354,24 @@ export function DietPrescriptionModal({ isOpen, onClose, clientId }: DietPrescri
             <div className="flex flex-col gap-1 w-full sm:w-auto">
               <DialogTitle className="text-xl flex items-center gap-2">
                 <Apple className="h-5 w-5 text-primary" />
-                {isSelfManaged ? 'Criar Minha Dieta' : 'Prescrição Dietética'}
+                {isSelfManaged
+                  ? editDietId
+                    ? 'Editar Minha Dieta'
+                    : 'Criar Minha Dieta'
+                  : editDietId
+                    ? 'Editar Prescrição'
+                    : cloneDietId
+                      ? 'Clonar Dieta'
+                      : 'Prescrição Dietética'}
               </DialogTitle>
               <DialogDescription>
                 {isSelfManaged
                   ? 'Monte o seu próprio plano alimentar.'
-                  : 'Monte o plano alimentar ou selecione um modelo.'}
+                  : editDietId
+                    ? 'Edite a prescrição atual.'
+                    : cloneDietId
+                      ? 'Ajuste e salve como uma nova prescrição oficial.'
+                      : 'Monte o plano alimentar ou selecione um modelo.'}
               </DialogDescription>
             </div>
 

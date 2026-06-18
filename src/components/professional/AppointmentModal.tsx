@@ -36,6 +36,7 @@ export function AppointmentModal({
 }: any) {
   const { user } = useAuth()
   const [patients, setPatients] = useState<any[]>([])
+  const [isLoadingPatients, setIsLoadingPatients] = useState(false)
 
   const [title, setTitle] = useState('')
   const [clientId, setClientId] = useState('none')
@@ -47,7 +48,28 @@ export function AppointmentModal({
   const [occurrences, setOccurrences] = useState(1)
 
   useEffect(() => {
-    if (user) getMyPatients(user.id).then((data) => setPatients(data.map((d: any) => d.client)))
+    let isMounted = true
+
+    if (user) {
+      setIsLoadingPatients(true)
+      getMyPatients(user.id)
+        .then((data) => {
+          if (isMounted && Array.isArray(data)) {
+            const validPatients = data
+              .map((d: any) => d.client)
+              .filter((client: any) => client !== null && client !== undefined && client.id)
+            setPatients(validPatients)
+          }
+        })
+        .catch((error) => console.error('Error fetching patients:', error))
+        .finally(() => {
+          if (isMounted) setIsLoadingPatients(false)
+        })
+    }
+
+    return () => {
+      isMounted = false
+    }
   }, [user])
 
   useEffect(() => {
@@ -162,17 +184,26 @@ export function AppointmentModal({
           </div>
           <div className="space-y-2">
             <Label>Paciente (Opcional)</Label>
-            <Select value={clientId} onValueChange={setClientId}>
+            <Select value={clientId} onValueChange={setClientId} disabled={isLoadingPatients}>
               <SelectTrigger>
-                <SelectValue placeholder="Selecione..." />
+                <SelectValue
+                  placeholder={isLoadingPatients ? 'Carregando pacientes...' : 'Selecione...'}
+                />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="none">Nenhum</SelectItem>
-                {patients.map((p) => (
-                  <SelectItem key={p.id} value={p.id}>
-                    {p.name || p.email}
+                {patients.length === 0 && !isLoadingPatients && (
+                  <SelectItem value="empty" disabled>
+                    Nenhum paciente encontrado
                   </SelectItem>
-                ))}
+                )}
+                {patients.map((p) =>
+                  p?.id ? (
+                    <SelectItem key={p?.id} value={p?.id}>
+                      {p?.name || p?.email || 'Sem nome'}
+                    </SelectItem>
+                  ) : null,
+                )}
               </SelectContent>
             </Select>
           </div>

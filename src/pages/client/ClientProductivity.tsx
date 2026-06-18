@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from 'react'
+import { AuthorshipBadge } from '@/components/shared/AuthorshipBadge'
 import { DashboardHeader } from '@/components/shared/DashboardHeader'
 import { PageContent } from '@/components/shared/PageContent'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -480,11 +481,17 @@ export default function ClientProductivity() {
                         <div className="flex justify-between items-start">
                           <div>
                             <h3 className="font-semibold text-lg">{habit.title}</h3>
-                            {habit.professional_id && (
+                            {habit.created_by ? (
+                              <AuthorshipBadge
+                                createdBy={habit.created_by}
+                                patientId={habit.client_id}
+                                className="mt-1"
+                              />
+                            ) : habit.professional_id ? (
                               <Badge variant="secondary" className="mt-1">
                                 👨‍⚕️ Prescrito
                               </Badge>
-                            )}
+                            ) : null}
                           </div>
                           <Button
                             variant="ghost"

@@ -37,6 +37,7 @@ import {
   ResponsiveModalClose,
 } from '@/components/ui/responsive-modal'
 import { Label } from '@/components/ui/label'
+import { AuthorshipBadge } from '@/components/shared/AuthorshipBadge'
 
 // Keep evolution mock as it's not part of the current AC scope to replace
 const LOAD_EVOLUTION = [
@@ -52,6 +53,7 @@ type PlanListType = {
   client_id: string
   professional_id: string
   is_active: boolean
+  created_by?: string | null
 }
 
 type FullPlanDetailsType = PlanListType & {
@@ -310,14 +312,20 @@ export default function ClientTraining() {
                 >
                   <div>
                     <h3 className="font-bold text-lg">{activePlan.name}</h3>
-                    <div className="flex items-center gap-1.5 opacity-80 text-sm mt-1">
+                    <div className="flex items-center gap-1.5 opacity-80 text-sm mt-1 mb-2">
                       <Timer className="w-4 h-4" />
                       <span>
                         {activePlan.plan_type === 'workout'
-                          ? 'Treino Prescrito'
+                          ? 'Treino'
                           : 'Protocolo de Reabilitação'}
                       </span>
                     </div>
+                    {activePlan.created_by && (
+                      <AuthorshipBadge
+                        createdBy={activePlan.created_by}
+                        patientId={activePlan.client_id}
+                      />
+                    )}
                   </div>
                   {activePlan.plan_type === 'workout' ? (
                     <Dumbbell className="w-10 h-10 opacity-30" />
@@ -558,16 +566,25 @@ export default function ClientTraining() {
                     <AccordionTrigger className="px-4 py-4 hover:no-underline">
                       <div className="flex flex-col items-start text-left gap-1">
                         <span className="font-bold text-base">{plan.name}</span>
-                        <Badge
-                          variant="secondary"
-                          className={cn(
-                            'text-xs font-medium mt-1',
-                            plan.plan_type === 'rehabilitation' &&
-                              'bg-rose-100 text-rose-700 dark:bg-rose-900/30 dark:text-rose-400',
+                        <div className="flex items-center gap-2 mt-1">
+                          <Badge
+                            variant="secondary"
+                            className={cn(
+                              'text-xs font-medium',
+                              plan.plan_type === 'rehabilitation' &&
+                                'bg-rose-100 text-rose-700 dark:bg-rose-900/30 dark:text-rose-400',
+                            )}
+                          >
+                            {plan.plan_type === 'workout' ? 'Treino' : 'Reabilitação'}
+                          </Badge>
+                          {plan.created_by && (
+                            <AuthorshipBadge
+                              createdBy={plan.created_by}
+                              patientId={plan.client_id}
+                              className="text-[10px] px-1.5 py-0"
+                            />
                           )}
-                        >
-                          {plan.plan_type === 'workout' ? 'Treino' : 'Reabilitação'}
-                        </Badge>
+                        </div>
                       </div>
                     </AccordionTrigger>
                     <AccordionContent className="px-4 pb-4">

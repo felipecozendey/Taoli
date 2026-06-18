@@ -145,11 +145,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const targetRole = targetUser.role || 'client'
 
     try {
-      const { error } = await supabase.from('audit_logs' as any).insert({
-        admin_id: realUser.id,
-        target_user_id: targetUser.id,
-        action: 'IMPERSONATE_START',
-        details: { targetRole },
+      const { error } = await supabase.rpc('register_audit_log' as any, {
+        p_action: 'IMPERSONATE_START',
+        p_target_user_id: targetUser.id,
+        p_details: { targetRole },
       })
 
       if (error) {
